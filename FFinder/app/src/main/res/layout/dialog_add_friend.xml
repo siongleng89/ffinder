@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:padding="20dp">
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/add_new_member_title"
+            android:id="@+id/textView3"
+            android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/textView3"
+            android:id="@+id/txtError" android:textColor="#db0303" android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" android:visibility="gone"/>
+
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/keyWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" android:layout_below="@+id/txtError">
+
+        <EditText
+                android:id="@+id/editTxtKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/user_key_hint"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/memberNameWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/keyWrapper" android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
+
+        <EditText
+                android:id="@+id/editTxtMemberName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/member_name_hint"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/yourNameWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/memberNameWrapper" android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
+
+        <EditText
+                android:id="@+id/editTxtYourName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/your_name_hint"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+
+</RelativeLayout>

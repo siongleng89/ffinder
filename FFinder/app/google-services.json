@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "679786452242",
+    "firebase_url": "https://ffinder-74ebd.firebaseio.com",
+    "project_id": "ffinder-74ebd",
+    "storage_bucket": "ffinder-74ebd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679786452242:android:ecdd077b37170b61",
+        "android_client_info": {
+          "package_name": "com.ffinder.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679786452242-8avt1n2ac4btdp9dq5kal8mdokfsbr60.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGx4_MQ__XWSC1mR3rY9QwGniwjoWsNgE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-84106126-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

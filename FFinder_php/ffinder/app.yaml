@@ -1,0 +1,10 @@
+application: ffinder-74ebd
+version: 1
+runtime: php55
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /login_user
+  script: login_user.php
+  secure: always

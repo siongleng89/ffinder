@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.ffinder.android">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- <uses-permission android:name="android.permission.ACCESS_GPS" /> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION" /> -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application
+            android:name=".MyApplication"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/FFAppTheme">
+        <activity android:name=".ActivityMain">
+        </activity>
+        <activity
+                android:name=".ActivityLaunch"
+                android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                        android:host="ffinderaddnew.com"
+                        android:scheme="http"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".ActivitySetup"
+                android:noHistory="true">
+        </activity>
+        <activity android:name=".ActivityMap">
+        </activity>
+        <activity android:name=".ActivityPromo">
+        </activity>
+
+        <!-- <service -->
+        <!-- android:name=".services.MyFirebaseMessagingService"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.MESSAGING_EVENT"/> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
+
+        <service android:name=".services.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+                android:name=".services.OneSignalNotificationService"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="com.onesignal.NotificationExtender"/>
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".absint.receivers.NotificationClickBroadcastReceiver"/>
+
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyADQK5vtpa2ZcipurNx8g4CVNRXUZ_qIX0"/>
+
+        <activity android:name=".ActivitySettings">
+        </activity>
+        /*start ads*/
+        <activity
+                android:name="com.jirbo.adcolony.AdColonyOverlay"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
+        <activity
+                android:name="com.jirbo.adcolony.AdColonyFullscreen"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
+        <activity
+                android:name="com.jirbo.adcolony.AdColonyBrowser"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
+        <activity android:name="com.applovin.adview.AppLovinInterstitialActivity"/>
+        <activity android:name="com.applovin.adview.AppLovinConfirmationActivity"/>
+        <activity
+                android:name="com.vungle.publisher.FullScreenAdActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        /*end ads*/
+
+    </application>
+
+</manifest>
