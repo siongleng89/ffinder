@@ -24,7 +24,8 @@
                 android:id="@+id/editTxtNewName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/new_name_title"/>
+                android:hint="@string/new_name_title"
+                android:inputType="textFilter|textNoSuggestions"/>
 
     </android.support.design.widget.TextInputLayout>
 </RelativeLayout>

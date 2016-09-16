@@ -58,7 +58,7 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
           //  song = new HashMap <String, String>();
             mViewHolder = new ViewHolder();
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.friend_list, parent, false);
+            convertView = vi.inflate(R.layout.lvitem_friend, parent, false);
 
             mViewHolder.txtTextFriend = (TextView) convertView.findViewById(R.id.txtFriend);
             mViewHolder.txtLocation = (TextView) convertView.findViewById(R.id.txtLocation);
@@ -153,6 +153,12 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
 
             if(error == SearchResult.ErrorTimeoutUnknownReason || error == SearchResult.ErrorTimeoutLocationDisabled){
                 autoNotifyWhenUserLocated(friendModel);
+                viewHolder.txtMessage.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+                toggleReasonListener(viewHolder, true, friendModel);
+            }
+            else{
+                viewHolder.txtMessage.setPaintFlags(0);
+                toggleReasonListener(viewHolder, false, friendModel);
             }
         }
 
@@ -183,11 +189,12 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
 
     private void setListeners(final View convertView, final int position){
         final ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        final FriendModel friendModel = friendModels.get(position);
+        FriendModel friendModel = friendModels.get(position);
 
         viewHolder.btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FriendModel friendModel = friendModels.get(position);
                 Intent intent = new Intent(context, ActivityMap.class);
                 intent.putExtra("username", friendModel.getName());
                 intent.putExtra("latitude", friendModel.getLastLocationModel().getLatitude());
@@ -206,10 +213,10 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
                 friendItemListener.onSearchRequest(friendModels.get(position));
             }
         });
+    }
 
-        if(friendModel.getSearchResult() == SearchResult.ErrorTimeoutUnknownReason ||
-                friendModel.getSearchResult() == SearchResult.ErrorTimeoutLocationDisabled){
-            viewHolder.txtMessage.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+    private void toggleReasonListener(ViewHolder viewHolder, boolean on, final FriendModel friendModel){
+        if(on){
             viewHolder.txtMessage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -227,9 +234,8 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
             });
         }
         else{
-            viewHolder.txtMessage.setPaintFlags(0);
+            viewHolder.txtMessage.setOnClickListener(null);
         }
-
     }
 
     static class ViewHolder {

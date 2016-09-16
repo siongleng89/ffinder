@@ -11,12 +11,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.adapters.IFriendItemListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.models.MyModelChangedListener;
@@ -25,25 +25,27 @@ import com.ffinder.android.adapters.FriendsAdapter;
 import com.ffinder.android.controls.AddMemberDialog;
 import com.ffinder.android.controls.ConfirmDeleteDialog;
 import com.ffinder.android.controls.EditNameDialog;
-import com.ffinder.android.enums.SearchResult;
-import com.ffinder.android.enums.SearchStatus;
-import com.ffinder.android.enums.Status;
+import com.ffinder.android.enums.*;
+import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.LocationModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Vars;
 import com.ffinder.android.tasks.RequestLocationTaskFrag;
+import com.ffinder.android.utils.PreferenceUtils;
+import com.ffinder.android.utils.RunnableArgs;
 import com.ffinder.android.utils.Strings;
 
 import java.util.List;
 
 
-public class ActivityMain extends AppCompatActivity implements IFriendItemListener {
+public class ActivityMain extends MyActivityAbstract implements IFriendItemListener {
 
     private ActivityMain _this;
     private FragmentIdentity fragmentIdentity;
     private FragmentEmptyFriend fragmentEmptyFriend;
+    private FragmentNextAdsCd fragmentNextAdsCd;
     private MyModel myModel;
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -70,6 +72,9 @@ public class ActivityMain extends AppCompatActivity implements IFriendItemListen
         myModel.sortFriendModels();
         myModel.loginFirebase(0, null);
 
+        fragmentNextAdsCd = (FragmentNextAdsCd) getSupportFragmentManager().findFragmentById(R.id.nextAdsCdFragment);
+        fragmentNextAdsCd.setMyModel(myModel);
+
         fragmentIdentity = (FragmentIdentity) getSupportFragmentManager().findFragmentById(R.id.identityFragment);
         fragmentIdentity.setMyModel(myModel);
 
@@ -79,7 +84,7 @@ public class ActivityMain extends AppCompatActivity implements IFriendItemListen
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary));
         listFriends = (ListView) findViewById(R.id.listFriends);
-        friendsAdapter = new FriendsAdapter(this, R.layout.friend_list, myModel.getFriendModels(), myModel, this);
+        friendsAdapter = new FriendsAdapter(this, R.layout.lvitem_friend, myModel.getFriendModels(), myModel, this);
         listFriends.setAdapter(friendsAdapter);
         registerForContextMenu(listFriends);
 
@@ -159,25 +164,35 @@ public class ActivityMain extends AppCompatActivity implements IFriendItemListen
             // If the Fragment is non-null, then it is currently being
             // retained across a configuration change.
             if (taskFragment != null) {
+                friendModel.setSearchResult(SearchResult.Normal);
                 friendModel.setSearchStatus(taskFragment.getCurrentStatus());
                 setRequestLocationTaskFragListener(taskFragment);
             }
         }
-
     }
 
-    private void createRequestLocationTaskFrag(FriendModel friendModel){
-        FragmentManager fm = getSupportFragmentManager();
-        RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag) fm.findFragmentByTag(friendModel.getUserId());
+    private void createRequestLocationTaskFrag(final FriendModel friendModel){
+        final FragmentManager fm = getSupportFragmentManager();
+        final RequestLocationTaskFrag[] taskFragment = {(RequestLocationTaskFrag) fm.findFragmentByTag(friendModel.getUserId())};
         //not in search
-        if (taskFragment == null) {
-            friendModel.setSearchResult(SearchResult.Normal);
-            friendModel.setSearchStatus(SearchStatus.Starting);
+        if (taskFragment[0] == null || taskFragment[0].getCurrentResult() != null) {
+            fragmentNextAdsCd.friendSearched(new RunnableArgs<Boolean>() {
+                @Override
+                public void run() {
+                    if(this.getFirstArg()){
+                        friendModel.setSearchResult(SearchResult.Normal);
+                        friendModel.setSearchStatus(SearchStatus.Starting);
 
-            taskFragment = RequestLocationTaskFrag.newInstance(myModel.getUserId(), friendModel.getUserId());
-            fm.beginTransaction().add(taskFragment, friendModel.getUserId()).commit();
-            setRequestLocationTaskFragListener(taskFragment);
+                        taskFragment[0] = RequestLocationTaskFrag.newInstance(myModel.getUserId(), friendModel.getUserId());
+                        fm.beginTransaction().add(taskFragment[0], friendModel.getUserId()).commit();
+                        setRequestLocationTaskFragListener(taskFragment[0]);
+                    }
+                }
+            });
         }
+
+
+
     }
 
 
@@ -231,6 +246,13 @@ public class ActivityMain extends AppCompatActivity implements IFriendItemListen
     }
 
     public void setListeners(){
+        listFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                createRequestLocationTaskFrag(myModel.getFriendModels().get(position));
+            }
+        });
+
         myModel.addMyModelChangedListener(new MyModelChangedListener() {
             @Override
             public void onChanged(MyModel newMyModel, String changedProperty) {
@@ -328,6 +350,8 @@ public class ActivityMain extends AppCompatActivity implements IFriendItemListen
 
         if(friendsAdapter != null) friendsAdapter.notifyDataSetChanged();
         refreshFriendList();
+
+        PreferenceUtils.delete(this, PreferenceType.AutoNotifiedReceivedIds);
     }
 
     @Override

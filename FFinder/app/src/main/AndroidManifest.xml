@@ -3,15 +3,13 @@
           package="com.ffinder.android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- <uses-permission android:name="android.permission.ACCESS_GPS" /> -->
-    <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION" /> -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="com.android.vending.BILLING"/>
 
     <application
             android:name=".MyApplication"
@@ -78,7 +76,8 @@
 
         <activity android:name=".ActivitySettings">
         </activity>
-        /*start ads*/
+
+        <!-- start ads -->
         <activity
                 android:name="com.jirbo.adcolony.AdColonyOverlay"
                 android:configChanges="keyboardHidden|orientation|screenSize"
@@ -97,8 +96,35 @@
                 android:name="com.vungle.publisher.FullScreenAdActivity"
                 android:configChanges="keyboardHidden|orientation|screenSize"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
-        /*end ads*/
+        <!-- end ads -->
 
+        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
+     dispatching on non-Google Play devices -->
+        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+                  android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+                 android:enabled="true"
+                 android:exported="false"/>
+
+        <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
+             installation campaign reporting -->
+        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
+
+        <activity
+                android:name=".ActivityVip"
+                android:theme="@style/FFAppTheme">
+        </activity>
     </application>
 
 </manifest>

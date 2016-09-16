@@ -28,6 +28,7 @@ public class RequestLocationTaskFrag extends Fragment {
     private RequestLocationTaskFragListener requestLocationTaskFragListener;
     private String userId, targetUserId;
     private SearchStatus currentStatus;
+    private SearchResult currentResult;
     //private int reuseToleranceSecs = 60;
     private int reuseToleranceSecs = 1;
     private int timeoutSecs = 45;
@@ -98,12 +99,17 @@ public class RequestLocationTaskFrag extends Fragment {
     }
 
     public void notifyResult(LocationModel locationModel, SearchResult searchResult){
+        currentResult = searchResult;
         if(requestLocationTaskFragListener != null)
             requestLocationTaskFragListener.onUpdateResult(targetUserId, locationModel, currentStatus, searchResult);
     }
 
     public SearchStatus getCurrentStatus() {
         return currentStatus;
+    }
+
+    public SearchResult getCurrentResult() {
+        return currentResult;
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -169,7 +175,7 @@ public class RequestLocationTaskFrag extends Fragment {
 
                                                         if(this.getFirstArg() != null){
                                                             resultLocationModel = this.getFirstArg();
-                                                            geodecodePart();
+                                                            geodecodePart(true, null);
                                                         }
                                                         else{
                                                             setSearchResult(SearchResult.ErrorUnknown);
@@ -187,7 +193,7 @@ public class RequestLocationTaskFrag extends Fragment {
                                 else{
                                     //recently updated, no need request again
                                     resultLocationModel = this.getFirstArg();
-                                    geodecodePart();
+                                    geodecodePart(true, null);
                                 }
                             }
                         });
@@ -199,24 +205,30 @@ public class RequestLocationTaskFrag extends Fragment {
             });
         }
 
-        private void geodecodePart(){
-            publishProgress(SearchStatus.Geocoding);
+        private void geodecodePart(final boolean notify, final Runnable onFinish){
+
+            if(notify) publishProgress(SearchStatus.Geocoding);
 
             AndroidUtils.geoDecode(context, resultLocationModel.getLatitude(), resultLocationModel.getLongitude(), new RunnableArgs<String>() {
                 @Override
                 public void run() {
-                    addressRetrieved(this.getFirstArg());
+                    addressRetrieved(this.getFirstArg(), notify, onFinish);
                 }
             });
         }
 
-        private void addressRetrieved(String address){
+        private void addressRetrieved(String address, boolean notify, Runnable onFinish){
             if(finish) return;
 
             resultLocationModel.setAddress(address);
 
-            publishProgress(SearchStatus.End);
-            setSearchResult(SearchResult.Normal);
+            if(notify){
+                publishProgress(SearchStatus.End);
+                setSearchResult(SearchResult.Normal);
+            }
+
+            if(onFinish != null) onFinish.run();
+
         }
 
 
@@ -362,20 +374,30 @@ public class RequestLocationTaskFrag extends Fragment {
             });
         }
 
-
-
-
-
         public void taskTimeout() {
-            if(searchStatus == SearchStatus.WaitingUserLocation){
-                setSearchResult(SearchResult.ErrorTimeoutLocationDisabled);
-            }
-            else if(searchStatus == SearchStatus.CheckingData){
-                setSearchResult(SearchResult.ErrorTimeoutNoConnection);
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if(searchStatus == SearchStatus.WaitingUserLocation){
+                        setSearchResult(SearchResult.ErrorTimeoutLocationDisabled);
+                    }
+                    else if(searchStatus == SearchStatus.CheckingData){
+                        setSearchResult(SearchResult.ErrorTimeoutNoConnection);
+                    }
+                    else{
+                        setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
+                    }
+                }
+            };
+
+            if(resultLocationModel != null && Strings.isEmpty(resultLocationModel.getAddress()) &&
+                    !Strings.isEmpty(resultLocationModel.getLatitude())){
+                geodecodePart(false, runnable);
             }
             else{
-                setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
+                runnable.run();
             }
+
         }
 
         public void dispose(){

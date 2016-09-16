@@ -7,11 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import com.ffinder.android.R;
-import com.ffinder.android.models.LanguageModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.models.SettingsModel;
 
@@ -44,7 +41,7 @@ public class SettingsAdapter extends ArrayAdapter<SettingsModel> {
             //  song = new HashMap <String, String>();
             mViewHolder = new ViewHolder();
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.setting_item, parent, false);
+            convertView = vi.inflate(R.layout.lvitem_setting, parent, false);
 
             mViewHolder.txtItem = (TextView) convertView.findViewById(R.id.txtItem);
 

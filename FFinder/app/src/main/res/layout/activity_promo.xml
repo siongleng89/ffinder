@@ -14,18 +14,33 @@
             android:text="@string/input_promo_code_title"
             android:id="@+id/textView7" android:layout_below="@+id/my_toolbar" android:layout_centerHorizontal="true"
             android:layout_marginTop="65dp"/>
-    <EditText
-            android:layout_width="wrap_content"
+
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/promoCodeWrapper"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editTextPromoCode" android:layout_below="@+id/textView7" android:layout_alignLeft="@+id/textView7"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/textView7"
+            android:layout_alignLeft="@+id/textView7"
             android:layout_alignStart="@+id/textView7" android:layout_marginTop="67dp"
-            android:layout_alignRight="@+id/textView7" android:layout_alignEnd="@+id/textView7"/>
+            android:layout_alignRight="@+id/textView7" android:layout_alignEnd="@+id/textView7">
+
+        <EditText
+                android:id="@+id/editTextPromoCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/promo_code_title"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/submit"
             android:id="@+id/btnSubmit"
-            android:layout_marginTop="62dp" android:layout_below="@+id/editTextPromoCode"
+            android:layout_marginTop="62dp" android:layout_below="@+id/promoCodeWrapper"
             android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

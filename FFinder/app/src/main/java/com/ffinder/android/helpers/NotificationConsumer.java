@@ -25,6 +25,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.support.v4.app.NotificationCompat.DEFAULT_LIGHTS;
+import static android.support.v4.app.NotificationCompat.DEFAULT_SOUND;
+import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
+
 /**
  * Created by SiongLeng on 4/9/2016.
  */
@@ -64,6 +68,7 @@ public class NotificationConsumer {
                         if(messageType == FCMMessageType.UpdateLocation){
                             RequestLocationHandler requestLocationHandler = new RequestLocationHandler(context, senderId, myModel);
                             requestLocationHandler.run();
+
                         }
                         else if(messageType == FCMMessageType.UserLocated){
                             FirebaseDB.getUserLocation(senderId, new FirebaseListener<LocationModel>(LocationModel.class) {
@@ -126,7 +131,7 @@ public class NotificationConsumer {
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.share_icon)
+                        .setSmallIcon(R.drawable.ic_stat_notification)
                         .setContentTitle(title)
                         .setContentText(msg);
         int NOTIFICATION_ID = 12345;
@@ -135,9 +140,7 @@ public class NotificationConsumer {
         PendingIntent contentIntent = PendingIntent.getBroadcast(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(contentIntent);
         builder.setAutoCancel(true);
-        builder.setVibrate(new long[] { 1000, 1000});
-        builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-
+        builder.setDefaults(DEFAULT_SOUND | DEFAULT_VIBRATE | DEFAULT_LIGHTS);
         NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         //nManager.cancel(NOTIFICATION_ID);

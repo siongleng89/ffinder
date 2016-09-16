@@ -40,7 +40,7 @@ public class LanguagesAdapter extends ArrayAdapter<LanguageModel>{
             //  song = new HashMap <String, String>();
             mViewHolder = new ViewHolder();
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.language_item, parent, false);
+            convertView = vi.inflate(R.layout.lvitem_language, parent, false);
 
             mViewHolder.txtLanguage = (TextView) convertView.findViewById(R.id.txtLanguage);
             mViewHolder.radioLanguage = (RadioButton) convertView.findViewById(R.id.radioLanguage);

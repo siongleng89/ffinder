@@ -26,6 +26,19 @@ public class RestfulService {
         callApi("login_user", nameValuePairs, listener);
     }
 
+    public static void adsWatched(String userId, RestfulListener<String> listener){
+        ArrayList<Pair<String, String>> nameValuePairs = new ArrayList<Pair<String, String>>();
+        nameValuePairs.add(new Pair<String, String>("userId", userId));
+        callApi("watched_ads", nameValuePairs, listener);
+    }
+
+    public static void usePromoCode(String userId, String promoCode, RestfulListener<String> listener){
+        ArrayList<Pair<String, String>> nameValuePairs = new ArrayList<Pair<String, String>>();
+        nameValuePairs.add(new Pair<String, String>("userId", userId));
+        nameValuePairs.add(new Pair<String, String>("promoCode", promoCode));
+        callApi("use_promo", nameValuePairs, listener);
+    }
+
     private static void callApi(final String name,  final ArrayList<Pair<String, String>> nameValuePairs, final RestfulListener listener) {
         nameValuePairs.add(new Pair<String, String>("restSecret", Constants.RestfulKey));
 

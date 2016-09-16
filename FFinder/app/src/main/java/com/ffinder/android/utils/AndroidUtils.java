@@ -2,15 +2,18 @@ package com.ffinder.android.utils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Patterns;
 import android.widget.EditText;
 import com.ffinder.android.R;
+import com.ffinder.android.enums.AlertDialogType;
 import com.ffinder.android.models.GoogleGeoCodeResponse;
 import com.ffinder.android.statics.Vars;
 
@@ -51,6 +54,21 @@ public class AndroidUtils {
         pd.setMessage(text);
         pd.show();
         return pd;
+    }
+
+    public static AlertDialog showDialog(Context context, String title, String content, final Runnable onDismiss){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        if(!Strings.isEmpty(title)) builder.setTitle(title);
+        builder.setMessage(content);
+        // Set up the buttons
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(onDismiss != null) onDismiss.run();
+            }
+        });
+
+        return builder.show();
     }
 
     public static String getUsername(Context context){
@@ -101,27 +119,63 @@ public class AndroidUtils {
 
 
     public static void geoDecode(final Context context, final String latitude, final String longitude, final RunnableArgs<String> onFinish){
-        geoDecodeByGeocoder(context, latitude, longitude, new RunnableArgs<String>() {
+        Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
-                if(Strings.isEmpty(this.getFirstArg())){
-                    geoDecodeByGoogleApi(latitude, longitude, new RunnableArgs<String>() {
-                        @Override
-                        public void run() {
-                            if(Strings.isEmpty(this.getFirstArg())){
-                                onFinish.run(context.getString(R.string.unknown_address_msg));
-                            }
-                            else{
-                                onFinish.run(this.getFirstArg());
-                            }
+                final ArrayList<String> addressResult = new ArrayList<String>();
+                int sleepCount = 0;
+
+                geoDecodeByGeocoder(context, latitude, longitude, new RunnableArgs<String>() {
+                    @Override
+                    public void run() {
+                        if(Strings.isEmpty(this.getFirstArg())){
+                            addressResult.add("");
                         }
-                    });
+                        else{
+                            addressResult.add(this.getFirstArg());
+                        }
+                    }
+                });
+
+                geoDecodeByGoogleApi(latitude, longitude, new RunnableArgs<String>() {
+                    @Override
+                    public void run() {
+                        if(Strings.isEmpty(this.getFirstArg())){
+                            addressResult.add("");
+                        }
+                        else{
+                            addressResult.add(this.getFirstArg());
+                        }
+                    }
+                });
+
+
+                while (addressResult.size() < 2){
+                    Threadings.sleep(300);
+                    sleepCount++;
+                    if(sleepCount > 40){
+                        break;
+                    }
                 }
-                else{
-                    onFinish.run(this.getFirstArg());
+
+                String finalAddress = "";
+                for(String address : addressResult){
+                    if(address.length() > finalAddress.length()){
+                        finalAddress = address;
+                    }
                 }
+
+                if(Strings.isEmpty(finalAddress)){
+                    finalAddress = context.getString(R.string.unknown_address_msg);
+                }
+
+                onFinish.run(finalAddress);
+
             }
         });
+
+
+
     }
 
 
@@ -185,6 +239,9 @@ public class AndroidUtils {
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
+
+                Logs.show("Geodecoding location using google api: " + latitude + ", " + longitude);
+
                 String address = null;
                 String url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + ","
                         + longitude + "&sensor=true";
@@ -194,6 +251,9 @@ public class AndroidUtils {
                     if(response.status.equalsIgnoreCase("ok")){
                         address = response.getFirstAddress();
                     }
+
+                    Logs.show("Geodecoding result: " + address);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

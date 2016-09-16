@@ -18,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.RelativeLayout;
 import com.ffinder.android.absint.activities.IAppsIntroductionListener;
+import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Vars;
@@ -37,7 +38,7 @@ import java.util.List;
 /**
  * Created by SiongLeng on 30/8/2016.
  */
-public class ActivityLaunch extends AppCompatActivity implements IAppsIntroductionListener {
+public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroductionListener {
 
     private ActivityLaunch _this;
     private GoogleApiClient googleApiClient;

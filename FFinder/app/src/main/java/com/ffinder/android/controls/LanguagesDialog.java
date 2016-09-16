@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.ffinder.android.R;
 import com.ffinder.android.adapters.LanguagesAdapter;
+import com.ffinder.android.enums.AnalyticEvent;
+import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.helpers.LocaleHelper;
 import com.ffinder.android.models.LanguageModel;
 import com.ffinder.android.models.MyModel;
@@ -42,7 +44,7 @@ public class LanguagesDialog {
                 (ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content), false);
 
         listViewLanguage = (ListView) viewInflated.findViewById(R.id.listViewLanguage);
-        languagesAdapter = new LanguagesAdapter(activity, R.layout.language_item, languageModels, myModel);
+        languagesAdapter = new LanguagesAdapter(activity, R.layout.lvitem_language, languageModels, myModel);
         listViewLanguage.setAdapter(languagesAdapter);
 
         builder.setView(viewInflated);
@@ -87,7 +89,7 @@ public class LanguagesDialog {
     private void populateLanguageModels(){
         languageModels = new ArrayList();
         languageModels.add(new LanguageModel("English", "en"));
-        languageModels.add(new LanguageModel("Bahasa Melayu", "ms"));
+        languageModels.add(new LanguageModel("Português", "pt"));
 
         originalLanguage = LocaleHelper.getLanguage(activity);
         for(LanguageModel languageModel : languageModels){
@@ -104,6 +106,7 @@ public class LanguagesDialog {
                 for(int i = 0; i < languageModels.size(); i++){
                     if(i == position){
                         languageModels.get(i).setSelected(true);
+                        Analytics.logEvent(AnalyticEvent.Change_Language, languageModels.get(i).getAbbr());
                     }
                     else{
                         languageModels.get(i).setSelected(false);

@@ -8,3 +8,11 @@ handlers:
 - url: /login_user
   script: login_user.php
   secure: always
+  
+- url: /watched_ads
+  script: watched_ads.php
+  secure: always
+
+- url: /use_promo
+  script: use_promo.php
+  secure: always

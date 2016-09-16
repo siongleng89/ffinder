@@ -1,12 +1,15 @@
 package com.ffinder.android.helpers;
 
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import com.ffinder.android.absint.databases.FirebaseListener;
+import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.models.AutoNotificationModel;
 import com.ffinder.android.models.KeyModel;
 import com.ffinder.android.models.LocationModel;
+import com.ffinder.android.models.NextAdsModel;
 import com.ffinder.android.utils.DateTimeUtils;
 import com.ffinder.android.utils.RunnableArgs;
 import com.ffinder.android.utils.Strings;
@@ -24,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by SiongLeng on 30/8/2016.
@@ -42,10 +46,10 @@ public class FirebaseDB {
                 });
     }
 
-    public static void saveNewUser(final String userId, String token, final FirebaseListener<String> listener){
+    public static void saveNewUser(final String userId, final FirebaseListener<String> listener){
         DatabaseReference db = getTable(TableName.users);
         HashMap<String, String> map = new HashMap();
-        map.put("token", token);
+        map.put("dummy", "1");
         db.child(userId).setValue(map, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -239,11 +243,6 @@ public class FirebaseDB {
         });
     }
 
-    public static void getUserFirebaseToken(String targetUserId, final FirebaseListener<String> listener){
-        getSingleData(getTable(TableName.users).child(targetUserId).child("token"), listener);
-    }
-
-
     public static void getUserLocation(String targetUserId, final FirebaseListener<LocationModel> listener){
         getSingleData(getTable(TableName.locations).child(targetUserId), listener);
     }
@@ -252,6 +251,57 @@ public class FirebaseDB {
     public static void getAllMyLinks(String myUserId, final FirebaseListener listener){
         DatabaseReference db = getTable(TableName.links);
         getData(db.child(myUserId), listener);
+    }
+
+    public static void setNextAdsCount(String myUserId, int newCount, final FirebaseListener listener){
+        final DatabaseReference db = getTable(TableName.nextAds);
+        db.child(myUserId).child("count").setValue(newCount, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if(listener != null) listener.onResult(null, databaseError);
+            }
+        });
+    }
+
+    public static void getNextAdsCount(final String myUserId, final FirebaseListener<Integer> listener){
+        final DatabaseReference db = getTable(TableName.nextAds);
+        getSingleData(db.child(myUserId).child("count"), new FirebaseListener<Integer>(Integer.class) {
+            @Override
+            public void onResult(Integer currentNextAdsCount, Status status) {
+                if(status == Status.Success){
+                    if(currentNextAdsCount == null){
+                        RestfulService.adsWatched(myUserId, new RestfulListener<String>() {
+                            @Override
+                            public void onResult(String result, Status status) {
+                                if(!Strings.isEmpty(result) && Strings.isNumeric(result) && status == Status.Success){
+                                    listener.onResult(Integer.valueOf(result), Status.Success);
+                                }
+                                else{
+                                    listener.onResult(0, Status.Success);
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        listener.onResult(currentNextAdsCount, Status.Success);
+                    }
+                }
+                else{
+                    listener.onResult(0, Status.Success);
+                }
+            }
+        });
+    }
+
+
+    public static void getAllPromoCodeUsages(String userId,  final FirebaseListener<ArrayList<Pair<String, Object>>> listener){
+        final DatabaseReference db = getTable(TableName.promoUsages);
+        getData(db.child(userId), listener);
+    }
+
+    public static void getAllProducts(final FirebaseListener<ArrayList<Pair<String, Object>>> listener){
+        final DatabaseReference db = getTable(TableName.products);
+        getData(db, listener);
     }
 
     private static void checkExist(DatabaseReference ref, final FirebaseListener<Boolean> listener) {
@@ -369,7 +419,8 @@ public class FirebaseDB {
     }
 
     private enum TableName{
-        users, links, locations, timestamps, pings, autoNotifications, keys
+        users, links, locations, timestamps, pings, autoNotifications, keys, nextAds, showAdsIn, promoCodes, promoUsages,
+        products
     }
 
 }

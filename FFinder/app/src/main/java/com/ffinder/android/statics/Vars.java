@@ -1,6 +1,7 @@
 package com.ffinder.android.statics;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ffinder.android.helpers.AdsMediation;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,8 +22,6 @@ public class Vars {
     public static void clearPendingAddUser(){
         pendingAddUserKey = null;
     }
-
-    public static AtomicInteger totalNotificationsCount;
 
 
 }

@@ -1,12 +1,19 @@
 package com.ffinder.android;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import com.ffinder.android.absint.activities.MyActivityAbstract;
+import com.ffinder.android.enums.AnalyticEvent;
+import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.utils.Strings;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,7 +21,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.*;
 
-public class ActivityMap extends AppCompatActivity implements OnMapReadyCallback{
+public class ActivityMap extends MyActivityAbstract implements OnMapReadyCallback{
 
     private String username, latitude, longitude, address, datetime;
 
@@ -35,17 +42,30 @@ public class ActivityMap extends AppCompatActivity implements OnMapReadyCallback
         address = bundle.getString("address");
         datetime = bundle.getString("datetime");
 
-
-
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.map_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        }
+        else if (item.getItemId() == R.id.action_direction) {
+            Analytics.logEvent(AnalyticEvent.Use_Direction);
+            String uri = "geo:" + latitude + ","
+                    + longitude + "?q=" + latitude
+                    + "," + longitude;
+            startActivity(new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse(uri)));
         }
 
         return super.onOptionsItemSelected(item);

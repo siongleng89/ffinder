@@ -2,36 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center|right" android:paddingRight="10dp">
+                android:gravity="center_vertical" android:paddingLeft="10dp">
 
-    <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorContrast"
-            android:layout_toRightOf="@+id/table" android:layout_marginLeft="10dp"/>
-
-    <TableLayout
+    <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" android:layout_marginLeft="10dp" android:gravity="center"
-            android:id="@+id/table">
-        <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView" android:textColor="@color/colorContrast"/>
-        </TableRow>
-        <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView2" android:textColor="@color/colorContrast"
-                    android:layout_gravity="center_horizontal"/>
-        </TableRow>
-    </TableLayout>
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text=""
+            android:id="@+id/txtNextAds" android:textColor="@color/colorContrast"/>
 </RelativeLayout>

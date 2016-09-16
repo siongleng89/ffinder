@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.FirebaseDB;
@@ -19,7 +20,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 /**
  * Created by SiongLeng on 30/8/2016.
  */
-public class ActivitySetup extends AppCompatActivity {
+public class ActivitySetup extends MyActivityAbstract {
 
     private boolean initialized;
     private ActivitySetup _this;
@@ -82,46 +83,31 @@ public class ActivitySetup extends AppCompatActivity {
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
-                String token = null;
-                int i = 0;
-                while (Strings.isEmpty(token)){
-                    token = FirebaseInstanceId.getInstance().getToken();
-                    if(!Strings.isEmpty(token) || i > 10) break;
-                    Threadings.sleep(1000);
-                    i++;
-                }
+                setCurrentStatus(getString(R.string.initializing_user));
 
-                if(Strings.isEmpty(token)){
-                    failed(FailedCode.NoToken);
-                }
-                else{
-                    setCurrentStatus(getString(R.string.initializing_user));
-
-                    myModel.setUserId(userId);
-                    final String finalToken = token;
-                    myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
-                        @Override
-                        public void run() {
-                            if(this.getFirstArg()){
-                                FirebaseDB.saveNewUser(userId, finalToken, new FirebaseListener<String>() {
-                                    @Override
-                                    public void onResult(String userId, Status status) {
-                                        if(status == Status.Success){
-                                            myModel.setUserId(userId);
-                                            myModel.save();
-                                            setCurrentStatus(getString(R.string.initialization_done));
-                                            Intent k = new Intent(_this, ActivityMain.class);
-                                            startActivity(k);
-                                        }
-                                        else{
-                                            failed(FailedCode.DBFailed);
-                                        }
+                myModel.setUserId(userId);
+                myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
+                    @Override
+                    public void run() {
+                        if(this.getFirstArg()){
+                            FirebaseDB.saveNewUser(userId, new FirebaseListener<String>() {
+                                @Override
+                                public void onResult(String userId, Status status) {
+                                    if(status == Status.Success){
+                                        myModel.setUserId(userId);
+                                        myModel.save();
+                                        setCurrentStatus(getString(R.string.initialization_done));
+                                        Intent k = new Intent(_this, ActivityMain.class);
+                                        startActivity(k);
                                     }
-                                });
-                            }
+                                    else{
+                                        failed(FailedCode.DBFailed);
+                                    }
+                                }
+                            });
                         }
-                    });
-                }
+                    }
+                });
             }
         });
     }
@@ -131,9 +117,6 @@ public class ActivitySetup extends AppCompatActivity {
         switch (failedCode){
             case NoConnection:
                 msg = getString(R.string.no_connection_msg);
-                break;
-            case NoToken:
-                msg = getString(R.string.no_token_msg);
                 break;
             case DBFailed:
                 msg = getString(R.string.db_failed_msg);
@@ -155,7 +138,7 @@ public class ActivitySetup extends AppCompatActivity {
     }
 
     private enum FailedCode{
-        NoConnection, NoToken, DBFailed
+        NoConnection, DBFailed
     }
 
     public void setCurrentStatus(final String currentStatus) {

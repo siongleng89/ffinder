@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.databases.FirebaseListener;
+import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.enums.Status;
+import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.KeyModel;
@@ -95,6 +97,8 @@ public class AddMemberDialog {
         if(autoAdd){
             checkCanAdd();
         }
+
+        Analytics.logEvent(AnalyticEvent.Open_Add_Friend_Dialog);
     }
 
     private void validate(){
@@ -172,6 +176,8 @@ public class AddMemberDialog {
         txtError.setText(msg);
         txtError.setVisibility(View.VISIBLE);
         pd.dismiss();
+
+        Analytics.logEvent(AnalyticEvent.Add_Friend_Failed, msg);
     }
 
     private void successAddUser(String addingUserId, String name){
@@ -180,11 +186,13 @@ public class AddMemberDialog {
         newFriendModel.setName(Strings.pickNonEmpty(editTxtMemberName.getText().toString(), name, "No_Name"));
 
         myModel.addFriendModel(newFriendModel, true);
-        newFriendModel.save(activity);
         myModel.sortFriendModels();
+        newFriendModel.save(activity);
 
         pd.dismiss();
         dialog.dismiss();
+
+        Analytics.logEvent(AnalyticEvent.Add_Friend_Success);
     }
 
 

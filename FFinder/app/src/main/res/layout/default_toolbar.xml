@@ -4,6 +4,7 @@
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
         app:theme="@style/ActionBarThemeOverlay"
+        app:popupTheme="@style/ToolbarPopup"
         style="@style/HeaderBar"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"/>

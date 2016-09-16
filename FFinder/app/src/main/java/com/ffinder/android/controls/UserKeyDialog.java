@@ -2,6 +2,7 @@ package com.ffinder.android.controls;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -11,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.ffinder.android.R;
+import com.ffinder.android.enums.AnalyticEvent;
+import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.utils.AndroidUtils;
 import com.ffinder.android.utils.DateTimeUtils;
@@ -103,6 +107,8 @@ public class UserKeyDialog {
         btnShareKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Analytics.logEvent(AnalyticEvent.Share_Key);
+
                 String key = txtYourKey.getText().toString();
 
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -125,6 +131,21 @@ public class UserKeyDialog {
                                 resetKey();
                             }})
                         .setNegativeButton(R.string.no, null).show();
+            }
+        });
+
+        txtYourKey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                    android.text.ClipboardManager clipboard = (android.text.ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                    clipboard.setText(txtYourKey.getText().toString());
+                } else {
+                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                    android.content.ClipData clip = android.content.ClipData.newPlainText("",txtYourKey.getText().toString());
+                    clipboard.setPrimaryClip(clip);
+                }
+                Toast.makeText(activity, R.string.copied_to_clipboard_toast_msg, Toast.LENGTH_SHORT).show();
             }
         });
 

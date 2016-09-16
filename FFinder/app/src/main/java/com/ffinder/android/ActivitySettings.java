@@ -1,5 +1,6 @@
 package com.ffinder.android;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -7,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.adapters.SettingsAdapter;
 import com.ffinder.android.controls.LanguagesDialog;
 import com.ffinder.android.models.MyModel;
@@ -14,7 +16,7 @@ import com.ffinder.android.models.SettingsModel;
 
 import java.util.ArrayList;
 
-public class ActivitySettings extends AppCompatActivity {
+public class ActivitySettings extends MyActivityAbstract {
 
     private ListView listViewSettings;
     private SettingsAdapter settingsAdapter;
@@ -34,7 +36,7 @@ public class ActivitySettings extends AppCompatActivity {
         myModel = new MyModel(this);
         populateSettingsModel();
         listViewSettings = (ListView) findViewById(R.id.listViewSettings);
-        settingsAdapter = new SettingsAdapter(this, R.layout.setting_item, settingsModels, myModel);
+        settingsAdapter = new SettingsAdapter(this, R.layout.lvitem_setting, settingsModels, myModel);
         listViewSettings.setAdapter(settingsAdapter);
 
         setListeners();
@@ -52,6 +54,7 @@ public class ActivitySettings extends AppCompatActivity {
     private void populateSettingsModel(){
         settingsModels = new ArrayList();
         settingsModels.add(new SettingsModel(getString(R.string.settings_item_language_title)));
+        settingsModels.add(new SettingsModel(getString(R.string.vip_title)));
     }
 
     private void setListeners(){
@@ -62,6 +65,11 @@ public class ActivitySettings extends AppCompatActivity {
                 if(settingsModel.getTitle().equals(getString(R.string.settings_item_language_title))){
                     LanguagesDialog languagesDialog = new LanguagesDialog(ActivitySettings.this, myModel);
                     languagesDialog.show();
+                }
+                else if(settingsModel.getTitle().equals(getString(R.string.vip_title))){
+                    Intent intent = new Intent(ActivitySettings.this, ActivityVip.class);
+                    intent.putExtra("userId", myModel.getUserId());
+                    startActivity(intent);
                 }
             }
         });

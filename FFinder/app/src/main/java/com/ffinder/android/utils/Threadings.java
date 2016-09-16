@@ -1,5 +1,8 @@
 package com.ffinder.android.utils;
 
+import android.app.Activity;
+import android.content.Context;
+
 /**
  * Created by SiongLeng on 9/12/2015.
  */
@@ -62,9 +65,9 @@ public class Threadings {
         }
     }
 
-    public static void postRunnable(Runnable runnable){
+    public static void postRunnable(Activity context, Runnable runnable){
         if(Thread.currentThread().getId() != mainTreadId){
-          //  Gdx.app.postRunnable(runnable);
+            context.runOnUiThread(runnable);
         }
         else{
             runnable.run();

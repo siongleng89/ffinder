@@ -3,6 +3,8 @@ package com.ffinder.android.helpers;
 
 import android.app.Activity;
 import com.aerserv.sdk.*;
+import com.aerserv.sdk.analytics.AerServAnalyticsUtils;
+import com.ffinder.android.absint.helpers.IAdsMediationListener;
 import com.ffinder.android.utils.Logs;
 import com.ffinder.android.utils.RunnableArgs;
 
@@ -17,13 +19,13 @@ public class AdsMediation {
     private Activity activity;
     private boolean hasAds;
     private AerServInterstitial interstitial;
+    private IAdsMediationListener adsMediationListener;
 
     public AdsMediation(Activity activity) {
         this.activity = activity;
         _this = this;
 
         AerServSdk.init(activity, "1001717");
-        showRewardedVideo(false, null);
     }
 
     public boolean onBackPressed() {
@@ -35,7 +37,7 @@ public class AdsMediation {
         return hasAds;
     }
 
-    public void showRewardedVideo(final boolean showAds, final RunnableArgs<Boolean> runnable) {
+    public void showRewardedVideo(Activity activity, final boolean showAds, final RunnableArgs<Boolean> runnable) {
         AerServEventListener listener = new AerServEventListener() {
             @Override
             public void onAerServEvent(AerServEvent event, List<Object> args) {
@@ -53,11 +55,13 @@ public class AdsMediation {
                     case AD_FAILED:
                         hasAds = false;
                         if(runnable != null) runnable.run(false);
+                        if(adsMediationListener != null) adsMediationListener.onResult(false);
                         break;
 
                     case VC_REWARDED:
-                        //broadcaster.broadcast(BroadcastEvent.WATCHED_VIDEO_ADS);
+                        if(adsMediationListener != null) adsMediationListener.onResult(true);
                         break;
+
                 }
             }
         };
@@ -69,4 +73,15 @@ public class AdsMediation {
         interstitial = new AerServInterstitial(config);
     }
 
+    public void preload(Activity activity){
+        AerServConfig config = new AerServConfig(activity, "1016571")
+                .setPreload(true);
+
+        interstitial = new AerServInterstitial(config);
+    }
+
+
+    public void setAdsMediationListener(IAdsMediationListener adsMediationListener) {
+        this.adsMediationListener = adsMediationListener;
+    }
 }

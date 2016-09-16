@@ -13,11 +13,15 @@ android {
 
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 5
+        versionCode 7
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            buildConfigField "Boolean", "DEBUG_MODE", "true"
+        }
         release {
+            buildConfigField "Boolean", "DEBUG_MODE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -29,6 +33,7 @@ android {
     }
     lintOptions {
         disable 'MissingTranslation'
+        checkReleaseBuilds false
     }
 }
 
@@ -47,6 +52,8 @@ dependencies {
     compile 'com.firebase:firebase-client-android:2.3.1'
     compile 'com.google.firebase:firebase-messaging:9.4.0'
     compile 'com.google.firebase:firebase-database:9.4.0'
+    compile 'com.anjlab.android.iab.v3:library:1.0.+'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

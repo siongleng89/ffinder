@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:padding="15dp">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/ran_out_free_search_msg"
+            android:id="@+id/textView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:gravity="center"/>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_below="@+id/textView"
+            android:gravity="center_horizontal" android:layout_marginTop="20dp">
+        <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="120dp"
+                android:layout_height="140dp"
+                android:text="@string/btn_watch_ads_earn_credits_text"
+                android:id="@+id/btnWatchAds" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+        <Button style="?android:attr/buttonStyleSmall" android:layout_width="120dp" android:layout_height="140dp"
+                android:text="@string/btn_input_promo_code_earn_credits_text" android:id="@+id/btnPromo"
+                android:layout_alignParentTop="true" android:layout_toRightOf="@+id/btnWatchAds"
+                android:layout_toEndOf="@+id/btnWatchAds"/>
+        <Button style="?android:attr/buttonStyleSmall" android:layout_width="120dp" android:layout_height="140dp"
+                android:text="@string/btn_subscript_unlimited_searches_text" android:id="@+id/btnSubscript"
+                android:layout_below="@+id/btnWatchAds" android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+        <Button style="?android:attr/buttonStyleSmall" android:layout_width="120dp" android:layout_height="140dp"
+                android:text="@string/btn_maybe_next_time_text" android:id="@+id/btnQuit"
+                android:layout_below="@+id/btnWatchAds" android:layout_alignRight="@+id/btnPromo"
+                android:layout_alignEnd="@+id/btnPromo"/>
+    </RelativeLayout>
+</RelativeLayout>

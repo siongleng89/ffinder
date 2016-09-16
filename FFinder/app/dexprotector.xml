@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dexprotector>
+    <verbose>false</verbose>
+    <optimize>false</optimize>
+    <signMode>release</signMode>
+    <keystore>C:\Users\SiongLeng\keys\ffinder.jks</keystore>
+    <alias>ffinder</alias>
+    <storepass>ab984025!</storepass>
+    <keypass>ab984025!</keypass>
+    <stringEncryption mode="all">
+        <filters>
+            <filter><![CDATA[glob:com/ffinder/android/statics/**]]></filter>
+        </filters>
+    </stringEncryption>
+    <classEncryption mode="all"/>
+    <integrityControl mode="all">
+        <checkCertificate>on</checkCertificate>
+    </integrityControl>
+</dexprotector>

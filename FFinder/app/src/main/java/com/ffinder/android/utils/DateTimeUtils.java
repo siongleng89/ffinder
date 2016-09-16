@@ -107,6 +107,14 @@ public class DateTimeUtils {
         return (afterMili - beforeMili) / 1000;
     }
 
+    public static String convertUnixMiliSecsToLocaleDateTimeString(Context context, long unixMiliSecs){
+        Date date = new Date();
+        date.setTime(unixMiliSecs);
 
+        Format dateFormat = android.text.format.DateFormat.getDateFormat(context);
+        String pattern = ((SimpleDateFormat) dateFormat).toLocalizedPattern();
+        DateFormat writeFormat = new SimpleDateFormat(pattern);
+        return writeFormat.format(date);
+    }
 
 }

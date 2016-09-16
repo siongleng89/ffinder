@@ -34,15 +34,15 @@
 
         <fragment
                 android:name="com.ffinder.android.FragmentNextAdsCd"
-                android:id="@+id/nextAdsFragment"
-                android:layout_weight="0"
+                android:id="@+id/nextAdsCdFragment"
+                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" android:gravity="center_vertical"/>
 
         <fragment
                 android:name="com.ffinder.android.FragmentIdentity"
                 android:id="@+id/identityFragment"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
 

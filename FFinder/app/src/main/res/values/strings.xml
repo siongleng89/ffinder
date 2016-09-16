@@ -1,13 +1,13 @@
 <resources>
 
-    /*Apps info start*/
+    <!--Apps info start-->
 
     <string name="app_name">FFinder</string>
 
-    /*Apps info end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Apps info end-->
+    <!-- _________________________________________________________________________________ -->
 
-    /*Common texts start*/
+    <!--Common texts start-->
 
     <string name="retry">Retry</string>
     <string name="unknown_error_msg">Unknown error occurred</string>
@@ -22,15 +22,15 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="never">Never</string>
-    /*Common texts end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Common texts end-->
+    <!--_________________________________________________________________________________-->
 
-    /*Launch Activity text start*/
+    <!--Launch Activity text start-->
 
-    <string name="no_google_service_error_msg">Please make sure google play service is properly configured before
-        running the apps.
+    <string name="no_google_service_error_msg">Please make sure Google Play service is properly configured before
+        running this app.
     </string>
-    <string name="no_permission_error_msg">Please make sure location and user account permissions are allowed before continue.</string>
+    <string name="no_permission_error_msg">Please make sure location and user account permissions are provided.</string>
 
     <string name="first_time_msg_title">Welcome!</string>
     <string name="first_time_msg_content">
@@ -40,11 +40,11 @@
         \n\n3) Is free with Ads!
     </string>
 
-    /*Launch Activity text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Launch Activity text end-->
+    <!--_________________________________________________________________________________-->
 
 
-    /*Setup Activity text start*/
+    <!--Setup Activity text start-->
 
     <string name="initializing">Initializing…</string>
     <string name="retrieving_token">Retrieving Token…</string>
@@ -55,32 +55,34 @@
     <string name="no_token_msg">Unable to retrieve token, please try again.</string>
     <string name="db_failed_msg">Unable to connect to server, please check your connection and try again.</string>
 
-    /*Setup Activity text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Setup Activity text end-->
+    <!--_________________________________________________________________________________-->
 
-    /*Main Activity text start*/
+    <!--Main Activity text start-->
 
     <string name="locating_user">Locating user…</string>
     <string name="last_updated">"Last Updated: %s"</string>
     <string name="never_locate_user_msg">
-        You have not searched this member yet, click Search Button to locate him/her!
+        You have not searched for this member yet, click Search Button to locate him/her!
     </string>
 
     <string name="btn_show_map_text">Map</string>
     <string name="btn_search_text">Search</string>
 
-    <string name="unknown_address_msg">Unknown address, please see the location using map.</string>
+    <string name="unknown_address_msg">Unknown address, please see the location with map</string>
     <string name="search_status_starting_msg">Starting…</string>
-    <string name="search_status_checking_data_msg">Connecting to server…</string>
-    <string name="search_status_waiting_user_respond_msg">Request sent, waiting user respond…</string>
-    <string name="search_status_waiting_user_location_msg">User has responded, waiting location message…</string>
-    <string name="search_status_geodecoding_msg">Getting user address…</string>
+    <string name="search_status_checking_data_msg">Connecting to location…</string>
+    <string name="search_status_waiting_user_respond_msg">Request sent, waiting for user response…</string>
+    <string name="search_status_waiting_user_location_msg">User has responded, waiting for location message…</string>
+    <string name="search_status_geodecoding_msg">Getting user\'s address…</string>
 
-    <string name="error_no_link_msg">Cannot retrieve address as user has removed you from list.</string>
-    <string name="error_timeout_msg">Search is not completed. We will keep searching and notify you later.</string>
-    <string name="error_timeout_no_connection_msg">Unable to connect to server, please check your connection and try again.</string>
+    <string name="error_no_link_msg">Cannot retrieve address as user does not have you on the list.</string>
+
+    <string name="error_timeout_no_connection_msg">Unable to connect, please check your connection and try again.
+    </string>
     <string name="error_timeout_unknown_reason_possible_reasons">
-        1) User\'s device does not have active internet connection \n2) User has forced close FFinder and not reopen it since (Android)
+        1) User\'s device does not have active internet connection \n2) User has forced close FFinder and not reopened
+        it since (Android)
     </string>
     <string name="error_timeout_location_disabled_reasons">
         1) User has disabled location sharing
@@ -88,91 +90,95 @@
 
 
     <string name="edit_name_context_menu">Edit Name</string>
-    <string name="delete_user_context_menu">Delete This Friend/Family</string>
+    <string name="delete_user_context_menu">Delete This User</string>
 
-    <string name="suggest_share_key_msg">Add your first friend or family by sharing your key\nYour friends &amp; family will appear here once they have added you.</string>
+    <string name="suggest_share_key_msg">Add your first friend or family by sharing your key\nYour friends &amp; family
+        will appear here once they have added you.
+    </string>
     <string name="btn_share_key_text">Share Key</string>
 
-    /*Main Activity text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Main Activity text end-->
+    <!--_________________________________________________________________________________-->
 
-    /*Settings Activity text start*/
+    <!--Settings Activity text start-->
 
     <string name="settings_activity_title">Settings</string>
 
 
     <string name="settings_item_language_title">Language</string>
 
-    /*Settings Activity text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Settings Activity text end-->
+    <!--_________________________________________________________________________________-->
 
-    /*Map Activity text start*/
+    <!--Map Activity text start-->
 
     <string name="map_activity_title">Map</string>
 
 
-    /*Map Activity text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Map Activity text end-->
+    <!--_________________________________________________________________________________-->
 
 
-    /*Promo Code Activity text start*/
+    <!--Promo Code Activity text start-->
 
     <string name="promo_code_activity_title">Promo code</string>
 
     <string name="input_promo_code_title">Input Promo Code</string>
 
-    /*Promo Code Activity text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Promo Code Activity text end-->
+    <!--_________________________________________________________________________________-->
 
 
-    /*Add member popup dialog text start*/
+    <!--Add member popup dialog text start-->
 
     <string name="add_new_member_title">
         <b>Add Friend/Family</b>
     </string>
 
     <string name="user_key_hint">User Key</string>
-    <string name="member_name_hint">How you address him/her?</string>
-    <string name="your_name_hint">How he/she address you?</string>
+    <string name="member_name_hint">How do you address him/her?</string>
+    <string name="your_name_hint">How does he/she address you?</string>
 
-    <string name="no_user_key_msg">Please input target member user key</string>
-    <string name="no_member_name_msg">Please input target member name</string>
+    <string name="no_user_key_msg">Please input member\'s key</string>
+    <string name="no_member_name_msg">Please input member\'s name</string>
     <string name="no_your_name_msg">Please input your name</string>
 
     <string name="adding_friend_msg">Adding record…</string>
 
     <string name="user_already_added_error_msg">User has already existed in your list name as %s</string>
-    <string name="key_expired_or_not_exist_msg">Key is not exist or has expired, please request another key from the user.</string>
+    <string name="key_expired_or_not_exist_msg">Key does not exist or has expired, please request for another key from
+        the user.
+    </string>
 
-    /*Add member popup dialog text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Add member popup dialog text end-->
+    <!--_________________________________________________________________________________-->
 
 
-    /*Edit member name popup dialog text start*/
+    <!--Edit member name popup dialog text start-->
 
     <string name="edit_name_title">Edit Name</string>
     <string name="new_name_title">New Name</string>
 
     <string name="edit_name_empty_error_msg">Please input a name</string>
 
-    /*Edit member name popup dialog text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Edit member name popup dialog text end-->
+    <!--_________________________________________________________________________________-->
 
-    /*Delete member popup dialog text start*/
+    <!--Delete member popup dialog text start-->
 
     <string name="delete_user_title">Delete %s?</string>
     <string name="confirm_delete_user_msg">Are you sure you want to delete this user, he/she will not be able to locate
-        you after you delete him/her.
+        you after you have deleted him/her.
     </string>
 
-    /*Delete member popup dialog text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Delete member popup dialog text end-->
+    <!--_________________________________________________________________________________-->
 
-    /*Share key popup dialog text start*/
+    <!--Share key popup dialog text start-->
 
     <string name="btn_share_via_other_apps_text">Share</string>
     <string name="your_key_title">Your Key:</string>
-    <string name="expired_at_title">Expired at</string>
+    <string name="expired_at_title">Expire at</string>
     <string name="minutes_left">(%s mins left)</string>
 
     <string name="regenerating_key_msg">Updating key…</string>
@@ -182,38 +188,62 @@
     </string>
 
 
-
     <string name="share_title">Share ID and Key</string>
     <string name="share_subject">FFinder ID and Key</string>
     <string name="share_msg" formatted="false">
-        Please add me on FFinder by clicking ono this link\nhttp://ffinderaddnew.com/%s \nOr manually:\nKey:
+        Please add me on FFinder by clicking on this link\nhttp://ffinderaddnew.com/%s \nOr manually:\nKey:
         %s\n-----------------------------\nDownload FFinder at
         https://play.google.com/store/apps/details?id=com.ffinder.android
     </string>
 
-    /*Share key popup dialog text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Share key popup dialog text end-->
+    <!--_________________________________________________________________________________-->
 
-    /*Language chooser popup dialog text start*/
+    <!--Language chooser popup dialog text start-->
 
     <string name="language_take_effect_after_restart_toast">
-        Language settings will only take effect after restart apps
+        Language settings will only take effect after app is restarted
     </string>
 
-    /*Language chooser popup dialog text end*/
-    /*-------------------------------------------------------------------------*/
+    <!--Language chooser popup dialog text end-->
+    <!--_________________________________________________________________________________-->
 
 
-    /*Notifications start */
+    <!--Notifications start -->
 
     <string name="notification_user_located_title">FFinder Update</string>
     <string name="notification_x_has_been_located_msg">%s has been located.</string>
     <string name="notification_x_users_located_msg">%s of friends located.</string>
 
+    <!--Notifications end -->
+    <!--_________________________________________________________________________________-->
 
-    /*Notifications end */
-    /*-------------------------------------------------------------------------*/
+    <string name="error_timeout_msg"><u>Search is not completed (Click to see why). We will keep searching to notify you later.</u></string>
+    <string name="x_search_left">%s Search Left</string>
 
+    <string name="promo_code_title">Promo Code:</string>
+    <string name="empty_promo_code_error_msg">Please input a promo code</string>
+    <string name="promo_code_failed_error_msg">Invalid promo code or you had already used this promo code before.
+    </string>
+    <string name="checking_promo_code_msg">Checking promo code…</string>
+    <string name="promo_code_success_msg">Promo code activated, you are now granted %s free searches.</string>
 
+    <string name="vip_member">Vip Member</string>
+    <string name="vip_title">Vip</string>
+    <string name="manage_subscriptions_item_title">Manage Subscriptions</string>
+    <string name="subscribed">Subscribed</string>
+    <string name="not_subscribed">Not Subscribed</string>
+    <string name="manage_subscriptions_introduction">To manage subscription, please open Google Play Store, tap Menu > Account > Subscriptions </string>
 
+    <string name="copied_to_clipboard_toast_msg">Copied</string>
+    <string name="direction_to_place">Direction</string>
+
+    <string name="ran_out_free_search_msg">You have ran out of free search, you can now</string>
+    <string name="btn_watch_ads_earn_credits_text">Watch a video ads for more free searches</string>
+    <string name="btn_input_promo_code_earn_credits_text">Input promo code for more free searches</string>
+    <string name="btn_subscript_unlimited_searches_text">Subscript for unlimited searches</string>
+    <string name="btn_maybe_next_time_text">Maybe next time</string>
+    <string name="no_ads_available_toast_msg">No ads available, free searches will be rewarded.</string>
+
+    <string name="loading">Loading…</string>
 </resources>
