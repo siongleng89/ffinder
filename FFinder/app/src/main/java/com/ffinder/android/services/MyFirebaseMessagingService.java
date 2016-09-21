@@ -1,5 +1,7 @@
 package com.ffinder.android.services;
 
+import com.ffinder.android.helpers.NotificationConsumer;
+import com.ffinder.android.utils.Logs;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -15,9 +17,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        //Logs.show("MyFirebaseMsgService received msg!!");
-        // Check if message contains a data payload.
-       // new NotificationConsumer(this).consume("Firebase", remoteMessage.getData());
+        Logs.show("MyFirebaseMsgService received msg!!");
+        new NotificationConsumer(this).consume(remoteMessage.getData());
     }
     // [END receive_message]
 

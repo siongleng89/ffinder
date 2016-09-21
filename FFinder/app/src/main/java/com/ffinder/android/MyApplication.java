@@ -1,13 +1,14 @@
 package com.ffinder.android;
 
 import android.app.Application;
-import android.util.Log;
 import com.ffinder.android.helpers.Analytics;
+import com.ffinder.android.helpers.FirebaseOnlineTracker;
 import com.ffinder.android.helpers.LocaleHelper;
 import com.ffinder.android.helpers.VipAndProductsHelpers;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.onesignal.OneSignal;
+
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * Created by SiongLeng on 4/9/2016.
@@ -21,20 +22,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         LocaleHelper.onCreate(this);
-
-        OneSignal.startInit(this).init();
-
-        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-            @Override
-            public void idsAvailable(String userId, String registrationId) {
-                Log.d("debug", "User:" + userId);
-                if (registrationId != null)
-                    Log.d("debug", "registrationId:" + registrationId);
-            }
-        });
     }
-
-
 
     /**
      * Gets the default {@link Tracker} for this {@link Application}.

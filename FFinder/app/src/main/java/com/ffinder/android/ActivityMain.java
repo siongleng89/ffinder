@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -16,15 +17,15 @@ import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.adapters.IFriendItemListener;
+import com.ffinder.android.absint.controls.ISearchFailedListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.models.MyModelChangedListener;
 import com.ffinder.android.absint.tasks.RequestLocationTaskFragListener;
 import com.ffinder.android.adapters.FriendsAdapter;
-import com.ffinder.android.controls.AddMemberDialog;
-import com.ffinder.android.controls.ConfirmDeleteDialog;
-import com.ffinder.android.controls.EditNameDialog;
+import com.ffinder.android.controls.*;
 import com.ffinder.android.enums.*;
 import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.helpers.FirebaseDB;
@@ -32,10 +33,13 @@ import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.LocationModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Vars;
+import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.tasks.RequestLocationTaskFrag;
 import com.ffinder.android.utils.PreferenceUtils;
 import com.ffinder.android.utils.RunnableArgs;
 import com.ffinder.android.utils.Strings;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.List;
 
@@ -93,6 +97,14 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         setListeners();
         checkHasPendingToAddUser();
         recreateRequestLocationTaskFrags();
+
+        AdsIdTask adsIdTask = new AdsIdTask(this, myModel.getUserId());
+        adsIdTask.execute();
+
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        if(!Strings.isEmpty(refreshedToken)) FirebaseDB.updateMyToken(myModel.getUserId(), refreshedToken);
+
+        checkKnownIssuePhones();
     }
 
     @Override
@@ -176,23 +188,39 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         final RequestLocationTaskFrag[] taskFragment = {(RequestLocationTaskFrag) fm.findFragmentByTag(friendModel.getUserId())};
         //not in search
         if (taskFragment[0] == null || taskFragment[0].getCurrentResult() != null) {
-            fragmentNextAdsCd.friendSearched(new RunnableArgs<Boolean>() {
-                @Override
-                public void run() {
-                    if(this.getFirstArg()){
-                        friendModel.setSearchResult(SearchResult.Normal);
-                        friendModel.setSearchStatus(SearchStatus.Starting);
+            if(friendModel.getSearchResult() != null){
+                if(friendModel.getSearchResult() == SearchResult.ErrorTimeoutUnknownReason
+                        || friendModel.getSearchResult() == SearchResult.ErrorTimeoutLocationDisabled){
 
-                        taskFragment[0] = RequestLocationTaskFrag.newInstance(myModel.getUserId(), friendModel.getUserId());
-                        fm.beginTransaction().add(taskFragment[0], friendModel.getUserId()).commit();
-                        setRequestLocationTaskFragListener(taskFragment[0]);
-                    }
+                    new SearchFailedDialog(ActivityMain.this,
+                            friendModel.getSearchResult(), new ISearchFailedListener() {
+                        @Override
+                        public void onSearchAnywayChoose() {
+                            searchNow(friendModel);
+                        }
+                    }).show();
+                    return;
                 }
-            });
+            }
+
+            searchNow(friendModel);
         }
+    }
 
-
-
+    private void searchNow(final FriendModel friendModel){
+        fragmentNextAdsCd.friendSearched(new RunnableArgs<Boolean>() {
+            @Override
+            public void run() {
+                if(this.getFirstArg()){
+                    friendModel.setSearchResult(SearchResult.Normal);
+                    friendModel.setSearchStatus(SearchStatus.Starting);
+                    final FragmentManager fm = getSupportFragmentManager();
+                    RequestLocationTaskFrag frag =  RequestLocationTaskFrag.newInstance(myModel.getUserId(), friendModel.getUserId());
+                    fm.beginTransaction().add(frag, friendModel.getUserId()).commit();
+                    setRequestLocationTaskFragListener(frag);
+                }
+            }
+        });
     }
 
 
@@ -218,6 +246,7 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                     }
 
                     if(foundNew){;
+                        myModel.sortFriendModels();
                         myModel.commitFriendUserIds();
                         myModel.notifyFriendModelsChanged();
                     }
@@ -243,6 +272,19 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     private void deleteUser(FriendModel friendModel){
         ConfirmDeleteDialog confirmDeleteDialog = new ConfirmDeleteDialog(this, friendModel, myModel);
         confirmDeleteDialog.show();
+    }
+
+    private void checkKnownIssuePhones(){
+        boolean notify = Strings.isEmpty(PreferenceUtils.get(this, PreferenceType.DontRemindMeAgainPhoneIssue));
+        if(notify){
+            String model = Build.BRAND;
+            if(model.equalsIgnoreCase(PhoneBrand.Huawei.name())
+                    || model.equalsIgnoreCase(PhoneBrand.Xiaomi.name())
+                    || model.equalsIgnoreCase(PhoneBrand.Sony.name())){
+                KnownIssueDialog knownIssueDialog = new KnownIssueDialog(this, PhoneBrand.valueOf(model));
+                knownIssueDialog.show();
+            }
+        }
     }
 
     public void setListeners(){
@@ -304,12 +346,11 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         createRequestLocationTaskFrag(friendModel);
     }
 
-    public void setRequestLocationTaskFragListener(RequestLocationTaskFrag requestLocationTaskFrag){
+    public void setRequestLocationTaskFragListener(final RequestLocationTaskFrag requestLocationTaskFrag){
         requestLocationTaskFrag.setRequestLocationTaskFragListener(new RequestLocationTaskFragListener() {
             @Override
             public void onUpdateStatus(String userId, SearchStatus newStatus) {
                 FriendModel friendModel = myModel.getFriendModelById(userId);
-                friendModel.setNotifyMeWhenLocated(false);
                 friendModel.setSearchStatus(newStatus);
             }
 
@@ -319,7 +360,6 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                 if(locationModel != null){
                     friendModel.setLastLocationModel(locationModel);
                 }
-                friendModel.setNotifyMeWhenLocated(false);
                 friendModel.setSearchStatus(finalSearchStatus);
                 friendModel.setSearchResult(result);
                 friendModel.save(_this);
@@ -330,6 +370,7 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
                 }
 
+                Analytics.logEvent(AnalyticEvent.Search_Result, result.name());
             }
         });
     }

@@ -32,7 +32,6 @@ public class FriendModel {
     private SearchStatus searchStatus;
     private SearchResult searchResult;
     private FriendModelChangedListener friendModelChangedListener;
-    private boolean notifyMeWhenLocated;
 
     public FriendModel() {
         searchResult = SearchResult.Normal;
@@ -74,7 +73,6 @@ public class FriendModel {
         this.setLastLocationModel(friendModel.getLastLocationModel());
         this.setSearchResult(friendModel.getSearchResult());
         this.setSearchStatus(friendModel.getSearchStatus());
-        this.setNotifyMeWhenLocated(friendModel.isNotifyMeWhenLocated());
     }
 
 
@@ -136,14 +134,6 @@ public class FriendModel {
         onModelChanged();
     }
 
-    public boolean isNotifyMeWhenLocated() {
-        return notifyMeWhenLocated;
-    }
-
-    public void setNotifyMeWhenLocated(boolean notifyMeWhenLocated) {
-        this.notifyMeWhenLocated = notifyMeWhenLocated;
-        onModelChanged();
-    }
 
     @JsonIgnore
     public SearchStatus getSearchStatus() {

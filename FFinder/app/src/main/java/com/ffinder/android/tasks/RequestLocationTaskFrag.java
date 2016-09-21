@@ -10,9 +10,11 @@ import com.ffinder.android.absint.tasks.RequestLocationTaskFragListener;
 import com.ffinder.android.enums.FCMMessageType;
 import com.ffinder.android.enums.SearchResult;
 import com.ffinder.android.enums.SearchStatus;
+import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.helpers.NotificationSender;
 import com.ffinder.android.models.LocationModel;
+import com.ffinder.android.models.OnlineRequest;
 import com.ffinder.android.utils.*;
 import com.google.firebase.database.ValueEventListener;
 
@@ -119,7 +121,7 @@ public class RequestLocationTaskFrag extends Fragment {
     public class RequestLocationTask extends AsyncTask<String, SearchStatus, LocationModel> {
         private boolean finish;
         private LocationModel resultLocationModel;
-        private ValueEventListener locationValueEventListener, pingValueEventListener2;
+        private OnlineRequest locationOnlineRequest, pingOnlineRequest;
         private String targetUserId, myUserId;
         private Context context;
         private SearchStatus searchStatus;
@@ -306,7 +308,7 @@ public class RequestLocationTaskFrag extends Fragment {
 
         private void monitorUserIsAlive(String myUserId, String targetUserId, final OneTimeRunnableArgs<Boolean> onAttach){
             final int[] triggeredCount = {0};
-            pingValueEventListener2 = FirebaseDB.monitorUserPing(myUserId, targetUserId, new FirebaseListener() {
+            pingOnlineRequest = FirebaseDB.monitorUserPing(myUserId, targetUserId, new FirebaseListener() {
                 @Override
                 public void onResult(Object result, com.ffinder.android.enums.Status status) {
                     if(status == com.ffinder.android.enums.Status.Success){
@@ -331,7 +333,7 @@ public class RequestLocationTaskFrag extends Fragment {
         private void sendRequestLocation(final String myUserId, final String targetUserId, final OneTimeRunnableArgs<LocationModel> onFinish){
             final boolean[] triggeredBefore = new boolean[1];
 
-            locationValueEventListener = FirebaseDB.monitorUserLocation(targetUserId, new FirebaseListener<LocationModel>(LocationModel.class) {
+            locationOnlineRequest = FirebaseDB.monitorUserLocation(targetUserId, new FirebaseListener<LocationModel>(LocationModel.class) {
                 @Override
                 public void onResult(LocationModel result, com.ffinder.android.enums.Status status) {
                     if(finish) return;
@@ -363,8 +365,13 @@ public class RequestLocationTaskFrag extends Fragment {
                             break;
                         }
                         else{
-                            NotificationSender.send(myUserId, targetUserId, FCMMessageType.UpdateLocation,
-                                    0);
+                            if(tries == 2){
+                                NotificationSender.send(myUserId, targetUserId, FCMMessageType.UpdateLocation,
+                                        0);
+                            }
+                            else{
+                                autoNotifyMe();
+                            }
                         }
                         tries--;
                         Logs.show("Sending notification try left: " + tries);
@@ -379,6 +386,7 @@ public class RequestLocationTaskFrag extends Fragment {
                 @Override
                 public void run() {
                     if(searchStatus == SearchStatus.WaitingUserLocation){
+                        autoNotifyMe();
                         setSearchResult(SearchResult.ErrorTimeoutLocationDisabled);
                     }
                     else if(searchStatus == SearchStatus.CheckingData){
@@ -400,15 +408,26 @@ public class RequestLocationTaskFrag extends Fragment {
 
         }
 
+        private void autoNotifyMe(){
+            FirebaseDB.autoNotifyMe(userId, targetUserId, new FirebaseListener() {
+                @Override
+                public void onResult(Object result, com.ffinder.android.enums.Status status) {
+                    //send one long ttl msg, hopefully user will reply asap or when it has connection
+                    NotificationSender.send(userId, targetUserId, FCMMessageType.UpdateLocation,
+                            1814399);
+                }
+            });
+        }
+
         public void dispose(){
-            if(locationValueEventListener != null){
-                FirebaseDB.deleteMonitorUserLocation(targetUserId, locationValueEventListener);
-                locationValueEventListener = null;
+            if(locationOnlineRequest != null){
+                FirebaseDB.deleteMonitorUserLocation(targetUserId, locationOnlineRequest);
+                locationOnlineRequest = null;
             }
 
-            if(pingValueEventListener2 != null){
-                FirebaseDB.deleteMonitorUserPing(myUserId, targetUserId, pingValueEventListener2);
-                pingValueEventListener2 = null;
+            if(pingOnlineRequest != null){
+                FirebaseDB.deleteMonitorUserPing(myUserId, targetUserId, pingOnlineRequest);
+                pingOnlineRequest = null;
             }
 
         }

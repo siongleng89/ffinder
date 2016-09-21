@@ -14,6 +14,7 @@ import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.helpers.RestfulService;
+import com.ffinder.android.statics.Constants;
 import com.ffinder.android.statics.Vars;
 import com.ffinder.android.utils.*;
 import com.firebase.client.Firebase;
@@ -85,7 +86,7 @@ public class MyModel implements Serializable {
 
     @JsonIgnore
     public long getUserKeyExpiredUnixTime(){
-        return userKeyGeneratedUnixTime + (60 * 60);
+        return userKeyGeneratedUnixTime + (Constants.KeyExpiredTotalSecs);
     }
 
     public void setUserKeyGeneratedUnixTime(long userKeyGeneratedUnixTime) {
@@ -190,10 +191,6 @@ public class MyModel implements Serializable {
         listeners.remove(listener);
     }
 
-    public void updateToken(String newToken){
-        FirebaseDB.updateMyToken(getUserId(), newToken);
-    }
-
     public void regenerateUserKey(final int counter, final RunnableArgs<String> onFinish){
         if(counter == 0){
             cancelGenerateKey = false;
@@ -224,7 +221,7 @@ public class MyModel implements Serializable {
     }
 
     public boolean checkUserKeyValid(){
-        return !(System.currentTimeMillis() / 1000L - userKeyGeneratedUnixTime > (60 * 60) || Strings.isEmpty(userKey));
+        return !(System.currentTimeMillis() / 1000L - userKeyGeneratedUnixTime > (Constants.KeyExpiredTotalSecs) || Strings.isEmpty(userKey));
     }
 
 
@@ -253,7 +250,9 @@ public class MyModel implements Serializable {
         try {
             ArrayList<String> userIds = new ArrayList();
             for(FriendModel friendModel : getFriendModels()){
-                userIds.add(friendModel.getUserId());
+                if(!userIds.contains(friendModel.getUserId())){
+                    userIds.add(friendModel.getUserId());
+                }
             }
 
             String json = Vars.getObjectMapper().writeValueAsString(userIds);
@@ -272,10 +271,12 @@ public class MyModel implements Serializable {
                 ArrayList<String> userIds = Vars.getObjectMapper().readValue(json, ArrayList.class);
 
                 for(String userId : userIds){
-                    FriendModel friendModel = new FriendModel();
-                    friendModel.setUserId(userId);
-                    friendModel.load(context);
-                    addFriendModel(friendModel, false);
+                    if(getFriendModelById(userId) == null){
+                        FriendModel friendModel = new FriendModel();
+                        friendModel.setUserId(userId);
+                        friendModel.load(context);
+                        addFriendModel(friendModel, false);
+                    }
                 }
 
                 notifyFriendModelsChanged();

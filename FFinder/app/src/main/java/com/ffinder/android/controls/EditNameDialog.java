@@ -77,6 +77,8 @@ public class EditNameDialog {
             if(changed){
                 friendModel.setName(editTxtNewName.getText().toString());
                 friendModel.save(activity);
+                myModel.sortFriendModels();
+                myModel.commitFriendUserIds();
                 FirebaseDB.editLinkName(myModel.getUserId(), friendModel.getUserId(), editTxtNewName.getText().toString(), null);
             }
 

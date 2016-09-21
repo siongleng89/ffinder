@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:padding="15dp">
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutMessage"/>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_below="@+id/layoutMessage"
+            android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:gravity="center"
+            android:layout_marginTop="15dp">
+        <Button
+                android:layout_width="130dp"
+                android:layout_height="100dp"
+                android:text="@string/btn_search_again_text"
+                android:id="@+id/btnSearchAgain"/>
+        <Button
+                android:layout_width="130dp"
+                android:layout_height="100dp"
+                android:text="@string/btn_wait_autonotification_text"
+                android:id="@+id/btnWait" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/btnSearchAgain"
+                android:layout_toEndOf="@+id/btnSearchAgain" android:layout_marginLeft="15dp"/>
+    </RelativeLayout>
+</RelativeLayout>

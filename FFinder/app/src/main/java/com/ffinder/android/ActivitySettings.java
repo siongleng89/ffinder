@@ -55,6 +55,7 @@ public class ActivitySettings extends MyActivityAbstract {
         settingsModels = new ArrayList();
         settingsModels.add(new SettingsModel(getString(R.string.settings_item_language_title)));
         settingsModels.add(new SettingsModel(getString(R.string.vip_title)));
+        settingsModels.add(new SettingsModel(getString(R.string.known_issues_title)));
     }
 
     private void setListeners(){
@@ -69,6 +70,10 @@ public class ActivitySettings extends MyActivityAbstract {
                 else if(settingsModel.getTitle().equals(getString(R.string.vip_title))){
                     Intent intent = new Intent(ActivitySettings.this, ActivityVip.class);
                     intent.putExtra("userId", myModel.getUserId());
+                    startActivity(intent);
+                }
+                else if(settingsModel.getTitle().equals(getString(R.string.known_issues_title))){
+                    Intent intent = new Intent(ActivitySettings.this, ActivityKnownIssues.class);
                     startActivity(intent);
                 }
             }

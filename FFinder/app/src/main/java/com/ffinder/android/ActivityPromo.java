@@ -14,9 +14,11 @@ import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.Analytics;
+import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.helpers.RestfulService;
 import com.ffinder.android.utils.AndroidUtils;
 import com.ffinder.android.utils.Threadings;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ActivityPromo extends MyActivityAbstract {
 
@@ -42,6 +44,8 @@ public class ActivityPromo extends MyActivityAbstract {
         editTextPromoCode = (EditText) findViewById(R.id.editTextPromoCode);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
         setListeners();
+
+
     }
 
     @Override

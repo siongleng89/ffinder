@@ -6,5 +6,6 @@ package com.ffinder.android.enums;
 public enum PreferenceType {
 
     MyModel, FriendUserIds, AutoNotifiedReceivedIds, FirebaseToken,
-    UserInfo, SeenAppsIntroduction, NextAdsCount
+    UserInfo, SeenAppsIntroduction, NextAdsCount,
+    CheckedGoogleService, DontRemindMeAgainPhoneIssue
 }

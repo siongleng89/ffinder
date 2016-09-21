@@ -78,9 +78,8 @@ public class UserKeyDialog {
         if(myModel.checkUserKeyValid()){
             String key = myModel.getUserKey();
             txtYourKey.setText(key);
-            txtExpiredDateTime.setText(String.valueOf(DateTimeUtils.convertUnixMiliSecsToDateTimeString(activity,
-                                    myModel.getUserKeyExpiredUnixTime() * 1000) +
-                                String.format(activity.getString(R.string.minutes_left), getKeyRemainingMinutes())));
+            txtExpiredDateTime.setText(String.valueOf(DateTimeUtils.convertUnixMiliSecsToUserPrefDateTimeString(activity,
+                                    myModel.getUserKeyExpiredUnixTime() * 1000)));
         }
         else{
             final ProgressDialog progressDialog = AndroidUtils.loading(activity.getString(R.string.regenerating_key_msg), activity, new Runnable() {
@@ -99,9 +98,6 @@ public class UserKeyDialog {
         }
     }
 
-    private long getKeyRemainingMinutes(){
-        return (myModel.getUserKeyExpiredUnixTime() - (System.currentTimeMillis() / 1000L)) / 60;
-    }
 
     public void setListeners(){
         btnShareKey.setOnClickListener(new View.OnClickListener() {

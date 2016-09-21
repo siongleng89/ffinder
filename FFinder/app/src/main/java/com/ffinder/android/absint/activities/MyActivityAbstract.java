@@ -10,6 +10,8 @@ import com.ffinder.android.helpers.Analytics;
  */
 public class MyActivityAbstract extends AppCompatActivity {
 
+    protected boolean paused;
+
     public MyActivityAbstract() {
 
     }
@@ -18,5 +20,21 @@ public class MyActivityAbstract extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Analytics.logToScreen(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        paused = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        paused = false;
+    }
+
+    public boolean isPaused() {
+        return paused;
     }
 }

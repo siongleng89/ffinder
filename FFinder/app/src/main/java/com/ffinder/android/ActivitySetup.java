@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,8 +13,13 @@ import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.models.MyModel;
+import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.utils.*;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by SiongLeng on 30/8/2016.
@@ -30,7 +34,6 @@ public class ActivitySetup extends MyActivityAbstract {
     private AnimationDrawable frameAnimation;
     private ImageView imgViewLoading;
     private Button btnRetry;
-    private String userId;
     private MyModel myModel;
 
     public ActivitySetup() {
@@ -43,11 +46,7 @@ public class ActivitySetup extends MyActivityAbstract {
 
         setContentView(R.layout.activity_setup);
 
-        Bundle b = getIntent().getExtras();
-        userId = b.getString("userId");
-
         myModel = new MyModel(this);
-        myModel.delete();
 
         txtStatus = (TextView) findViewById(R.id.txtStatus);
         setCurrentStatus(currentStatus);
@@ -85,20 +84,51 @@ public class ActivitySetup extends MyActivityAbstract {
             public void run() {
                 setCurrentStatus(getString(R.string.initializing_user));
 
-                myModel.setUserId(userId);
-                myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
+                tryRecoverUserByGoogleAdsId(new RunnableArgs<String>() {
                     @Override
                     public void run() {
-                        if(this.getFirstArg()){
-                            FirebaseDB.saveNewUser(userId, new FirebaseListener<String>() {
+                        if(!Strings.isEmpty(this.getFirstArg())){     //successfully recovered
+                            String recoverUserId = this.getFirstArg();
+                            myModel.setUserId(recoverUserId);
+                            myModel.save();
+                            myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
                                 @Override
-                                public void onResult(String userId, Status status) {
-                                    if(status == Status.Success){
-                                        myModel.setUserId(userId);
-                                        myModel.save();
+                                public void run() {
+                                    if(this.getFirstArg()){
                                         setCurrentStatus(getString(R.string.initialization_done));
                                         Intent k = new Intent(_this, ActivityMain.class);
                                         startActivity(k);
+                                    }
+                                    else{
+                                        failed(FailedCode.DBFailed);
+                                    }
+                                }
+                            });
+                        }
+                        else{
+                            myModel.delete();
+                            final String userId = FirebaseDB.getNewUserId();
+                            myModel.setUserId(userId);
+                            myModel.save();
+
+                            myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
+                                @Override
+                                public void run() {
+                                    if(this.getFirstArg()){
+                                        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                                        FirebaseDB.saveNewUser(userId, refreshedToken, new FirebaseListener() {
+                                            @Override
+                                            public void onResult(Object result, Status status) {
+                                                if(status == Status.Success){
+                                                    setCurrentStatus(getString(R.string.initialization_done));
+                                                    Intent k = new Intent(_this, ActivityMain.class);
+                                                    startActivity(k);
+                                                }
+                                                else{
+                                                    failed(FailedCode.DBFailed);
+                                                }
+                                            }
+                                        });
                                     }
                                     else{
                                         failed(FailedCode.DBFailed);
@@ -110,6 +140,36 @@ public class ActivitySetup extends MyActivityAbstract {
                 });
             }
         });
+    }
+
+    private void tryRecoverUserByGoogleAdsId(final RunnableArgs<String> onResult){
+        AdsIdTask adsIdTask = new AdsIdTask(this, null);
+        try {
+            String adsId = adsIdTask.execute().get(3, TimeUnit.SECONDS);
+            FirebaseDB.getUserIdByIdentifier(adsId, new FirebaseListener<String>(String.class) {
+                @Override
+                public void onResult(String recoverUserId, Status status) {
+                    if(status == Status.Success && !Strings.isEmpty(recoverUserId)){
+                        onResult.run(recoverUserId);
+                    }
+                    else{
+                        onResult.run(null);
+                    }
+                }
+            });
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            onResult.run(null);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            onResult.run(null);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            onResult.run(null);
+        }
+
     }
 
     private void failed(FailedCode failedCode){

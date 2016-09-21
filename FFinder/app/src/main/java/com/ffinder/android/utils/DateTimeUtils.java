@@ -103,6 +103,16 @@ public class DateTimeUtils {
         return result;
     }
 
+    public static String convertUnixMiliSecsToUserPrefDateTimeString(Context context, long unixMiliSecs){
+        SimpleDateFormat fmtDate = (SimpleDateFormat)android.text.format.DateFormat.getDateFormat(context); //default user preference for date
+        SimpleDateFormat fmtTime = (SimpleDateFormat)android.text.format.DateFormat.getTimeFormat(context);  //default user preference for time
+        String pattern = fmtDate.toLocalizedPattern() + " " + fmtTime.toLocalizedPattern();
+        DateFormat writeFormat = new SimpleDateFormat(pattern);
+        Date date = new Date();
+        date.setTime(unixMiliSecs);
+        return writeFormat.format(date);
+    }
+
     public static long getDifferenceInSecs(long beforeMili, long afterMili){
         return (afterMili - beforeMili) / 1000;
     }

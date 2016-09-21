@@ -15,14 +15,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.RelativeLayout;
 import com.ffinder.android.absint.activities.IAppsIntroductionListener;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.PreferenceType;
+import com.ffinder.android.helpers.RequestLocationHandler;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Vars;
 import com.ffinder.android.utils.PreferenceUtils;
+import com.ffinder.android.utils.RunnableArgs;
 import com.ffinder.android.utils.Strings;
 import com.ffinder.android.utils.Threadings;
 import com.google.android.gms.common.ConnectionResult;
@@ -31,7 +32,6 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.*;
-import com.onesignal.OneSignal;
 
 import java.util.List;
 
@@ -45,6 +45,8 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
     private boolean quitOnResume;
     private RelativeLayout layoutDefault;
     private Intent intent;
+    private boolean checkedGoogleService;
+    private boolean showingIntroduction;
 
     public ActivityLaunch() {
         _this = this;
@@ -58,8 +60,17 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
 
         layoutDefault = (RelativeLayout) findViewById(R.id.layoutDefault);
 
+        String checked = PreferenceUtils.get(this, PreferenceType.CheckedGoogleService);
+        checkedGoogleService = !Strings.isEmpty(checked);
+
+
         if(isLocationPermissionGranted()){
-            checkGoogleServiceAvailable();
+            if(checkedGoogleService){
+                onFinishChecking();
+            }
+            else{
+                checkGoogleServiceAvailable();
+            }
         }
     }
 
@@ -153,53 +164,67 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
 
         if (Intent.ACTION_VIEW.equals(action)) {
             final List<String> segments = intent.getData().getPathSegments();
-            if (segments.size() == 1) {
-                Vars.pendingAddUserKey = segments.get(0);
+            if (segments.size() == 2) {
+                Vars.pendingAddUserKey = segments.get(1);
             }
         }
 
-        googleApiClient.disconnect();
+        if(!checkedGoogleService){
+            googleApiClient.disconnect();
+            PreferenceUtils.put(this, PreferenceType.CheckedGoogleService, "1");
+        }
 
-        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-            @Override
-            public void idsAvailable(String userId, String registrationId) {
-                Bundle b = new Bundle();
-                b.putString("userId", userId);
+        final MyModel myModel = new MyModel(_this);
 
-                MyModel myModel = new MyModel(_this);
-
-                if(Strings.isEmpty(myModel.getUserId()) || !userId.equals(myModel.getUserId())){
-                    Intent k = new Intent(_this, ActivitySetup.class);
-                    k.putExtras(b);
-                    readyStartActivity(k);
+        if(Strings.isEmpty(myModel.getUserId())){
+            Intent k = new Intent(_this, ActivitySetup.class);
+            readyStartActivity(k);
+        }
+        else{
+            Intent k = new Intent(_this, ActivityMain.class);
+            readyStartActivity(k);
+            myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
+                @Override
+                public void run() {
+                    new RequestLocationHandler(ActivityLaunch.this, null, myModel).run();
                 }
-                else{
-                    Intent k = new Intent(_this, ActivityMain.class);
-                    k.putExtras(b);
-                    readyStartActivity(k);
-                }
-            }
-        });
+            });
+        }
     }
 
     private void readyStartActivity(Intent intent){
         String value = PreferenceUtils.get(this, PreferenceType.SeenAppsIntroduction);
+        this.intent = intent;
         if(Strings.isEmpty(value)){
-            this.intent = intent;
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            FragmentAppsIntroduction fragment = new FragmentAppsIntroduction();
-            fragmentTransaction.add(R.id.layoutDefault, fragment);
-            fragmentTransaction.commit();
+            showingIntroduction = true;
+            showIntroduction();
         }
         else{
-            startActivity(intent);
+            goToNextActivitiy();
         }
+    }
+
+    private void showIntroduction(){
+        if(showingIntroduction){
+            if(!isPaused()) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragmentAppsIntroduction fragment = new FragmentAppsIntroduction();
+                fragmentTransaction.add(R.id.layoutDefault, fragment);
+                fragmentTransaction.commit();
+            }
+        }
+
     }
 
     @Override
     public void onCompleteAppsIntroduction() {
-        startActivity(intent);
+        goToNextActivitiy();
+    }
+
+    private void goToNextActivitiy(){
+        this.startActivity(intent);
+        this.overridePendingTransition(0, 0);
     }
 
     @Override
@@ -286,6 +311,8 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
         if(quitOnResume){
             finish();
         }
+
+        showIntroduction();
     }
 
 

@@ -21,17 +21,23 @@ public class Analytics {
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
+
+
     public static void logEvent(AnalyticEvent analyticEvent){
-        logEvent(analyticEvent, "");
+        logEvent(analyticEvent.name(), "");
     }
 
     public static void logEvent(AnalyticEvent analyticEvent, String value){
+        logEvent(analyticEvent.name(), value);
+    }
+
+    public static void logEvent(String eventName, String value){
         Tracker tracker = getTracker(null);
         if(tracker == null) return;
 
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("FFinder")
-                .setAction(analyticEvent.name())
+                .setAction(eventName)
                 .setLabel(value)
                 .build());
 

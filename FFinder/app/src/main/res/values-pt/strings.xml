@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--Apps info start-->
+    /*Apps info start*/
 
-    <string name="app_name">FFinder</string>
+    <string name="app_name">FFfinder</string>
 
-    <!--Apps info end-->
-    <!--_____________________________________________________________________________________-->
+    /*Apps info end*/
+    /*-------------------------------------------------------------------------*/
 
-    <!--Common texts start-->
+    /*Common texts start*/
 
     <string name="retry">Tentar</string>
     <string name="unknown_error_msg">Erro</string>
@@ -22,10 +22,10 @@
     <string name="yes">Sim</string>
     <string name="no">Nao</string>
     <string name="never">Nunca</string>
-    <!--Common texts end-->
-    <!--_____________________________________________________________________________________-->
+    /*Common texts end*/
+    /*-------------------------------------------------------------------------*/
 
-    <!--Launch Activity text start-->
+    /*Launch Activity text start*/
 
     <string name="no_google_service_error_msg">Certifique-se de serviço Google Play está configurado corretamente antes
         executar este aplicativo.
@@ -40,13 +40,13 @@
         \n\n3) É gratuito com anúncios!
     </string>
 
-    <!--Launch Activity text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Launch Activity text end*/
+    /*-------------------------------------------------------------------------*/
 
 
-    <!--Setup Activity text start-->
+    /*Setup Activity text start*/
 
-    <string name="initializing">Inicializar…</string>
+    <string name="initializing">Inicializar...</string>
     <string name="retrieving_token">recuperação de token…</string>
     <string name="initializing_user">usuário inicializar…</string>
     <string name="initialization_done">inicialização feito.</string>
@@ -55,10 +55,10 @@
     <string name="no_token_msg">Não é possível recuperar token, por favor, tente novamente.</string>
     <string name="db_failed_msg">Não é possível conectar , por favor, verifique sua conexão e tente novamente.</string>
 
-    <!--Setup Activity text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Setup Activity text end*/
+    /*-------------------------------------------------------------------------*/
 
-    <!--Main Activity text start-->
+    /*Main Activity text start*/
 
     <string name="locating_user">user Localizando…</string>
     <string name="last_updated">"Ultima atualização: %s"</string>
@@ -77,13 +77,14 @@
     <string name="search_status_geodecoding_msg">Obtendo endereço do usuário…</string>
 
     <string name="error_no_link_msg">Não é possível recuperar endereço como usuário não tem você na lista.</string>
-    <string name="error_timeout_msg"><u>Pesquisa não está concluída. Vamos continuar procurando para notificá-lo mais tarde.</u></string>
     <string name="error_timeout_no_connection_msg">Não é possível conectar , por favor, verifique sua conexão e tente novamente.</string>
-    <string name="error_timeout_unknown_reason_possible_reasons">
-        1) Dispositivo não tem conexão de Internet ativa \n2)O usuário tem força fechada FFinder e não reabri-lo uma vez que (Android)
+    <string name="error_timeout_unknown_reason_possible_reasons1">
+        1) Dispositivo não tem conexão de Internet ativa
+        \n2)O usuário tem força fechada FFfinder e não reabri-lo uma vez que (Android)
     </string>
     <string name="error_timeout_location_disabled_reasons">
-        1) Usuário desativou a partilha de localização
+        1) Dispositivo não tem conexão de Internet ativa
+        \n2) Usuário desativou a partilha de localização
     </string>
 
 
@@ -91,41 +92,41 @@
     <string name="delete_user_context_menu">Excluir este usuário</string>
 
     <string name="suggest_share_key_msg">Adicione o seu primeiro amigo ou da família\neles aparecerão aqui.</string>
-    <string name="btn_share_key_text">Share Key</string>
+    <string name="btn_share_key_text">adicionar o seu amigo e família</string>
 
-    <!--Main Activity text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Main Activity text end*/
+    /*-------------------------------------------------------------------------*/
 
-    <!--Settings Activity text start-->
+    /*Settings Activity text start*/
 
     <string name="settings_activity_title">Configurações</string>
 
 
     <string name="settings_item_language_title">Língua</string>
 
-    <!--Settings Activity text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Settings Activity text end*/
+    /*-------------------------------------------------------------------------*/
 
-    <!--Map Activity text start-->
+    /*Map Activity text start*/
 
     <string name="map_activity_title">Mapa</string>
 
 
-    <!--Map Activity text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Map Activity text end*/
+    /*-------------------------------------------------------------------------*/
 
 
-    <!--Promo Code Activity text start-->
+    /*Promo Code Activity text start*/
 
     <string name="promo_code_activity_title">Código promocional</string>
 
     <string name="input_promo_code_title">Entrada Promo Code</string>
 
-    <!--Promo Code Activity text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Promo Code Activity text end*/
+    /*-------------------------------------------------------------------------*/
 
 
-    <!--Add member popup dialog text start-->
+    /*Add member popup dialog text start*/
 
     <string name="add_new_member_title">
         <b>Adicionar amigo / família</b>
@@ -144,11 +145,11 @@
     <string name="user_already_added_error_msg">Usuário já existia em seu nome da lista como %s</string>
     <string name="key_expired_or_not_exist_msg">Chave inexistente ou expirou , por favor, pedir para outra chave do utilizador.</string>
 
-    <!--Add member popup dialog text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Add member popup dialog text end*/
+    /*-------------------------------------------------------------------------*/
 
 
-    <!--Edit member name popup dialog text start-->
+    /*Edit member name popup dialog text start*/
 
     <string name="edit_name_title">Editar nome
     </string>
@@ -157,23 +158,23 @@
 
     <string name="edit_name_empty_error_msg">Por favor, insira um nome</string>
 
-    <!--Edit member name popup dialog text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Edit member name popup dialog text end*/
+    /*-------------------------------------------------------------------------*/
 
-    <!--Delete member popup dialog text start-->
+    /*Delete member popup dialog text start*/
 
     <string name="delete_user_title">excluir %s?</string>
     <string name="confirm_delete_user_msg">Tem certeza de que deseja excluir este usuário, ele / ela não será capaz de localizar
         você depois de ter excluído a ele / ela
     </string>
 
-    <!--Delete member popup dialog text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Delete member popup dialog text end*/
+    /*-------------------------------------------------------------------------*/
 
-    <!--Share key popup dialog text start-->
+    /*Share key popup dialog text start*/
 
     <string name="btn_share_via_other_apps_text">Compartilhar</string>
-    <string name="your_key_title">Sua chave:</string>
+
     <string name="expired_at_title">expirou no</string>
     <string name="minutes_left">(%s minutos restantes)</string>
 
@@ -186,24 +187,99 @@
 
 
     <string name="share_title">Share ID and Key</string>
-    <string name="share_subject">FFinder ID and Key</string>
-    <string name="share_msg" formatted="false">
-        Por favor me add no localizador clicando neste link\nhttp://ffinderaddnew.com/%s \nOr manually:\nKey:
-        %s\n-----------------------------\nDownload FFinder at
-        https://play.google.com/store/apps/details?id=com.ffinder.android
-    </string>
+    <string name="share_subject">FFfinder ID and Key</string>
 
-    <!--Share key popup dialog text end-->
-    <!--_____________________________________________________________________________________-->
 
-    <!--Language chooser popup dialog text start-->
+    /*Share key popup dialog text end*/
+    /*-------------------------------------------------------------------------*/
+
+    /*Language chooser popup dialog text start*/
 
     <string name="language_take_effect_after_restart_toast">
         configurações de idioma só terá efeito após o aplicativo é reiniciado
     </string>
 
-    <!--Language chooser popup dialog text end-->
-    <!--_____________________________________________________________________________________-->
+    /*Language chooser popup dialog text end*/
+    /*-------------------------------------------------------------------------*/
 
+    <!--Notifications start -->
+
+    <string name="notification_user_located_title">FFfinder Update</string>
+    <string name="notification_x_has_been_located_msg">%s foi localizado</string>
+    <string name="notification_x_users_located_msg">%s foi localizado</string>
+
+    <!--Notifications end -->
+    <!--_________________________________________________________________________________-->
+
+    <string name="x_search_left">%s Search Left</string>
+
+    <string name="promo_code_title">Código promocional:</string>
+    <string name="empty_promo_code_error_msg">Por favor, insira um código promocional</string>
+    <string name="promo_code_failed_error_msg">código promocional inválido ou você já usou esse código promocional para esta conta.</string>
+    <string name="checking_promo_code_msg">Verificando código promocional…</string>
+    <string name="promo_code_success_msg">Você começa %s pesquisa livres</string>
+
+    <string name="vip_member">Vip Member</string>
+    <string name="vip_title">Vip</string>
+    <string name="manage_subscriptions_item_title">Gerenciar assinaturas</string>
+    <string name="subscribed">subscrito</string>
+    <string name="not_subscribed">Nao subscrito</string>
+    <string name="manage_subscriptions_introduction">Para gerenciar subscrição , por favor, abra Google Play Store, tap Menu > Account > Subscriptions </string>
+
+    <string name="copied_to_clipboard_toast_msg">copiado</string>
+    <string name="direction_to_place">Direction</string>
+
+    <string name="ran_out_free_search_msg">você não tem pesquisas mais livres</string>
+    <string name="btn_watch_ads_earn_credits_text">Assistir a um anúncio de vídeo para mais pesquisas gratuitos</string>
+    <string name="btn_input_promo_code_earn_credits_text">código promocional de entrada para mais pesquisas gratuitos</string>
+    <string name="btn_subscript_unlimited_searches_text">Subscrever para pesquisas ilimitadas</string>
+    <string name="btn_maybe_next_time_text">não, obrigado</string>
+    <string name="no_ads_available_toast_msg">No ads available, free searches will be rewarded.</string>
+
+    <string name="loading">Carregando…</string>
+
+
+
+    <string name="share_msg" formatted="false">
+        Faça o download FFfinder em
+        https://play.google.com/store/apps/details?id=com.ffinder.android
+        \n------------------------------------------------------
+
+        \n\nand adicione-me , clicando neste link
+        \nhttp://ff-finder.com/addnew/%s
+
+        \n\nOr manually:
+        \nKey: %s
+
+    </string>
+
+
+    <string name="error_timeout_msg"><u>incapaz de obter a localização do usuário, porque.</u>
+    </string>
+
+    <string name="your_key_title">compartilhar essa chave com o seu amigo e família</string>
+
+    <string name="known_issues_title">Instructions for Xiaomi and Huaiwei</string>
+    <string name="don_remind_me_again">Não me lembre novamente.</string>
+    <string name="issue_fix_xiaomi">Para Xiao Mi,
+        :\n\n1) Go to Security Apps\n2) Go to permission then click on Auto Start
+        Management\n3) Add/Enable auto start apps, allow FFfinder
+    </string>
+    <string name="issue_fix_huawei">Para Huawei,
+        s:\n\n1) Go to Settings\n2) Click on Protected Apps
+        \n3) Add FFfinder as protected apps
+    </string>
+
+
+    <string name="failed_search_msg_text1">Parece que não somos capazes de localizar este usuário a última vez que você busca , devido à
+        a possível motivo:
+    </string>
+    <string name="failed_search_msg_text2">Vamos continuar procurando este usuário e enviar-lhe uma notificação livre, uma vez feito, ou você
+        também pode tentar procurar novamente manualmente.
+    </string>
+    <string name="btn_search_again_text">procurar novamente de qualquer maneira
+    </string>
+    <string name="btn_wait_autonotification_text">Vou esperar para a notificação automática
+    </string>
 
 </resources>

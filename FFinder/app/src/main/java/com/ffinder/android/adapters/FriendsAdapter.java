@@ -150,16 +150,6 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
         else{
             viewHolder.txtMessage.setText(error.getMessage(context));
             viewHolder.txtMessage.setVisibility(View.VISIBLE);
-
-            if(error == SearchResult.ErrorTimeoutUnknownReason || error == SearchResult.ErrorTimeoutLocationDisabled){
-                autoNotifyWhenUserLocated(friendModel);
-                viewHolder.txtMessage.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
-                toggleReasonListener(viewHolder, true, friendModel);
-            }
-            else{
-                viewHolder.txtMessage.setPaintFlags(0);
-                toggleReasonListener(viewHolder, false, friendModel);
-            }
         }
 
         if(hasCoordinates){
@@ -171,25 +161,8 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
 
     }
 
-    private void autoNotifyWhenUserLocated(final FriendModel friendModel){
-        if(!friendModel.isNotifyMeWhenLocated()){
-            friendModel.setNotifyMeWhenLocated(true);
-            friendModel.save(context);
-
-            FirebaseDB.autoNotifyMe(myModel.getUserId(), friendModel.getUserId(), new FirebaseListener() {
-                @Override
-                public void onResult(Object result, Status status) {
-                    //send one long ttl msg, hopefully user will reply asap or when it has connection
-                    NotificationSender.send(myModel.getUserId(), friendModel.getUserId(), FCMMessageType.UpdateLocation,
-                            1814399);
-                }
-            });
-        }
-    }
-
     private void setListeners(final View convertView, final int position){
         final ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        FriendModel friendModel = friendModels.get(position);
 
         viewHolder.btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,28 +188,6 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
         });
     }
 
-    private void toggleReasonListener(ViewHolder viewHolder, boolean on, final FriendModel friendModel){
-        if(on){
-            viewHolder.txtMessage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new AlertDialog.Builder(context)
-                            .setMessage(friendModel.getSearchResult() == SearchResult.ErrorTimeoutUnknownReason ?
-                                    context.getString(R.string.error_timeout_unknown_reason_possible_reasons) :
-                                    context.getString(R.string.error_timeout_location_disabled_reasons))
-                            .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .show();
-
-                }
-            });
-        }
-        else{
-            viewHolder.txtMessage.setOnClickListener(null);
-        }
-    }
 
     static class ViewHolder {
         private TextView txtTextFriend, txtLocation, txtLastUpdated, txtMessage;

@@ -43,7 +43,8 @@ public class RequestLocationHandler implements
 
     public void run(){
         if(!Strings.isEmpty(myModel.getUserId())){
-            respondToPing(myModel.getUserId(), fromUserId);
+
+            if(!Strings.isEmpty(fromUserId)) respondToPing(myModel.getUserId(), fromUserId);
 
             googleApiClient = new GoogleApiClient.Builder(context)
                     .addConnectionCallbacks(this)
@@ -113,6 +114,8 @@ public class RequestLocationHandler implements
         LocationModel locationModel = new LocationModel();
         locationModel.setLatitude(latitude);
         locationModel.setLongitude(longitude);
+
+        Logs.show("Updating my location to: " + latitude + ", " + longitude);
 
         FirebaseDB.updateLocation(myModel.getUserId(), locationModel, new FirebaseListener() {
             @Override
