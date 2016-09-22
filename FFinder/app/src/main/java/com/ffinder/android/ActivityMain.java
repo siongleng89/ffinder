@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -35,9 +36,7 @@ import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Vars;
 import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.tasks.RequestLocationTaskFrag;
-import com.ffinder.android.utils.PreferenceUtils;
-import com.ffinder.android.utils.RunnableArgs;
-import com.ffinder.android.utils.Strings;
+import com.ffinder.android.utils.*;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -64,6 +63,8 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Logs.show("ActivityMain onCreate start");
+
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         _this = this;
@@ -72,8 +73,7 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         setSupportActionBar(myToolbar);
 
         myModel = new MyModel(this);
-        myModel.loadAllFriendModels();
-        myModel.sortFriendModels();
+
         myModel.loginFirebase(0, null);
 
         fragmentNextAdsCd = (FragmentNextAdsCd) getSupportFragmentManager().findFragmentById(R.id.nextAdsCdFragment);
@@ -95,16 +95,27 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         layoutEmptyFriend = (RelativeLayout) findViewById(R.id.layoutEmptyFriendFragment);
 
         setListeners();
-        checkHasPendingToAddUser();
-        recreateRequestLocationTaskFrags();
 
-        AdsIdTask adsIdTask = new AdsIdTask(this, myModel.getUserId());
-        adsIdTask.execute();
+        Threadings.runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                myModel.loadAllFriendModels();
+                myModel.sortFriendModels();
 
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        if(!Strings.isEmpty(refreshedToken)) FirebaseDB.updateMyToken(myModel.getUserId(), refreshedToken);
+                checkHasPendingToAddUser();
+                recreateRequestLocationTaskFrags();
 
-        checkKnownIssuePhones();
+                AdsIdTask adsIdTask = new AdsIdTask(ActivityMain.this, myModel.getUserId());
+                adsIdTask.execute();
+
+                String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                if(!Strings.isEmpty(refreshedToken)) FirebaseDB.updateMyToken(myModel.getUserId(), refreshedToken);
+
+                checkKnownIssuePhones();
+            }
+        });
+
+        Logs.show("ActivityMain onCreate end");
     }
 
     @Override
@@ -161,10 +172,16 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     }
 
     private void checkHasPendingToAddUser(){
-        if(!Strings.isEmpty(Vars.pendingAddUserKey)){
-            AddMemberDialog addMemberDialog = new AddMemberDialog(this, myModel);
-            addMemberDialog.show();
-        }
+        Threadings.postRunnable(ActivityMain.this, new Runnable() {
+            @Override
+            public void run() {
+                if(!Strings.isEmpty(Vars.pendingAddUserKey)){
+                    AddMemberDialog addMemberDialog = new AddMemberDialog(ActivityMain.this, myModel);
+                    addMemberDialog.show();
+                }
+            }
+        });
+
     }
 
     private void recreateRequestLocationTaskFrags(){
@@ -252,11 +269,16 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                     }
 
                 }
-                swipeRefreshLayout.setRefreshing(false);
+                Threadings.postRunnable(ActivityMain.this, new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
             }
         });
 
-        new Handler().postDelayed(new Runnable() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 swipeRefreshLayout.setRefreshing(false);
@@ -277,12 +299,17 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     private void checkKnownIssuePhones(){
         boolean notify = Strings.isEmpty(PreferenceUtils.get(this, PreferenceType.DontRemindMeAgainPhoneIssue));
         if(notify){
-            String model = Build.BRAND;
+            final String model = Build.BRAND;
             if(model.equalsIgnoreCase(PhoneBrand.Huawei.name())
                     || model.equalsIgnoreCase(PhoneBrand.Xiaomi.name())
                     || model.equalsIgnoreCase(PhoneBrand.Sony.name())){
-                KnownIssueDialog knownIssueDialog = new KnownIssueDialog(this, PhoneBrand.valueOf(model));
-                knownIssueDialog.show();
+                Threadings.postRunnable(ActivityMain.this, new Runnable() {
+                    @Override
+                    public void run() {
+                        KnownIssueDialog knownIssueDialog = new KnownIssueDialog(ActivityMain.this, PhoneBrand.valueOf(model));
+                        knownIssueDialog.show();
+                    }
+                });
             }
         }
     }
@@ -380,19 +407,36 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         super.onResume();
         afterSavedInstanceState = false;
 
-        for(FriendModel friendModel : myModel.getFriendModels()){
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(friendModel.getUserId());
-            if(fragment != null){
-                if(friendModel.getSearchStatus() == SearchStatus.End){
-                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-                }
-            }
-        }
+        Logs.show("ActivityMain onResume start");
 
-        if(friendsAdapter != null) friendsAdapter.notifyDataSetChanged();
-        refreshFriendList();
+        Threadings.runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                for(FriendModel friendModel : myModel.getFriendModels()){
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(friendModel.getUserId());
+                    if(fragment != null){
+                        if(friendModel.getSearchStatus() == SearchStatus.End){
+                            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                        }
+                    }
+                }
+
+                Threadings.postRunnable(ActivityMain.this, new Runnable() {
+                    @Override
+                    public void run() {
+                        if(friendsAdapter != null) friendsAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                refreshFriendList();
+            }
+        });
+
 
         PreferenceUtils.delete(this, PreferenceType.AutoNotifiedReceivedIds);
+
+        Logs.show("ActivityMain onResume end");
+
     }
 
     @Override

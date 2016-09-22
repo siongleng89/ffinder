@@ -121,7 +121,7 @@ public class AddMemberDialog {
             }
         });
 
-        String targetKey = editTxtKey.getText().toString();
+        final String targetKey = editTxtKey.getText().toString();
         final String myName = editTxtYourName.getText().toString();
 
         FirebaseDB.checkKeyExist(myModel.getUserId(), targetKey, new FirebaseListener<KeyModel>(KeyModel.class) {
@@ -153,23 +153,27 @@ public class AddMemberDialog {
                     }
                 }
                 else{
-                    errorOccurred(AddMemberError.KeyNotExistOrExpired);
+                    errorOccurred(AddMemberError.KeyNotExistOrExpired, targetKey);
                 }
             }
         });
     }
 
     private void errorOccurred(AddMemberError addMemberError, String... extra){
+        String errorMsg = "";
         String msg = "";
         switch (addMemberError){
             case UserAlreadyAdded:
                 msg = String.format(activity.getString(R.string.user_already_added_error_msg), extra[0]);
+                errorMsg = msg;
                 break;
             case KeyNotExistOrExpired:
                 msg = activity.getString(R.string.key_expired_or_not_exist_msg);
+                errorMsg = msg + "--" + extra[0];
                 break;
             case UnknownError:
                 msg = activity.getString(R.string.unknown_error_msg);
+                errorMsg = msg;
                 break;
         }
 
@@ -177,7 +181,7 @@ public class AddMemberDialog {
         txtError.setVisibility(View.VISIBLE);
         pd.dismiss();
 
-        Analytics.logEvent(AnalyticEvent.Add_Friend_Failed, msg);
+        Analytics.logEvent(AnalyticEvent.Add_Friend_Failed, errorMsg);
     }
 
     private void successAddUser(String addingUserId, String name){

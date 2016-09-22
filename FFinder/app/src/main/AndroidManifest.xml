@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
             android:name=".MyApplication"
@@ -66,7 +67,31 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".absint.receivers.NotificationClickBroadcastReceiver"/>
+        <receiver android:name=".absint.receivers.StartServiceBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+        <service
+                android:name=".services.TestService"
+                android:stopWithTask="false" >
+        </service>
+
+        <activity
+                android:name=".ActivityDummy"
+                android:theme="@android:style/Theme.NoDisplay"
+                android:enabled="true"
+                android:allowTaskReparenting="true"
+                android:noHistory="true"
+                android:excludeFromRecents="true"
+                android:alwaysRetainTaskState="false"
+                android:stateNotNeeded="true"
+                android:clearTaskOnLaunch="true"
+                android:finishOnTaskLaunch="true"
+        />
+
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"

@@ -21,11 +21,9 @@ import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.helpers.RequestLocationHandler;
 import com.ffinder.android.models.MyModel;
+import com.ffinder.android.services.TestService;
 import com.ffinder.android.statics.Vars;
-import com.ffinder.android.utils.PreferenceUtils;
-import com.ffinder.android.utils.RunnableArgs;
-import com.ffinder.android.utils.Strings;
-import com.ffinder.android.utils.Threadings;
+import com.ffinder.android.utils.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -56,6 +54,8 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logs.show("ActivityLaunch onCreate start");
+
         setContentView(R.layout.activity_launch);
 
         layoutDefault = (RelativeLayout) findViewById(R.id.layoutDefault);
@@ -72,6 +72,9 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
                 checkGoogleServiceAvailable();
             }
         }
+
+        Intent intent = new Intent(this, TestService.class);
+        startService(intent);
     }
 
     private void checkGoogleServiceAvailable(){
@@ -174,7 +177,9 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
             PreferenceUtils.put(this, PreferenceType.CheckedGoogleService, "1");
         }
 
+        Logs.show("initialiting model");
         final MyModel myModel = new MyModel(_this);
+        Logs.show("model initiated");
 
         if(Strings.isEmpty(myModel.getUserId())){
             Intent k = new Intent(_this, ActivitySetup.class);
@@ -223,6 +228,7 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
     }
 
     private void goToNextActivitiy(){
+        Logs.show("starting mainactivity");
         this.startActivity(intent);
         this.overridePendingTransition(0, 0);
     }

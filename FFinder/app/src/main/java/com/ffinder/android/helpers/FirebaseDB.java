@@ -1,31 +1,26 @@
 package com.ffinder.android.helpers;
 
-import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.enums.Status;
-import com.ffinder.android.models.*;
+import com.ffinder.android.models.AutoNotificationModel;
+import com.ffinder.android.models.KeyModel;
+import com.ffinder.android.models.LocationModel;
+import com.ffinder.android.models.OnlineRequest;
 import com.ffinder.android.statics.Constants;
 import com.ffinder.android.utils.DateTimeUtils;
-import com.ffinder.android.utils.RunnableArgs;
 import com.ffinder.android.utils.Strings;
-import com.firebase.client.*;
-import com.firebase.client.Query;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by SiongLeng on 30/8/2016.

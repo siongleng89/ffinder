@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ffinder.android.ActivityMain;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.databases.FirebaseListener;
-import com.ffinder.android.absint.receivers.NotificationClickBroadcastReceiver;
 import com.ffinder.android.enums.FCMMessageType;
 import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.enums.SearchResult;
