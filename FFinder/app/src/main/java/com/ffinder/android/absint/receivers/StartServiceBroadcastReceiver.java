@@ -3,7 +3,7 @@ package com.ffinder.android.absint.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import com.ffinder.android.services.TestService;
+import com.ffinder.android.services.GcmAliveHeartbeatService;
 
 /**
  * Created by SiongLeng on 22/9/2016.
@@ -11,7 +11,7 @@ import com.ffinder.android.services.TestService;
 public class StartServiceBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent startServiceIntent = new Intent(context, TestService.class);
+        Intent startServiceIntent = new Intent(context, GcmAliveHeartbeatService.class);
         context.startService(startServiceIntent);
     }
 }

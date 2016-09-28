@@ -12,6 +12,7 @@ import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.FirebaseDB;
+import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.utils.*;
@@ -95,9 +96,7 @@ public class ActivitySetup extends MyActivityAbstract {
                                 @Override
                                 public void run() {
                                     if(this.getFirstArg()){
-                                        setCurrentStatus(getString(R.string.initialization_done));
-                                        Intent k = new Intent(_this, ActivityMain.class);
-                                        startActivity(k);
+                                        finishProcessAndStartActivity();
                                     }
                                     else{
                                         failed(FailedCode.DBFailed);
@@ -120,9 +119,7 @@ public class ActivitySetup extends MyActivityAbstract {
                                             @Override
                                             public void onResult(Object result, Status status) {
                                                 if(status == Status.Success){
-                                                    setCurrentStatus(getString(R.string.initialization_done));
-                                                    Intent k = new Intent(_this, ActivityMain.class);
-                                                    startActivity(k);
+                                                    finishProcessAndStartActivity();
                                                 }
                                                 else{
                                                     failed(FailedCode.DBFailed);
@@ -185,6 +182,41 @@ public class ActivitySetup extends MyActivityAbstract {
 
         setCurrentStatus(msg);
         setFailed(true);
+
+    }
+
+    private void finishProcessAndStartActivity(){
+        FirebaseDB.checkUserHasAnyLink(myModel.getUserId(), new FirebaseListener<Boolean>() {
+            @Override
+            public void onResult(Boolean result, Status status) {
+                if(result != null && !result){
+                    FirebaseDB.addNewLink(myModel.getUserId(), myModel.getUserId(),
+                            getString(R.string.address_myself),
+                            getString(R.string.address_myself), new FirebaseListener() {
+                        @Override
+                        public void onResult(Object result, Status status) {
+                            FriendModel myOwnModel = new FriendModel();
+                            myOwnModel.setUserId(myModel.getUserId());
+                            myOwnModel.setName(getString(R.string.address_myself));
+                            myOwnModel.save(ActivitySetup.this);
+                            myModel.addFriendModel(myOwnModel, false);
+                            myModel.commitFriendUserIds();
+
+                            setCurrentStatus(getString(R.string.initialization_done));
+                            Intent k = new Intent(_this, ActivityMain.class);
+                            k.putExtra("firstRun", "1");
+                            startActivity(k);
+                        }
+                    });
+                }
+                else{
+                    setCurrentStatus(getString(R.string.initialization_done));
+                    Intent k = new Intent(_this, ActivityMain.class);
+                    startActivity(k);
+                }
+            }
+        });
+
 
     }
 

@@ -21,8 +21,7 @@ public class Threadings {
     }
 
 
-    public static ThreadFragment delay(final long timeInMs, final Runnable toRun){
-        final ThreadFragment delayFrag = new ThreadFragment();
+    public static void delay(final long timeInMs, final Activity activity, final Runnable toRun){
         runInBackground(new Runnable() {
             @Override
             public void run() {
@@ -31,16 +30,9 @@ public class Threadings {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-//                Gdx.app.postRunnable(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        toRun.run();
-//                        delayFrag.setFinished(true);
-//                    }
-//                });
+                postRunnable(activity, toRun);
             }
         });
-        return delayFrag;
     }
 
     public static void delayNoPost(final long timeInMs, final Runnable toRun){

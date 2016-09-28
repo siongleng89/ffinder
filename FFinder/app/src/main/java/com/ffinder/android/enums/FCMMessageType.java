@@ -5,6 +5,6 @@ package com.ffinder.android.enums;
  */
 public enum  FCMMessageType {
 
-    UpdateLocation, UserLocated
+    UpdateLocation, UserLocated, NotifyRememberToAddFriend, FriendsAdded
 
 }

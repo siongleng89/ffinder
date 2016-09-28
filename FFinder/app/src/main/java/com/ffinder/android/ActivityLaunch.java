@@ -2,10 +2,12 @@ package com.ffinder.android;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,7 +23,7 @@ import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.helpers.RequestLocationHandler;
 import com.ffinder.android.models.MyModel;
-import com.ffinder.android.services.TestService;
+import com.ffinder.android.services.GcmAliveHeartbeatService;
 import com.ffinder.android.statics.Vars;
 import com.ffinder.android.utils.*;
 import com.google.android.gms.common.ConnectionResult;
@@ -64,7 +66,7 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
         checkedGoogleService = !Strings.isEmpty(checked);
 
 
-        if(isLocationPermissionGranted()){
+        if(isLocationPermissionGranted() && isLocationServicesEnabled()){
             if(checkedGoogleService){
                 onFinishChecking();
             }
@@ -73,7 +75,7 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
             }
         }
 
-        Intent intent = new Intent(this, TestService.class);
+        Intent intent = new Intent(this, GcmAliveHeartbeatService.class);
         startService(intent);
     }
 
@@ -280,6 +282,40 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
         }
         else { //permission is automatically granted on sdk<23 upon installation
             return true;
+        }
+    }
+
+    public boolean isLocationServicesEnabled(){
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(network_enabled || gps_enabled) {
+            return true;
+        }
+        else{
+            AndroidUtils.showDialogWithButtonText(this, "", getString(R.string.required_location_provider_msg),
+                    getString(R.string.btn_go_to_location_settings_text), new RunnableArgs<DialogInterface>() {
+                        @Override
+                        public void run() {
+                            this.getFirstArg().dismiss();
+                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    }, new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    });
+            return false;
         }
     }
 

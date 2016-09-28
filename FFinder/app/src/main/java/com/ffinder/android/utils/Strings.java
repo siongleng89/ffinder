@@ -103,7 +103,7 @@ public class Strings {
     }
 
     public static String generateUserKey(){
-        return generateUniqueRandomKey(8);
+        return generateUniqueNumber(4) + "-" + generateUniqueNumber(4) + "-" + generateUniqueNumber(4);
     }
 
     public static String pickNonEmpty(String... inputs){

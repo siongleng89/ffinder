@@ -1,5 +1,8 @@
 package com.ffinder.android.adapters;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +29,7 @@ import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.utils.DateTimeUtils;
 import com.ffinder.android.utils.Strings;
+import com.ffinder.android.utils.Threadings;
 
 import java.util.List;
 
@@ -34,18 +38,23 @@ import java.util.List;
  */
 public class FriendsAdapter extends ArrayAdapter<FriendModel> {
 
-    private Context context;
+    private Activity context;
     private List<FriendModel> friendModels;
     private MyModel myModel;
     private IFriendItemListener friendItemListener;
 
-    public FriendsAdapter(Context context, @LayoutRes int resource, @NonNull List<FriendModel> objects,
+    public FriendsAdapter(Activity context, @LayoutRes int resource, @NonNull List<FriendModel> objects,
                           MyModel myModel, IFriendItemListener friendItemListener) {
         super(context, resource, objects);
         this.context = context;
         this.friendModels = objects;
         this.myModel = myModel;
         this.friendItemListener = friendItemListener;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 
     @Override
@@ -110,9 +119,9 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
 
     }
 
-    private void updateDesign(ViewHolder viewHolder, String statusMsg,
+    private void updateDesign(final ViewHolder viewHolder, String statusMsg,
                               String address, String lastUpdated, SearchResult error,
-                              boolean hasCoordinates, FriendModel friendModel){
+                              boolean hasCoordinates, final FriendModel friendModel){
 
         if(!Strings.isEmpty(statusMsg)){
             //searching
@@ -135,14 +144,39 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
                 viewHolder.txtLocation.setText(address);
             }
 
-            viewHolder.imgViewLoading.setVisibility(View.GONE);
-            viewHolder.loadingAnimation.stop();
-            viewHolder.btnSearch.setVisibility(View.VISIBLE);
-            viewHolder.btnMap.setVisibility(View.VISIBLE);
-            viewHolder.txtLastUpdated.setVisibility(View.VISIBLE);
-        }
+            viewHolder.txtLastUpdated.setText(lastUpdated);
 
-        viewHolder.txtLastUpdated.setText(lastUpdated);
+            Threadings.delay(300, context, new Runnable() {
+                @Override
+                public void run() {
+                    viewHolder.imgViewLoading.setVisibility(View.GONE);
+                    viewHolder.loadingAnimation.stop();
+                    viewHolder.btnSearch.setVisibility(View.VISIBLE);
+                    viewHolder.btnMap.setVisibility(View.VISIBLE);
+                    viewHolder.txtLastUpdated.setVisibility(View.VISIBLE);
+
+                    if(friendModel.isRecentlyFinishSearch()){
+                        Integer colorFrom = ContextCompat.getColor(context, R.color.colorPrimary);
+                        Integer colorTo = ContextCompat.getColor(context, R.color.colorCaption);
+                        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+                        colorAnimation.setDuration(3000);
+                        colorAnimation.setRepeatCount(1);
+                        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animator) {
+                                viewHolder.txtLocation.setTextColor((Integer)animator.getAnimatedValue());
+                                viewHolder.txtLastUpdated.setTextColor((Integer)animator.getAnimatedValue());
+                            }
+
+                        });
+                        colorAnimation.start();
+                        friendModel.setRecentlyFinishSearch(false);
+                    }
+
+                }
+            });
+        }
 
         if(error == null || error == SearchResult.Normal){
             viewHolder.txtMessage.setVisibility(View.GONE);

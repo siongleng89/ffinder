@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:padding="10dp"
+                android:background="@drawable/listview_bg" android:gravity="center">
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/suggest_share_key_msg"
+            android:id="@+id/textView2" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_share_key_text"
+            android:id="@+id/button"
+            android:layout_below="@+id/textView2" android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"/>
+</RelativeLayout>

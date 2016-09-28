@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import com.ffinder.android.absint.databases.FirebaseListener;
+import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.enums.FCMMessageType;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.models.AutoNotificationModel;
@@ -127,7 +128,8 @@ public class RequestLocationHandler implements
                             if(status == Status.Success && result != null){
                                 for(AutoNotificationModel autoNotificationModel : result){
                                     NotificationSender.send(myModel.getUserId(),
-                                            autoNotificationModel.getWaitingUserId(), FCMMessageType.UserLocated, 1814399);
+                                            autoNotificationModel.getWaitingUserId(), FCMMessageType.UserLocated, NotificationSender.TTL_LONG);
+                                    Analytics.logEvent(AnalyticEvent.Auto_Notification_Sent);
                                 }
                                 FirebaseDB.clearAllAutoNotification(myModel.getUserId());
                             }

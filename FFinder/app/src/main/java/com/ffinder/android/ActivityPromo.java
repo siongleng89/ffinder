@@ -75,7 +75,7 @@ public class ActivityPromo extends MyActivityAbstract {
                             if(status == Status.Success){
                                 Integer resultInt = Integer.valueOf(result);
                                 if(resultInt > 0){
-                                    AndroidUtils.showDialog(ActivityPromo.this, "", String.format(getString(R.string.promo_code_success_msg), result), new Runnable() {
+                                    AndroidUtils.showDialog(ActivityPromo.this, "", String.format(getString(R.string.promo_code_success_msg), result), null, new Runnable() {
                                         @Override
                                         public void run() {
                                             finish();

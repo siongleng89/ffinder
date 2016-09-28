@@ -32,6 +32,7 @@ public class FriendModel {
     private SearchStatus searchStatus;
     private SearchResult searchResult;
     private FriendModelChangedListener friendModelChangedListener;
+    private boolean recentlyFinishSearch;
 
     public FriendModel() {
         searchResult = SearchResult.Normal;
@@ -148,6 +149,16 @@ public class FriendModel {
             onModelChanged();
             Logs.show("New search status for: " + getName() + " is " + this.searchStatus);
         }
+    }
+
+    @JsonIgnore
+    public boolean isRecentlyFinishSearch() {
+        return recentlyFinishSearch;
+    }
+
+    @JsonIgnore
+    public void setRecentlyFinishSearch(boolean recentlyFinishSearch) {
+        this.recentlyFinishSearch = recentlyFinishSearch;
     }
 
     public SearchResult getSearchResult() {

@@ -22,7 +22,11 @@ public enum AnalyticEvent {
     Insert_PromoCode_Success,
     Insert_PromoCode_Failed,
     Use_Direction,
-    Share_Key,
+
+    Open_Share_Key_Dialog,
+    Share_Key_Button_Clicked,
+    Close_Share_Key_Dialog,
+
     Change_Language
 
 }

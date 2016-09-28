@@ -5,17 +5,24 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.AnalyticEvent;
+import com.ffinder.android.enums.FCMMessageType;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.helpers.FirebaseDB;
+import com.ffinder.android.helpers.NotificationSender;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.KeyModel;
 import com.ffinder.android.models.MyModel;
@@ -33,6 +40,7 @@ public class AddMemberDialog {
     private TextView txtError;
     private EditText editTxtYourName, editTxtKey, editTxtMemberName;
     private TextInputLayout userKeyWrapper, memberNameWrapper, yourNameWrapper;
+    private RelativeLayout layoutTutorials;
     private AlertDialog dialog;
     private ProgressDialog pd;
     private MyModel myModel;
@@ -60,6 +68,7 @@ public class AddMemberDialog {
         userKeyWrapper = (TextInputLayout) viewInflated.findViewById(R.id.keyWrapper);
         memberNameWrapper = (TextInputLayout) viewInflated.findViewById(R.id.memberNameWrapper);
         yourNameWrapper = (TextInputLayout) viewInflated.findViewById(R.id.yourNameWrapper);
+        layoutTutorials = (RelativeLayout) viewInflated.findViewById(R.id.layoutTutorials);
 
         editTxtKey = (EditText) viewInflated.findViewById(R.id.editTxtKey);
         editTxtKey.setText(pendingAddUserKey != null ? pendingAddUserKey : "");
@@ -97,6 +106,8 @@ public class AddMemberDialog {
         if(autoAdd){
             checkCanAdd();
         }
+
+        setListeners();
 
         Analytics.logEvent(AnalyticEvent.Open_Add_Friend_Dialog);
     }
@@ -140,7 +151,7 @@ public class AddMemberDialog {
                             @Override
                             public void onResult(Object result, Status status) {
                                 if(status == Status.Success){
-                                    successAddUser(keyModel.getUserId(), keyModel.getUserName());
+                                    successAddUser(keyModel.getUserId(), keyModel.getUserName(), myName);
                                 }
                                 else{
                                     errorOccurred(AddMemberError.UnknownError);
@@ -170,6 +181,7 @@ public class AddMemberDialog {
             case KeyNotExistOrExpired:
                 msg = activity.getString(R.string.key_expired_or_not_exist_msg);
                 errorMsg = msg + "--" + extra[0];
+                layoutTutorials.setVisibility(View.VISIBLE);
                 break;
             case UnknownError:
                 msg = activity.getString(R.string.unknown_error_msg);
@@ -184,7 +196,7 @@ public class AddMemberDialog {
         Analytics.logEvent(AnalyticEvent.Add_Friend_Failed, errorMsg);
     }
 
-    private void successAddUser(String addingUserId, String name){
+    private void successAddUser(String addingUserId, String name, String myName){
         FriendModel newFriendModel = new FriendModel();
         newFriendModel.setUserId(addingUserId);
         newFriendModel.setName(Strings.pickNonEmpty(editTxtMemberName.getText().toString(), name, "No_Name"));
@@ -196,10 +208,76 @@ public class AddMemberDialog {
         pd.dismiss();
         dialog.dismiss();
 
+        NotificationSender.send(myModel.getUserId(), addingUserId, FCMMessageType.FriendsAdded, NotificationSender.TTL_LONG,
+                new Pair<String, String>("username", myName));
+
         Analytics.logEvent(AnalyticEvent.Add_Friend_Success);
     }
 
 
+    private void setListeners(){
+        editTxtKey.addTextChangedListener(new TextWatcher() {
+            boolean isFormatting;
+            boolean deletingHyphen;
+            int hyphenStart;
+            boolean deletingBackward;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (isFormatting)
+                    return;
+
+                // Make sure user is deleting one char, without a selection
+                final int selStart = Selection.getSelectionStart(s);
+                final int selEnd = Selection.getSelectionEnd(s);
+                if (s.length() > 1 // Can delete another character
+                        && count == 1 // Deleting only one character
+                        && after == 0 // Deleting
+                        && s.charAt(start) == '-' // a hyphen
+                        && selStart == selEnd) { // no selection
+                    deletingHyphen = true;
+                    hyphenStart = start;
+                    // Check if the user is deleting forward or backward
+                    if (selStart == start + 1) {
+                        deletingBackward = true;
+                    } else {
+                        deletingBackward = false;
+                    }
+                } else {
+                    deletingHyphen = false;
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (isFormatting)
+                    return;
+
+                isFormatting = true;
+
+                // If deleting hyphen, also delete character before or after it
+                if (deletingHyphen && hyphenStart > 0) {
+                    if (deletingBackward) {
+                        if (hyphenStart - 1 < editable.length()) {
+                            editable.delete(hyphenStart - 1, hyphenStart);
+                        }
+                    } else if (hyphenStart < editable.length()) {
+                        editable.delete(hyphenStart, hyphenStart + 1);
+                    }
+                }
+                if (editable.length() == 4 || editable.length() == 9) {
+                    editable.append('-');
+                }
+
+                isFormatting = false;
+            }
+        });
+    }
 
     private enum AddMemberError{
         KeyNotExistOrExpired, UserAlreadyAdded, UnknownError

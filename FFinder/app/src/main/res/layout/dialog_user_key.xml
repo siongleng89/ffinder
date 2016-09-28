@@ -11,7 +11,7 @@
             android:id="@+id/textView4" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" android:gravity="center_horizontal"/>
     <RelativeLayout
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/relativeLayout" android:layout_below="@+id/textView4"
             android:layout_alignParentRight="false" android:layout_alignParentEnd="false" android:layout_marginTop="20dp"
@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/txtYourKey" android:layout_centerHorizontal="true"
-                android:text="xxxxx" android:layout_marginTop="10dp" android:layout_marginBottom="10dp"/>
+                android:text="xxxxx"/>
         <ImageButton
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"

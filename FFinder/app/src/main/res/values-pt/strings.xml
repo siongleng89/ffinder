@@ -92,7 +92,7 @@
     <string name="delete_user_context_menu">Excluir este usuário</string>
 
     <string name="suggest_share_key_msg">Adicione o seu primeiro amigo ou da família\neles aparecerão aqui.</string>
-    <string name="btn_share_key_text">adicionar o seu amigo e família</string>
+    <string name="btn_share_key_text">compartilhando sua chave</string>
 
     /*Main Activity text end*/
     /*-------------------------------------------------------------------------*/
@@ -128,11 +128,11 @@
 
     /*Add member popup dialog text start*/
 
-    <string name="add_new_member_title">
-        <b>Adicionar amigo / família</b>
-    </string>
+    <string name="add_new_member_title">Adicionar amigo / família</string>
 
-    <string name="user_key_hint">Chave do usuário</string>
+    <string name="add_new_member_manually_title">Adicionar amigo / família</string>
+
+    <string name="user_key_hint">Chave do usuário (eg. 0123-4567-8901)</string>
     <string name="member_name_hint">Como você lidar com ele/ela?</string>
     <string name="your_name_hint">Como é que ele / ela lhe falar ?</string>
 
@@ -143,7 +143,7 @@
     <string name="adding_friend_msg">adicionando registro…</string>
 
     <string name="user_already_added_error_msg">Usuário já existia em seu nome da lista como %s</string>
-    <string name="key_expired_or_not_exist_msg">Chave inexistente ou expirou , por favor, pedir para outra chave do utilizador.</string>
+    <string name="key_expired_or_not_exist_msg">Chave inexistente ou expirou. (rolar abaixo para mais informações)</string>
 
     /*Add member popup dialog text end*/
     /*-------------------------------------------------------------------------*/
@@ -186,8 +186,8 @@
 
 
 
-    <string name="share_title">Share ID and Key</string>
-    <string name="share_subject">FFfinder ID and Key</string>
+    <string name="share_title">Clique aqui para compartilhar chave</string>
+    <string name="share_subject">FFfinder ID e chave</string>
 
 
     /*Share key popup dialog text end*/
@@ -240,24 +240,25 @@
 
 
 
-    <string name="share_msg" formatted="false">
-        Faça o download FFfinder em
-        https://play.google.com/store/apps/details?id=com.ffinder.android
+    <string name="share_msg" formatted="false">Faça o download FFfinder em encontrar o seu amigo e família com um clique
+        \nhttps://play.google.com/store/apps/details?id=com.ffinder.android
         \n------------------------------------------------------
 
-        \n\nand adicione-me , clicando neste link
+        \n\nand adicione-me , clicando neste link (Abrir com FFfinder)
         \nhttp://ff-finder.com/addnew/%s
 
         \n\nOr manually:
         \nKey: %s
-
     </string>
 
 
     <string name="error_timeout_msg"><u>incapaz de obter a localização do usuário, porque.</u>
     </string>
 
-    <string name="your_key_title">compartilhar essa chave com o seu amigo e família</string>
+    <string name="your_key_title">compartilhar essa chave com o seu amigo e família
+        <b>(Nenhuma ação é necessária depois de compartilhar sua chave)</b>
+        Você pode começar a controlar sua localização depois de terem adicionado você.
+    </string>
 
     <string name="known_issues_title">Instructions for Xiaomi and Huaiwei</string>
     <string name="don_remind_me_again">Não me lembre novamente.</string>
@@ -281,5 +282,20 @@
     </string>
     <string name="btn_wait_autonotification_text">Vou esperar para a notificação automática
     </string>
+
+
+    <string name="notification_x_added_you">%s adicionou você! Você pode localizar um ao outro agora.</string>
+
+    <string name="passcode_tutorial_title1">Você recebeu uma mensagem de
+        seu amigo / familiar? Se sim, por favor siga o seguinte..
+        \n<b>(Por favor, obter uma nova chave a partir deles, se você só vê a mensagem de um dia mais tarde)</b>
+    </string>
+    <string name="passcode_tutorial_text_1_0">1.0 Clique no link compartilhado por seu amigo / familiar adicioná-los</string>
+    <string name="passcode_tutorial_text_1_1">1.1 Abrir com FFfinder</string>
+    <string name="passcode_tutorial_text_1_2">1.2 Adicionar amigo/familiar sucesso
+    </string>
+    <string name="passcode_tutorial_title2">Ou, alternativamente, você também pode adicionar amigo manunally.</string>
+    <string name="passcode_tutorial_text_2_0">2.0 Copiar a chave compartilhada por seu amigo / familiar.</string>
+    <string name="passcode_tutorial_text_2_1">2.1 Digite o código de acesso e pressione OK.</string>
 
 </resources>

@@ -367,7 +367,7 @@ public class RequestLocationTaskFrag extends Fragment {
                         else{
                             if(tries == 2){
                                 NotificationSender.send(myUserId, targetUserId, FCMMessageType.UpdateLocation,
-                                        0);
+                                        NotificationSender.TTL_INSTANT);
                             }
                             else{
                                 autoNotifyMe();
@@ -414,7 +414,7 @@ public class RequestLocationTaskFrag extends Fragment {
                 public void onResult(Object result, com.ffinder.android.enums.Status status) {
                     //send one long ttl msg, hopefully user will reply asap or when it has connection
                     NotificationSender.send(userId, targetUserId, FCMMessageType.UpdateLocation,
-                            1814399);
+                            NotificationSender.TTL_LONG);
                 }
             });
         }

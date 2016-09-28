@@ -232,6 +232,17 @@ public class MyModel implements Serializable {
     }
 
     @JsonIgnore
+    public int getNonSelfFriendModelsCount() {
+        if(friendModels == null) friendModels = new ArrayList();
+        if(friendModels.size() == 1 && getFriendModelById(getUserId()) != null){
+            return 0;
+        }
+        else{
+            return friendModels.size();
+        }
+    }
+
+    @JsonIgnore
     public FriendModel getFriendModelById(String userId){
         for(FriendModel friendModel : getFriendModels()){
             if(friendModel.getUserId().equals(userId)){

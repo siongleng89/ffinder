@@ -1,5 +1,6 @@
 package com.ffinder.android.helpers;
 
+import android.util.Pair;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.FCMMessageType;
 import com.ffinder.android.enums.Status;
@@ -24,14 +25,17 @@ import java.util.HashMap;
  */
 public class NotificationSender {
 
+    public static final int TTL_LONG = 1814399;
+    public static final int TTL_INSTANT = 0;
+
     public static void send(final String myUserId, final String targetUserId,
                             final FCMMessageType fcmMessageType,
-                            final int ttl){
+                            final int ttl, final Pair<String, String>... appendsToMapPairs){
         FirebaseDB.getUserToken(targetUserId, new FirebaseListener<String>(String.class) {
             @Override
             public void onResult(String token, Status status) {
                 if(status == Status.Success && !Strings.isEmpty(token)){
-                    sendFcm(myUserId, token, fcmMessageType, ttl);
+                    sendFcm(myUserId, token, fcmMessageType, ttl, appendsToMapPairs);
                 }
             }
         });
@@ -77,7 +81,8 @@ public class NotificationSender {
 //    }
 
 
-    private static void sendFcm(final String myUserId, final String toToken, final FCMMessageType fcmMessageType, final int ttl){
+    private static void sendFcm(final String myUserId, final String toToken, final FCMMessageType fcmMessageType, final int ttl,
+                                final Pair<String, String>... appendsToMapPairs){
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
@@ -97,6 +102,13 @@ public class NotificationSender {
                     dataMap.put("action", fcmMessageType.name());
                     dataMap.put("senderId", myUserId);
                     dataMap.put("fromPlatform", "Firebase");
+                    dataMap.put("messageId", Strings.generateUniqueRandomKey(30));
+
+                    if(appendsToMapPairs != null){
+                        for(Pair<String, String> pair: appendsToMapPairs){
+                            dataMap.put(pair.first, pair.second);
+                        }
+                    }
 
                     HashMap<String, Object> hashMap = new HashMap();
                     hashMap.put("data", dataMap);

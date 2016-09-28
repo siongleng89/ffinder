@@ -70,8 +70,17 @@ public class UserKeyDialog {
             }
         });
 
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                Analytics.logEvent(AnalyticEvent.Close_Share_Key_Dialog);
+            }
+        });
+
         resetKey();
         setListeners();
+
+        Analytics.logEvent(AnalyticEvent.Open_Share_Key_Dialog);
     }
 
     public void resetKey(){
@@ -103,7 +112,7 @@ public class UserKeyDialog {
         btnShareKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Analytics.logEvent(AnalyticEvent.Share_Key);
+                Analytics.logEvent(AnalyticEvent.Share_Key_Button_Clicked);
 
                 String key = txtYourKey.getText().toString();
 

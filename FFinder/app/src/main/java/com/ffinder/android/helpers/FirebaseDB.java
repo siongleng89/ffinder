@@ -2,6 +2,7 @@ package com.ffinder.android.helpers;
 
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
+import com.ffinder.android.R;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.enums.Status;
@@ -147,6 +148,11 @@ public class FirebaseDB {
                 }
             }
         });
+    }
+
+    public static void checkUserHasAnyLink(final String userId, final FirebaseListener<Boolean> listener){
+        DatabaseReference db = getTable(TableName.links);
+        checkExist(db.child(userId), listener);
     }
 
     public static void addNewLink(String myUserId, String targetUserId, String myName, String targetName, final FirebaseListener listener){

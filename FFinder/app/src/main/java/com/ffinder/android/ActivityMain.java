@@ -15,10 +15,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.*;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.adapters.IFriendItemListener;
 import com.ffinder.android.absint.controls.ISearchFailedListener;
@@ -37,7 +34,6 @@ import com.ffinder.android.statics.Vars;
 import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.tasks.RequestLocationTaskFrag;
 import com.ffinder.android.utils.*;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.List;
@@ -46,16 +42,15 @@ import java.util.List;
 public class ActivityMain extends MyActivityAbstract implements IFriendItemListener {
 
     private ActivityMain _this;
-    private FragmentIdentity fragmentIdentity;
-    private FragmentEmptyFriend fragmentEmptyFriend;
     private FragmentNextAdsCd fragmentNextAdsCd;
     private MyModel myModel;
 
+    private Button btnShareKey;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listFriends;
     private RelativeLayout layoutEmptyFriend;
     private FriendsAdapter friendsAdapter;
-    private BroadcastReceiver receiver;
+    private BroadcastReceiver refreshFriendReceiver, refreshFriendListReceiver;
     private boolean afterSavedInstanceState;
 
     public ActivityMain() {
@@ -69,21 +64,17 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         super.onCreate(savedInstanceState);
         _this = this;
         setContentView(R.layout.activity_main);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         myModel = new MyModel(this);
 
         myModel.loginFirebase(0, null);
 
+        btnShareKey = (Button) findViewById(R.id.btnShareKey);
+
         fragmentNextAdsCd = (FragmentNextAdsCd) getSupportFragmentManager().findFragmentById(R.id.nextAdsCdFragment);
         fragmentNextAdsCd.setMyModel(myModel);
-
-        fragmentIdentity = (FragmentIdentity) getSupportFragmentManager().findFragmentById(R.id.identityFragment);
-        fragmentIdentity.setMyModel(myModel);
-
-        fragmentEmptyFriend = (FragmentEmptyFriend) getSupportFragmentManager().findFragmentById(R.id.emptyFriendFragment);
-        fragmentEmptyFriend.setMyModel(myModel);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary));
@@ -112,8 +103,23 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                 if(!Strings.isEmpty(refreshedToken)) FirebaseDB.updateMyToken(myModel.getUserId(), refreshedToken);
 
                 checkKnownIssuePhones();
+
+                Threadings.postRunnable(ActivityMain.this, new Runnable() {
+                    @Override
+                    public void run() {
+                        Bundle extras = getIntent().getExtras();
+                        if(extras !=null && extras.containsKey("firstRun")) {
+                            if(myModel.getNonSelfFriendModelsCount() == 0){
+                                FriendModel myOwnModel = myModel.getFriendModelById(myModel.getUserId());
+                                searchNow(myOwnModel);
+                            }
+                        }
+                    }
+                });
             }
         });
+
+        onNewIntent(getIntent());
 
         Logs.show("ActivityMain onCreate end");
     }
@@ -128,6 +134,10 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_share:
+                UserKeyDialog userKeyDialog = new UserKeyDialog(ActivityMain.this, myModel);
+                userKeyDialog.show();
+                break;
             case R.id.action_add:
                 AddMemberDialog addMemberDialog = new AddMemberDialog(this, myModel);
                 addMemberDialog.show();
@@ -135,11 +145,6 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             case R.id.action_settings:
                 Intent intent = new Intent(this, ActivitySettings.class);
                 startActivity(intent);
-                break;
-            case R.id.action_promo:
-                Intent intent2 = new Intent(this, ActivityPromo.class);
-                intent2.putExtra("userId", myModel.getUserId());
-                startActivity(intent2);
                 break;
         }
 
@@ -169,6 +174,17 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle extras = intent.getExtras();
+        if(extras !=null && extras.containsKey("shareKey")) {
+            UserKeyDialog userKeyDialog = new UserKeyDialog(this, myModel);
+            userKeyDialog.show();
+        }
+
     }
 
     private void checkHasPendingToAddUser(){
@@ -322,16 +338,24 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             }
         });
 
+        btnShareKey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserKeyDialog userKeyDialog = new UserKeyDialog(ActivityMain.this, myModel);
+                userKeyDialog.show();
+            }
+        });
+
         myModel.addMyModelChangedListener(new MyModelChangedListener() {
             @Override
             public void onChanged(MyModel newMyModel, String changedProperty) {
-                if(changedProperty.equals("friendModels") && !isAfterSavedInstanceState()){
+                if(changedProperty.equals("friendModels")){
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             friendsAdapter.notifyDataSetChanged();
 
-                            if(myModel.getFriendModels().size() == 0){
+                            if(myModel.getNonSelfFriendModelsCount() == 0){
                                 layoutEmptyFriend.setVisibility(View.VISIBLE);
                             }
                             else{
@@ -354,7 +378,7 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         IntentFilter filter = new IntentFilter();
         filter.addAction("REFRESH_FRIEND");
 
-        receiver = new BroadcastReceiver() {
+        refreshFriendReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 final String friendId = intent.getStringExtra("userId");
@@ -364,7 +388,18 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                 }
             }
         };
-        registerReceiver(receiver, filter);
+        registerReceiver(refreshFriendReceiver, filter);
+
+        IntentFilter filter2 = new IntentFilter();
+        filter2.addAction("REFRESH_FRIENDLIST");
+
+        refreshFriendListReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                refreshFriendList();
+            }
+        };
+        registerReceiver(refreshFriendListReceiver, filter2);
 
     }
 
@@ -387,6 +422,7 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                 if(locationModel != null){
                     friendModel.setLastLocationModel(locationModel);
                 }
+                friendModel.setRecentlyFinishSearch(true);
                 friendModel.setSearchStatus(finalSearchStatus);
                 friendModel.setSearchResult(result);
                 friendModel.save(_this);
@@ -447,10 +483,15 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
 
     @Override
     protected void onDestroy() {
-        if (receiver != null) {
-            unregisterReceiver(receiver);
-            receiver = null;
+        if (refreshFriendReceiver != null) {
+            unregisterReceiver(refreshFriendReceiver);
+            refreshFriendReceiver = null;
         }
+        if (refreshFriendListReceiver != null) {
+            unregisterReceiver(refreshFriendListReceiver);
+            refreshFriendListReceiver = null;
+        }
+
         super.onDestroy();
     }
 

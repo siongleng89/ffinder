@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:padding="20dp">
+                android:layout_height="match_parent" android:padding="15dp">
 
 
     <TextView
@@ -13,65 +13,145 @@
             android:id="@+id/textView3"
             android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
-
-
-    <TextView
+    <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/textView3"
-            android:id="@+id/txtError" android:textColor="#db0303" android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" android:visibility="gone"/>
-
-
-    <android.support.design.widget.TextInputLayout
-            android:id="@+id/keyWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp" android:layout_below="@+id/txtError">
-
-        <EditText
-                android:id="@+id/editTxtKey"
+            android:id="@+id/scrollView3" android:layout_marginTop="10dp" android:layout_below="@+id/textView3">
+        <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textFilter|textNoSuggestions"
-                android:hint="@string/user_key_hint"/>
+                android:layout_height="match_parent">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/txtError" android:textColor="#db0303"
+                    android:layout_marginBottom="10dp" android:visibility="gone"/>
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/keyWrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp" android:layout_below="@+id/txtError">
 
-    </android.support.design.widget.TextInputLayout>
+                <EditText
+                        android:id="@+id/editTxtKey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textFilter|textNoSuggestions|number"
+                        android:hint="@string/user_key_hint"/>
 
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/memberNameWrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/keyWrapper" android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp">
 
-    <android.support.design.widget.TextInputLayout
-            android:id="@+id/memberNameWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/keyWrapper" android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp">
+                <EditText
+                        android:id="@+id/editTxtMemberName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textFilter|textNoSuggestions"
+                        android:hint="@string/member_name_hint"/>
 
-        <EditText
-                android:id="@+id/editTxtMemberName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textFilter|textNoSuggestions"
-                android:hint="@string/member_name_hint"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/yourNameWrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/memberNameWrapper" android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp">
 
-    </android.support.design.widget.TextInputLayout>
+                <EditText
+                        android:id="@+id/editTxtYourName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textFilter|textNoSuggestions"
+                        android:hint="@string/your_name_hint"/>
 
-    <android.support.design.widget.TextInputLayout
-            android:id="@+id/yourNameWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/memberNameWrapper" android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp">
-
-        <EditText
-                android:id="@+id/editTxtYourName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textFilter|textNoSuggestions"
-                android:hint="@string/your_name_hint"/>
-
-    </android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>
+            <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:layout_below="@+id/yourNameWrapper"
+                            android:id="@+id/layoutTutorials" android:visibility="gone"
+                            android:layout_marginTop="10dp" android:paddingBottom="10dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:text="@string/passcode_tutorial_title1" android:id="@+id/textView15"
+                          android:textColor="@color/colorAccent" android:textSize="15sp"/>
+                <LinearLayout android:orientation="vertical" android:layout_width="match_parent"
+                              android:layout_height="match_parent" android:layout_below="@+id/textView15"
+                              android:layout_marginTop="10dp" android:background="@drawable/empty_friend_bg"
+                              android:padding="10dp" android:id="@+id/linearLayout3">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:textAppearance="?android:attr/textAppearanceSmall"
+                              android:text="@string/passcode_tutorial_text_1_0" android:id="@+id/textView17"
+                              android:textColor="#000000"/>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                                    android:gravity="center_horizontal">
+                        <ImageView android:layout_width="wrap_content" android:layout_height="200dp"
+                                   android:id="@+id/imageView5" android:src="@drawable/add_friend1"
+                                   android:layout_below="@+id/textView17" android:layout_centerHorizontal="true"
+                                   android:layout_marginTop="10dp" android:layout_marginBottom="10dp"/>
+                    </RelativeLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:textAppearance="?android:attr/textAppearanceSmall"
+                              android:text="@string/passcode_tutorial_text_1_1" android:id="@+id/textView18"
+                              android:textColor="#000000"/>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                                    android:gravity="center_horizontal">
+                        <ImageView android:layout_width="wrap_content" android:layout_height="200dp"
+                                   android:id="@+id/imageView8" android:src="@drawable/add_friend1_1"
+                                   android:layout_below="@+id/textView17" android:layout_centerHorizontal="true"
+                                   android:layout_marginTop="10dp" android:layout_marginBottom="10dp"/>
+                    </RelativeLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:textAppearance="?android:attr/textAppearanceSmall"
+                              android:text="@string/passcode_tutorial_text_1_2" android:id="@+id/textView19"
+                              android:textColor="#000000"/>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                                    android:gravity="center_horizontal">
+                        <ImageView android:layout_width="200dp" android:layout_height="200dp"
+                                   android:id="@+id/imageView9" android:layout_below="@+id/textView17"
+                                   android:layout_centerHorizontal="true" android:layout_marginTop="10dp"
+                                   android:layout_marginBottom="10dp" android:src="@drawable/add_friend1_2"/>
+                    </RelativeLayout>
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:text="@string/passcode_tutorial_title2" android:id="@+id/textView20"
+                          android:layout_below="@+id/linearLayout3" android:layout_marginTop="10dp"
+                          android:textColor="@color/colorAccent" android:textSize="15sp"/>
+                <LinearLayout android:orientation="vertical" android:layout_width="match_parent"
+                              android:layout_height="match_parent" android:layout_below="@+id/textView20"
+                              android:layout_marginTop="10dp" android:background="@drawable/empty_friend_bg"
+                              android:padding="10dp" android:id="@+id/linearLayout4">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:textAppearance="?android:attr/textAppearanceSmall"
+                              android:text="@string/passcode_tutorial_text_2_0" android:id="@+id/textView21"
+                              android:textColor="#000000"/>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                                    android:gravity="center_horizontal">
+                        <ImageView android:layout_width="200dp" android:layout_height="200dp"
+                                   android:id="@+id/imageView10" android:layout_centerHorizontal="true"
+                                   android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
+                                   android:src="@drawable/add_friend2"/>
+                    </RelativeLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:textAppearance="?android:attr/textAppearanceSmall"
+                              android:text="@string/passcode_tutorial_text_2_1" android:id="@+id/textView22"
+                              android:textColor="#000000"/>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                                    android:gravity="center_horizontal">
+                        <ImageView android:layout_width="200dp" android:layout_height="200dp"
+                                   android:id="@+id/imageView11" android:layout_centerHorizontal="true"
+                                   android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
+                                   android:src="@drawable/add_friend2_1"/>
+                    </RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
 
 
 </RelativeLayout>

@@ -82,7 +82,7 @@ public class ActivityKnownIssues extends MyActivityAbstract {
                     msg = getString(R.string.issue_fix_sony);
                 }
 
-                AndroidUtils.showDialog(ActivityKnownIssues.this, "", msg, null);
+                AndroidUtils.showDialog(ActivityKnownIssues.this, "", msg, null, null);
             }
         });
     }

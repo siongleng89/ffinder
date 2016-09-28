@@ -1,6 +1,7 @@
 package com.ffinder.android.helpers;
 
 import android.app.Activity;
+import com.ffinder.android.BuildConfig;
 import com.ffinder.android.MyApplication;
 import com.ffinder.android.enums.AnalyticEvent;
 import com.google.android.gms.analytics.HitBuilders;
@@ -14,6 +15,8 @@ public class Analytics {
     private static Tracker _tracker;
 
     public static void logToScreen(Activity activity){
+        if(BuildConfig.DEBUG_MODE) return;
+
         Tracker tracker = getTracker(activity);
         if(tracker == null) return;
 
@@ -32,6 +35,8 @@ public class Analytics {
     }
 
     public static void logEvent(String eventName, String value){
+        if(BuildConfig.DEBUG_MODE) return;
+
         Tracker tracker = getTracker(null);
         if(tracker == null) return;
 

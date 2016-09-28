@@ -98,7 +98,7 @@ public class ActivityVip extends MyActivityAbstract {
                     Analytics.logEvent(AnalyticEvent.Click_Subscribe, subscriptionModel.getSkuDetails().productId);
                 }
                 else{
-                    AndroidUtils.showDialog(ActivityVip.this, "", getString(R.string.manage_subscriptions_introduction), null);
+                    AndroidUtils.showDialog(ActivityVip.this, "", getString(R.string.manage_subscriptions_introduction), null, null);
                 }
             }
         });

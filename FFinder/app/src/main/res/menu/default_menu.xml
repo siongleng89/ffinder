@@ -2,19 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+            android:id="@+id/action_share"
+            android:icon="@drawable/ic_stat_content_add"
+            android:title="@string/btn_share_key_text"
+            app:showAsAction="ifRoom"/>
+
+    <item
             android:id="@+id/action_add"
             android:icon="@drawable/ic_stat_content_add"
-            android:title="@string/add_new_member_title"
-            app:showAsAction="ifRoom"/>
+            android:title="@string/add_new_member_manually_title"
+            app:showAsAction="never"/>
 
     <item android:id="@+id/action_settings"
           android:icon="@drawable/ic_stat_action_settings"
           android:title="@string/settings_activity_title"
-          app:showAsAction="ifRoom"/>
+          app:showAsAction="never"/>
 
-    <item android:id="@+id/action_promo"
-          android:icon="@drawable/ic_stat_action_promo"
-          android:title="@string/input_promo_code_title"
-          app:showAsAction="ifRoom"/>
+
 
 </menu>

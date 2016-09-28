@@ -29,6 +29,8 @@ public class MyApplication extends Application {
      * @return tracker
      */
     synchronized public Tracker getDefaultTracker() {
+        if(BuildConfig.DEBUG_MODE) return null;
+
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG

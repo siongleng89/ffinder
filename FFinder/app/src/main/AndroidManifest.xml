@@ -67,7 +67,8 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".absint.receivers.StartServiceBroadcastReceiver">
+        <receiver android:name=".absint.receivers.StartServiceBroadcastReceiver"
+                  android:process=":remote">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -75,23 +76,16 @@
         </receiver>
 
         <service
-                android:name=".services.TestService"
-                android:stopWithTask="false" >
+                android:name=".services.GcmAliveHeartbeatService"
+                android:enabled="true"
+                android:exported="false">
         </service>
 
-        <activity
-                android:name=".ActivityDummy"
-                android:theme="@android:style/Theme.NoDisplay"
-                android:enabled="true"
-                android:allowTaskReparenting="true"
-                android:noHistory="true"
-                android:excludeFromRecents="true"
-                android:alwaysRetainTaskState="false"
-                android:stateNotNeeded="true"
-                android:clearTaskOnLaunch="true"
-                android:finishOnTaskLaunch="true"
-        />
 
+        <service
+                android:name=".services.HandoffToNotificationConsumerIntentService">
+
+        </service>
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
