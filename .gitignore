@@ -1,2 +1,5 @@
 *.apk
 FFinder/app/app-release.apk
+FFinder/.idea/gradle.xml
+
+FFinder/.idea/misc.xml
