@@ -29,6 +29,7 @@ public class FragmentAppsIntroduction extends Fragment {
 
         btnOk = (Button) appsIntroductionView.findViewById(R.id.btnOk);
 
+
         setListeners();
         return appsIntroductionView;
     }
