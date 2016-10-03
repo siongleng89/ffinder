@@ -328,8 +328,8 @@
 
     <string name="btn_share_via_other_apps_text">Share</string>
 
-    <string name="your_key_title">Share this Passcode with your friends and family <b>(No action is required after sharing your Passcode)</b>
-        You can start tracking their location once they have added you.</string>
+    <string name="your_key_title">Share this Passcode with your friends and family, and you can start tracking their location once they have added you
+        (No action is required after sharing your Passcode)</string>
 
     <string name="expired_at_title">Expire at</string>
 

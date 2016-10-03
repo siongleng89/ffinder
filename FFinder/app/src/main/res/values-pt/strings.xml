@@ -255,9 +255,9 @@
     <string name="error_timeout_msg"><u>incapaz de obter a localização do usuário, porque.</u>
     </string>
 
-    <string name="your_key_title">compartilhar essa chave com o seu amigo e família
-        <b>(Nenhuma ação é necessária depois de compartilhar sua chave)</b>
-        Você pode começar a controlar sua localização depois de terem adicionado você.
+    <string name="your_key_title">compartilhar essa chave com o seu amigo e família, Você pode começar a controlar sua
+        localização depois de terem adicionado você
+        (Nenhuma ação é necessária depois de compartilhar sua chave)
     </string>
 
     <string name="known_issues_title">Instructions for Xiaomi and Huaiwei</string>

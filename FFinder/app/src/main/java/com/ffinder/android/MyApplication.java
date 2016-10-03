@@ -5,6 +5,7 @@ import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.helpers.FirebaseOnlineTracker;
 import com.ffinder.android.helpers.LocaleHelper;
 import com.ffinder.android.helpers.VipAndProductsHelpers;
+import com.ffinder.android.utils.Logs;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -22,6 +23,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         LocaleHelper.onCreate(this);
+        Logs.registerEventCatchingIFDebug();
     }
 
     /**

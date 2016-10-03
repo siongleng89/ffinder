@@ -129,7 +129,6 @@ public class RequestLocationHandler implements
                                 for(AutoNotificationModel autoNotificationModel : result){
                                     NotificationSender.send(myModel.getUserId(),
                                             autoNotificationModel.getWaitingUserId(), FCMMessageType.UserLocated, NotificationSender.TTL_LONG);
-                                    Analytics.logEvent(AnalyticEvent.Auto_Notification_Sent);
                                 }
                                 FirebaseDB.clearAllAutoNotification(myModel.getUserId());
                             }

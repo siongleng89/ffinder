@@ -58,8 +58,8 @@ public class NotificationConsumer {
 
     public void consume(final Map<String, String> map){
         if(checkContainEssentialField(map)){
-            final String senderId = map.get("senderId").toString();
-            final FCMMessageType messageType = FCMMessageType.valueOf(map.get("action").toString());
+            final String senderId = map.get("senderId");
+            final FCMMessageType messageType = FCMMessageType.convertStringToFCMMessageType(map.get("action"));
             final MyModel myModel = new MyModel(context);
             myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
                 @Override
@@ -123,7 +123,7 @@ public class NotificationConsumer {
         }
         else{
             if(map.containsKey("action")){
-                final FCMMessageType messageType = FCMMessageType.valueOf(map.get("action").toString());
+                final FCMMessageType messageType = FCMMessageType.convertStringToFCMMessageType(map.get("action"));
                 final MyModel myModel = new MyModel(context);
                 if(messageType == FCMMessageType.NotifyRememberToAddFriend){
                     myModel.loadAllFriendModels();

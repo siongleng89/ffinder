@@ -283,6 +283,11 @@ public class FirebaseDB {
         });
     }
 
+    public static void saveLog(String logEvent){
+        final DatabaseReference db = getTable(TableName.logs);
+        setValue(db.push(), logEvent, null);
+    }
+
     public static void getAllProducts(final FirebaseListener<ArrayList<Pair<String, Object>>> listener){
         final DatabaseReference db = getTable(TableName.products);
         getData(db, listener);
@@ -433,7 +438,7 @@ public class FirebaseDB {
 
     private enum TableName{
         users, links, locations, timestamps, pings, autoNotifications, keys, nextAds, showAdsIn, promoCodes, promoUsages,
-        products, identifierToUserIdMaps
+        products, identifierToUserIdMaps, logs
     }
 
 }

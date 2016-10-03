@@ -5,6 +5,7 @@ import android.util.Log;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Constants;
+import com.ffinder.android.utils.RunnableArgs;
 import com.ffinder.android.utils.Strings;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,10 +39,17 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
-        MyModel myModel = new MyModel(this);
+    private void sendRegistrationToServer(final String token) {
+        final MyModel myModel = new MyModel(this);
         if(!Strings.isEmpty(myModel.getUserId())){
-            FirebaseDB.updateMyToken(myModel.getUserId(), token);
+            myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
+                @Override
+                public void run() {
+                    if(this.getFirstArg()){
+                        FirebaseDB.updateMyToken(myModel.getUserId(), token);
+                    }
+                }
+            });
         }
     }
 }

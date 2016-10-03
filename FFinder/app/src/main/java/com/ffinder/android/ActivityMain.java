@@ -35,6 +35,7 @@ import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.tasks.RequestLocationTaskFrag;
 import com.ffinder.android.utils.*;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
 
@@ -60,7 +61,6 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     protected void onCreate(Bundle savedInstanceState) {
         Logs.show("ActivityMain onCreate start");
 
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         _this = this;
         setContentView(R.layout.activity_main);
@@ -103,6 +103,7 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                 if(!Strings.isEmpty(refreshedToken)) FirebaseDB.updateMyToken(myModel.getUserId(), refreshedToken);
 
                 checkKnownIssuePhones();
+                FirebaseMessaging.getInstance().subscribeToTopic("allDevices");
 
                 Threadings.postRunnable(ActivityMain.this, new Runnable() {
                     @Override
