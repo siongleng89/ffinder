@@ -1,0 +1,6 @@
+framework module Pods_FFfinder {
+  umbrella header "Pods-FFfinder-umbrella.h"
+
+  export *
+  module * { export * }
+}
