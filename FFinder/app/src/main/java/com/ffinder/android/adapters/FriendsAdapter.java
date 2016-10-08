@@ -61,10 +61,8 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder mViewHolder = null;
-        //HashMap<String, String> song = null;
 
         if (convertView == null) {
-          //  song = new HashMap <String, String>();
             mViewHolder = new ViewHolder();
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = vi.inflate(R.layout.lvitem_friend, parent, false);
@@ -127,6 +125,7 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
             //searching
             viewHolder.txtLocation.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             viewHolder.txtLocation.setText(statusMsg);
+
             viewHolder.imgViewLoading.setVisibility(View.VISIBLE);
             viewHolder.loadingAnimation.run();
             viewHolder.btnSearch.setVisibility(View.INVISIBLE);
@@ -156,26 +155,27 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
                     viewHolder.txtLastUpdated.setVisibility(View.VISIBLE);
 
                     if(friendModel.isRecentlyFinishSearch()){
-                        Integer colorFrom = ContextCompat.getColor(context, R.color.colorPrimary);
-                        Integer colorTo = ContextCompat.getColor(context, R.color.colorCaption);
-                        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-                        colorAnimation.setDuration(3000);
-                        colorAnimation.setRepeatCount(1);
-                        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator animator) {
-                                viewHolder.txtLocation.setTextColor((Integer)animator.getAnimatedValue());
-                                viewHolder.txtLastUpdated.setTextColor((Integer)animator.getAnimatedValue());
-                            }
-
-                        });
-                        colorAnimation.start();
+//                        Integer colorFrom = ContextCompat.getColor(context, R.color.colorPrimary);
+//                        Integer colorTo = ContextCompat.getColor(context, R.color.colorCaption);
+//                        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+//                        colorAnimation.setDuration(3000);
+//                        colorAnimation.setRepeatCount(1);
+//                        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//
+//                            @Override
+//                            public void onAnimationUpdate(ValueAnimator animator) {
+//                                viewHolder.txtLocation.setTextColor((Integer)animator.getAnimatedValue());
+//                                viewHolder.txtLastUpdated.setTextColor((Integer)animator.getAnimatedValue());
+//                            }
+//
+//                        });
+//                        colorAnimation.start();
                         friendModel.setRecentlyFinishSearch(false);
                     }
 
                 }
             });
+
         }
 
         if(error == null || error == SearchResult.Normal){

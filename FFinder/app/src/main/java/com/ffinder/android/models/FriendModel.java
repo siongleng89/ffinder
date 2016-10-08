@@ -31,7 +31,6 @@ public class FriendModel {
     private LocationModel lastLocationModel;
     private SearchStatus searchStatus;
     private SearchResult searchResult;
-    private FriendModelChangedListener friendModelChangedListener;
     private boolean recentlyFinishSearch;
 
     public FriendModel() {
@@ -45,7 +44,6 @@ public class FriendModel {
 
                 FriendModel retrievedFriendModel = Vars.getObjectMapper().readValue(json, FriendModel.class);
                 copyToThis(retrievedFriendModel);
-                onModelChanged();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -115,15 +113,7 @@ public class FriendModel {
     }
 
     public void setLastLocationModel(LocationModel newLastLocationModel) {
-        if(newLastLocationModel != null
-                && !Strings.isEmpty(newLastLocationModel.getLongitude())
-                && !Strings.isEmpty(newLastLocationModel.getLatitude())
-                && (!newLastLocationModel.getLatitude().equals(this.getLastLocationModel().getLatitude())
-                || (!newLastLocationModel.getLongitude().equals(this.getLastLocationModel().getLongitude()))
-                || (!newLastLocationModel.getAddress().equals(this.getLastLocationModel().getAddress())))){
-            this.lastLocationModel = newLastLocationModel;
-            onModelChanged();
-        }
+        this.lastLocationModel = newLastLocationModel;
     }
 
     public String getName() {
@@ -132,7 +122,6 @@ public class FriendModel {
 
     public void setName(String name) {
         this.name = name;
-        onModelChanged();
     }
 
 
@@ -144,11 +133,8 @@ public class FriendModel {
 
     @JsonIgnore
     public void setSearchStatus(SearchStatus newSearchStatus) {
-        if(this.searchStatus != newSearchStatus){
-            this.searchStatus = newSearchStatus;
-            onModelChanged();
-            Logs.show("New search status for: " + getName() + " is " + this.searchStatus);
-        }
+        this.searchStatus = newSearchStatus;
+        Logs.show("New search status for: " + getName() + " is " + this.searchStatus);
     }
 
     @JsonIgnore
@@ -166,11 +152,8 @@ public class FriendModel {
     }
 
     public void setSearchResult(SearchResult newSearchResult) {
-        if(this.searchResult != newSearchResult){
-            this.searchResult = newSearchResult;
-            onModelChanged();
-            Logs.show("New search result for : " + getName() + " is " + this.searchResult);
-        }
+        this.searchResult = newSearchResult;
+        Logs.show("New search result for : " + getName() + " is " + this.searchResult);
     }
 
     @Override
@@ -181,20 +164,6 @@ public class FriendModel {
         else return super.equals(o);
     }
 
-    @JsonIgnore
-    public FriendModelChangedListener getFriendModelChangedListener() {
-        return friendModelChangedListener;
-    }
 
-    @JsonIgnore
-    public void setFriendModelChangedListener(FriendModelChangedListener friendModelChangedListener) {
-        this.friendModelChangedListener = friendModelChangedListener;
-    }
-
-    private void onModelChanged(){
-        if(getFriendModelChangedListener() != null){
-            friendModelChangedListener.onChanged();
-        }
-    }
 
 }

@@ -28,9 +28,9 @@ public class NotificationSender {
     public static final int TTL_LONG = 1814399;
     public static final int TTL_INSTANT = 0;
 
-    public static void send(final String myUserId, final String targetUserId,
-                            final FCMMessageType fcmMessageType,
-                            final int ttl, final Pair<String, String>... appendsToMapPairs){
+    public static void sendWithUserId(final String myUserId, final String targetUserId,
+                                      final FCMMessageType fcmMessageType,
+                                      final int ttl, final Pair<String, String>... appendsToMapPairs){
         FirebaseDB.getUserToken(targetUserId, new FirebaseListener<String>(String.class) {
             @Override
             public void onResult(String token, Status status) {
@@ -39,9 +39,15 @@ public class NotificationSender {
                 }
             }
         });
-
-
     }
+
+    public static void sendWithToken(final String myUserId, final String targetToken,
+                                      final FCMMessageType fcmMessageType,
+                                      final int ttl, final Pair<String, String>... appendsToMapPairs){
+        sendFcm(myUserId, targetToken, fcmMessageType, ttl, appendsToMapPairs);
+    }
+
+
 
 //    private static void sendOneSignal(String myUserId, String targetUserId, final FCMMessageType fcmMessageType, final int ttl){
 //        try {

@@ -397,8 +397,10 @@
     <string name="address_myself">Me</string>
     <string name="required_location_provider_msg">FFfinder required location service enabled to work.</string>
     <string name="btn_go_to_location_settings_text">Go to Location Settings</string>
-
-
+    <string name="some_permission_denied_toast_msg">Please make sure all required permissions are allowed to start
+        FFfinder.
+    </string>
+    <string name="checking_google_service_availability">Checking google service availability</string>
 
 
 </resources>

@@ -4,9 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
-import com.ffinder.android.helpers.RequestLocationHandler;
+import com.ffinder.android.helpers.LocationUpdater;
 import com.ffinder.android.models.MyModel;
-import com.ffinder.android.utils.Logs;
 import com.ffinder.android.utils.RunnableArgs;
 
 /**
@@ -29,13 +28,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         } catch(Exception ex) {}
 
         if(network_enabled) {
-            final MyModel myModel = new MyModel(context);
-            myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
-                @Override
-                public void run() {
-                    new RequestLocationHandler(context, null, myModel).run();
-                }
-            });
+            new LocationUpdater(context, null, null);
         }
 
     }

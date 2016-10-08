@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import com.ffinder.android.R;
+import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.MyModel;
@@ -20,14 +21,17 @@ import com.ffinder.android.utils.AndroidUtils;
 public class EditNameDialog {
 
     private Activity activity;
+    private IFriendsAdapterHolder friendsAdapterHolder;
     private FriendModel friendModel;
     private MyModel myModel;
     private EditText editTxtNewName;
     private TextInputLayout newNameWrapper;
     private AlertDialog dialog;
 
-    public EditNameDialog(Activity activity, FriendModel friendModel, MyModel myModel) {
+    public EditNameDialog(Activity activity, IFriendsAdapterHolder friendsAdapterHolder,
+                          FriendModel friendModel, MyModel myModel) {
         this.activity = activity;
+        this.friendsAdapterHolder = friendsAdapterHolder;
         this.friendModel = friendModel;
         this.myModel = myModel;
     }
@@ -79,6 +83,7 @@ public class EditNameDialog {
                 friendModel.save(activity);
                 myModel.sortFriendModels();
                 myModel.commitFriendUserIds();
+                friendsAdapterHolder.updateFriendsListAdapter();
                 FirebaseDB.editLinkName(myModel.getUserId(), friendModel.getUserId(), editTxtNewName.getText().toString(), null);
             }
 

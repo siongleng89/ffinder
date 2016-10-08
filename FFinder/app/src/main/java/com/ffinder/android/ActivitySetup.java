@@ -1,13 +1,18 @@
 package com.ffinder.android;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.Status;
@@ -16,6 +21,11 @@ import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.utils.*;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.*;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.concurrent.ExecutionException;
@@ -27,8 +37,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class ActivitySetup extends MyActivityAbstract {
 
-    private boolean initialized;
-    private ActivitySetup _this;
+    private GoogleApiClient googleApiClient;
     private TextView txtStatus;
     private String currentStatus;
     private boolean failed;
@@ -36,10 +45,6 @@ public class ActivitySetup extends MyActivityAbstract {
     private ImageView imgViewLoading;
     private Button btnRetry;
     private MyModel myModel;
-
-    public ActivitySetup() {
-        _this = this;
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,82 +67,149 @@ public class ActivitySetup extends MyActivityAbstract {
         setFailed(failed);
 
         setListeners();
-        init();
+
+        //start the whole process by checking google service availability
+        checkGoogleServiceAvailable();
     }
 
-    private void init(){
-        if(!initialized){
-            initialized = true;
-            startProcess();
-        }
+    private void checkGoogleServiceAvailable(){
+        setCurrentStatus(getString(R.string.checking_google_service_availability));
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(@Nullable Bundle bundle) {
+
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+                    }
+                })
+                .build();
+
+        googleApiClient.connect();
+
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true);
+
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(LocationSettingsResult result) {
+                final com.google.android.gms.common.api.Status status = result.getStatus();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        onFinishChecking();
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        // Location settings are not satisfied. But could be fixed by showing the user
+                        // a dialog.
+                        try {
+                            // Show the dialog by calling startResolutionForResult(),
+                            // and check the result in onActivityResult().
+                            status.startResolutionForResult(
+                                    ActivitySetup.this, 7);
+                        } catch (IntentSender.SendIntentException e) {
+                            // Ignore the error.
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        Toast.makeText(ActivitySetup.this, getString(R.string.no_google_service_error_msg),
+                                Toast.LENGTH_LONG)
+                                .show();
+
+                        finish();   //quit FFfinder
+                        break;
+                }
+            }
+        });
     }
+
+    private void onFinishChecking(){
+        googleApiClient.disconnect();
+
+        //finish google service availability checking, can start the setup user process now
+        startProcess();
+    }
+
 
     private void startProcess(){
         setFailed(false);
         setCurrentStatus(getString(R.string.retrieving_token));
-        if(!DeviceInfo.isNetworkAvailable(_this)){
+        if(!DeviceInfo.isNetworkAvailable(this)){
             failed(FailedCode.NoConnection);
             return;
         }
 
-        Threadings.runInBackground(new Runnable() {
+        setCurrentStatus(getString(R.string.initializing_user));
+
+        tryRecoverUserByGoogleAdsId(new RunnableArgs<String>() {
             @Override
             public void run() {
-                setCurrentStatus(getString(R.string.initializing_user));
-
-                tryRecoverUserByGoogleAdsId(new RunnableArgs<String>() {
-                    @Override
-                    public void run() {
-                        if(!Strings.isEmpty(this.getFirstArg())){     //successfully recovered
-                            String recoverUserId = this.getFirstArg();
-                            myModel.setUserId(recoverUserId);
-                            myModel.save();
-                            myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
-                                @Override
-                                public void run() {
-                                    if(this.getFirstArg()){
-                                        finishProcessAndStartActivity();
-                                    }
-                                    else{
-                                        failed(FailedCode.DBFailed);
-                                    }
-                                }
-                            });
+                if(!Strings.isEmpty(this.getFirstArg())){     //successfully recovered
+                    String recoverUserId = this.getFirstArg();
+                    myModel.setUserId(recoverUserId);
+                    myModel.save();
+                    myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
+                        @Override
+                        public void run() {
+                            if(this.getFirstArg()){
+                                finishProcessAndStartActivity();
+                            }
+                            else{
+                                failed(FailedCode.DBFailed);
+                            }
                         }
-                        else{
-                            myModel.delete();
-                            final String userId = FirebaseDB.getNewUserId();
-                            myModel.setUserId(userId);
-                            myModel.save();
+                    });
+                }
+                else{
+                    myModel.delete();
+                    final String userId = FirebaseDB.getNewUserId();
+                    myModel.setUserId(userId);
+                    myModel.save();
 
-                            myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
-                                @Override
-                                public void run() {
-                                    if(this.getFirstArg()){
-                                        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-                                        FirebaseDB.saveNewUser(userId, refreshedToken, new FirebaseListener() {
-                                            @Override
-                                            public void onResult(Object result, Status status) {
-                                                if(status == Status.Success){
-                                                    finishProcessAndStartActivity();
-                                                }
-                                                else{
-                                                    failed(FailedCode.DBFailed);
-                                                }
-                                            }
-                                        });
+                    myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
+                        @Override
+                        public void run() {
+                            if(this.getFirstArg()){
+                                String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                                FirebaseDB.saveNewUser(userId, refreshedToken, new FirebaseListener() {
+                                    @Override
+                                    public void onResult(Object result, Status status) {
+                                        if(status == Status.Success){
+                                            finishProcessAndStartActivity();
+                                        }
+                                        else{
+                                            failed(FailedCode.DBFailed);
+                                        }
                                     }
-                                    else{
-                                        failed(FailedCode.DBFailed);
-                                    }
-                                }
-                            });
+                                });
+                            }
+                            else{
+                                failed(FailedCode.DBFailed);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
     }
+
 
     private void tryRecoverUserByGoogleAdsId(final RunnableArgs<String> onResult){
         AdsIdTask adsIdTask = new AdsIdTask(this, null);
@@ -199,11 +271,11 @@ public class ActivitySetup extends MyActivityAbstract {
                             myOwnModel.setUserId(myModel.getUserId());
                             myOwnModel.setName(getString(R.string.address_myself));
                             myOwnModel.save(ActivitySetup.this);
-                            myModel.addFriendModel(myOwnModel, false);
+                            myModel.addFriendModel(myOwnModel);
                             myModel.commitFriendUserIds();
 
                             setCurrentStatus(getString(R.string.initialization_done));
-                            Intent k = new Intent(_this, ActivityMain.class);
+                            Intent k = new Intent(ActivitySetup.this, ActivityMain.class);
                             k.putExtra("firstRun", "1");
                             startActivity(k);
                         }
@@ -211,7 +283,7 @@ public class ActivitySetup extends MyActivityAbstract {
                 }
                 else{
                     setCurrentStatus(getString(R.string.initialization_done));
-                    Intent k = new Intent(_this, ActivityMain.class);
+                    Intent k = new Intent(ActivitySetup.this, ActivityMain.class);
                     startActivity(k);
                 }
             }
@@ -237,7 +309,7 @@ public class ActivitySetup extends MyActivityAbstract {
         this.currentStatus = currentStatus;
         if(txtStatus != null && currentStatus != null){
             System.out.println(this.currentStatus);
-            runOnUiThread(new Runnable() {
+            Threadings.postRunnable(this, new Runnable() {
                 @Override
                 public void run() {
                     txtStatus.setText(currentStatus);
@@ -250,7 +322,7 @@ public class ActivitySetup extends MyActivityAbstract {
         this.failed = failed;
 
         if(imgViewLoading != null){
-            runOnUiThread(new Runnable() {
+            Threadings.postRunnable(this, new Runnable() {
                 @Override
                 public void run() {
                     if(!failed){
@@ -265,8 +337,9 @@ public class ActivitySetup extends MyActivityAbstract {
             });
         }
 
-
-
     }
+
+
+
 
 }

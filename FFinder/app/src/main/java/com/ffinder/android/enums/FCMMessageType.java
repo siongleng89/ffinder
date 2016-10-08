@@ -7,7 +7,8 @@ import com.ffinder.android.utils.Strings;
  */
 public enum  FCMMessageType {
 
-    UpdateLocation, UserLocated, NotifyRememberToAddFriend, FriendsAdded, Nothing;
+    UpdateLocation, UserLocated, NotifyRememberToAddFriend, FriendsAdded,
+    IsAliveMsg, Nothing;
 
     public static FCMMessageType convertStringToFCMMessageType(String input){
         if(Strings.isEmpty(input)) return Nothing;

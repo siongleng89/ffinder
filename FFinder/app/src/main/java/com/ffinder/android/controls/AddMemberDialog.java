@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ffinder.android.R;
+import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.enums.FCMMessageType;
@@ -37,6 +38,7 @@ public class AddMemberDialog {
 
     private boolean processCanceled;
     private Activity activity;
+    private IFriendsAdapterHolder friendsAdapterHolder;
     private TextView txtError;
     private EditText editTxtYourName, editTxtKey, editTxtMemberName;
     private TextInputLayout userKeyWrapper, memberNameWrapper, yourNameWrapper;
@@ -46,9 +48,10 @@ public class AddMemberDialog {
     private MyModel myModel;
     private boolean autoAdd;
 
-    public AddMemberDialog(Activity activity, MyModel myModel) {
+    public AddMemberDialog(Activity activity, IFriendsAdapterHolder friendsAdapterHolder, MyModel myModel) {
         this.activity = activity;
         this.myModel = myModel;
+        this.friendsAdapterHolder = friendsAdapterHolder;
     }
 
     public void show(){
@@ -201,14 +204,15 @@ public class AddMemberDialog {
         newFriendModel.setUserId(addingUserId);
         newFriendModel.setName(Strings.pickNonEmpty(editTxtMemberName.getText().toString(), name, "No_Name"));
 
-        myModel.addFriendModel(newFriendModel, true);
+        myModel.addFriendModel(newFriendModel);
         myModel.sortFriendModels();
         newFriendModel.save(activity);
+        friendsAdapterHolder.updateFriendsListAdapter();
 
         pd.dismiss();
         dialog.dismiss();
 
-        NotificationSender.send(myModel.getUserId(), addingUserId, FCMMessageType.FriendsAdded, NotificationSender.TTL_LONG,
+        NotificationSender.sendWithUserId(myModel.getUserId(), addingUserId, FCMMessageType.FriendsAdded, NotificationSender.TTL_LONG,
                 new Pair<String, String>("username", myName));
 
         Analytics.logEvent(AnalyticEvent.Add_Friend_Success);
