@@ -212,33 +212,38 @@ public class ActivitySetup extends MyActivityAbstract {
 
 
     private void tryRecoverUserByGoogleAdsId(final RunnableArgs<String> onResult){
-        AdsIdTask adsIdTask = new AdsIdTask(this, null);
-        try {
-            String adsId = adsIdTask.execute().get(3, TimeUnit.SECONDS);
-            FirebaseDB.getUserIdByIdentifier(adsId, new FirebaseListener<String>(String.class) {
-                @Override
-                public void onResult(String recoverUserId, Status status) {
-                    if(status == Status.Success && !Strings.isEmpty(recoverUserId)){
-                        onResult.run(recoverUserId);
-                    }
-                    else{
-                        onResult.run(null);
-                    }
+        Threadings.runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                AdsIdTask adsIdTask = new AdsIdTask(ActivitySetup.this, null);
+                try {
+
+                    String adsId = adsIdTask.execute().get(3, TimeUnit.SECONDS);
+                    FirebaseDB.getUserIdByIdentifier(adsId, new FirebaseListener<String>(String.class) {
+                        @Override
+                        public void onResult(String recoverUserId, Status status) {
+                            if(status == Status.Success && !Strings.isEmpty(recoverUserId)){
+                                onResult.run(recoverUserId);
+                            }
+                            else{
+                                onResult.run(null);
+                            }
+                        }
+                    });
+
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    onResult.run(null);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                    onResult.run(null);
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                    onResult.run(null);
                 }
-            });
-
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            onResult.run(null);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            onResult.run(null);
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-            onResult.run(null);
-        }
-
+            }
+        });
     }
 
     private void failed(FailedCode failedCode){

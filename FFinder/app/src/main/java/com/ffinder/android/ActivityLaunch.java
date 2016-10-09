@@ -82,13 +82,11 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
     }
 
     private void showIntroduction(){
-        if(!isPaused()) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            FragmentAppsIntroduction fragment = new FragmentAppsIntroduction();
-            fragmentTransaction.add(R.id.layoutDefault, fragment);
-            fragmentTransaction.commit();
-        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentAppsIntroduction fragment = new FragmentAppsIntroduction();
+        fragmentTransaction.add(R.id.layoutDefault, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -198,12 +196,6 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
                 Vars.pendingAddUserKey = segments.get(1);
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        readyStartActivity();
     }
 
 

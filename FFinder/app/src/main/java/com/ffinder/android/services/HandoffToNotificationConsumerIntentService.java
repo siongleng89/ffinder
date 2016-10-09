@@ -23,12 +23,17 @@ public class HandoffToNotificationConsumerIntentService extends IntentService {
         final String action = intent.getStringExtra("action");
         final String senderId = intent.getStringExtra("senderId");
         final String messageId = intent.getStringExtra("messageId");
+        final String senderToken = intent.getStringExtra("senderToken");
 
         Map<String, String> map = new HashMap();
         map.put("action", action);
         map.put("senderId", senderId);
         map.put("messageId", messageId);
+        map.put("senderToken", senderToken);
+
+        //sleep for 2secs, to prevent duplicate handling of gcm and fcm
         Threadings.sleep(2000);
+
         new NotificationConsumer(this).consume(map);
         GcmAliveHeartbeatBroadcastReceiver.completeWakefulIntent(intent);
     }

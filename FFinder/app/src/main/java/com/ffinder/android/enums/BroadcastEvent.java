@@ -5,6 +5,6 @@ package com.ffinder.android.enums;
  */
 public enum BroadcastEvent {
 
-    RefreshFriend, RefreshWholeFriendList, UserIsAlive
+    RefreshFriend, RefreshWholeFriendList
 
 }

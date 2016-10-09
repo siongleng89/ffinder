@@ -68,31 +68,39 @@ public class NotificationConsumer {
             //auto user located notification received,
             // broadcast refresh single friend model to trigger update design
             else if(messageType == FCMMessageType.UserLocated){
-                String senderId = map.get("senderId");
+                final String senderId = map.get("senderId");
                 String latitude = map.get("latitude");
                 String longitude = map.get("longitude");
-                String isAutoNotification = map.get("isAutoNotification");
+                final String isAutoNotification = map.get("isAutoNotification");
                 MyModel myModel = new MyModel(context);
 
                 myModel.loadFriend(senderId);
-                FriendModel friendModel = myModel.getFriendModelById(senderId);
+                final FriendModel friendModel = myModel.getFriendModelById(senderId);
                 if(friendModel != null){
-                    LocationModel locationModel = new LocationModel();
+                    final LocationModel locationModel = new LocationModel();
                     locationModel.setLatitude(latitude);
                     locationModel.setLongitude(longitude);
                     locationModel.setTimestampLastUpdatedLong(System.currentTimeMillis());
-
                     friendModel.setSearchResult(SearchResult.Normal);
-                    friendModel.setLastLocationModel(locationModel);
-                    friendModel.save(context);
+                    friendModel.setSearchStatus(SearchStatus.End);
 
-                    BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshFriend,
-                            new Pair<String, String>("userId", senderId));
+                    locationModel.geodecodeCoordinatesIfNeeded(context, new Runnable() {
+                        @Override
+                        public void run() {
+                            friendModel.setLastLocationModel(locationModel);
+                            friendModel.save(context);
 
-                    //only show notification on user system tray if it is from auto notification
-                    if(isAutoNotification.equals("1")){
-                        showLocatedNotification(friendModel.getUserId(), friendModel.getName());
-                    }
+                            BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshFriend,
+                                    new Pair<String, String>("userId", senderId));
+
+                            //only show notification on user system tray if it is from auto notification
+                            if(isAutoNotification.equals("1")){
+                                showLocatedNotification(friendModel.getUserId(), friendModel.getName());
+                            }
+                        }
+                    });
+
+
                 }
             }
 
@@ -100,8 +108,19 @@ public class NotificationConsumer {
             //broadcast refresh single friend model to trigger update design
             else if(messageType == FCMMessageType.IsAliveMsg){
                 String senderId = map.get("senderId");
-                BroadcasterHelper.broadcast(context, BroadcastEvent.UserIsAlive,
+
+                //must save to preference to preserve state when apps is in background
+                MyModel myModel = new MyModel(context);
+                myModel.loadFriend(senderId);
+                final FriendModel friendModel = myModel.getFriendModelById(senderId);
+                if(friendModel != null){
+                    friendModel.setSearchStatus(SearchStatus.WaitingUserLocation);
+                    friendModel.save(context);
+                }
+
+                BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshFriend,
                         new Pair<String, String>("userId", senderId));
+
             }
 
             //push notification received for add friend reminder

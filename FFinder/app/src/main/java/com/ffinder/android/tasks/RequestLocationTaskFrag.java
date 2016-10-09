@@ -16,7 +16,9 @@ import com.ffinder.android.enums.SearchStatus;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.helpers.NotificationSender;
+import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.LocationModel;
+import com.ffinder.android.models.MyModel;
 import com.ffinder.android.models.OnlineRequest;
 import com.ffinder.android.utils.*;
 
@@ -33,7 +35,7 @@ public class RequestLocationTaskFrag extends Fragment {
     private String userId, myToken, targetUserId;
     private SearchStatus currentStatus;
     private SearchResult currentResult;
-    private int timeoutSecs = 45;
+    private int timeoutSecs = 20;
     private RequestLocationTask requestLocationTask;
 
     public static RequestLocationTaskFrag newInstance(String userId, String myToken, String targetUserId) {
@@ -91,9 +93,6 @@ public class RequestLocationTaskFrag extends Fragment {
                 } catch (TimeoutException e) {
                     requestLocationTask.taskTimeout();
                 }
-                finally {
-                    requestLocationTask.dispose();
-                }
             }
         });
     }
@@ -127,6 +126,11 @@ public class RequestLocationTaskFrag extends Fragment {
         if(requestLocationTaskFragListener != null)
             requestLocationTaskFragListener.onUpdateResult(targetUserId, locationModel, currentStatus, searchResult);
 
+        terminate();
+    }
+
+    public void terminate(){
+        //already gotten the result from push notification, can terminate the task now
         if(requestLocationTask != null) requestLocationTask.dispose();
     }
 
@@ -187,20 +191,7 @@ public class RequestLocationTaskFrag extends Fragment {
 
             while (!finish){
                 Threadings.sleep(500);
-            }
-
-            if(disposed) return null;
-
-            if(searchStatus == SearchStatus.WaitingUserRespond ||
-                    searchStatus == SearchStatus.WaitingUserLocation){
-                FirebaseDB.autoNotifyMe(userId, targetUserId, new FirebaseListener() {
-                    @Override
-                    public void onResult(Object result, com.ffinder.android.enums.Status status) {
-                        //sendWithUserId one long ttl msg, hopefully user will reply asap or when it has connection
-                        NotificationSender.sendWithUserId(userId, targetUserId, FCMMessageType.UpdateLocation,
-                                NotificationSender.TTL_LONG);
-                    }
-                });
+                if(disposed) return null;
             }
 
             return null;
@@ -227,9 +218,7 @@ public class RequestLocationTaskFrag extends Fragment {
 
             if(!disposed){
                 notifyResult(resultLocationModel, searchResult);
-                dispose();
             }
-
         }
 
         private void checkCanSearch(String myUserId, String targetUserId, final RunnableArgs<Boolean> toRun){
@@ -248,6 +237,15 @@ public class RequestLocationTaskFrag extends Fragment {
 
 
         public void taskTimeout() {
+            MyModel myModel = new MyModel(context);
+            myModel.loadFriend(targetUserId);
+            FriendModel friendModel = myModel.getFriendModelById(targetUserId);
+
+
+            //update task search status with friend model one, as friend model always hold latest status
+            searchStatus = friendModel.getSearchStatus();
+
+
             //timeout, get user latest location model from database
             FirebaseDB.getUserLocation(targetUserId, new FirebaseListener<LocationModel>(LocationModel.class) {
                 @Override
@@ -256,20 +254,37 @@ public class RequestLocationTaskFrag extends Fragment {
                         resultLocationModel = result;
                     }
 
+                    //only trigger auto notify when error is waiting user response
+                    boolean shouldAutoNotify = false;
+
 
                     if(searchStatus == SearchStatus.WaitingUserLocation){
                         setSearchResult(SearchResult.ErrorTimeoutLocationDisabled);
+                        shouldAutoNotify = true;
+                    }
+                    else if(searchStatus == SearchStatus.WaitingUserRespond){
+                        setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
+                        shouldAutoNotify = true;
                     }
                     else if(searchStatus == SearchStatus.CheckingData){
                         setSearchResult(SearchResult.ErrorTimeoutNoConnection);
+                        shouldAutoNotify = false;
                     }
-                    else{
-                        setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
+
+                    if(shouldAutoNotify){
+                        FirebaseDB.autoNotifyMe(userId, targetUserId, new FirebaseListener() {
+                            @Override
+                            public void onResult(Object result, com.ffinder.android.enums.Status status) {
+                                //sendWithUserId one long ttl msg, hopefully user will reply asap or when it has connection
+                                NotificationSender.sendWithUserId(userId, targetUserId, FCMMessageType.UpdateLocation,
+                                        NotificationSender.TTL_LONG);
+                            }
+                        });
                     }
+
                 }
             });
         }
-
 
 
         public void dispose(){

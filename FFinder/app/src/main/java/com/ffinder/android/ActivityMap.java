@@ -15,10 +15,7 @@ import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.utils.Strings;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 
 public class ActivityMap extends MyActivityAbstract implements OnMapReadyCallback{
@@ -42,7 +39,7 @@ public class ActivityMap extends MyActivityAbstract implements OnMapReadyCallbac
         address = bundle.getString("address");
         datetime = bundle.getString("datetime");
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }

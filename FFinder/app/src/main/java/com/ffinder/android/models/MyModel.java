@@ -303,14 +303,12 @@ public class MyModel implements Serializable {
 
     public void addFriendModel(FriendModel friendModel){
         getFriendModels().add(friendModel);
-        commitFriendUserIds();
     }
 
     public void deleteFriend(FriendModel friendModel){
         FriendModel toDeleteModel = getFriendModelById(friendModel.getUserId());
         if(toDeleteModel != null){
             getFriendModels().remove(toDeleteModel);
-            commitFriendUserIds();
         }
     }
 

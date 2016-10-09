@@ -136,7 +136,7 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
             //search end
             viewHolder.txtLocation.setTextColor(ContextCompat.getColor(context, R.color.colorCaption));
 
-            if(Strings.isEmpty(address)){
+            if(Strings.isEmpty(address) && !hasCoordinates){
                 viewHolder.txtLocation.setText(R.string.never_locate_user_msg);
             }
             else{

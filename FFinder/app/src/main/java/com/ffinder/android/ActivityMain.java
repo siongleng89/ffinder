@@ -79,14 +79,15 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             public void run() {
                 myModel.loadAllFriendModels();
                 myModel.sortFriendModels();
-                ActivityMain.this.updateFriendsListAdapter();
-                refreshFriendList();
 
                 //check if pending to add user, if yes, pop add user dialog automatically
                 checkHasPendingToAddUser();
 
                 //reload(recreate/remove) task fragments for friend searching (mostly for rotating device)
                 reloadFriendsDesignByRequestLocationTaskFrags();
+
+                //refresh friend list from database
+                refreshFriendList();
 
                 //save adsId to database to persist user even uninstalling apps
                 AdsIdTask adsIdTask = new AdsIdTask(ActivityMain.this, myModel.getUserId());
@@ -204,30 +205,33 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
 
     //reload friends adapter design by checking retained fragments
     private void reloadFriendsDesignByRequestLocationTaskFrags(){
-        Threadings.postRunnable(this, new Runnable() {
-            @Override
-            public void run() {
-                FragmentManager fm = getSupportFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
 
-                for(FriendModel friendModel : myModel.getFriendModels()){
-                    RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
-                                                            fm.findFragmentByTag(friendModel.getUserId());
+        for(FriendModel friendModel : myModel.getFriendModels()){
+            RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
+                    fm.findFragmentByTag(friendModel.getUserId());
 
-                    // If the Fragment is non-null, then it is currently being
-                    // retained across a configuration change.
-                    if (taskFragment != null) {
-                        if(friendModel.getSearchStatus() == SearchStatus.End){
-                            getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
-                        }
-                        else{
-                            friendModel.setSearchResult(SearchResult.Normal);
-                            friendModel.setSearchStatus(taskFragment.getCurrentStatus());
-                            setRequestLocationTaskFragListener(taskFragment);
-                        }
-                    }
+            friendModel.load(ActivityMain.this);
+
+            // If the Fragment is non-null, then it is currently being
+            // retained across a configuration change.
+            if (taskFragment != null) {
+                if(friendModel.getSearchStatus() == SearchStatus.End){
+                    taskFragment.terminate();
+                    getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
                 }
             }
-        });
+            //check if there is any leftoever stuck search, if there is
+            //overwrite the search status
+            else{
+                if(friendModel.getSearchStatus() != SearchStatus.End){
+                    friendModel.setSearchStatus(SearchStatus.End);
+                    friendModel.save(ActivityMain.this);
+                }
+            }
+
+        }
+        ActivityMain.this.updateFriendsListAdapter();
     }
 
     private void createRequestLocationTaskFrag(final FriendModel friendModel){
@@ -284,6 +288,7 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             @Override
             public void onResult(Object result, Status status) {
                 if(status == Status.Success && result != null){
+
                     List<Pair<String, Object>> list = (List<Pair<String, Object>>) result;
                     boolean foundNew = false;
                     for(Pair<String, Object> pair : list){
@@ -386,23 +391,21 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                     final FriendModel friendModel = myModel.getFriendModelById(friendId);
                     friendModel.load(ActivityMain.this);
 
-                    Threadings.postRunnable(ActivityMain.this, new Runnable() {
-                        @Override
-                        public void run() {
-                            FragmentManager fm = getSupportFragmentManager();
-                            RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
-                                    fm.findFragmentByTag(friendId);
+                    FragmentManager fm = getSupportFragmentManager();
+                    RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
+                            fm.findFragmentByTag(friendId);
 
-                            // If the Fragment is non-null, then it is currently searching,
-                            // check is waiting for user respond,
-                            // if yes, change to waiting for user location
-                            // else, discard
-                            if (taskFragment != null) {
-                                taskFragment.notifyProgress(SearchStatus.End);
-                                taskFragment.notifyResult(friendModel.getLastLocationModel(), SearchResult.Normal);
-                            }
-                        }
-                    });
+                    // If the Fragment is non-null, then it is currently searching,
+                    // check is waiting for user respond,
+                    // if exist and friend status is end, mean it is already finish searching, can safely
+                    // remove task fragment already
+                    // then update the address design
+                    if (taskFragment != null && friendModel.getSearchStatus() == SearchStatus.End) {
+                        taskFragment.terminate();
+                        fm.beginTransaction().remove(taskFragment).commit();
+                    }
+
+                    ActivityMain.this.updateFriendsListAdapter();
                 }
             }
         });
@@ -411,35 +414,6 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             @Override
             public void run() {
                 refreshFriendList();
-            }
-        });
-
-        registerBroadcastReceiver(BroadcastEvent.UserIsAlive, new RunnableArgs<Intent>() {
-            @Override
-            public void run() {
-                Intent intent = this.getFirstArg();
-                final String friendId = intent.getStringExtra("userId");
-                Logs.show("User is Alive msg received");
-
-                Threadings.postRunnable(ActivityMain.this, new Runnable() {
-                    @Override
-                    public void run() {
-                        FragmentManager fm = getSupportFragmentManager();
-                        RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
-                                fm.findFragmentByTag(friendId);
-
-                        // If the Fragment is non-null, then it is currently searching,
-                        // check is waiting for user respond,
-                        // if yes, change to waiting for user location
-                        // else, discard
-                        if (taskFragment != null) {
-                            if(taskFragment.getCurrentStatus() == SearchStatus.WaitingUserRespond){
-                                taskFragment.notifyProgress(SearchStatus.WaitingUserLocation);
-                            }
-                        }
-                    }
-                });
-
             }
         });
 
@@ -455,7 +429,10 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             @Override
             public void onUpdateStatus(String userId, SearchStatus newStatus) {
                 FriendModel friendModel = myModel.getFriendModelById(userId);
-                friendModel.setSearchStatus(newStatus);
+                if(newStatus != friendModel.getSearchStatus()){
+                    friendModel.setSearchStatus(newStatus);
+                    friendModel.save(ActivityMain.this);
+                }
                 ActivityMain.this.updateFriendsListAdapter();
             }
 
@@ -464,40 +441,17 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                                        final SearchStatus finalSearchStatus, final SearchResult result) {
 
                 final FriendModel friendModel = myModel.getFriendModelById(userId);
-
-                final Runnable runnable = new Runnable() {
+                friendModel.setLastLocationModel(locationModel);
+                friendModel.setRecentlyFinishSearch(true);
+                friendModel.setSearchStatus(finalSearchStatus);
+                friendModel.setSearchResult(result);
+                friendModel.getLastLocationModel().geodecodeCoordinatesIfNeeded(ActivityMain.this, new Runnable() {
                     @Override
                     public void run() {
-                        friendModel.setRecentlyFinishSearch(true);
-                        friendModel.setSearchStatus(finalSearchStatus);
-                        friendModel.setSearchResult(result);
                         friendModel.save(ActivityMain.this);
                         ActivityMain.this.updateFriendsListAdapter();
                     }
-                };
-
-                if(locationModel != null){
-                    //need to geodecode coordinates to address before save if address is currently empty
-                    if(Strings.isEmpty(locationModel.getAddress())
-                            && !Strings.isEmpty(locationModel.getLatitude())){
-                        AndroidUtils.geoDecode(ActivityMain.this, locationModel.getLatitude(),
-                                locationModel.getLongitude(), new RunnableArgs<String>() {
-                                    @Override
-                                    public void run() {
-                                        locationModel.setAddress(this.getFirstArg());
-                                        friendModel.setLastLocationModel(locationModel);
-                                        runnable.run();
-                                    }
-                                });
-                    }
-                    else{
-                        runnable.run();
-                    }
-                }
-                else{
-                    runnable.run();
-                }
-
+                });
 
                 if(!isPaused()){
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(userId);

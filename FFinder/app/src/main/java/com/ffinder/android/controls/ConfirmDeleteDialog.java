@@ -36,6 +36,7 @@ public class ConfirmDeleteDialog {
                         FirebaseDB.deleteLink(myModel.getUserId(), friendModel.getUserId(), null);
                         myModel.deleteFriend(friendModel);
                         friendModel.delete(activity);
+                        myModel.commitFriendUserIds();
                         friendsAdapterHolder.updateFriendsListAdapter();
                         dialog.dismiss();
                     }})

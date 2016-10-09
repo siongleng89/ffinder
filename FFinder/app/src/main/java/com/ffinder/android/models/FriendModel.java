@@ -124,14 +124,11 @@ public class FriendModel {
         this.name = name;
     }
 
-
-    @JsonIgnore
     public SearchStatus getSearchStatus() {
         if(searchStatus == null) searchStatus = SearchStatus.End;
         return searchStatus;
     }
 
-    @JsonIgnore
     public void setSearchStatus(SearchStatus newSearchStatus) {
         this.searchStatus = newSearchStatus;
         Logs.show("New search status for: " + getName() + " is " + this.searchStatus);
@@ -155,6 +152,7 @@ public class FriendModel {
         this.searchResult = newSearchResult;
         Logs.show("New search result for : " + getName() + " is " + this.searchResult);
     }
+
 
     @Override
     public boolean equals(Object o) {

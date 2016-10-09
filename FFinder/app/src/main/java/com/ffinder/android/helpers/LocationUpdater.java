@@ -70,7 +70,7 @@ public class LocationUpdater implements
         }
 
         LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(500);
+        mLocationRequest.setInterval(2000);
         mLocationRequest.setFastestInterval(50);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
@@ -152,11 +152,6 @@ public class LocationUpdater implements
                                     public void onResult(ArrayList<AutoNotificationModel> result, Status status) {
                                         if(status == Status.Success && result != null){
                                             for(AutoNotificationModel autoNotificationModel : result){
-                                                if(autoNotificationModel.getWaitingUserId().equals(fromUserId)){
-                                                    //already sent at above, no need resend again
-                                                    continue;
-                                                }
-
                                                 NotificationSender.sendWithUserId(myModel.getUserId(),
                                                         autoNotificationModel.getWaitingUserId(),
                                                         FCMMessageType.UserLocated, NotificationSender.TTL_LONG,

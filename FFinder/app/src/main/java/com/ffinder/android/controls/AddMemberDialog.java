@@ -207,6 +207,7 @@ public class AddMemberDialog {
         myModel.addFriendModel(newFriendModel);
         myModel.sortFriendModels();
         newFriendModel.save(activity);
+        myModel.commitFriendUserIds();
         friendsAdapterHolder.updateFriendsListAdapter();
 
         pd.dismiss();
