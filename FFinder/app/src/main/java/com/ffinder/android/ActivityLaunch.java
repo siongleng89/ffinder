@@ -5,19 +5,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.ffinder.android.absint.activities.IAppsIntroductionListener;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
+import com.ffinder.android.enums.AnimateType;
 import com.ffinder.android.enums.PreferenceType;
+import com.ffinder.android.helpers.AnimateBuilder;
 import com.ffinder.android.helpers.LocationUpdater;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.services.GcmAliveHeartbeatService;
@@ -29,14 +34,25 @@ import java.util.List;
 /**
  * Created by SiongLeng on 30/8/2016.
  */
-public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroductionListener {
+public class ActivityLaunch extends MyActivityAbstract {
 
     private Intent intent;
+    private ImageView imgViewIcon, imgViewBg, imgViewNextIcon;
+    private RelativeLayout layoutDefault, layoutWelcome, layoutIntroduction, layoutNext;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+
+        imgViewIcon = (ImageView) findViewById(R.id.imgViewIcon);
+        imgViewBg = (ImageView) findViewById(R.id.imgViewBg);
+        imgViewNextIcon = (ImageView) findViewById(R.id.imgViewNextIcon);
+        layoutDefault = (RelativeLayout) findViewById(R.id.layoutDefault);
+        layoutWelcome = (RelativeLayout) findViewById(R.id.layoutWelcome);
+        layoutIntroduction = (RelativeLayout) findViewById(R.id.layoutIntroduction);
+        layoutNext = (RelativeLayout) findViewById(R.id.layoutNext);
 
         restartPermissionChecking();
 
@@ -82,16 +98,68 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
     }
 
     private void showIntroduction(){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        FragmentAppsIntroduction fragment = new FragmentAppsIntroduction();
-        fragmentTransaction.add(R.id.layoutDefault, fragment);
-        fragmentTransaction.commit();
-    }
+        imgViewBg.setVisibility(View.VISIBLE);
+        imgViewIcon.setVisibility(View.VISIBLE);
 
-    @Override
-    public void onCompleteAppsIntroduction() {
-        goToNextActivitiy();
+        final ViewTreeObserver vto = imgViewIcon.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                imgViewIcon.getViewTreeObserver().removeOnPreDrawListener(this);
+                float heightInDp = AndroidUtils.pxToDp(ActivityLaunch.this, imgViewIcon.getHeight());
+
+                float beforeDp = AndroidUtils.getScreenDpHeight(ActivityLaunch.this) / 2 - heightInDp / 2;
+                float finalDp = 110;
+                final float moveByDp = beforeDp - finalDp;
+
+                AnimateBuilder.build(ActivityLaunch.this, imgViewIcon).setAnimateType(AnimateType.moveByY)
+                        .setDurationMs(0).setValue(moveByDp).setFinishCallback(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimateBuilder.build(ActivityLaunch.this, imgViewIcon).setAnimateType(AnimateType.moveByY)
+                                .setDurationMs(1000).setValue(-moveByDp).setFinishCallback(new Runnable() {
+                            @Override
+                            public void run() {
+                                AnimateBuilder.build(ActivityLaunch.this, layoutWelcome)
+                                        .setAnimateType(AnimateType.alpha).setDurationMs(700)
+                                        .setValue(1).setFinishCallback(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AnimateBuilder.build(ActivityLaunch.this, layoutIntroduction)
+                                                .setAnimateType(AnimateType.alpha)
+                                                .setValue(1).setDurationMs(700)
+                                                .setFinishCallback(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        AnimateBuilder.build(ActivityLaunch.this, layoutNext)
+                                                                .setAnimateType(AnimateType.alpha)
+                                                                .setValue(1).setDurationMs(700)
+                                                                .setFinishCallback(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+
+                                                                    }
+                                                                }).start();
+
+                                                        AnimateBuilder.build(ActivityLaunch.this, imgViewNextIcon)
+                                                                .setAnimateType(AnimateType.moveByX)
+                                                                .setValue(-3).setDurationMs(400)
+                                                                .setRepeat(true)
+                                                                .start();
+                                                    }
+                                                }).start();
+                                    }
+                                }).start();
+                            }
+                        }).start();
+                    }
+                }).start();
+
+
+                return true;
+            }
+        });
+
+        setListeners();
     }
 
     private void goToNextActivitiy(){
@@ -198,6 +266,29 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
         }
     }
 
+    private void setListeners(){
+        layoutNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutNext.setOnClickListener(null);
+                PreferenceUtils.put(ActivityLaunch.this, PreferenceType.SeenAppsIntroduction, "1");
+
+                AnimateBuilder.build(ActivityLaunch.this, layoutIntroduction)
+                        .setAnimateType(AnimateType.alpha).setDurationMs(600)
+                        .setValue(0).setFinishCallback(new Runnable() {
+                    @Override
+                    public void run() {
+                        goToNextActivitiy();
+                    }
+                }).start();
+
+                AnimateBuilder.build(ActivityLaunch.this, layoutNext)
+                        .setAnimateType(AnimateType.alpha).setDurationMs(600)
+                        .setValue(0).start();
+
+            }
+        });
+    }
 
 
 

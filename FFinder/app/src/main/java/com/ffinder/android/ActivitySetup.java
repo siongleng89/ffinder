@@ -9,13 +9,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.databases.FirebaseListener;
+import com.ffinder.android.enums.AnimateType;
 import com.ffinder.android.enums.Status;
+import com.ffinder.android.helpers.AnimateBuilder;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.MyModel;
@@ -38,13 +37,15 @@ import java.util.concurrent.TimeoutException;
 public class ActivitySetup extends MyActivityAbstract {
 
     private GoogleApiClient googleApiClient;
-    private TextView txtStatus;
     private String currentStatus;
     private boolean failed;
-    private AnimationDrawable frameAnimation;
-    private ImageView imgViewLoading;
-    private Button btnRetry;
     private MyModel myModel;
+
+    private RelativeLayout layoutRetry, layoutContent;
+    private ImageView imgViewRetryIcon;
+    private TextView txtStatus;
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,19 +58,30 @@ public class ActivitySetup extends MyActivityAbstract {
         txtStatus = (TextView) findViewById(R.id.txtStatus);
         setCurrentStatus(currentStatus);
 
-        btnRetry = (Button) findViewById(R.id.btnRetry);
+        layoutRetry = (RelativeLayout) findViewById(R.id.layoutRetry);
+        layoutContent = (RelativeLayout) findViewById(R.id.layoutContent);
 
-        imgViewLoading = (ImageView)findViewById(R.id.imgViewLoading);
-        imgViewLoading.setBackgroundResource(R.drawable.loading_animation);
+        imgViewRetryIcon = (ImageView) findViewById(R.id.imgViewRetryIcon);
 
-        frameAnimation = (AnimationDrawable) imgViewLoading.getBackground();
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         setFailed(failed);
 
         setListeners();
 
-        //start the whole process by checking google service availability
-        checkGoogleServiceAvailable();
+        AnimateBuilder.build(this, imgViewRetryIcon).setAnimateType(AnimateType.rotate)
+                .setDurationMs(2000).setValue(360).setRepeat(true).start();
+
+        AnimateBuilder.build(this, layoutContent).setAnimateType(AnimateType.alpha)
+                .setDurationMs(700).setValue(1).setFinishCallback(new Runnable() {
+            @Override
+            public void run() {
+                //start the whole process by checking google service availability
+                 checkGoogleServiceAvailable();
+            }
+        }).start();
+
+
     }
 
     private void checkGoogleServiceAvailable(){
@@ -298,10 +310,14 @@ public class ActivitySetup extends MyActivityAbstract {
     }
 
     public void setListeners(){
-        btnRetry.setOnClickListener(new View.OnClickListener() {
+        layoutRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startProcess();
+                if(failed){
+                    AnimateBuilder.fadeOut(ActivitySetup.this, layoutRetry);
+                    AnimateBuilder.fadeIn(ActivitySetup.this, progressBar);
+                    startProcess();
+                }
             }
         });
     }
@@ -326,20 +342,10 @@ public class ActivitySetup extends MyActivityAbstract {
     public void setFailed(final boolean failed) {
         this.failed = failed;
 
-        if(imgViewLoading != null){
-            Threadings.postRunnable(this, new Runnable() {
-                @Override
-                public void run() {
-                    if(!failed){
-                        frameAnimation.run();
-                    }
-                    else{
-                        frameAnimation.stop();
-                    }
+        if(failed){
 
-                    btnRetry.setVisibility(failed ? View.VISIBLE : View.GONE);
-                }
-            });
+            AnimateBuilder.fadeIn(this, layoutRetry);
+            AnimateBuilder.fadeOut(this, progressBar);
         }
 
     }

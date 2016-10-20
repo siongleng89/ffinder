@@ -210,7 +210,8 @@ public class MyModel implements Serializable {
     }
 
     public boolean checkUserKeyValid(){
-        return !(System.currentTimeMillis() / 1000L - userKeyGeneratedUnixTime > (Constants.KeyExpiredTotalSecs) || Strings.isEmpty(userKey));
+        return !(System.currentTimeMillis() / 1000L - userKeyGeneratedUnixTime > (Constants.KeyExpiredTotalSecs)
+                || Strings.isEmpty(userKey));
     }
 
 

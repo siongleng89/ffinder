@@ -8,23 +8,12 @@
 
     <include layout="@layout/default_toolbar" android:id="@+id/my_toolbar"/>
 
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                  xmlns:tools="http://schemas.android.com/tools"
-                                                  android:id="@+id/swipeRefresh"
-                                                  android:layout_width="wrap_content"
-                                                  android:layout_height="wrap_content"
-                                                  android:layout_below="@+id/my_toolbar"
-                                                  android:layout_alignParentLeft="true"
-                                                  android:layout_alignParentStart="true" android:visibility="visible"
-                                                  android:layout_above="@+id/linearLayout">
-
-        <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/listFriends"  />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
+    <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listFriends" android:layout_below="@+id/my_toolbar"
+            android:layout_above="@+id/linearLayout" android:background="#c8e5bd"
+            android:divider="@drawable/horizontal_green_line"/>
 
 
     <RelativeLayout android:orientation="horizontal"
@@ -60,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true" android:layout_alignParentStart="false"
-            android:weightSum="2" android:background="?colorPrimary" android:id="@+id/linearLayout"
+            android:weightSum="2" android:id="@+id/linearLayout"
             android:baselineAligned="false">
 
         <fragment

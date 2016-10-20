@@ -5,39 +5,13 @@
                 android:layout_height="wrap_content" android:padding="10dp"
                 android:background="@drawable/listview_bg" >
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Sample Name"
-            android:id="@+id/txtFriend" android:layout_alignParentLeft="true" android:layout_marginLeft="0dp"
-            android:layout_alignParentTop="true" android:layout_marginTop="0dp" android:textColor="#000000"/>
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtLocation"
-            android:layout_below="@+id/txtFriend" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" android:layout_toLeftOf="@+id/layoutAction"
-            android:layout_toStartOf="@+id/layoutAction" android:layout_marginRight="10dp"
-            android:layout_marginTop="0dp" android:textColor="@color/colorCaption"
-            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."/>
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Last Updated: 2 days ago"
-            android:id="@+id/txtLastUpdated"
-            android:layout_below="@+id/txtLocation" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" android:textColor="@color/colorCaption"/>
-
 
     <RelativeLayout
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:id="@+id/layoutAction" android:gravity="center_vertical|right"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true" android:visibility="gone">
         <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -59,16 +33,109 @@
                 android:layout_alignParentStart="true" android:textSize="10dp"
                 android:focusable="false"/>
     </RelativeLayout>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."
-            android:id="@+id/txtMessage"
-            android:textColor="?colorAccent"
-            android:layout_below="@+id/txtLastUpdated" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" android:layout_alignRight="@+id/txtLocation"
-            android:layout_alignEnd="@+id/txtLocation"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RelativeLayout
+                android:layout_width="72dp"
+                android:layout_height="wrap_content" android:gravity="center_horizontal" android:id="@+id/layoutLeft">
+            <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+                    android:background="@drawable/profile_image_bg" android:gravity="center"
+                    android:id="@+id/layoutProfileImage">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtShortFormName" android:textColor="#588e7e" android:textSize="20dp"/>
+            </RelativeLayout>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lorem Ipsum"
+                    android:id="@+id/txtFriend"
+                    android:layout_below="@+id/layoutProfileImage" android:layout_alignParentLeft="false"
+                    android:layout_alignParentRight="false" android:gravity="center_horizontal"
+                    android:textColor="#588e7e" android:layout_marginTop="3dp" android:ellipsize="end"
+                    android:singleLine="true" android:textSize="16sp"/>
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" android:layout_toRightOf="@+id/layoutLeft"
+                android:layout_marginLeft="10dp" android:id="@+id/layoutCenter" android:layout_weight="1">
+            <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/layoutResult" android:visibility="visible">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtLocation"
+                        android:textColor="#5b5b5b"
+                        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                        android:visibility="visible" android:textSize="12sp"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lorem ipsum ehheheh and is simplet eje and gogo"
+                        android:id="@+id/txtMessage"
+                        android:visibility="visible"
+                        android:layout_below="@+id/txtLocation" android:singleLine="true" android:textSize="11sp"
+                        android:layout_marginTop="2dp" android:textColor="#b86521"
+                        android:textStyle="italic"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/layoutStatus" android:visibility="invisible">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:id="@+id/txtStatus" android:textColor="#6eb301"
+                          android:text="Searching..."
+                          android:visibility="visible" android:textSize="12sp" android:textStyle="bold"/>
+            </RelativeLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+                <com.ffinder.android.extentions.ImageButtonWhiteStyle
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:id="@+id/imageButton" android:layout_weight="1"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/map_btn_icon"/>
+                <com.ffinder.android.extentions.ImageButtonWhiteStyle
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:id="@+id/imageButton2" android:layout_weight="1"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/allow_search_icon" android:scaleType="center"/>
+                <com.ffinder.android.extentions.ImageButtonWhiteStyle
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:id="@+id/imageButton3" android:layout_weight="1"
+                        android:src="@drawable/delete_icon"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_width="55dp"
+                android:layout_height="fill_parent" android:layout_toRightOf="@+id/layoutCenter"
+                android:id="@+id/layoutRight" android:layout_marginLeft="10sp">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 days ago"
+                    android:id="@+id/txtLastUpdated"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" android:textColor="#84867f"
+                    android:visibility="visible" android:textSize="11sp"
+            />
+            <ImageButton
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/imageButton4" android:layout_below="@+id/txtLastUpdated"
+                    android:background="@drawable/white_btn" android:layout_marginTop="5dp"/>
+        </RelativeLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>

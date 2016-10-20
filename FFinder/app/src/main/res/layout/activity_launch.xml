@@ -4,7 +4,81 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ActivityMap" android:id="@+id/layoutDefault">
+        tools:context=".ActivityMap" android:id="@+id/layoutDefault" android:clipChildren="false"
+        >
 
 
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imgViewBg" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_image" android:visibility="invisible"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imgViewIcon" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+            android:src="@drawable/splash_screen_icon" android:visibility="invisible"
+            android:layout_below="@+id/layoutWelcome" android:layout_marginTop="20dp"/>
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="100dp" android:layout_centerHorizontal="true" android:visibility="invisible"
+            android:id="@+id/layoutWelcome">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Welcome To"
+                android:id="@+id/textView10" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+                android:layout_marginTop="35dp" android:textColor="#FFF"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceMedium" android:text="Flowerpot"
+                  android:id="@+id/textView11"
+                  android:textColor="#FFF"
+                  android:layout_below="@+id/textView10" android:layout_centerHorizontal="true"
+                  android:textSize="35dp" android:textStyle="bold"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layout_alignParentBottom="true" android:layout_marginBottom="70dp"
+            android:layout_centerHorizontal="true" android:background="@drawable/white_box" android:paddingLeft="15dp"
+            android:paddingRight="15dp" android:paddingBottom="25dp" android:visibility="invisible"
+            android:id="@+id/layoutIntroduction">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Friends and Family Finder"
+                android:id="@+id/textView12" android:textColor="#fff" android:textStyle="bold"
+                android:layout_marginTop="-7dp" android:layout_centerHorizontal="true"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/first_time_msg_content"
+                android:id="@+id/textView13" android:layout_below="@+id/textView12" android:layout_marginTop="15dp"
+                android:textColor="#fff" android:textSize="12dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" android:layout_marginRight="30dp" android:layout_marginBottom="30dp"
+            android:id="@+id/layoutNext" android:visibility="invisible" android:clipChildren="false"
+            android:clipToPadding="false">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgViewNextIcon" android:src="@drawable/next_icon"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:id="@+id/textView14" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/imgViewNextIcon" android:layout_marginLeft="5dp" android:textStyle="bold"
+                android:textColor="#fff" android:textSize="17dp"/>
+    </RelativeLayout>
 </RelativeLayout>

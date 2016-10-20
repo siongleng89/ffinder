@@ -8,6 +8,15 @@ import java.util.ArrayList;
  */
 public class Strings {
 
+    //end index is exclusive
+    public static String safeSubstring(String input, int startIndex, int endIndex){
+        if (input.length() - 1 >= endIndex){
+            return input.substring(startIndex, endIndex);
+        }
+        else{
+            return input;
+        }
+    }
 
     public static String joinArr(ArrayList<String> arr, String sSep) {
         StringBuilder sbStr = new StringBuilder();

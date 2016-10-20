@@ -2,13 +2,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|right" android:paddingLeft="10dp" android:paddingRight="10dp"
-                android:paddingTop="10dp" android:paddingBottom="10dp">
+                android:gravity="center" android:paddingLeft="10dp" android:paddingRight="10dp"
+                android:paddingTop="10dp" android:paddingBottom="10dp" android:background="@drawable/bottom_bar">
 
-    <TextView
+    <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text=""
-            android:id="@+id/txtNextAds" android:textColor="@color/colorContrast"/>
+            android:layout_height="wrap_content" android:background="@drawable/next_ads_bg"
+            android:paddingLeft="10dp" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="4dp"
+            android:gravity="center" android:id="@+id/layoutControl" android:minHeight="38dp" android:minWidth="127dp">
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:background="@drawable/next_ads_count_bg"
+                android:id="@+id/layoutCount" android:gravity="center" android:visibility="visible">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3"
+                    android:id="@+id/txtNextAdsCount" android:paddingBottom="2dp" android:textColor="#ffff"
+                    android:textSize="15dp" android:textStyle="bold" android:visibility="gone"/>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imgViewTick" android:src="@drawable/tick_icon" android:visibility="gone"
+                    android:scaleType="fitCenter" android:scaleX="0.7" android:scaleY="0.7"/>
+        </RelativeLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/search_left"
+                android:id="@+id/txtSearchLeft" android:textColor="@color/colorContrast"
+                android:layout_toRightOf="@+id/layoutCount"
+                android:layout_marginLeft="5dp" android:textSize="14dp" android:layout_centerVertical="true"
+                android:visibility="invisible"/>
+    </RelativeLayout>
 </RelativeLayout>

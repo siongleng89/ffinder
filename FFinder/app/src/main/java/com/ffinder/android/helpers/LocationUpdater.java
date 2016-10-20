@@ -116,7 +116,7 @@ public class LocationUpdater implements
 
     private void replyAliveMsg(String myUserId, String toUserToken){
         NotificationSender.sendWithToken(myUserId, toUserToken,
-                FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT);
+                FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT, null);
     }
 
     private void locationSuccessfullyRetrieved(final String latitude, final String longitude){
@@ -131,6 +131,7 @@ public class LocationUpdater implements
         if(!Strings.isEmpty(fromUserToken)){
             NotificationSender.sendWithToken(myModel.getUserId(), fromUserToken,
                     FCMMessageType.UserLocated, NotificationSender.TTL_INSTANT,
+                    null,
                     new Pair<String, String>("latitude", latitude),
                     new Pair<String, String>("longitude", longitude),
                     //is auto notificaiton decide whether show push notification on user tray
@@ -155,6 +156,7 @@ public class LocationUpdater implements
                                                 NotificationSender.sendWithUserId(myModel.getUserId(),
                                                         autoNotificationModel.getWaitingUserId(),
                                                         FCMMessageType.UserLocated, NotificationSender.TTL_LONG,
+                                                        null,
                                                         new Pair<String, String>("latitude", latitude),
                                                         new Pair<String, String>("longitude", longitude),
                                                         new Pair<String, String>("isAutoNotification", "1"));

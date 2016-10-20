@@ -213,7 +213,8 @@ public class AddMemberDialog {
         pd.dismiss();
         dialog.dismiss();
 
-        NotificationSender.sendWithUserId(myModel.getUserId(), addingUserId, FCMMessageType.FriendsAdded, NotificationSender.TTL_LONG,
+        NotificationSender.sendWithUserId(myModel.getUserId(), addingUserId,
+                FCMMessageType.FriendsAdded, NotificationSender.TTL_LONG, null,
                 new Pair<String, String>("username", myName));
 
         Analytics.logEvent(AnalyticEvent.Add_Friend_Success);

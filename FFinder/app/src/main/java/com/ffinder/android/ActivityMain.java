@@ -40,7 +40,6 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     private FragmentNextAdsCd fragmentNextAdsCd;
     private MyModel myModel;
     private Button btnShareKey;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listFriends;
     private RelativeLayout layoutEmptyFriend;
     private FriendsAdapter friendsAdapter;
@@ -52,8 +51,12 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+        enableCustomActionBar();
+        addActionToActionBar(ActionBarActionType.AppIcon, true, true);
+        addActionToActionBar(ActionBarActionType.ShareKey, false, false);
+        addActionToActionBar(ActionBarActionType.Overflow, false, false);
+        addActionToOverflow(getString(R.string.add_new_member_manually_title));
+        addActionToOverflow(getString(R.string.settings_activity_title));
 
         myModel = new MyModel(this);
         myModel.loginFirebase(0, null);
@@ -63,8 +66,6 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         fragmentNextAdsCd = (FragmentNextAdsCd) getSupportFragmentManager().findFragmentById(R.id.nextAdsCdFragment);
         fragmentNextAdsCd.setMyModel(myModel);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
-        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary));
         listFriends = (ListView) findViewById(R.id.listFriends);
         friendsAdapter = new FriendsAdapter(this, R.layout.lvitem_friend, myModel.getFriendModels(), myModel, this);
         listFriends.setAdapter(friendsAdapter);
@@ -126,19 +127,21 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.default_menu, menu);
-        return true;
-    }
+    public void onActionButtonClicked(ActionBarActionType actionBarActionType) {
+        super.onActionButtonClicked(actionBarActionType);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_share:
+        switch (actionBarActionType){
+            case ShareKey:
                 UserKeyDialog userKeyDialog = new UserKeyDialog(ActivityMain.this, myModel);
                 userKeyDialog.show();
                 break;
+
+        }
+    }
+
+    @Override   //only use for overflow menu
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
             case R.id.action_add:
                 AddMemberDialog addMemberDialog = new AddMemberDialog(this, this, myModel);
                 addMemberDialog.show();
@@ -312,21 +315,9 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                     }
 
                 }
-                Threadings.postRunnable(ActivityMain.this, new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
             }
         });
 
-        Threadings.delay(20 * 1000, this, new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
     }
 
     private void editName(FriendModel friendModel){
@@ -371,13 +362,6 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             public void onClick(View view) {
                 UserKeyDialog userKeyDialog = new UserKeyDialog(ActivityMain.this, myModel);
                 userKeyDialog.show();
-            }
-        });
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshFriendList();
             }
         });
 

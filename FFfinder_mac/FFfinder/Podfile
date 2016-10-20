@@ -10,7 +10,9 @@ target 'FFfinder' do
   pod ‘Firebase/Core’
   pod ‘Firebase/Messaging’
   pod ‘Firebase/Auth’
-	
+  pod ‘Firebase/Database’
+  pod "EVReflection", :git => 'https://github.com/evermeer/EVReflection.git’, :branch => 'Swift3'
+
   target 'FFfinderTests' do
     inherit! :search_paths
     # Pods for testing

@@ -26,6 +26,7 @@ public class Logs {
                     StringWriter sw = new StringWriter();
                     PrintWriter pw = new PrintWriter(sw);
                     e.printStackTrace(pw);
+                    System.out.println(sw.toString());
                     FirebaseDB.saveLog(sw.toString());
                     System.exit(1);
                 }

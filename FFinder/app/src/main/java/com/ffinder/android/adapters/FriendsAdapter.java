@@ -43,6 +43,16 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
     private MyModel myModel;
     private IFriendItemListener friendItemListener;
 
+    static class ViewHolder {
+        private TextView txtTextFriend, txtLocation, txtLastUpdated, txtMessage;
+        private Button btnMap, btnSearch;
+        private ImageView imgViewLoading;
+        private AnimationDrawable loadingAnimation;
+
+        private TextView txtShortFormName;
+
+    }
+
     public FriendsAdapter(Activity context, @LayoutRes int resource, @NonNull List<FriendModel> objects,
                           MyModel myModel, IFriendItemListener friendItemListener) {
         super(context, resource, objects);
@@ -81,6 +91,10 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
             mViewHolder.loadingAnimation =(AnimationDrawable) mViewHolder.imgViewLoading.getBackground();
 
 
+
+            mViewHolder.txtShortFormName = (TextView) convertView.findViewById(R.id.txtShortFormName);
+
+
             convertView.setTag(mViewHolder);
 
             setListeners(convertView, position);
@@ -93,6 +107,14 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
 
     private void updateDesign(View convertView, FriendModel friendModel){
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+
+
+        viewHolder.txtShortFormName.setText(Strings.safeSubstring(friendModel.getName().toUpperCase(), 0, 2));
+
+
+
+
+
         viewHolder.txtTextFriend.setText(friendModel.getName());
         String msg = null, address = null, lastUpdated = null, error = null;
 
@@ -100,20 +122,20 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
                 DateTimeUtils.convertUnixMiliSecsToDateTimeString(context,
                         friendModel.getLastLocationModel().getTimestampLastUpdatedLong()));
 
-        switch (friendModel.getSearchResult()){
-            case Normal:
-                msg = friendModel.getSearchStatus().getMessage(context);
-                address = friendModel.getLastLocationModel().getAddress();
-
-                updateDesign(viewHolder, msg, address, lastUpdated, friendModel.getSearchResult(),
-                        !Strings.isEmpty(friendModel.getLastLocationModel().getLatitude()), friendModel);
-                break;
-            default:
-                address = friendModel.getLastLocationModel().getAddress();
-                updateDesign(viewHolder, msg, address, lastUpdated, friendModel.getSearchResult(),
-                        !Strings.isEmpty(friendModel.getLastLocationModel().getLatitude()), friendModel);
-                break;
-        }
+//        switch (friendModel.getSearchResult()){
+//            case Normal:
+//                msg = friendModel.getSearchStatus().getMessage(context);
+//                address = friendModel.getLastLocationModel().getAddress();
+//
+//                updateDesign(viewHolder, msg, address, lastUpdated, friendModel.getSearchResult(),
+//                        !Strings.isEmpty(friendModel.getLastLocationModel().getLatitude()), friendModel);
+//                break;
+//            default:
+//                address = friendModel.getLastLocationModel().getAddress();
+//                updateDesign(viewHolder, msg, address, lastUpdated, friendModel.getSearchResult(),
+//                        !Strings.isEmpty(friendModel.getLastLocationModel().getLatitude()), friendModel);
+//                break;
+//        }
 
     }
 
@@ -223,11 +245,6 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
     }
 
 
-    static class ViewHolder {
-        private TextView txtTextFriend, txtLocation, txtLastUpdated, txtMessage;
-        private Button btnMap, btnSearch;
-        private ImageView imgViewLoading;
-        private AnimationDrawable loadingAnimation;
-    }
+
 
 }

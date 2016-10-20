@@ -59,8 +59,12 @@
 
     <string name="first_time_msg_title">Welcome!</string>
 
-    <string name="first_time_msg_content">Thanks for choosing us, you now have a friend &amp; family finder that,
-        \n\n1) Does not drain battery as search is on demand \n\n2) Offers some privacy as it does not track every move \n\n3) Is free with Ads \n\n4) Uses promo code \"10free\" or \"20free\" to add searches one time now! </string>
+    <string name="first_time_msg_content">
+        Thanks for choosing us, you now have a friend &amp; family finder that,
+
+        \n\n- Does not drain battery as search is on demand
+        \n- Offers some privacy as it does not track every move
+        \n- Is free with Ads  </string>
 
     <!--Launch Activity text end-->
 
@@ -146,7 +150,7 @@
 
     <string name="btn_share_key_text">Share your Passcode here</string>
 
-    <string name="x_search_left">%s Search Left</string>
+    <string name="search_left">Search Left</string>
 
     <string name="ran_out_free_search_msg">You have run out of free search, you can now</string>
 

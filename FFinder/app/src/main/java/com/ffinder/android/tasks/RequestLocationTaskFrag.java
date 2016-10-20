@@ -35,7 +35,7 @@ public class RequestLocationTaskFrag extends Fragment {
     private String userId, myToken, targetUserId;
     private SearchStatus currentStatus;
     private SearchResult currentResult;
-    private int timeoutSecs = 20;
+    public static int timeoutSecs = 40;
     private RequestLocationTask requestLocationTask;
 
     public static RequestLocationTaskFrag newInstance(String userId, String myToken, String targetUserId) {
@@ -154,9 +154,11 @@ public class RequestLocationTaskFrag extends Fragment {
         private Context context;
         private SearchStatus searchStatus;
         private SearchResult searchResult;
+        private String msgId;
 
         public RequestLocationTask(Context context) {
             this.context = context;
+            this.msgId = Strings.generateUniqueRandomKey(30);
         }
 
         @Override
@@ -176,11 +178,25 @@ public class RequestLocationTaskFrag extends Fragment {
                     //can search, trigger fcm now
                     if(this.getFirstArg()){
 
+                        searchStatus = SearchStatus.WaitingUserRespond;
                         publishProgress(SearchStatus.WaitingUserRespond);
 
-                        NotificationSender.sendWithUserId(myUserId, targetUserId, FCMMessageType.UpdateLocation,
-                                NotificationSender.TTL_INSTANT, new Pair<String, String>("senderToken", myToken));
+                        Threadings.runInBackground(new Runnable() {
+                            @Override
+                            public void run() {
+                                while (searchStatus == SearchStatus.WaitingUserRespond){
+                                    NotificationSender.sendWithUserId(myUserId, targetUserId,
+                                            FCMMessageType.UpdateLocation,
+                                            RequestLocationTaskFrag.timeoutSecs, msgId,
+                                            new Pair<String, String>("senderToken", myToken));
+                                    Threadings.sleep(5000);
 
+                                    if (finish){
+                                        break;
+                                    }
+                                }
+                            }
+                        });
                     }
                     else{
                         setSearchResult(SearchResult.ErrorNoLink);
@@ -276,8 +292,10 @@ public class RequestLocationTaskFrag extends Fragment {
                             @Override
                             public void onResult(Object result, com.ffinder.android.enums.Status status) {
                                 //sendWithUserId one long ttl msg, hopefully user will reply asap or when it has connection
-                                NotificationSender.sendWithUserId(userId, targetUserId, FCMMessageType.UpdateLocation,
-                                        NotificationSender.TTL_LONG);
+                                NotificationSender.sendWithUserId(userId, targetUserId,
+                                        FCMMessageType.UpdateLocation,
+                                        NotificationSender.TTL_LONG, msgId,
+                                        new Pair<String, String>("senderToken", myToken));
                             }
                         });
                     }

@@ -11,15 +11,19 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ffinder.android.absint.controls.INoCreditsListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.controls.NoCreditsDialog;
 import com.ffinder.android.enums.AnalyticEvent;
+import com.ffinder.android.enums.AnimateType;
 import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.Analytics;
+import com.ffinder.android.helpers.AnimateBuilder;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.helpers.RestfulService;
 import com.ffinder.android.models.MyModel;
@@ -31,7 +35,9 @@ import com.ffinder.android.utils.*;
  */
 public class FragmentNextAdsCd extends Fragment {
 
-    private TextView txtNextAds;
+    private TextView txtNextAdsCount, txtSearchLeft;
+    private RelativeLayout layoutCount, layoutControl;
+    private ImageView imgViewTick;
     private MyModel myModel;
     private AdsFrag adsFrag;
     private Integer currentNextAdsCount;
@@ -63,7 +69,16 @@ public class FragmentNextAdsCd extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View nextAdsFragmentView = inflater.inflate(R.layout.fragment_next_ads_cd, container, false);
 
-        txtNextAds = (TextView) nextAdsFragmentView.findViewById(R.id.txtNextAds);
+        txtNextAdsCount = (TextView) nextAdsFragmentView.findViewById(R.id.txtNextAdsCount);
+        txtSearchLeft = (TextView) nextAdsFragmentView.findViewById(R.id.txtSearchLeft);
+        imgViewTick = (ImageView) nextAdsFragmentView.findViewById(R.id.imgViewTick);
+
+        layoutCount = (RelativeLayout) nextAdsFragmentView.findViewById(R.id.layoutCount);
+        layoutControl = (RelativeLayout) nextAdsFragmentView.findViewById(R.id.layoutControl);
+
+        txtSearchLeft.setVisibility(View.INVISIBLE);
+        imgViewTick.setVisibility(View.GONE);
+        txtNextAdsCount.setVisibility(View.GONE);
 
         setListeners();
         return nextAdsFragmentView;
@@ -96,7 +111,9 @@ public class FragmentNextAdsCd extends Fragment {
                         @Override
                         public void run() {
                             completeProcessing = true;
-                            txtNextAds.setText(R.string.vip_member);
+                            txtSearchLeft.setText(R.string.vip_member);
+                            AnimateBuilder.fadeIn(getActivity(), txtSearchLeft);
+                            AnimateBuilder.fadeIn(getActivity(), imgViewTick);
                         }
                     });
 
@@ -113,7 +130,10 @@ public class FragmentNextAdsCd extends Fragment {
                                 addingCount = 0;
                                 needSaveToDb = true;
                             }
-                            changeNextAdsCount(result);
+                            changeNextAdsCount(result, false);
+                            txtSearchLeft.setText(R.string.search_left);
+                            AnimateBuilder.fadeIn(getActivity(), txtSearchLeft);
+                            AnimateBuilder.fadeIn(getActivity(), txtNextAdsCount);
 
                             if(needSaveToDb){
                                 FirebaseDB.setNextAdsCount(myModel.getUserId(), getCurrentNextAdsCount(), new FirebaseListener() {
@@ -157,7 +177,7 @@ public class FragmentNextAdsCd extends Fragment {
                     }
                     else{
                         canRun.run(true);
-                        changeNextAdsCount(getCurrentNextAdsCount() - 1);
+                        changeNextAdsCount(getCurrentNextAdsCount() - 1, true);
                         FirebaseDB.setNextAdsCount(myModel.getUserId(), getCurrentNextAdsCount(), new FirebaseListener() {
                             @Override
                             public void onResult(Object result, Status status) {
@@ -189,7 +209,7 @@ public class FragmentNextAdsCd extends Fragment {
         }
     }
 
-    private void refreshNextAdsCount(final int newAdsCount){
+    private void refreshNextAdsCount(final int newAdsCount, final boolean animate){
         Threadings.postRunnable(getActivity(), new Runnable() {
             @Override
             public void run() {
@@ -197,12 +217,33 @@ public class FragmentNextAdsCd extends Fragment {
 
                 Logs.show("refresh next ads count: " + newAdsCount);
 
+                String finalString = "";
+
                 if(!completeProcessing){
-                    txtNextAds.setText("");
+                    finalString = "?";
                 }
                 else{
-                    txtNextAds.setText(String.format(getString(R.string.x_search_left), Math.max(newAdsCount, 0)));
+                    finalString = String.valueOf(Math.max(newAdsCount, 0));
                 }
+
+                if (animate){
+                    final String finalString1 = finalString;
+                    AnimateBuilder.build(getActivity(), txtNextAdsCount)
+                            .setDurationMs(200).setValue(0).setAnimateType(AnimateType.alpha)
+                            .setFinishCallback(new Runnable() {
+                                @Override
+                                public void run() {
+                                    txtNextAdsCount.setText(finalString1);
+                                    AnimateBuilder.fadeIn(getActivity(), txtNextAdsCount);
+
+                                }
+                            }).start();
+                }
+                else{
+                    txtNextAdsCount.setText(finalString);
+                }
+
+
             }
         });
     }
@@ -217,7 +258,7 @@ public class FragmentNextAdsCd extends Fragment {
                     @Override
                     public void onResult(String result, Status status) {
                         if(status == Status.Success && !Strings.isEmpty(result) && Strings.isNumeric(result)){
-                            changeNextAdsCount(Integer.valueOf(result));
+                            changeNextAdsCount(Integer.valueOf(result), true);
                         }
                     }
                 });
@@ -226,9 +267,9 @@ public class FragmentNextAdsCd extends Fragment {
         Analytics.logEvent(AnalyticEvent.Watch_Ads);
     }
 
-    private void changeNextAdsCount(int newCount){
+    private void changeNextAdsCount(int newCount, boolean animate){
         setCurrentNextAdsCount(newCount);
-        refreshNextAdsCount(newCount);
+        refreshNextAdsCount(newCount, animate);
     }
 
     public Integer getCurrentNextAdsCount() {
@@ -250,7 +291,7 @@ public class FragmentNextAdsCd extends Fragment {
     }
 
     private void setListeners(){
-        txtNextAds.setOnClickListener(new View.OnClickListener() {
+        layoutControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ActivityVip.class);

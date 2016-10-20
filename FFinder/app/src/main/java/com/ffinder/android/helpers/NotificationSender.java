@@ -28,14 +28,15 @@ public class NotificationSender {
     public static final int TTL_LONG = 1814399;
     public static final int TTL_INSTANT = 0;
 
+    //null msgId will be auto generated
     public static void sendWithUserId(final String myUserId, final String targetUserId,
                                       final FCMMessageType fcmMessageType,
-                                      final int ttl, final Pair<String, String>... appendsToMapPairs){
+                                      final int ttl, final String msgId, final Pair<String, String>... appendsToMapPairs){
         FirebaseDB.getUserToken(targetUserId, new FirebaseListener<String>(String.class) {
             @Override
             public void onResult(String token, Status status) {
                 if(status == Status.Success && !Strings.isEmpty(token)){
-                    sendFcm(myUserId, token, fcmMessageType, ttl, appendsToMapPairs);
+                    sendFcm(myUserId, token, fcmMessageType, ttl, msgId, appendsToMapPairs);
                 }
             }
         });
@@ -43,8 +44,8 @@ public class NotificationSender {
 
     public static void sendWithToken(final String myUserId, final String targetToken,
                                       final FCMMessageType fcmMessageType,
-                                      final int ttl, final Pair<String, String>... appendsToMapPairs){
-        sendFcm(myUserId, targetToken, fcmMessageType, ttl, appendsToMapPairs);
+                                      final int ttl, String msgId, final Pair<String, String>... appendsToMapPairs){
+        sendFcm(myUserId, targetToken, fcmMessageType, ttl, msgId, appendsToMapPairs);
     }
 
 
@@ -88,7 +89,7 @@ public class NotificationSender {
 
 
     private static void sendFcm(final String myUserId, final String toToken, final FCMMessageType fcmMessageType, final int ttl,
-                                final Pair<String, String>... appendsToMapPairs){
+                                final String msgId, final Pair<String, String>... appendsToMapPairs){
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
@@ -96,6 +97,12 @@ public class NotificationSender {
                     String url = "https://fcm.googleapis.com/fcm/send";
                     URL obj = null;
                     obj = new URL(url);
+
+                    String finalMsgId = msgId;
+
+                    if(Strings.isEmpty(msgId)){
+                        finalMsgId = Strings.generateUniqueRandomKey(30);
+                    }
 
                     HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
@@ -108,7 +115,7 @@ public class NotificationSender {
                     dataMap.put("action", fcmMessageType.name());
                     dataMap.put("senderId", myUserId);
                     dataMap.put("fromPlatform", "Firebase");
-                    dataMap.put("messageId", Strings.generateUniqueRandomKey(30));
+                    dataMap.put("messageId", finalMsgId);
 
                     if(appendsToMapPairs != null){
                         for(Pair<String, String> pair: appendsToMapPairs){
@@ -116,12 +123,20 @@ public class NotificationSender {
                         }
                     }
 
+                    HashMap<String, String> notificationMap = new HashMap();
+                    notificationMap.put("badge", "1");
+                    notificationMap.put("alert", "");
+                    notificationMap.put("sound", "");
+
+
                     HashMap<String, Object> hashMap = new HashMap();
                     hashMap.put("data", dataMap);
+                    hashMap.put("notification", notificationMap);
                     hashMap.put("to", toToken);
                     hashMap.put("priority", "high");
                     hashMap.put("delay_while_idle", false);
                     hashMap.put("time_to_live", ttl);
+                    hashMap.put("content_available", true);
 
                     String json = Vars.getObjectMapper().writeValueAsString(hashMap);
 
