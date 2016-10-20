@@ -1,209 +1,95 @@
 package com.ffinder.android;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import com.ffinder.android.absint.activities.IAppsIntroductionListener;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
+import com.ffinder.android.enums.AnimateType;
 import com.ffinder.android.enums.PreferenceType;
-import com.ffinder.android.helpers.RequestLocationHandler;
+import com.ffinder.android.helpers.AnimateBuilder;
+import com.ffinder.android.helpers.LocationUpdater;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.services.GcmAliveHeartbeatService;
 import com.ffinder.android.statics.Vars;
 import com.ffinder.android.utils.*;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.*;
 
 import java.util.List;
 
 /**
  * Created by SiongLeng on 30/8/2016.
  */
-public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroductionListener {
+public class ActivityLaunch extends MyActivityAbstract {
 
-    private ActivityLaunch _this;
-    private GoogleApiClient googleApiClient;
-    private boolean quitOnResume;
-    private RelativeLayout layoutDefault;
     private Intent intent;
-    private boolean checkedGoogleService;
-    private boolean showingIntroduction;
+    private ImageView imgViewIcon, imgViewBg, imgViewNextIcon;
+    private RelativeLayout layoutDefault, layoutWelcome, layoutIntroduction, layoutNext;
 
-    public ActivityLaunch() {
-        _this = this;
-        Threadings.setMainTreadId();
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logs.show("ActivityLaunch onCreate start");
-
         setContentView(R.layout.activity_launch);
 
+        imgViewIcon = (ImageView) findViewById(R.id.imgViewIcon);
+        imgViewBg = (ImageView) findViewById(R.id.imgViewBg);
+        imgViewNextIcon = (ImageView) findViewById(R.id.imgViewNextIcon);
         layoutDefault = (RelativeLayout) findViewById(R.id.layoutDefault);
+        layoutWelcome = (RelativeLayout) findViewById(R.id.layoutWelcome);
+        layoutIntroduction = (RelativeLayout) findViewById(R.id.layoutIntroduction);
+        layoutNext = (RelativeLayout) findViewById(R.id.layoutNext);
 
-        String checked = PreferenceUtils.get(this, PreferenceType.CheckedGoogleService);
-        checkedGoogleService = !Strings.isEmpty(checked);
+        restartPermissionChecking();
 
-
-        if(isLocationPermissionGranted() && isLocationServicesEnabled()){
-            if(checkedGoogleService){
-                onFinishChecking();
-            }
-            else{
-                checkGoogleServiceAvailable();
-            }
-        }
-
+        //start heart beat service singleton
         Intent intent = new Intent(this, GcmAliveHeartbeatService.class);
         startService(intent);
     }
 
-    private void checkGoogleServiceAvailable(){
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(@Nullable Bundle bundle) {
+    private void restartPermissionChecking(){
+        if(isLocationPermissionGranted() && isLocationServicesEnabled()){
+            onPermissionFinishChecking();
+        }
 
-                    }
-
-                    @Override
-                    public void onConnectionSuspended(int i) {
-
-                    }
-                })
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-                    }
-                })
-                .build();
-
-        googleApiClient.connect();
-
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        onFinishChecking();
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        // Location settings are not satisfied. But could be fixed by showing the user
-                        // a dialog.
-                        try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            status.startResolutionForResult(
-                                    _this, 7);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Ignore the error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        quit(QuitCode.NoGoogleService);
-                        break;
-                }
-            }
-        });
     }
 
+    private void onPermissionFinishChecking(){
+        populatePendingAddUserKey();
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 7:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        // All required changes were successfully made
-                        onFinishChecking();
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        // The user was asked to change settings, but chose not to
-                        quit(QuitCode.NoGoogleService);
-                        break;
-                    default:
-                        break;
-                }
-                break;
-        }
-    }
-
-    private void onFinishChecking(){
-        final Intent intent = getIntent();
-        final String action = intent.getAction();
-
-        if (Intent.ACTION_VIEW.equals(action)) {
-            final List<String> segments = intent.getData().getPathSegments();
-            if (segments.size() == 2) {
-                Vars.pendingAddUserKey = segments.get(1);
-            }
-        }
-
-        if(!checkedGoogleService){
-            googleApiClient.disconnect();
-            PreferenceUtils.put(this, PreferenceType.CheckedGoogleService, "1");
-        }
-
-        Logs.show("initialiting model");
-        final MyModel myModel = new MyModel(_this);
-        Logs.show("model initiated");
+        final MyModel myModel = new MyModel(this);
 
         if(Strings.isEmpty(myModel.getUserId())){
-            Intent k = new Intent(_this, ActivitySetup.class);
-            readyStartActivity(k);
+            this.intent = new Intent(this, ActivitySetup.class);
         }
         else{
-            Intent k = new Intent(_this, ActivityMain.class);
-            readyStartActivity(k);
-            myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
-                @Override
-                public void run() {
-                    new RequestLocationHandler(ActivityLaunch.this, null, myModel).run();
-                }
-            });
+            this.intent = new Intent(this, ActivityMain.class);
+
+            //always update location when launch apps
+            new LocationUpdater(ActivityLaunch.this, null, null);
         }
+
+        readyStartActivity();
     }
 
-    private void readyStartActivity(Intent intent){
+    private void readyStartActivity(){
         String value = PreferenceUtils.get(this, PreferenceType.SeenAppsIntroduction);
-        this.intent = intent;
+
         if(Strings.isEmpty(value)){
-            showingIntroduction = true;
             showIntroduction();
         }
         else{
@@ -212,25 +98,71 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
     }
 
     private void showIntroduction(){
-        if(showingIntroduction){
-            if(!isPaused()) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FragmentAppsIntroduction fragment = new FragmentAppsIntroduction();
-                fragmentTransaction.add(R.id.layoutDefault, fragment);
-                fragmentTransaction.commit();
+        imgViewBg.setVisibility(View.VISIBLE);
+        imgViewIcon.setVisibility(View.VISIBLE);
+
+        final ViewTreeObserver vto = imgViewIcon.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                imgViewIcon.getViewTreeObserver().removeOnPreDrawListener(this);
+                float heightInDp = AndroidUtils.pxToDp(ActivityLaunch.this, imgViewIcon.getHeight());
+
+                float beforeDp = AndroidUtils.getScreenDpHeight(ActivityLaunch.this) / 2 - heightInDp / 2;
+                float finalDp = 110;
+                final float moveByDp = beforeDp - finalDp;
+
+                AnimateBuilder.build(ActivityLaunch.this, imgViewIcon).setAnimateType(AnimateType.moveByY)
+                        .setDurationMs(0).setValue(moveByDp).setFinishCallback(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimateBuilder.build(ActivityLaunch.this, imgViewIcon).setAnimateType(AnimateType.moveByY)
+                                .setDurationMs(1000).setValue(-moveByDp).setFinishCallback(new Runnable() {
+                            @Override
+                            public void run() {
+                                AnimateBuilder.build(ActivityLaunch.this, layoutWelcome)
+                                        .setAnimateType(AnimateType.alpha).setDurationMs(700)
+                                        .setValue(1).setFinishCallback(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AnimateBuilder.build(ActivityLaunch.this, layoutIntroduction)
+                                                .setAnimateType(AnimateType.alpha)
+                                                .setValue(1).setDurationMs(700)
+                                                .setFinishCallback(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        AnimateBuilder.build(ActivityLaunch.this, layoutNext)
+                                                                .setAnimateType(AnimateType.alpha)
+                                                                .setValue(1).setDurationMs(700)
+                                                                .setFinishCallback(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+
+                                                                    }
+                                                                }).start();
+
+                                                        AnimateBuilder.build(ActivityLaunch.this, imgViewNextIcon)
+                                                                .setAnimateType(AnimateType.moveByX)
+                                                                .setValue(-3).setDurationMs(400)
+                                                                .setRepeat(true)
+                                                                .start();
+                                                    }
+                                                }).start();
+                                    }
+                                }).start();
+                            }
+                        }).start();
+                    }
+                }).start();
+
+
+                return true;
             }
-        }
+        });
 
-    }
-
-    @Override
-    public void onCompleteAppsIntroduction() {
-        goToNextActivitiy();
+        setListeners();
     }
 
     private void goToNextActivitiy(){
-        Logs.show("starting mainactivity");
         this.startActivity(intent);
         this.overridePendingTransition(0, 0);
     }
@@ -256,10 +188,12 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
                 }
             }
             if(granted >= 3){
-                checkGoogleServiceAvailable();
+                restartPermissionChecking();
             }
             else{
-                quit(QuitCode.NoPermission);
+                Toast.makeText(this,
+                        R.string.some_permission_denied_toast_msg, Toast.LENGTH_LONG)
+                        .show();
             }
 
         }
@@ -319,48 +253,43 @@ public class ActivityLaunch extends MyActivityAbstract implements IAppsIntroduct
         }
     }
 
-    private void quit(QuitCode quitCode){
-        String msg = "";
+    //user is enter FFfinder through whatsapp msg
+    private void populatePendingAddUserKey(){
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
 
-        switch (quitCode){
-            case NoGoogleService:
-                msg = getString(R.string.no_google_service_error_msg);
-                break;
-            case NoPermission:
-                msg = getString(R.string.no_permission_error_msg);
-                break;
+        if (Intent.ACTION_VIEW.equals(action)) {
+            final List<String> segments = intent.getData().getPathSegments();
+            if (segments.size() == 2) {
+                Vars.pendingAddUserKey = segments.get(1);
+            }
         }
+    }
 
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle(getString(R.string.error));
-        dlg.setMessage(msg);
-        dlg.setCancelable(false);
-        dlg.setPositiveButton(getString(R.string.quit), new DialogInterface.OnClickListener() {
+    private void setListeners(){
+        layoutNext.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                quitOnResume = true;
-                dialog.dismiss();
+            public void onClick(View v) {
+                layoutNext.setOnClickListener(null);
+                PreferenceUtils.put(ActivityLaunch.this, PreferenceType.SeenAppsIntroduction, "1");
+
+                AnimateBuilder.build(ActivityLaunch.this, layoutIntroduction)
+                        .setAnimateType(AnimateType.alpha).setDurationMs(600)
+                        .setValue(0).setFinishCallback(new Runnable() {
+                    @Override
+                    public void run() {
+                        goToNextActivitiy();
+                    }
+                }).start();
+
+                AnimateBuilder.build(ActivityLaunch.this, layoutNext)
+                        .setAnimateType(AnimateType.alpha).setDurationMs(600)
+                        .setValue(0).start();
+
             }
         });
-        dlg.create();
-        dlg.show();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(quitOnResume){
-            finish();
-        }
-
-        showIntroduction();
     }
 
 
-
-    private enum QuitCode{
-        NoPermission, NoGoogleService
-    }
 
 }

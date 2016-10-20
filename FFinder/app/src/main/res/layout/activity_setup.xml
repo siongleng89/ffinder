@@ -2,32 +2,65 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:gravity="center_vertical|center_horizontal">
+                android:layout_height="match_parent" android:gravity="center_vertical|center_horizontal"
+                android:clipChildren="false" android:clipToPadding="false">
 
-    <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView" android:layout_gravity="center_horizontal" android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/map_icon"/>
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imgViewLoading" android:layout_below="@+id/imageView" android:layout_marginTop="50dp"
-            android:layout_centerHorizontal="true"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text=""
-            android:id="@+id/txtStatus" android:layout_below="@+id/imgViewLoading" android:layout_centerHorizontal="true"
-            android:layout_alignParentLeft="false" android:layout_marginTop="50dp" android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" android:gravity="center"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/retry"
-            android:visibility="gone"
-            android:id="@+id/btnRetry" android:layout_below="@+id/txtStatus" android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"/>
+    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/imageView"
+               android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+               android:layout_alignParentStart="true" android:layout_alignParentBottom="true"
+               android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+               android:background="@drawable/bg_image" android:visibility="visible"/>
+    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/imageView2"
+               android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+               android:src="@drawable/splash_screen_icon" android:visibility="visible"
+               android:layout_below="@+id/relativeLayout3" android:layout_marginTop="20dp"/>
+
+    <RelativeLayout android:layout_width="wrap_content" android:layout_height="100dp"
+                    android:layout_centerHorizontal="true" android:visibility="visible"
+                    android:id="@+id/relativeLayout3">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceMedium" android:text="Welcome To"
+                  android:id="@+id/textView16" android:layout_alignParentTop="true"
+                  android:layout_centerHorizontal="true" android:layout_marginTop="35dp" android:textColor="#FFF"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceMedium" android:text="Flowerpot"
+                  android:id="@+id/textView23" android:textColor="#FFF" android:layout_below="@+id/textView16"
+                  android:layout_centerHorizontal="true" android:textSize="35dp" android:textStyle="bold"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="240dp"
+            android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" android:layout_marginBottom="70dp"
+            android:visibility="invisible" android:id="@+id/layoutContent" android:clipChildren="false"
+            android:clipToPadding="false">
+
+        <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:indeterminate="true"
+                android:indeterminateDrawable="@drawable/progress" android:id="@+id/progressBar"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:id="@+id/txtStatus" android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true" android:textColor="#fff" android:textSize="18sp"
+                android:textStyle="bold" android:layout_below="@+id/progressBar" android:singleLine="false"
+                android:gravity="center_horizontal"/>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true" android:layout_alignParentRight="true"
+                    android:layout_marginRight="30dp" android:layout_marginBottom="30dp" android:id="@+id/layoutRetry"
+                    android:visibility="invisible" android:clipChildren="false" android:clipToPadding="false">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                   android:id="@+id/imgViewRetryIcon" android:src="@drawable/retry_icon"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Retry?"
+                  android:id="@+id/textView24" android:layout_centerVertical="true"
+                  android:layout_toRightOf="@+id/imgViewRetryIcon" android:layout_marginLeft="5dp"
+                  android:textStyle="bold" android:textColor="#fff" android:textSize="17dp"/>
+    </RelativeLayout>
 </RelativeLayout>

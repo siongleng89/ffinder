@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>EVReflection.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-FFfinder.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,7 +37,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9E8EF0BF2B8247A93C2C8C96D90AE3B6</key>
+		<key>C3C2090211A29BD5E3D9489627F6F807</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F048DD6FF315EE61C5FB1C2EA014137D</key>
 		<dict>
 			<key>primary</key>
 			<true/>

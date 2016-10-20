@@ -29,4 +29,11 @@
         <item name="android:background">?colorPrimary</item>
     </style>
 
+    <style name="splashScreenTheme" parent="FFAppTheme">
+        <item name="android:windowBackground">@drawable/splash_image</item>
+    </style>
+
+
+
+
 </resources>

@@ -211,7 +211,7 @@
     <!--Notifications end -->
     <!--_________________________________________________________________________________-->
 
-    <string name="x_search_left">%s Search Left</string>
+    <string name="search_left">%s Search Left</string>
 
     <string name="promo_code_title">Código promocional:</string>
     <string name="empty_promo_code_error_msg">Por favor, insira um código promocional</string>

@@ -25,7 +25,9 @@
         </activity>
         <activity
                 android:name=".ActivityLaunch"
-                android:noHistory="true">
+                android:noHistory="true"
+                android:screenOrientation="portrait"
+                android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

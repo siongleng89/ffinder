@@ -43,6 +43,16 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
     private MyModel myModel;
     private IFriendItemListener friendItemListener;
 
+    static class ViewHolder {
+        private TextView txtTextFriend, txtLocation, txtLastUpdated, txtMessage;
+        private Button btnMap, btnSearch;
+        private ImageView imgViewLoading;
+        private AnimationDrawable loadingAnimation;
+
+        private TextView txtShortFormName;
+
+    }
+
     public FriendsAdapter(Activity context, @LayoutRes int resource, @NonNull List<FriendModel> objects,
                           MyModel myModel, IFriendItemListener friendItemListener) {
         super(context, resource, objects);
@@ -61,10 +71,8 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder mViewHolder = null;
-        //HashMap<String, String> song = null;
 
         if (convertView == null) {
-          //  song = new HashMap <String, String>();
             mViewHolder = new ViewHolder();
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = vi.inflate(R.layout.lvitem_friend, parent, false);
@@ -83,6 +91,10 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
             mViewHolder.loadingAnimation =(AnimationDrawable) mViewHolder.imgViewLoading.getBackground();
 
 
+
+            mViewHolder.txtShortFormName = (TextView) convertView.findViewById(R.id.txtShortFormName);
+
+
             convertView.setTag(mViewHolder);
 
             setListeners(convertView, position);
@@ -95,6 +107,14 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
 
     private void updateDesign(View convertView, FriendModel friendModel){
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+
+
+        viewHolder.txtShortFormName.setText(Strings.safeSubstring(friendModel.getName().toUpperCase(), 0, 2));
+
+
+
+
+
         viewHolder.txtTextFriend.setText(friendModel.getName());
         String msg = null, address = null, lastUpdated = null, error = null;
 
@@ -102,20 +122,20 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
                 DateTimeUtils.convertUnixMiliSecsToDateTimeString(context,
                         friendModel.getLastLocationModel().getTimestampLastUpdatedLong()));
 
-        switch (friendModel.getSearchResult()){
-            case Normal:
-                msg = friendModel.getSearchStatus().getMessage(context);
-                address = friendModel.getLastLocationModel().getAddress();
-
-                updateDesign(viewHolder, msg, address, lastUpdated, friendModel.getSearchResult(),
-                        !Strings.isEmpty(friendModel.getLastLocationModel().getLatitude()), friendModel);
-                break;
-            default:
-                address = friendModel.getLastLocationModel().getAddress();
-                updateDesign(viewHolder, msg, address, lastUpdated, friendModel.getSearchResult(),
-                        !Strings.isEmpty(friendModel.getLastLocationModel().getLatitude()), friendModel);
-                break;
-        }
+//        switch (friendModel.getSearchResult()){
+//            case Normal:
+//                msg = friendModel.getSearchStatus().getMessage(context);
+//                address = friendModel.getLastLocationModel().getAddress();
+//
+//                updateDesign(viewHolder, msg, address, lastUpdated, friendModel.getSearchResult(),
+//                        !Strings.isEmpty(friendModel.getLastLocationModel().getLatitude()), friendModel);
+//                break;
+//            default:
+//                address = friendModel.getLastLocationModel().getAddress();
+//                updateDesign(viewHolder, msg, address, lastUpdated, friendModel.getSearchResult(),
+//                        !Strings.isEmpty(friendModel.getLastLocationModel().getLatitude()), friendModel);
+//                break;
+//        }
 
     }
 
@@ -127,6 +147,7 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
             //searching
             viewHolder.txtLocation.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             viewHolder.txtLocation.setText(statusMsg);
+
             viewHolder.imgViewLoading.setVisibility(View.VISIBLE);
             viewHolder.loadingAnimation.run();
             viewHolder.btnSearch.setVisibility(View.INVISIBLE);
@@ -137,7 +158,7 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
             //search end
             viewHolder.txtLocation.setTextColor(ContextCompat.getColor(context, R.color.colorCaption));
 
-            if(Strings.isEmpty(address)){
+            if(Strings.isEmpty(address) && !hasCoordinates){
                 viewHolder.txtLocation.setText(R.string.never_locate_user_msg);
             }
             else{
@@ -156,26 +177,27 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
                     viewHolder.txtLastUpdated.setVisibility(View.VISIBLE);
 
                     if(friendModel.isRecentlyFinishSearch()){
-                        Integer colorFrom = ContextCompat.getColor(context, R.color.colorPrimary);
-                        Integer colorTo = ContextCompat.getColor(context, R.color.colorCaption);
-                        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-                        colorAnimation.setDuration(3000);
-                        colorAnimation.setRepeatCount(1);
-                        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator animator) {
-                                viewHolder.txtLocation.setTextColor((Integer)animator.getAnimatedValue());
-                                viewHolder.txtLastUpdated.setTextColor((Integer)animator.getAnimatedValue());
-                            }
-
-                        });
-                        colorAnimation.start();
+//                        Integer colorFrom = ContextCompat.getColor(context, R.color.colorPrimary);
+//                        Integer colorTo = ContextCompat.getColor(context, R.color.colorCaption);
+//                        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+//                        colorAnimation.setDuration(3000);
+//                        colorAnimation.setRepeatCount(1);
+//                        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//
+//                            @Override
+//                            public void onAnimationUpdate(ValueAnimator animator) {
+//                                viewHolder.txtLocation.setTextColor((Integer)animator.getAnimatedValue());
+//                                viewHolder.txtLastUpdated.setTextColor((Integer)animator.getAnimatedValue());
+//                            }
+//
+//                        });
+//                        colorAnimation.start();
                         friendModel.setRecentlyFinishSearch(false);
                     }
 
                 }
             });
+
         }
 
         if(error == null || error == SearchResult.Normal){
@@ -223,11 +245,6 @@ public class FriendsAdapter extends ArrayAdapter<FriendModel> {
     }
 
 
-    static class ViewHolder {
-        private TextView txtTextFriend, txtLocation, txtLastUpdated, txtMessage;
-        private Button btnMap, btnSearch;
-        private ImageView imgViewLoading;
-        private AnimationDrawable loadingAnimation;
-    }
+
 
 }

@@ -1,19 +1,13 @@
 package com.ffinder.android.helpers;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
+import android.support.v4.util.Pair;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ffinder.android.ActivityMain;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.databases.FirebaseListener;
-import com.ffinder.android.enums.FCMMessageType;
-import com.ffinder.android.enums.PreferenceType;
-import com.ffinder.android.enums.SearchResult;
-import com.ffinder.android.enums.Status;
+import com.ffinder.android.enums.*;
 import com.ffinder.android.extentions.LimitedArrayList;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.LocationModel;
@@ -23,12 +17,7 @@ import com.ffinder.android.utils.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-
-import static android.support.v4.app.NotificationCompat.DEFAULT_LIGHTS;
-import static android.support.v4.app.NotificationCompat.DEFAULT_SOUND;
-import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
 
 /**
  * Created by SiongLeng on 4/9/2016.
@@ -41,103 +30,109 @@ public class NotificationConsumer {
         this.context = context;
     }
 
-    public void consume(String json){
-        try {
-            if(Strings.isEmpty(json)){
-                consume(new HashMap<String, String>());
-            }
-            else{
-                consume(Vars.getObjectMapper().readValue(json, Map.class));
-            }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void consume(final Map<String, String> map){
-        if(checkContainEssentialField(map)){
-            final String senderId = map.get("senderId");
+        if(map.containsKey("action")){
+
             final FCMMessageType messageType = FCMMessageType.convertStringToFCMMessageType(map.get("action"));
-            final MyModel myModel = new MyModel(context);
-            myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
-                @Override
-                public void run() {
-                    if(this.getFirstArg()){
-                        if(messageType == FCMMessageType.FriendsAdded && map.containsKey("username")){
-                            String username = map.get("username");
-                            showFriendAddedNotification(senderId, username);
-                            Intent i = new Intent("REFRESH_FRIENDLIST");
-                            context.sendBroadcast(i);
-                        }
-                        else if(messageType == FCMMessageType.UpdateLocation){
-                            if(map.containsKey("messageId")){
-                                String messageId = map.get("messageId");
-                                if(!Strings.isEmpty(messageId)){
-                                    LimitedArrayList<String> processedIds = getProcessedIdList();
-                                    if(processedIds.contains(messageId)){
-                                        Logs.show(messageId + " already processed, returning....");
-                                        return;
-                                    }
-                                    processedIds.add(messageId);
-                                    saveProcessedIdList(processedIds);
-                                    Logs.show(messageId + " now is being processed");
-                                }
-                            }
 
-                            RequestLocationHandler requestLocationHandler = new RequestLocationHandler(context, senderId, myModel);
-                            requestLocationHandler.run();
-                        }
-                        else if(messageType == FCMMessageType.UserLocated){
-                            FirebaseDB.getUserLocation(senderId, new FirebaseListener<LocationModel>(LocationModel.class) {
-                                @Override
-                                public void onResult(final LocationModel result, Status status) {
-                                    if(status == Status.Success && result != null){
+            //my friend has added me, broadcast refresh my friend list event
+            if(messageType == FCMMessageType.FriendsAdded){
+                String username = map.get("username");
+                final String senderId = map.get("senderId");
+                showFriendAddedNotification(senderId, username);
+                BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshWholeFriendList);
+            }
 
-                                        myModel.loadFriend(senderId);
-                                        final FriendModel friendModel = myModel.getFriendModelById(senderId);
-                                        if(friendModel != null){
-                                            AndroidUtils.geoDecode(context,
-                                                    result.getLatitude(), result.getLongitude(), new RunnableArgs<String>() {
-                                                        @Override
-                                                        public void run() {
-                                                            result.setAddress(this.getFirstArg());
-                                                            friendModel.setSearchResult(SearchResult.Normal);
-                                                            friendModel.setLastLocationModel(result);
-                                                            friendModel.save(context);
-                                                            Intent i = new Intent("REFRESH_FRIEND");
-                                                            i.putExtra("userId", senderId);
-                                                            context.sendBroadcast(i);
-                                                            showLocatedNotification(friendModel.getUserId(), friendModel.getName());
-                                                        }
-                                                    });
-                                        }
-                                    }
-                                }
-                            });
+            //someone has asked for my location, update location
+            else if(messageType == FCMMessageType.UpdateLocation){
+                if(map.containsKey("messageId")){
+                    String messageId = map.get("messageId");
+                    if(!Strings.isEmpty(messageId)){
+                        LimitedArrayList<String> processedIds = getProcessedIdList();
+                        if(processedIds.contains(messageId)){
+                            Logs.show(messageId + " already processed, returning....");
+                            return;
                         }
+                        processedIds.add(messageId);
+                        saveProcessedIdList(processedIds);
+                        Logs.show(messageId + " now is being processed");
                     }
                 }
-            });
-        }
-        else{
-            if(map.containsKey("action")){
-                final FCMMessageType messageType = FCMMessageType.convertStringToFCMMessageType(map.get("action"));
-                final MyModel myModel = new MyModel(context);
-                if(messageType == FCMMessageType.NotifyRememberToAddFriend){
-                    myModel.loadAllFriendModels();
-                    if(myModel.getNonSelfFriendModelsCount() == 0){
-                        showRememberToAddFriendNotification();
-                    }
+
+                String senderId = map.get("senderId");
+                String senderToken = map.get("senderToken");
+
+                new LocationUpdater(context, senderId, senderToken);
+            }
+
+            //auto user located notification received,
+            // broadcast refresh single friend model to trigger update design
+            else if(messageType == FCMMessageType.UserLocated){
+                final String senderId = map.get("senderId");
+                String latitude = map.get("latitude");
+                String longitude = map.get("longitude");
+                final String isAutoNotification = map.get("isAutoNotification");
+                MyModel myModel = new MyModel(context);
+
+                myModel.loadFriend(senderId);
+                final FriendModel friendModel = myModel.getFriendModelById(senderId);
+                if(friendModel != null){
+                    final LocationModel locationModel = new LocationModel();
+                    locationModel.setLatitude(latitude);
+                    locationModel.setLongitude(longitude);
+                    locationModel.setTimestampLastUpdatedLong(System.currentTimeMillis());
+                    friendModel.setSearchResult(SearchResult.Normal);
+                    friendModel.setSearchStatus(SearchStatus.End);
+
+                    locationModel.geodecodeCoordinatesIfNeeded(context, new Runnable() {
+                        @Override
+                        public void run() {
+                            friendModel.setLastLocationModel(locationModel);
+                            friendModel.save(context);
+
+                            BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshFriend,
+                                    new Pair<String, String>("userId", senderId));
+
+                            //only show notification on user system tray if it is from auto notification
+                            if(isAutoNotification.equals("1")){
+                                showLocatedNotification(friendModel.getUserId(), friendModel.getName());
+                            }
+                        }
+                    });
+
+
                 }
             }
+
+            //user is alive msg
+            //broadcast refresh single friend model to trigger update design
+            else if(messageType == FCMMessageType.IsAliveMsg){
+                String senderId = map.get("senderId");
+
+                //must save to preference to preserve state when apps is in background
+                MyModel myModel = new MyModel(context);
+                myModel.loadFriend(senderId);
+                final FriendModel friendModel = myModel.getFriendModelById(senderId);
+                if(friendModel != null){
+                    friendModel.setSearchStatus(SearchStatus.WaitingUserLocation);
+                    friendModel.save(context);
+                }
+
+                BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshFriend,
+                        new Pair<String, String>("userId", senderId));
+
+            }
+
+            //push notification received for add friend reminder
+            else if(messageType == FCMMessageType.NotifyRememberToAddFriend){
+                MyModel myModel = new MyModel(context);
+                myModel.loadAllFriendModels();
+                if(myModel.getNonSelfFriendModelsCount() == 0){
+                    showRememberToAddFriendNotification();
+                }
+            }
+
         }
-
-    }
-
-    private boolean checkContainEssentialField(Map<String, String> map){
-        return map.containsKey("action") && map.containsKey("senderId");
     }
 
 
@@ -155,84 +150,29 @@ public class NotificationConsumer {
         PreferenceUtils.put(context, PreferenceType.AutoNotifiedReceivedIds, Strings.joinArr(currentIdsList, ","));
 
         String title = context.getString(R.string.notification_user_located_title);
-        String msg = String.format(context.getString(R.string.notification_x_has_been_located_msg), username);
+        String content = String.format(context.getString(R.string.notification_x_has_been_located_msg), username);
 
         if(currentIdsList.size() > 1){
-            msg = String.format(context.getString(R.string.notification_x_users_located_msg), currentIdsList.size());
+            content = String.format(context.getString(R.string.notification_x_users_located_msg), currentIdsList.size());
         }
 
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_stat_notification)
-                        .setContentTitle(title)
-                        .setContentText(msg);
-        int NOTIFICATION_ID = 12345;
-
-        Intent targetIntent = new Intent(context, ActivityMain.class);
-        targetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        PendingIntent intent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        builder.setContentIntent(intent);
-        builder.setAutoCancel(true);
-        builder.setDefaults(DEFAULT_SOUND | DEFAULT_VIBRATE | DEFAULT_LIGHTS);
-        NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        //nManager.cancel(NOTIFICATION_ID);
-        nManager.notify(NOTIFICATION_ID, builder.build());
+        NotificationShower.show(context,
+                NotificationShower.UserLocatedNotificationId, title, content, false);
     }
 
     private void showRememberToAddFriendNotification(){
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_stat_notification)
-                        .setContentTitle(context.getString(R.string.app_name))
-                        .setContentText(context.getString(R.string.notification_remember_to_add_friend_msg))
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(context.getString(R.string.notification_remember_to_add_friend_msg)));
+        String title = context.getString(R.string.app_name);
+        String content = context.getString(R.string.notification_remember_to_add_friend_msg);
 
-        int NOTIFICATION_ID = 99999;
-
-        Intent targetIntent = new Intent(context, ActivityMain.class);
-        targetIntent.putExtra("shareKey", "1");
-
-        targetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        PendingIntent intent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        builder.setContentIntent(intent);
-        builder.setAutoCancel(true);
-        builder.setDefaults(DEFAULT_SOUND | DEFAULT_VIBRATE | DEFAULT_LIGHTS);
-        NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        nManager.notify(NOTIFICATION_ID, builder.build());
+        NotificationShower.show(context,
+                NotificationShower.RememberToAddFriendNotificationId, title, content, true);
     }
 
     private void showFriendAddedNotification(String senderId, String senderName){
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_stat_notification)
-                        .setContentTitle(context.getString(R.string.app_name))
-                        .setContentText(String.format(context.getString(R.string.notification_x_added_you), senderName))
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(String.format(context.getString(R.string.notification_x_added_you), senderName)));
+        String title = context.getString(R.string.app_name);
+        String content = String.format(context.getString(R.string.notification_x_added_you), senderName);
 
-        int NOTIFICATION_ID = 99998;
-
-        Intent targetIntent = new Intent(context, ActivityMain.class);
-        targetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        PendingIntent intent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        builder.setContentIntent(intent);
-        builder.setAutoCancel(true);
-        builder.setDefaults(DEFAULT_SOUND | DEFAULT_VIBRATE | DEFAULT_LIGHTS);
-        NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        nManager.notify(NOTIFICATION_ID, builder.build());
+        NotificationShower.show(context, NotificationShower.FriendsAddedNotificationId, title, content, true);
     }
 
     private LimitedArrayList<String> getProcessedIdList() {
@@ -262,5 +202,4 @@ public class NotificationConsumer {
             e.printStackTrace();
         }
     }
-
 }

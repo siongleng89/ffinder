@@ -20,19 +20,12 @@ public class GcmAliveHeartbeatBroadcastReceiver extends WakefulBroadcastReceiver
     @Override
     public void onReceive(final Context context, Intent intent) {
         final String action = intent.getStringExtra("action");
-        final String senderId = intent.getStringExtra("senderId");
-        final String messageId = intent.getStringExtra("messageId");
+        FCMMessageType fcmAction = FCMMessageType.convertStringToFCMMessageType(action);
 
-        if(!Strings.isEmpty(action) && !Strings.isEmpty(messageId)){
-            FCMMessageType fcmAction = FCMMessageType.convertStringToFCMMessageType(action);
-
-            if(fcmAction == FCMMessageType.UpdateLocation){
-                Intent service = new Intent(context, HandoffToNotificationConsumerIntentService.class);
-                service.putExtra("action", action);
-                service.putExtra("senderId", senderId);
-                service.putExtra("messageId", messageId);
-                startWakefulService(context, service);
-            }
+        if(fcmAction == FCMMessageType.UpdateLocation){
+            Intent service = new Intent(context, HandoffToNotificationConsumerIntentService.class);
+            service.putExtras(intent);
+            startWakefulService(context, service);
         }
     }
 }

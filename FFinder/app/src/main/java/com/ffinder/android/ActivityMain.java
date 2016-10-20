@@ -1,13 +1,8 @@
 package com.ffinder.android;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -16,11 +11,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
+import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.adapters.IFriendItemListener;
 import com.ffinder.android.absint.controls.ISearchFailedListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
-import com.ffinder.android.absint.models.MyModelChangedListener;
 import com.ffinder.android.absint.tasks.RequestLocationTaskFragListener;
 import com.ffinder.android.adapters.FriendsAdapter;
 import com.ffinder.android.controls.*;
@@ -40,35 +35,30 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.List;
 
 
-public class ActivityMain extends MyActivityAbstract implements IFriendItemListener {
+public class ActivityMain extends MyActivityAbstract implements IFriendItemListener, IFriendsAdapterHolder {
 
-    private ActivityMain _this;
     private FragmentNextAdsCd fragmentNextAdsCd;
     private MyModel myModel;
-
     private Button btnShareKey;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listFriends;
     private RelativeLayout layoutEmptyFriend;
     private FriendsAdapter friendsAdapter;
-    private BroadcastReceiver refreshFriendReceiver, refreshFriendListReceiver;
-    private boolean afterSavedInstanceState;
 
     public ActivityMain() {
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Logs.show("ActivityMain onCreate start");
-
         super.onCreate(savedInstanceState);
-        _this = this;
         setContentView(R.layout.activity_main);
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+        enableCustomActionBar();
+        addActionToActionBar(ActionBarActionType.AppIcon, true, true);
+        addActionToActionBar(ActionBarActionType.ShareKey, false, false);
+        addActionToActionBar(ActionBarActionType.Overflow, false, false);
+        addActionToOverflow(getString(R.string.add_new_member_manually_title));
+        addActionToOverflow(getString(R.string.settings_activity_title));
 
         myModel = new MyModel(this);
-
         myModel.loginFirebase(0, null);
 
         btnShareKey = (Button) findViewById(R.id.btnShareKey);
@@ -76,8 +66,6 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         fragmentNextAdsCd = (FragmentNextAdsCd) getSupportFragmentManager().findFragmentById(R.id.nextAdsCdFragment);
         fragmentNextAdsCd.setMyModel(myModel);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
-        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary));
         listFriends = (ListView) findViewById(R.id.listFriends);
         friendsAdapter = new FriendsAdapter(this, R.layout.lvitem_friend, myModel.getFriendModels(), myModel, this);
         listFriends.setAdapter(friendsAdapter);
@@ -93,54 +81,69 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                 myModel.loadAllFriendModels();
                 myModel.sortFriendModels();
 
+                //check if pending to add user, if yes, pop add user dialog automatically
                 checkHasPendingToAddUser();
-                recreateRequestLocationTaskFrags();
 
+                //reload(recreate/remove) task fragments for friend searching (mostly for rotating device)
+                reloadFriendsDesignByRequestLocationTaskFrags();
+
+                //refresh friend list from database
+                refreshFriendList();
+
+                //save adsId to database to persist user even uninstalling apps
                 AdsIdTask adsIdTask = new AdsIdTask(ActivityMain.this, myModel.getUserId());
                 adsIdTask.execute();
 
+                //save refresh token provided token refresh called in service is called before user login
+                //which firebase will block it from saving
                 String refreshedToken = FirebaseInstanceId.getInstance().getToken();
                 if(!Strings.isEmpty(refreshedToken)) FirebaseDB.updateMyToken(myModel.getUserId(), refreshedToken);
 
+                //some of the devices have known issues, notify the user to follow setup guides
                 checkKnownIssuePhones();
+
+                //subscribe for push notifications
                 FirebaseMessaging.getInstance().subscribeToTopic("allDevices");
 
-                Threadings.postRunnable(ActivityMain.this, new Runnable() {
-                    @Override
-                    public void run() {
-                        Bundle extras = getIntent().getExtras();
-                        if(extras !=null && extras.containsKey("firstRun")) {
-                            if(myModel.getNonSelfFriendModelsCount() == 0){
-                                FriendModel myOwnModel = myModel.getFriendModelById(myModel.getUserId());
-                                searchNow(myOwnModel);
-                            }
-                        }
+                //auto run search myself the first time user run apps
+                Bundle extras = getIntent().getExtras();
+                if(extras !=null && extras.containsKey("firstRun")) {
+                    if(myModel.getNonSelfFriendModelsCount() == 0){
+                        FriendModel myOwnModel = myModel.getFriendModelById(myModel.getUserId());
+                        searchNow(myOwnModel);
                     }
-                });
+                }
             }
         });
 
         onNewIntent(getIntent());
-
-        Logs.show("ActivityMain onCreate end");
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.default_menu, menu);
-        return true;
+    protected void onResume() {
+        super.onResume();
+        reloadFriendsDesignByRequestLocationTaskFrags();
+        PreferenceUtils.delete(this, PreferenceType.AutoNotifiedReceivedIds);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_share:
+    public void onActionButtonClicked(ActionBarActionType actionBarActionType) {
+        super.onActionButtonClicked(actionBarActionType);
+
+        switch (actionBarActionType){
+            case ShareKey:
                 UserKeyDialog userKeyDialog = new UserKeyDialog(ActivityMain.this, myModel);
                 userKeyDialog.show();
                 break;
+
+        }
+    }
+
+    @Override   //only use for overflow menu
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
             case R.id.action_add:
-                AddMemberDialog addMemberDialog = new AddMemberDialog(this, myModel);
+                AddMemberDialog addMemberDialog = new AddMemberDialog(this, this, myModel);
                 addMemberDialog.show();
                 break;
             case R.id.action_settings:
@@ -181,6 +184,7 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Bundle extras = intent.getExtras();
+        //open apps by clicking share key reminder push notification
         if(extras !=null && extras.containsKey("shareKey")) {
             UserKeyDialog userKeyDialog = new UserKeyDialog(this, myModel);
             userKeyDialog.show();
@@ -188,40 +192,57 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
 
     }
 
+    //auto add user if there is pending add user key
     private void checkHasPendingToAddUser(){
         Threadings.postRunnable(ActivityMain.this, new Runnable() {
             @Override
             public void run() {
                 if(!Strings.isEmpty(Vars.pendingAddUserKey)){
-                    AddMemberDialog addMemberDialog = new AddMemberDialog(ActivityMain.this, myModel);
+                    AddMemberDialog addMemberDialog = new AddMemberDialog(
+                            ActivityMain.this, ActivityMain.this, myModel);
                     addMemberDialog.show();
                 }
             }
         });
-
     }
 
-    private void recreateRequestLocationTaskFrags(){
+    //reload friends adapter design by checking retained fragments
+    private void reloadFriendsDesignByRequestLocationTaskFrags(){
         FragmentManager fm = getSupportFragmentManager();
 
         for(FriendModel friendModel : myModel.getFriendModels()){
-            RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag) fm.findFragmentByTag(friendModel.getUserId());
+            RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
+                    fm.findFragmentByTag(friendModel.getUserId());
+
+            friendModel.load(ActivityMain.this);
 
             // If the Fragment is non-null, then it is currently being
             // retained across a configuration change.
             if (taskFragment != null) {
-                friendModel.setSearchResult(SearchResult.Normal);
-                friendModel.setSearchStatus(taskFragment.getCurrentStatus());
-                setRequestLocationTaskFragListener(taskFragment);
+                if(friendModel.getSearchStatus() == SearchStatus.End){
+                    taskFragment.terminate();
+                    getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
+                }
             }
+            //check if there is any leftoever stuck search, if there is
+            //overwrite the search status
+            else{
+                if(friendModel.getSearchStatus() != SearchStatus.End){
+                    friendModel.setSearchStatus(SearchStatus.End);
+                    friendModel.save(ActivityMain.this);
+                }
+            }
+
         }
+        ActivityMain.this.updateFriendsListAdapter();
     }
 
     private void createRequestLocationTaskFrag(final FriendModel friendModel){
-        final FragmentManager fm = getSupportFragmentManager();
-        final RequestLocationTaskFrag[] taskFragment = {(RequestLocationTaskFrag) fm.findFragmentByTag(friendModel.getUserId())};
+        FragmentManager fm = getSupportFragmentManager();
+        RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
+                                                    fm.findFragmentByTag(friendModel.getUserId());
         //not in search
-        if (taskFragment[0] == null || taskFragment[0].getCurrentResult() != null) {
+        if (taskFragment == null || taskFragment.getCurrentResult() != null) {
             if(friendModel.getSearchResult() != null){
                 if(friendModel.getSearchResult() == SearchResult.ErrorTimeoutUnknownReason
                         || friendModel.getSearchResult() == SearchResult.ErrorTimeoutLocationDisabled){
@@ -242,27 +263,35 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     }
 
     private void searchNow(final FriendModel friendModel){
-        fragmentNextAdsCd.friendSearched(new RunnableArgs<Boolean>() {
+        Threadings.postRunnable(this, new Runnable() {
             @Override
             public void run() {
-                if(this.getFirstArg()){
-                    friendModel.setSearchResult(SearchResult.Normal);
-                    friendModel.setSearchStatus(SearchStatus.Starting);
-                    final FragmentManager fm = getSupportFragmentManager();
-                    RequestLocationTaskFrag frag =  RequestLocationTaskFrag.newInstance(myModel.getUserId(), friendModel.getUserId());
-                    fm.beginTransaction().add(frag, friendModel.getUserId()).commit();
-                    setRequestLocationTaskFragListener(frag);
-                }
+                fragmentNextAdsCd.friendSearched(new RunnableArgs<Boolean>() {
+                    @Override
+                    public void run() {
+                        if(this.getFirstArg()){
+                            friendModel.setSearchResult(SearchResult.Normal);
+                            friendModel.setSearchStatus(SearchStatus.Starting);
+                            final FragmentManager fm = getSupportFragmentManager();
+                            RequestLocationTaskFrag frag = RequestLocationTaskFrag.newInstance(
+                                    myModel.getUserId(), FirebaseInstanceId.getInstance().getToken(),
+                                    friendModel.getUserId());
+                            fm.beginTransaction().add(frag, friendModel.getUserId()).commit();
+                            setRequestLocationTaskFragListener(frag);
+                        }
+                    }
+                });
             }
         });
     }
 
-
+    //refresh friends list from firebase database
     private void refreshFriendList(){
         FirebaseDB.getAllMyLinks(myModel.getUserId(), new FirebaseListener() {
             @Override
             public void onResult(Object result, Status status) {
                 if(status == Status.Success && result != null){
+
                     List<Pair<String, Object>> list = (List<Pair<String, Object>>) result;
                     boolean foundNew = false;
                     for(Pair<String, Object> pair : list){
@@ -273,8 +302,8 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                             FriendModel friendModel = new FriendModel();
                             friendModel.setName(name);
                             friendModel.setUserId(userId);
-                            friendModel.save(_this);
-                            myModel.addFriendModel(friendModel, false);
+                            friendModel.save(ActivityMain.this);
+                            myModel.addFriendModel(friendModel);
                             foundNew = true;
                         }
                     }
@@ -282,34 +311,22 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                     if(foundNew){;
                         myModel.sortFriendModels();
                         myModel.commitFriendUserIds();
-                        myModel.notifyFriendModelsChanged();
+                        ActivityMain.this.updateFriendsListAdapter();
                     }
 
                 }
-                Threadings.postRunnable(ActivityMain.this, new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
             }
         });
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        }, 20 * 1000);
     }
 
     private void editName(FriendModel friendModel){
-        EditNameDialog editNameDialog = new EditNameDialog(this, friendModel, myModel);
+        EditNameDialog editNameDialog = new EditNameDialog(this, this, friendModel, myModel);
         editNameDialog.show();
     }
 
     private void deleteUser(FriendModel friendModel){
-        ConfirmDeleteDialog confirmDeleteDialog = new ConfirmDeleteDialog(this, friendModel, myModel);
+        ConfirmDeleteDialog confirmDeleteDialog = new ConfirmDeleteDialog(this, this, friendModel, myModel);
         confirmDeleteDialog.show();
     }
 
@@ -323,7 +340,8 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                 Threadings.postRunnable(ActivityMain.this, new Runnable() {
                     @Override
                     public void run() {
-                        KnownIssueDialog knownIssueDialog = new KnownIssueDialog(ActivityMain.this, PhoneBrand.valueOf(model));
+                        KnownIssueDialog knownIssueDialog = new KnownIssueDialog(ActivityMain.this,
+                                                        PhoneBrand.valueOf(model));
                         knownIssueDialog.show();
                     }
                 });
@@ -347,60 +365,41 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             }
         });
 
-        myModel.addMyModelChangedListener(new MyModelChangedListener() {
+        registerBroadcastReceiver(BroadcastEvent.RefreshFriend, new RunnableArgs<Intent>() {
             @Override
-            public void onChanged(MyModel newMyModel, String changedProperty) {
-                if(changedProperty.equals("friendModels")){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            friendsAdapter.notifyDataSetChanged();
-
-                            if(myModel.getNonSelfFriendModelsCount() == 0){
-                                layoutEmptyFriend.setVisibility(View.VISIBLE);
-                            }
-                            else{
-                                layoutEmptyFriend.setVisibility(View.GONE);
-                            }
-
-                        }
-                    });
-                }
-            }
-        });
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshFriendList();
-            }
-        });
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("REFRESH_FRIEND");
-
-        refreshFriendReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
+            public void run() {
+                Logs.show("User location msg received");
+                Intent intent = this.getFirstArg();
                 final String friendId = intent.getStringExtra("userId");
                 if(myModel.checkFriendExist(friendId)) {
                     final FriendModel friendModel = myModel.getFriendModelById(friendId);
-                    friendModel.load(_this);
+                    friendModel.load(ActivityMain.this);
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
+                            fm.findFragmentByTag(friendId);
+
+                    // If the Fragment is non-null, then it is currently searching,
+                    // check is waiting for user respond,
+                    // if exist and friend status is end, mean it is already finish searching, can safely
+                    // remove task fragment already
+                    // then update the address design
+                    if (taskFragment != null && friendModel.getSearchStatus() == SearchStatus.End) {
+                        taskFragment.terminate();
+                        fm.beginTransaction().remove(taskFragment).commit();
+                    }
+
+                    ActivityMain.this.updateFriendsListAdapter();
                 }
             }
-        };
-        registerReceiver(refreshFriendReceiver, filter);
+        });
 
-        IntentFilter filter2 = new IntentFilter();
-        filter2.addAction("REFRESH_FRIENDLIST");
-
-        refreshFriendListReceiver = new BroadcastReceiver() {
+        registerBroadcastReceiver(BroadcastEvent.RefreshWholeFriendList, new RunnableArgs<Intent>() {
             @Override
-            public void onReceive(Context context, Intent intent) {
+            public void run() {
                 refreshFriendList();
             }
-        };
-        registerReceiver(refreshFriendListReceiver, filter2);
+        });
 
     }
 
@@ -414,21 +413,31 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             @Override
             public void onUpdateStatus(String userId, SearchStatus newStatus) {
                 FriendModel friendModel = myModel.getFriendModelById(userId);
-                friendModel.setSearchStatus(newStatus);
+                if(newStatus != friendModel.getSearchStatus()){
+                    friendModel.setSearchStatus(newStatus);
+                    friendModel.save(ActivityMain.this);
+                }
+                ActivityMain.this.updateFriendsListAdapter();
             }
 
             @Override
-            public void onUpdateResult(String userId, LocationModel locationModel, SearchStatus finalSearchStatus, SearchResult result) {
-                FriendModel friendModel = myModel.getFriendModelById(userId);
-                if(locationModel != null){
-                    friendModel.setLastLocationModel(locationModel);
-                }
+            public void onUpdateResult(String userId, final LocationModel locationModel,
+                                       final SearchStatus finalSearchStatus, final SearchResult result) {
+
+                final FriendModel friendModel = myModel.getFriendModelById(userId);
+                friendModel.setLastLocationModel(locationModel);
                 friendModel.setRecentlyFinishSearch(true);
                 friendModel.setSearchStatus(finalSearchStatus);
                 friendModel.setSearchResult(result);
-                friendModel.save(_this);
+                friendModel.getLastLocationModel().geodecodeCoordinatesIfNeeded(ActivityMain.this, new Runnable() {
+                    @Override
+                    public void run() {
+                        friendModel.save(ActivityMain.this);
+                        ActivityMain.this.updateFriendsListAdapter();
+                    }
+                });
 
-                if(!isAfterSavedInstanceState()){
+                if(!isPaused()){
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(userId);
                     if(fragment != null)
                         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
@@ -439,66 +448,23 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         });
     }
 
+
+    //notify friend models changed
     @Override
-    protected void onResume() {
-        super.onResume();
-        afterSavedInstanceState = false;
-
-        Logs.show("ActivityMain onResume start");
-
-        Threadings.runInBackground(new Runnable() {
+    public void updateFriendsListAdapter() {
+        Threadings.postRunnable(ActivityMain.this, new Runnable() {
             @Override
             public void run() {
-                for(FriendModel friendModel : myModel.getFriendModels()){
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(friendModel.getUserId());
-                    if(fragment != null){
-                        if(friendModel.getSearchStatus() == SearchStatus.End){
-                            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-                        }
-                    }
+                friendsAdapter.notifyDataSetChanged();
+
+                if(myModel.getNonSelfFriendModelsCount() == 0){
+                    layoutEmptyFriend.setVisibility(View.VISIBLE);
+                }
+                else{
+                    layoutEmptyFriend.setVisibility(View.GONE);
                 }
 
-                Threadings.postRunnable(ActivityMain.this, new Runnable() {
-                    @Override
-                    public void run() {
-                        if(friendsAdapter != null) friendsAdapter.notifyDataSetChanged();
-                    }
-                });
-
-                refreshFriendList();
             }
         });
-
-
-        PreferenceUtils.delete(this, PreferenceType.AutoNotifiedReceivedIds);
-
-        Logs.show("ActivityMain onResume end");
-
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        afterSavedInstanceState = true;
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (refreshFriendReceiver != null) {
-            unregisterReceiver(refreshFriendReceiver);
-            refreshFriendReceiver = null;
-        }
-        if (refreshFriendListReceiver != null) {
-            unregisterReceiver(refreshFriendListReceiver);
-            refreshFriendListReceiver = null;
-        }
-
-        super.onDestroy();
-    }
-
-    public boolean isAfterSavedInstanceState() {
-        return afterSavedInstanceState;
-    }
-
-
 }

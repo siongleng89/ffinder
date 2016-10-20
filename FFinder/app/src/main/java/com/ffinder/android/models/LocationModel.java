@@ -1,7 +1,11 @@
 package com.ffinder.android.models;
 
+import android.content.Context;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ffinder.android.utils.AndroidUtils;
+import com.ffinder.android.utils.RunnableArgs;
+import com.ffinder.android.utils.Strings;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 
@@ -68,4 +72,28 @@ public class LocationModel {
     public void setTimestampLastUpdatedLong(long timestampLastUpdated) {
         this.timestampLastUpdated = timestampLastUpdated;
     }
+
+
+    public void geodecodeCoordinatesIfNeeded(Context context, final Runnable onFinish){
+        if(!Strings.isEmpty(this.getLatitude()) && Strings.isEmpty(this.getAddress())){
+            AndroidUtils.geoDecode(context, getLatitude(), getLongitude(), new RunnableArgs<String>() {
+                @Override
+                public void run() {
+                    setAddress(this.getFirstArg());
+                    onFinish.run();
+                }
+            });
+        }
+        else{
+            onFinish.run();
+        }
+    }
+
+
+
+
+
+
+
+
 }

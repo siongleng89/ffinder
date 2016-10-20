@@ -1,10 +1,13 @@
 package com.ffinder.android.tasks;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.tasks.RequestLocationTaskFragListener;
 import com.ffinder.android.enums.FCMMessageType;
@@ -13,10 +16,11 @@ import com.ffinder.android.enums.SearchStatus;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.helpers.NotificationSender;
+import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.LocationModel;
+import com.ffinder.android.models.MyModel;
 import com.ffinder.android.models.OnlineRequest;
 import com.ffinder.android.utils.*;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -28,17 +32,17 @@ import java.util.concurrent.TimeoutException;
 public class RequestLocationTaskFrag extends Fragment {
 
     private RequestLocationTaskFragListener requestLocationTaskFragListener;
-    private String userId, targetUserId;
+    private String userId, myToken, targetUserId;
     private SearchStatus currentStatus;
     private SearchResult currentResult;
-    //private int reuseToleranceSecs = 60;
-    private int reuseToleranceSecs = 1;
-    private int timeoutSecs = 45;
+    public static int timeoutSecs = 40;
+    private RequestLocationTask requestLocationTask;
 
-    public static RequestLocationTaskFrag newInstance(String userId, String targetUserId) {
+    public static RequestLocationTaskFrag newInstance(String userId, String myToken, String targetUserId) {
         RequestLocationTaskFrag f = new RequestLocationTaskFrag();
         Bundle args = new Bundle();
         args.putString("userId", userId);
+        args.putString("myToken", myToken);
         args.putString("targetUserId", targetUserId);
         f.setArguments(args);
         return f;
@@ -61,26 +65,33 @@ public class RequestLocationTaskFrag extends Fragment {
         Bundle bundle = this.getArguments();
 
         userId = bundle.getString("userId");
+        myToken = bundle.getString("myToken");
         targetUserId = bundle.getString("targetUserId");
+
         FirebaseDB.removeAutoNotify(targetUserId, userId);
 
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
-                RequestLocationTask requestLocationTask = new RequestLocationTask(getContext());
+                requestLocationTask = new RequestLocationTask(getContext());
 
                 try {
-                    requestLocationTask
-                            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, userId, targetUserId)
-                            .get(timeoutSecs, TimeUnit.SECONDS);
+                    if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
+                        requestLocationTask
+                                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, userId, myToken, targetUserId)
+                                .get(timeoutSecs, TimeUnit.SECONDS);
+
+                    }
+                    else {
+                        requestLocationTask.execute(userId, myToken, targetUserId)
+                                .get(timeoutSecs, TimeUnit.SECONDS);
+                    }
+
 
                 } catch (InterruptedException e) {
                 } catch (ExecutionException e) {
                 } catch (TimeoutException e) {
                     requestLocationTask.taskTimeout();
-                }
-                finally {
-                    requestLocationTask.dispose();
                 }
             }
         });
@@ -89,6 +100,16 @@ public class RequestLocationTaskFrag extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     public void setRequestLocationTaskFragListener(RequestLocationTaskFragListener requestLocationTaskFragListener) {
@@ -104,7 +125,15 @@ public class RequestLocationTaskFrag extends Fragment {
         currentResult = searchResult;
         if(requestLocationTaskFragListener != null)
             requestLocationTaskFragListener.onUpdateResult(targetUserId, locationModel, currentStatus, searchResult);
+
+        terminate();
     }
+
+    public void terminate(){
+        //already gotten the result from push notification, can terminate the task now
+        if(requestLocationTask != null) requestLocationTask.dispose();
+    }
+
 
     public SearchStatus getCurrentStatus() {
         return currentStatus;
@@ -119,83 +148,52 @@ public class RequestLocationTaskFrag extends Fragment {
     /////////////////////////////////////////////////////////////////////////
 
     public class RequestLocationTask extends AsyncTask<String, SearchStatus, LocationModel> {
-        private boolean finish;
+        private boolean finish, disposed;
         private LocationModel resultLocationModel;
-        private OnlineRequest locationOnlineRequest, pingOnlineRequest;
-        private String targetUserId, myUserId;
+        private String targetUserId, myUserId, myToken;
         private Context context;
         private SearchStatus searchStatus;
         private SearchResult searchResult;
+        private String msgId;
 
         public RequestLocationTask(Context context) {
             this.context = context;
+            this.msgId = Strings.generateUniqueRandomKey(30);
         }
 
         @Override
         protected LocationModel doInBackground(String... params) {
             myUserId = params[0];
-            targetUserId = params[1];
+            myToken = params[1];
+            targetUserId = params[2];
 
-            requestLocationPart();
-
-            while (!finish){
-                Threadings.sleep(500);
-            }
-
-            return null;
-        }
-
-        private void requestLocationPart(){
             publishProgress(SearchStatus.CheckingData);
 
+            //check user is allowed to search the target user
             checkCanSearch(myUserId, targetUserId, new RunnableArgs<Boolean>() {
                 @Override
                 public void run() {
                     if(finish) return;
 
+                    //can search, trigger fcm now
                     if(this.getFirstArg()){
-                        checkHasRecentlyLastUpdated(myUserId, targetUserId, new RunnableArgs<LocationModel>() {
+
+                        searchStatus = SearchStatus.WaitingUserRespond;
+                        publishProgress(SearchStatus.WaitingUserRespond);
+
+                        Threadings.runInBackground(new Runnable() {
                             @Override
                             public void run() {
-                                if(finish) return;
+                                while (searchStatus == SearchStatus.WaitingUserRespond){
+                                    NotificationSender.sendWithUserId(myUserId, targetUserId,
+                                            FCMMessageType.UpdateLocation,
+                                            RequestLocationTaskFrag.timeoutSecs, msgId,
+                                            new Pair<String, String>("senderToken", myToken));
+                                    Threadings.sleep(5000);
 
-                                //recently not updated
-                                if(this.getFirstArg() == null){
-
-                                    monitorUserIsAlive(myUserId, targetUserId, new OneTimeRunnableArgs<Boolean>() {
-                                        @Override
-                                        public void run() {
-                                            if(finish) return;
-                                            if(this.getFirstArg()){
-
-                                                publishProgress(SearchStatus.WaitingUserRespond);
-
-                                                sendRequestLocation(myUserId, targetUserId, new OneTimeRunnableArgs<LocationModel>() {
-                                                    @Override
-                                                    public void run() {
-                                                        if(finish) return;
-
-                                                        if(this.getFirstArg() != null){
-                                                            resultLocationModel = this.getFirstArg();
-                                                            geodecodePart(true, null);
-                                                        }
-                                                        else{
-                                                            setSearchResult(SearchResult.ErrorUnknown);
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                            else{
-                                                setSearchResult(SearchResult.ErrorUnknown);
-                                            }
-                                        }
-                                    });
-
-                                }
-                                else{
-                                    //recently updated, no need request again
-                                    resultLocationModel = this.getFirstArg();
-                                    geodecodePart(true, null);
+                                    if (finish){
+                                        break;
+                                    }
                                 }
                             }
                         });
@@ -205,33 +203,16 @@ public class RequestLocationTaskFrag extends Fragment {
                     }
                 }
             });
-        }
 
-        private void geodecodePart(final boolean notify, final Runnable onFinish){
 
-            if(notify) publishProgress(SearchStatus.Geocoding);
-
-            AndroidUtils.geoDecode(context, resultLocationModel.getLatitude(), resultLocationModel.getLongitude(), new RunnableArgs<String>() {
-                @Override
-                public void run() {
-                    addressRetrieved(this.getFirstArg(), notify, onFinish);
-                }
-            });
-        }
-
-        private void addressRetrieved(String address, boolean notify, Runnable onFinish){
-            if(finish) return;
-
-            resultLocationModel.setAddress(address);
-
-            if(notify){
-                publishProgress(SearchStatus.End);
-                setSearchResult(SearchResult.Normal);
+            while (!finish){
+                Threadings.sleep(500);
+                if(disposed) return null;
             }
 
-            if(onFinish != null) onFinish.run();
-
+            return null;
         }
+
 
 
         private void setSearchResult(SearchResult newSearchResult){
@@ -250,8 +231,10 @@ public class RequestLocationTaskFrag extends Fragment {
         @Override
         protected void onPostExecute(LocationModel locationModel) {
             super.onPostExecute(locationModel);
-            notifyResult(resultLocationModel, searchResult);
-            dispose();
+
+            if(!disposed){
+                notifyResult(resultLocationModel, searchResult);
+            }
         }
 
         private void checkCanSearch(String myUserId, String targetUserId, final RunnableArgs<Boolean> toRun){
@@ -269,167 +252,62 @@ public class RequestLocationTaskFrag extends Fragment {
         }
 
 
-        private void checkHasRecentlyLastUpdated(String myUserId, final String targetUserId, final RunnableArgs<LocationModel> toRun){
-            FirebaseDB.getCurrentTimestamp(myUserId, new FirebaseListener<String>() {
-                @Override
-                public void onResult(final String currentTimeStampString, com.ffinder.android.enums.Status status) {
-                    if(status == com.ffinder.android.enums.Status.Success && currentTimeStampString != null){
-                        FirebaseDB.getUserLocation(targetUserId, new FirebaseListener<LocationModel>(LocationModel.class) {
-                            @Override
-                            public void onResult(LocationModel result, com.ffinder.android.enums.Status status) {
-                                if(status == com.ffinder.android.enums.Status.Success && result != null){
-                                    resultLocationModel = result;
+        public void taskTimeout() {
+            MyModel myModel = new MyModel(context);
+            myModel.loadFriend(targetUserId);
+            FriendModel friendModel = myModel.getFriendModelById(targetUserId);
 
-                                    long previousTimestamp = result.getTimestampLastUpdatedLong() / 1000;
-                                    long currentTimeStamp = Long.valueOf(currentTimeStampString) / 1000;
 
-                                    double differenceInMin = (((double) currentTimeStamp - previousTimestamp) / 60);
-                                    Logs.show("Comparing previous: " + previousTimestamp + " with current: " + currentTimeStamp);
-                                    Logs.show("Compare result is " + differenceInMin);
-                                    if(differenceInMin * 60 > reuseToleranceSecs){
-                                        toRun.run(null);
-                                    }
-                                    else{
-                                        toRun.run(result);
-                                    }
-                                }
-                                else{
-                                    toRun.run(null);
-                                }
-                            }
-                        });
-                    }
-                    else{
-                        toRun.run(null);
-                    }
-                }
-            });
-        }
+            //update task search status with friend model one, as friend model always hold latest status
+            searchStatus = friendModel.getSearchStatus();
 
-        private void monitorUserIsAlive(String myUserId, String targetUserId, final OneTimeRunnableArgs<Boolean> onAttach){
-            final int[] triggeredCount = {0};
-            pingOnlineRequest = FirebaseDB.monitorUserPing(myUserId, targetUserId, new FirebaseListener() {
-                @Override
-                public void onResult(Object result, com.ffinder.android.enums.Status status) {
-                    if(status == com.ffinder.android.enums.Status.Success){
-                        if(triggeredCount[0] == 0){
-                            triggeredCount[0]++;
-                        }
-                        else{
-                            if(triggeredCount[0] == 1){
-                                publishProgress(SearchStatus.WaitingUserLocation);
-                                triggeredCount[0]++;
-                            }
-                        }
-                        onAttach.run(true);
-                    }
-                    else{
-                        onAttach.run(false);
-                    }
-                }
-            });
-        }
 
-        private void sendRequestLocation(final String myUserId, final String targetUserId, final OneTimeRunnableArgs<LocationModel> onFinish){
-            final boolean[] triggeredBefore = new boolean[1];
-
-            locationOnlineRequest = FirebaseDB.monitorUserLocation(targetUserId, new FirebaseListener<LocationModel>(LocationModel.class) {
+            //timeout, get user latest location model from database
+            FirebaseDB.getUserLocation(targetUserId, new FirebaseListener<LocationModel>(LocationModel.class) {
                 @Override
                 public void onResult(LocationModel result, com.ffinder.android.enums.Status status) {
-                    if(finish) return;
-                    else{
-                        if(!triggeredBefore[0]) {
-                            triggeredBefore[0] = true;
-                            notifyTarget(myUserId, targetUserId);
-                            return;
-                        }
-
-                        if(status == com.ffinder.android.enums.Status.Success && result != null){
-                            onFinish.run(result);
-                        }
-                        else{
-                            onFinish.run(null);
-                        }
+                    if(status == com.ffinder.android.enums.Status.Success && result != null){
+                        resultLocationModel = result;
                     }
-                }
-            });
-        }
 
-        private void notifyTarget(final String myUserId, final String targetUserId){
-            Threadings.runInBackground(new Runnable() {
-                @Override
-                public void run() {
-                    int tries = 2;
-                    while (tries > 0){
-                        if(searchStatus != SearchStatus.WaitingUserRespond || finish){
-                            break;
-                        }
-                        else{
-                            if(tries == 2){
-                                NotificationSender.send(myUserId, targetUserId, FCMMessageType.UpdateLocation,
-                                        NotificationSender.TTL_INSTANT);
-                            }
-                            else{
-                                autoNotifyMe();
-                            }
-                        }
-                        tries--;
-                        Logs.show("Sending notification try left: " + tries);
-                        Threadings.sleep(20 * 1000);
-                    }
-                }
-            });
-        }
+                    //only trigger auto notify when error is waiting user response
+                    boolean shouldAutoNotify = false;
 
-        public void taskTimeout() {
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
+
                     if(searchStatus == SearchStatus.WaitingUserLocation){
-                        autoNotifyMe();
                         setSearchResult(SearchResult.ErrorTimeoutLocationDisabled);
+                        shouldAutoNotify = true;
+                    }
+                    else if(searchStatus == SearchStatus.WaitingUserRespond){
+                        setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
+                        shouldAutoNotify = true;
                     }
                     else if(searchStatus == SearchStatus.CheckingData){
                         setSearchResult(SearchResult.ErrorTimeoutNoConnection);
+                        shouldAutoNotify = false;
                     }
-                    else{
-                        setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
+
+                    if(shouldAutoNotify){
+                        FirebaseDB.autoNotifyMe(userId, targetUserId, new FirebaseListener() {
+                            @Override
+                            public void onResult(Object result, com.ffinder.android.enums.Status status) {
+                                //sendWithUserId one long ttl msg, hopefully user will reply asap or when it has connection
+                                NotificationSender.sendWithUserId(userId, targetUserId,
+                                        FCMMessageType.UpdateLocation,
+                                        NotificationSender.TTL_LONG, msgId,
+                                        new Pair<String, String>("senderToken", myToken));
+                            }
+                        });
                     }
-                }
-            };
 
-            if(resultLocationModel != null && Strings.isEmpty(resultLocationModel.getAddress()) &&
-                    !Strings.isEmpty(resultLocationModel.getLatitude())){
-                geodecodePart(false, runnable);
-            }
-            else{
-                runnable.run();
-            }
-
-        }
-
-        private void autoNotifyMe(){
-            FirebaseDB.autoNotifyMe(userId, targetUserId, new FirebaseListener() {
-                @Override
-                public void onResult(Object result, com.ffinder.android.enums.Status status) {
-                    //send one long ttl msg, hopefully user will reply asap or when it has connection
-                    NotificationSender.send(userId, targetUserId, FCMMessageType.UpdateLocation,
-                            NotificationSender.TTL_LONG);
                 }
             });
         }
 
+
         public void dispose(){
-            if(locationOnlineRequest != null){
-                FirebaseDB.deleteMonitorUserLocation(targetUserId, locationOnlineRequest);
-                locationOnlineRequest = null;
-            }
-
-            if(pingOnlineRequest != null){
-                FirebaseDB.deleteMonitorUserPing(myUserId, targetUserId, pingOnlineRequest);
-                pingOnlineRequest = null;
-            }
-
+            finish = true;
+            disposed = true;
         }
     }
 

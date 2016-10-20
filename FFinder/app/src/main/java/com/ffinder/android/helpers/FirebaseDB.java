@@ -53,6 +53,7 @@ public class FirebaseDB {
         DatabaseReference db = getTable(TableName.users);
         HashMap<String, String> map = new HashMap();
         map.put("token", token);
+        map.put("platform", "android");
         setValue(db.child(userId), map, listener);
     }
 
@@ -123,7 +124,7 @@ public class FirebaseDB {
                             public void onResult(String result, Status status) {
                                 if(status == Status.Success && result != null){
                                     long differenceInSecs = DateTimeUtils.getDifferenceInSecs(keyModel.getInsertAtLong(), Long.valueOf(result));
-                                    if(differenceInSecs > 70 * 60){
+                                    if(differenceInSecs > Constants.KeyExpiredTotalSecs + (10 * 60)){
                                         getTable(TableName.keys).child(key).setValue(toInsertModel, new DatabaseReference.CompletionListener() {
                                             @Override
                                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -176,6 +177,11 @@ public class FirebaseDB {
         checkExist(db.child(targetUserId).child(myUserId), listener);
     }
 
+    public static void getAllMyLinks(String myUserId, final FirebaseListener listener){
+        DatabaseReference db = getTable(TableName.links);
+        getData(db.child(myUserId), listener);
+    }
+
     public static void checkKeyExist(final String userId, final String userKey, final FirebaseListener<KeyModel> listener){
         getSingleData(getTable(TableName.keys).child(userKey), new FirebaseListener<KeyModel>(KeyModel.class) {
             @Override
@@ -210,10 +216,6 @@ public class FirebaseDB {
         setValue(getTable(TableName.locations).child(userId), locationModel, listener);
     }
 
-    public static void respondToPing(String myUserId, String fromUserId, final  FirebaseListener listener){
-        setValue(getTable(TableName.pings).child(myUserId).child(fromUserId), ServerValue.TIMESTAMP, listener);
-    }
-
     public static void getCurrentTimestamp(final String userId, final FirebaseListener<String> listener){
         setValue(getTable(TableName.timestamps).child(userId), ServerValue.TIMESTAMP, new FirebaseListener() {
             @Override
@@ -240,12 +242,6 @@ public class FirebaseDB {
 
     public static void getUserLocation(String targetUserId, final FirebaseListener<LocationModel> listener){
         getSingleData(getTable(TableName.locations).child(targetUserId), listener);
-    }
-
-
-    public static void getAllMyLinks(String myUserId, final FirebaseListener listener){
-        DatabaseReference db = getTable(TableName.links);
-        getData(db.child(myUserId), listener);
     }
 
     public static void setNextAdsCount(String myUserId, int newCount, final FirebaseListener listener){
@@ -291,30 +287,6 @@ public class FirebaseDB {
     public static void getAllProducts(final FirebaseListener<ArrayList<Pair<String, Object>>> listener){
         final DatabaseReference db = getTable(TableName.products);
         getData(db, listener);
-    }
-
-    public static OnlineRequest monitorUserLocation(String targetUserId, final FirebaseListener<LocationModel> listener){
-        OnlineRequest onlineRequest = FirebaseOnlineTracker.get().requestOnline("monitorUserLocation");
-        ValueEventListener valueEventListener = getSingleDataMonitor(getTable(TableName.locations).child(targetUserId), listener);
-        onlineRequest.setValueEventListener(valueEventListener);
-        return onlineRequest;
-    }
-
-    public static OnlineRequest monitorUserPing(String myUserId, String targetUserId, final FirebaseListener listener){
-        OnlineRequest onlineRequest = FirebaseOnlineTracker.get().requestOnline("monitorUserPing");
-        ValueEventListener valueEventListener = getSingleDataMonitor(getTable(TableName.pings).child(targetUserId).child(myUserId), listener);
-        onlineRequest.setValueEventListener(valueEventListener);
-        return onlineRequest;
-    }
-
-    public static void deleteMonitorUserLocation(String targetUserId, OnlineRequest onlineRequest){
-        getTable(TableName.locations).child(targetUserId).removeEventListener(onlineRequest.getValueEventListener());
-        FirebaseOnlineTracker.get().releaseOnline(onlineRequest);
-    }
-
-    public static void deleteMonitorUserPing(String myUserId, String targetUserId, OnlineRequest onlineRequest){
-        getTable(TableName.pings).child(targetUserId).child(myUserId).removeEventListener(onlineRequest.getValueEventListener());
-        FirebaseOnlineTracker.get().releaseOnline(onlineRequest);
     }
 
     private static void checkExist(DatabaseReference ref, final FirebaseListener<Boolean> listener) {

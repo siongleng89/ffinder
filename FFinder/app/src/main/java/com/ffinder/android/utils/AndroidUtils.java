@@ -8,9 +8,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.util.Patterns;
+import android.view.Display;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import com.ffinder.android.R;
 import com.ffinder.android.enums.AlertDialogType;
@@ -29,6 +35,40 @@ import java.util.regex.Pattern;
  * Created by SiongLeng on 1/9/2016.
  */
 public class AndroidUtils {
+
+    public static float getScreenDpHeight(Activity activity){
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics ();
+        display.getMetrics(outMetrics);
+
+        float density  = activity.getResources().getDisplayMetrics().density;
+        float dpHeight = outMetrics.heightPixels / density;
+        float dpWidth  = outMetrics.widthPixels / density;
+        return dpHeight;
+    }
+
+    public static float getScreenDpWidth(Activity activity){
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics ();
+        display.getMetrics(outMetrics);
+
+        float density  = activity.getResources().getDisplayMetrics().density;
+        float dpHeight = outMetrics.heightPixels / density;
+        float dpWidth  = outMetrics.widthPixels / density;
+        return dpWidth;
+    }
+
+    public static int pxToDp(Context context, int px) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp;
+    }
+
+    public static int dpToPx(Context context, int dp) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
+    }
 
     public static boolean validateEditText(EditText editText, TextInputLayout textInputLayout, String emptyMsg){
         if(Strings.isEmpty(editText.getText().toString())){
@@ -153,6 +193,15 @@ public class AndroidUtils {
             }
         }
         return "";
+    }
+
+    public static void setButtonBackground(Context context, View button, int drawable){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            button.setBackground( ContextCompat.getDrawable(context, drawable));
+        }
+        else{
+            button.setBackgroundDrawable( ContextCompat.getDrawable(context, drawable) );
+        }
     }
 
 
@@ -302,5 +351,9 @@ public class AndroidUtils {
         });
 
     }
+
+
+
+
 
 }

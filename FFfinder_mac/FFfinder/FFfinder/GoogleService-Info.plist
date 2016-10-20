@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>679786452242-3hmq0mbmt2pmaj9rqvgdrhslvem7qk6b.apps.googleusercontent.com</string>
+	<string>679786452242-1v5mnrca09kcl1np1t15vj6bidn69dhl.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.679786452242-3hmq0mbmt2pmaj9rqvgdrhslvem7qk6b</string>
+	<string>com.googleusercontent.apps.679786452242-1v5mnrca09kcl1np1t15vj6bidn69dhl</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBl24aXXYQOaUiF3Lu717At54uzGaDd1Ks</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.lightweightstudioapps.FFfinder</string>
+	<string>com.lightweightstudioapps.FFfinderIphone</string>
 	<key>PROJECT_ID</key>
 	<string>ffinder-74ebd</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:679786452242:ios:70280c2c4393fb2d</string>
+	<string>1:679786452242:ios:3dc2f6d01f96bd62</string>
 	<key>DATABASE_URL</key>
 	<string>https://ffinder-74ebd.firebaseio.com</string>
 </dict>

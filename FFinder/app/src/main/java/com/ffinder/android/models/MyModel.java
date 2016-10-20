@@ -36,7 +36,6 @@ public class MyModel implements Serializable {
     private long userKeyGeneratedUnixTime;
     private Context context;
     private ArrayList<FriendModel> friendModels;
-    private ArrayList<MyModelChangedListener> listeners;
     private boolean cancelGenerateKey;
     private boolean firebaseLogon;
 
@@ -46,7 +45,6 @@ public class MyModel implements Serializable {
     public MyModel(Context context) {
         this.context = context;
         load();
-        listeners = new ArrayList();
     }
 
     public String getUserId() {
@@ -63,7 +61,6 @@ public class MyModel implements Serializable {
 
     public void setUserKey(String userKey) {
         this.userKey = userKey;
-        onModelChanged("userKey");
     }
 
     @JsonIgnore
@@ -183,14 +180,6 @@ public class MyModel implements Serializable {
     }
 
 
-    public void addMyModelChangedListener(MyModelChangedListener listener){
-        listeners.add(listener);
-    }
-
-    public void removeMyModelChangedListener(MyModelChangedListener listener){
-        listeners.remove(listener);
-    }
-
     public void regenerateUserKey(final int counter, final RunnableArgs<String> onFinish){
         if(counter == 0){
             cancelGenerateKey = false;
@@ -221,7 +210,8 @@ public class MyModel implements Serializable {
     }
 
     public boolean checkUserKeyValid(){
-        return !(System.currentTimeMillis() / 1000L - userKeyGeneratedUnixTime > (Constants.KeyExpiredTotalSecs) || Strings.isEmpty(userKey));
+        return !(System.currentTimeMillis() / 1000L - userKeyGeneratedUnixTime > (Constants.KeyExpiredTotalSecs)
+                || Strings.isEmpty(userKey));
     }
 
 
@@ -286,11 +276,9 @@ public class MyModel implements Serializable {
                         FriendModel friendModel = new FriendModel();
                         friendModel.setUserId(userId);
                         friendModel.load(context);
-                        addFriendModel(friendModel, false);
+                        addFriendModel(friendModel);
                     }
                 }
-
-                notifyFriendModelsChanged();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -306,7 +294,7 @@ public class MyModel implements Serializable {
                 FriendModel friendModel = new FriendModel();
                 friendModel.setUserId(friendId);
                 friendModel.load(context);
-                addFriendModel(friendModel, false);
+                addFriendModel(friendModel);
 
             }
         } catch (IOException e) {
@@ -314,26 +302,14 @@ public class MyModel implements Serializable {
         }
     }
 
-    public void addFriendModel(FriendModel friendModel, boolean notify){
+    public void addFriendModel(FriendModel friendModel){
         getFriendModels().add(friendModel);
-        friendModel.setFriendModelChangedListener(new FriendModelChangedListener() {
-            @Override
-            public void onChanged() {
-                notifyFriendModelsChanged();
-            }
-        });
-        if(notify){
-            notifyFriendModelsChanged();
-            commitFriendUserIds();
-        }
     }
 
     public void deleteFriend(FriendModel friendModel){
         FriendModel toDeleteModel = getFriendModelById(friendModel.getUserId());
         if(toDeleteModel != null){
             getFriendModels().remove(toDeleteModel);
-            notifyFriendModelsChanged();
-            commitFriendUserIds();
         }
     }
 
@@ -345,19 +321,6 @@ public class MyModel implements Serializable {
             }
         });
     }
-
-    public void notifyFriendModelsChanged(){
-        onModelChanged("friendModels");
-    }
-
-    private void onModelChanged(String property){
-        if(listeners != null){
-            for(MyModelChangedListener listener : listeners){
-                listener.onChanged(this, property);
-            }
-        }
-    }
-
 
 
 }
