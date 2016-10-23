@@ -1,19 +1,17 @@
 package com.ffinder.android.helpers;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.util.Pair;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffinder.android.R;
-import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.*;
-import com.ffinder.android.extentions.LimitedArrayList;
+import com.ffinder.android.extensions.LimitedArrayList;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.LocationModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Vars;
-import com.ffinder.android.utils.*;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,8 +59,9 @@ public class NotificationConsumer {
 
                 String senderId = map.get("senderId");
                 String senderToken = map.get("senderToken");
+                String fromPlatform = map.get("fromPlatform");
 
-                new LocationUpdater(context, senderId, senderToken);
+                new LocationUpdater(context, senderId, fromPlatform, senderToken);
             }
 
             //auto user located notification received,
@@ -96,6 +95,7 @@ public class NotificationConsumer {
                             //only show notification on user system tray if it is from auto notification
                             if(isAutoNotification.equals("1")){
                                 showLocatedNotification(friendModel.getUserId(), friendModel.getName());
+                                FirebaseMessaging.getInstance().unsubscribeFromTopic(senderId);
                             }
                         }
                     });

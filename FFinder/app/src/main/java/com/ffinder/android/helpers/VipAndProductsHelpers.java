@@ -2,19 +2,15 @@ package com.ffinder.android.helpers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.util.Pair;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.SkuDetails;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.databases.FirebaseListener;
-import com.ffinder.android.adapters.VipAdapter;
 import com.ffinder.android.enums.Status;
-import com.ffinder.android.models.MyModel;
 import com.ffinder.android.models.SubscriptionModel;
 import com.ffinder.android.statics.Constants;
-import com.ffinder.android.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +41,8 @@ public class VipAndProductsHelpers implements BillingProcessor.IBillingHandler  
     }
 
     public void isInVipPeriod(final RunnableArgs<Boolean> onResult){
+        //onResult.run(true);
+
         if(subscribed == null){
             refreshIsSubscribed(new Runnable() {
                 @Override

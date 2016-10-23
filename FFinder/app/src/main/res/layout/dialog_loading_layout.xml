@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:background="@drawable/white_rounded_bg"
+                android:padding="20dp">
+
+    <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar2" android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progress_green"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lorem Ipsum..."
+            android:id="@+id/loadingTextView" android:layout_toRightOf="@+id/progressBar2"
+            android:layout_centerVertical="true" android:layout_marginLeft="20dp"
+            android:textColor="@color/colorHighlighted" android:textSize="20sp" android:textStyle="bold"/>
+</RelativeLayout>

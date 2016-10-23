@@ -1,48 +1,58 @@
 package com.ffinder.android;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.*;
 import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
+import com.ffinder.android.absint.activities.IProfileImagePickerListener;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.adapters.IFriendItemListener;
+import com.ffinder.android.absint.controls.INoCreditsListener;
 import com.ffinder.android.absint.controls.ISearchFailedListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.tasks.RequestLocationTaskFragListener;
 import com.ffinder.android.adapters.FriendsAdapter;
 import com.ffinder.android.controls.*;
 import com.ffinder.android.enums.*;
-import com.ffinder.android.helpers.Analytics;
-import com.ffinder.android.helpers.FirebaseDB;
+import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.LocationModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Vars;
 import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.tasks.RequestLocationTaskFrag;
-import com.ffinder.android.utils.*;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class ActivityMain extends MyActivityAbstract implements IFriendItemListener, IFriendsAdapterHolder {
+public class ActivityMain extends MyActivityAbstract implements
+        IFriendItemListener, IFriendsAdapterHolder, IProfileImagePickerListener {
 
     private FragmentNextAdsCd fragmentNextAdsCd;
     private MyModel myModel;
     private Button btnShareKey;
-    private ListView listFriends;
+    private RecyclerView listFriends;
     private RelativeLayout layoutEmptyFriend;
     private FriendsAdapter friendsAdapter;
+    private final int pickImageCode = 100, cropImageCode = 101;
+    private String pickingProfileImageForFriendId;
 
     public ActivityMain() {
     }
@@ -58,17 +68,24 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         addActionToOverflow(getString(R.string.add_new_member_manually_title));
         addActionToOverflow(getString(R.string.settings_activity_title));
 
-        myModel = new MyModel(this);
-        myModel.loginFirebase(0, null);
+        myModel = getMyModel();
 
         btnShareKey = (Button) findViewById(R.id.btnShareKey);
 
         fragmentNextAdsCd = (FragmentNextAdsCd) getSupportFragmentManager().findFragmentById(R.id.nextAdsCdFragment);
         fragmentNextAdsCd.setMyModel(myModel);
 
-        listFriends = (ListView) findViewById(R.id.listFriends);
-        friendsAdapter = new FriendsAdapter(this, R.layout.lvitem_friend, myModel.getFriendModels(), myModel, this);
+        listFriends = (RecyclerView) findViewById(R.id.listFriends);
+        friendsAdapter = new FriendsAdapter(this, myModel.getFriendModels(), this, this, this);
         listFriends.setAdapter(friendsAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setAutoMeasureEnabled(false);
+        listFriends.setLayoutManager(layoutManager);
+        listFriends.setItemAnimator(null);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                layoutManager.getOrientation());
+        listFriends.addItemDecoration(dividerItemDecoration);
         registerForContextMenu(listFriends);
 
         layoutEmptyFriend = (RelativeLayout) findViewById(R.id.layoutEmptyFriendFragment);
@@ -132,27 +149,24 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
 
         switch (actionBarActionType){
             case ShareKey:
-                UserKeyDialog userKeyDialog = new UserKeyDialog(ActivityMain.this, myModel);
-                userKeyDialog.show();
-                break;
-
-        }
-    }
-
-    @Override   //only use for overflow menu
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_add:
-                AddMemberDialog addMemberDialog = new AddMemberDialog(this, this, myModel);
-                addMemberDialog.show();
-                break;
-            case R.id.action_settings:
-                Intent intent = new Intent(this, ActivitySettings.class);
+                Intent intent = new Intent(this, ActivityShareKey.class);
                 startActivity(intent);
                 break;
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public void onOverflowActionClicked(String title) {
+        super.onOverflowActionClicked(title);
+
+        if(title.equals(getString(R.string.add_new_member_manually_title))){
+            Intent intent = new Intent(this, ActivityAddFriend.class);
+            startActivity(intent);
+        }
+        else if(title.equals(getString(R.string.settings_activity_title))){
+            Intent intent = new Intent(this, ActivitySettings.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -165,76 +179,59 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int listPosition = info.position;
-
-        if(item.getTitle().equals(getString(R.string.edit_name_context_menu))){
-            editName(myModel.getFriendModels().get(listPosition));
-        }
-        else if(item.getTitle().equals(getString(R.string.delete_user_context_menu))){
-            deleteUser(myModel.getFriendModels().get(listPosition));
-        }else{
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Bundle extras = intent.getExtras();
         //open apps by clicking share key reminder push notification
         if(extras !=null && extras.containsKey("shareKey")) {
-            UserKeyDialog userKeyDialog = new UserKeyDialog(this, myModel);
-            userKeyDialog.show();
+            Intent intent2 = new Intent(this, ActivityShareKey.class);
+            startActivity(intent2);
         }
 
     }
 
     //auto add user if there is pending add user key
     private void checkHasPendingToAddUser(){
-        Threadings.postRunnable(ActivityMain.this, new Runnable() {
-            @Override
-            public void run() {
-                if(!Strings.isEmpty(Vars.pendingAddUserKey)){
-                    AddMemberDialog addMemberDialog = new AddMemberDialog(
-                            ActivityMain.this, ActivityMain.this, myModel);
-                    addMemberDialog.show();
-                }
-            }
-        });
+        if(!Strings.isEmpty(Vars.pendingAddUserKey)){
+            Intent intent = new Intent(ActivityMain.this, ActivityAddFriend.class);
+            startActivity(intent);
+        }
     }
 
     //reload friends adapter design by checking retained fragments
     private void reloadFriendsDesignByRequestLocationTaskFrags(){
-        FragmentManager fm = getSupportFragmentManager();
+        Threadings.runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                FragmentManager fm = getSupportFragmentManager();
 
-        for(FriendModel friendModel : myModel.getFriendModels()){
-            RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
-                    fm.findFragmentByTag(friendModel.getUserId());
+                for(FriendModel friendModel : getMyModel().getFriendModels()){
+                    RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
+                            fm.findFragmentByTag(friendModel.getUserId());
 
-            friendModel.load(ActivityMain.this);
+                    friendModel.load(ActivityMain.this);
 
-            // If the Fragment is non-null, then it is currently being
-            // retained across a configuration change.
-            if (taskFragment != null) {
-                if(friendModel.getSearchStatus() == SearchStatus.End){
-                    taskFragment.terminate();
-                    getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
+                    // If the Fragment is non-null, then it is currently being
+                    // retained across a configuration change.
+                    if (taskFragment != null) {
+                        if(friendModel.getSearchStatus() == SearchStatus.End){
+                            taskFragment.terminate();
+                            getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
+                        }
+                    }
+                    //check if there is any leftoever stuck search, if there is
+                    //overwrite the search status
+                    else{
+                        if(friendModel.getSearchStatus() != SearchStatus.End){
+                            friendModel.setSearchStatus(SearchStatus.End);
+                            friendModel.save(ActivityMain.this);
+                        }
+                    }
+
                 }
+                ActivityMain.this.updateFriendsListAdapter();
             }
-            //check if there is any leftoever stuck search, if there is
-            //overwrite the search status
-            else{
-                if(friendModel.getSearchStatus() != SearchStatus.End){
-                    friendModel.setSearchStatus(SearchStatus.End);
-                    friendModel.save(ActivityMain.this);
-                }
-            }
-
-        }
-        ActivityMain.this.updateFriendsListAdapter();
+        });
     }
 
     private void createRequestLocationTaskFrag(final FriendModel friendModel){
@@ -320,16 +317,6 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
 
     }
 
-    private void editName(FriendModel friendModel){
-        EditNameDialog editNameDialog = new EditNameDialog(this, this, friendModel, myModel);
-        editNameDialog.show();
-    }
-
-    private void deleteUser(FriendModel friendModel){
-        ConfirmDeleteDialog confirmDeleteDialog = new ConfirmDeleteDialog(this, this, friendModel, myModel);
-        confirmDeleteDialog.show();
-    }
-
     private void checkKnownIssuePhones(){
         boolean notify = Strings.isEmpty(PreferenceUtils.get(this, PreferenceType.DontRemindMeAgainPhoneIssue));
         if(notify){
@@ -350,20 +337,12 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
     }
 
     public void setListeners(){
-        listFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                createRequestLocationTaskFrag(myModel.getFriendModels().get(position));
-            }
-        });
-
-        btnShareKey.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserKeyDialog userKeyDialog = new UserKeyDialog(ActivityMain.this, myModel);
-                userKeyDialog.show();
-            }
-        });
+//        listFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                createRequestLocationTaskFrag(myModel.getFriendModels().get(position));
+//            }
+//        });
 
         registerBroadcastReceiver(BroadcastEvent.RefreshFriend, new RunnableArgs<Intent>() {
             @Override
@@ -371,8 +350,8 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                 Logs.show("User location msg received");
                 Intent intent = this.getFirstArg();
                 final String friendId = intent.getStringExtra("userId");
-                if(myModel.checkFriendExist(friendId)) {
-                    final FriendModel friendModel = myModel.getFriendModelById(friendId);
+                if(getMyModel().checkFriendExist(friendId)) {
+                    final FriendModel friendModel = getMyModel().getFriendModelById(friendId);
                     friendModel.load(ActivityMain.this);
 
                     FragmentManager fm = getSupportFragmentManager();
@@ -389,7 +368,11 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                         fm.beginTransaction().remove(taskFragment).commit();
                     }
 
-                    ActivityMain.this.updateFriendsListAdapter();
+                    ActivityMain.this.updateFriendsListAdapter(friendId);
+                }
+                else{
+                    getMyModel().loadFriend(friendId);
+                    onAddFriend(getMyModel().getFriendModelById(friendId));
                 }
             }
         });
@@ -417,25 +400,32 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
                     friendModel.setSearchStatus(newStatus);
                     friendModel.save(ActivityMain.this);
                 }
-                ActivityMain.this.updateFriendsListAdapter();
+                ActivityMain.this.updateFriendsListAdapter(userId);
             }
 
             @Override
-            public void onUpdateResult(String userId, final LocationModel locationModel,
+            public void onUpdateResult(final String userId, final LocationModel locationModel,
                                        final SearchStatus finalSearchStatus, final SearchResult result) {
 
                 final FriendModel friendModel = myModel.getFriendModelById(userId);
-                friendModel.setLastLocationModel(locationModel);
                 friendModel.setRecentlyFinishSearch(true);
                 friendModel.setSearchStatus(finalSearchStatus);
                 friendModel.setSearchResult(result);
+                friendModel.setSearchStatus(SearchStatus.End);
+
+                //location model could be null if unable to search user
+                if(locationModel != null){
+                    friendModel.setLastLocationModel(locationModel);
+                }
+
                 friendModel.getLastLocationModel().geodecodeCoordinatesIfNeeded(ActivityMain.this, new Runnable() {
                     @Override
                     public void run() {
                         friendModel.save(ActivityMain.this);
-                        ActivityMain.this.updateFriendsListAdapter();
+                        ActivityMain.this.updateFriendsListAdapter(userId);
                     }
                 });
+
 
                 if(!isPaused()){
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(userId);
@@ -448,6 +438,27 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         });
     }
 
+    @Override
+    public void updateFriendsListAdapter(final String friendId) {
+        Threadings.postRunnable(ActivityMain.this, new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<FriendModel> friendModels = getMyModel().getFriendModels();
+                int row = -1;
+                for (int i = 0; i < friendModels.size(); i++){
+                    if(friendModels.get(i).getUserId().equals(friendId)){
+                        row = i;
+                        break;
+                    }
+                }
+
+                if(row >= 0){
+                    friendsAdapter.notifyItemChanged(row);
+                    Logs.show("row changed: " + row);
+                }
+            }
+        });
+    }
 
     //notify friend models changed
     @Override
@@ -455,6 +466,7 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
         Threadings.postRunnable(ActivityMain.this, new Runnable() {
             @Override
             public void run() {
+                friendsAdapter.reset();
                 friendsAdapter.notifyDataSetChanged();
 
                 if(myModel.getNonSelfFriendModelsCount() == 0){
@@ -467,4 +479,115 @@ public class ActivityMain extends MyActivityAbstract implements IFriendItemListe
             }
         });
     }
+
+    //add friend process is delegated in ActivityAddFriend
+    @Override
+    public void onAddFriend(FriendModel friendModel) {
+        updateFriendsListAdapter();
+    }
+
+    @Override
+    public void onDeleteFriend(FriendModel friendModel) {
+        FirebaseDB.deleteLink(getMyModel().getUserId(), friendModel.getUserId(), null);
+        getMyModel().deleteFriend(friendModel);
+        friendModel.delete(this);
+        getMyModel().commitFriendUserIds();
+        updateFriendsListAdapter();
+    }
+
+    @Override
+    public void onEditFriend(FriendModel friendModel, String newName) {
+        FriendModel changingFriendModel = getMyModel().getFriendModelById(friendModel.getUserId());
+        if(changingFriendModel != null){
+            changingFriendModel.setName(newName);
+            changingFriendModel.save(this);
+            getMyModel().sortFriendModels();
+            getMyModel().commitFriendUserIds();
+            updateFriendsListAdapter();
+            FirebaseDB.editLinkName(myModel.getUserId(), changingFriendModel.getUserId(), newName, null);
+        }
+    }
+
+    @Override
+    public void pickImageForFriend(String friendId) {
+        this.pickingProfileImageForFriendId = friendId;
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, pickImageCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch(requestCode){
+            case pickImageCode:
+                if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+                    try{
+                        Uri selectedImage = data.getData();
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA };
+                        Cursor cursor = getContentResolver().query(selectedImage,
+                                filePathColumn, null, null, null);
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String picturePath = cursor.getString(columnIndex);
+                        cursor.close();
+
+                        //crop using image path
+                        performCrop(picturePath);
+
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case cropImageCode:
+                if(resultCode == Activity.RESULT_OK){
+
+                    AndroidUtils.moveProfileImageToPrivateDir(this,
+                            AndroidUtils.getTempImageStorageUri(pickingProfileImageForFriendId),
+                            pickingProfileImageForFriendId);
+
+                    //set to null to let it refresh image
+                    getMyModel().getFriendModelById(pickingProfileImageForFriendId).setHasProfileImage(null);
+                    updateFriendsListAdapter(pickingProfileImageForFriendId);
+                }
+        }
+    }
+
+    private void performCrop(String picUri) {
+        try {
+            //Start Crop Activity
+
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            File f = new File(picUri);
+            Uri contentUri = Uri.fromFile(f);
+
+            cropIntent.setDataAndType(contentUri, "image/*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 280);
+            cropIntent.putExtra("outputY", 280);
+
+            // retrieve data on return
+            cropIntent.putExtra("return-data", false);
+
+            // save temp image
+            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    AndroidUtils.getTempImageStorageUri(pickingProfileImageForFriendId));
+
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, cropImageCode);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+
+        }
+    }
+
 }

@@ -2,7 +2,6 @@ package com.ffinder.android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,9 +10,11 @@ import android.widget.ListView;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.adapters.VipAdapter;
 import com.ffinder.android.enums.AnalyticEvent;
+import com.ffinder.android.enums.OverlayType;
 import com.ffinder.android.helpers.Analytics;
+import com.ffinder.android.helpers.AndroidUtils;
+import com.ffinder.android.helpers.OverlayBuilder;
 import com.ffinder.android.models.SubscriptionModel;
-import com.ffinder.android.utils.*;
 
 import java.util.ArrayList;
 
@@ -98,7 +99,10 @@ public class ActivityVip extends MyActivityAbstract {
                     Analytics.logEvent(AnalyticEvent.Click_Subscribe, subscriptionModel.getSkuDetails().productId);
                 }
                 else{
-                    AndroidUtils.showDialog(ActivityVip.this, "", getString(R.string.manage_subscriptions_introduction), null, null);
+                    OverlayBuilder.build(ActivityVip.this)
+                            .setOverlayType(OverlayType.OkOnly)
+                            .setContent(getString(R.string.manage_subscriptions_introduction))
+                            .show();
                 }
             }
         });

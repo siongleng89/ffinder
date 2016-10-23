@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context="com.ffinder.android.ActivityShareKey" android:background="@color/colorBackground">
+
+    <include layout="@layout/default_toolbar" android:id="@+id/my_toolbar"/>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/my_toolbar">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBackgroundLight" android:paddingTop="30dp" android:paddingLeft="20dp"
+                android:paddingRight="20dp" android:paddingBottom="40dp">
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:gravity="center" android:id="@+id/layoutTitle">
+                <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView3" android:src="@drawable/add_friend_icon2"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Friend/Family By Sharing Your Passcode"
+                        android:id="@+id/textView7"
+                        android:layout_toRightOf="@+id/imageView3" android:textColor="@color/colorHighlighted"
+                        android:layout_centerVertical="true" android:layout_marginLeft="10dp" android:textSize="16sp"/>
+            </RelativeLayout>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="xxxx-xxxx-xxxx"
+                    android:id="@+id/txtYourKey" android:layout_below="@+id/layoutTitle"
+                    android:layout_centerHorizontal="true" android:layout_marginTop="30dp"
+                    android:textColor="@color/colorHighlighted" android:textStyle="bold" android:textSize="25sp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(Expired at xxxxx)"
+                    android:id="@+id/txtExpiredDateTime" android:layout_below="@+id/txtYourKey"
+                    android:layout_centerHorizontal="true" android:textStyle="italic" android:textSize="13sp"
+                    android:textColor="#a6a6a6"/>
+            <com.ffinder.android.extensions.FFTextButton
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/share_title"
+                    android:id="@+id/btnShareKey"
+                    android:layout_marginTop="30dp"
+                    android:layout_centerHorizontal="true"
+                    app:ffBtnColorScheme="green" android:visibility="visible"
+                    android:layout_below="@+id/txtExpiredDateTime"/>
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:layout_below="@+id/btnShareKey"
+                    android:layout_marginTop="30dp" android:id="@+id/layoutExplain">
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:background="@drawable/horizontal_grey_line">
+                </RelativeLayout>
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:layout_marginTop="30dp">
+                    <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/your_key_title"
+                            android:id="@+id/textView27" android:textColor="#979797" android:layout_weight="1"
+                            android:allowUndo="false" android:textSize="12sp"/>
+                    <ImageButton
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/imgButtonTutorial" android:src="@drawable/question_icon"
+                            android:background="@null" android:scaleType="fitCenter" android:layout_marginLeft="10dp"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
+
+</RelativeLayout>
+
+

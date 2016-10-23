@@ -3,10 +3,7 @@ package com.ffinder.android.helpers;
 
 import android.app.Activity;
 import com.aerserv.sdk.*;
-import com.aerserv.sdk.analytics.AerServAnalyticsUtils;
 import com.ffinder.android.absint.helpers.IAdsMediationListener;
-import com.ffinder.android.utils.Logs;
-import com.ffinder.android.utils.RunnableArgs;
 
 import java.util.List;
 

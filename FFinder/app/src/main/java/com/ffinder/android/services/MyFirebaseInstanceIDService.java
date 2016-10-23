@@ -1,14 +1,9 @@
 package com.ffinder.android.services;
 
-import android.util.Log;
-
 import com.ffinder.android.helpers.FirebaseDB;
 import com.ffinder.android.models.MyModel;
-import com.ffinder.android.statics.Constants;
-import com.ffinder.android.utils.RunnableArgs;
-import com.ffinder.android.utils.Strings;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.ffinder.android.helpers.RunnableArgs;
+import com.ffinder.android.helpers.Strings;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 

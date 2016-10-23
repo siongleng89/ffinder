@@ -8,12 +8,12 @@
 
     <include layout="@layout/default_toolbar" android:id="@+id/my_toolbar"/>
 
-    <ListView
-            android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/listFriends" android:layout_below="@+id/my_toolbar"
-            android:layout_above="@+id/linearLayout" android:background="#c8e5bd"
-            android:divider="@drawable/horizontal_green_line"/>
+            android:layout_above="@+id/linearLayout"
+            style="@style/FFListViewStyle"/>
 
 
     <RelativeLayout android:orientation="horizontal"

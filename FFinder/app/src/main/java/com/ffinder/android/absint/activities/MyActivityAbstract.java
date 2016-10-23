@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -15,13 +14,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.*;
 import android.widget.*;
+import com.ffinder.android.MyApplication;
 import com.ffinder.android.R;
 import com.ffinder.android.enums.ActionBarActionType;
 import com.ffinder.android.enums.BroadcastEvent;
 import com.ffinder.android.helpers.Analytics;
+import com.ffinder.android.helpers.AnimateBuilder;
 import com.ffinder.android.helpers.BroadcasterHelper;
-import com.ffinder.android.utils.AndroidUtils;
-import com.ffinder.android.utils.RunnableArgs;
+import com.ffinder.android.models.MyModel;
+import com.ffinder.android.helpers.AndroidUtils;
+import com.ffinder.android.helpers.RunnableArgs;
 
 import java.util.HashMap;
 
@@ -34,6 +36,7 @@ public class MyActivityAbstract extends AppCompatActivity {
     protected boolean paused;
     private LinearLayout menuOverflowLayout;
     private HashMap<BroadcastEvent, BroadcastReceiver> broadcastReceiverHashMap;
+    private MyModel myModel;
 
 
     public MyActivityAbstract() {
@@ -92,6 +95,7 @@ public class MyActivityAbstract extends AppCompatActivity {
 
         View view = getLayoutInflater().inflate(R.layout.top_action_bar, null);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(view);
 
@@ -99,6 +103,11 @@ public class MyActivityAbstract extends AppCompatActivity {
         Toolbar parent =(Toolbar) view.getParent();
         parent.setPadding(0,0,0,0);//for tab otherwise give space in tab
         parent.setContentInsetsAbsolute(0,0);
+    }
+
+    protected void setActionBarTitle(int titleId){
+        TextView txtTitle = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.txtTitle);
+        txtTitle.setText(getString(titleId));
     }
 
     protected void addActionToActionBar(ActionBarActionType actionBarActionType, boolean bigIcon,
@@ -117,6 +126,22 @@ public class MyActivityAbstract extends AppCompatActivity {
 
             case Overflow:
                 drawable = R.drawable.overflow_icon;
+                break;
+
+            case Back:
+                drawable = R.drawable.back_icon;
+                break;
+
+            case OK:
+                drawable = R.drawable.tick_icon;
+                break;
+
+            case Share:
+                drawable = R.drawable.share_icon;
+                break;
+
+            case Reload:
+                drawable = R.drawable.reload_icon;
                 break;
 
         }
@@ -138,7 +163,7 @@ public class MyActivityAbstract extends AppCompatActivity {
 
 
             ImageButton btn = new ImageButton(this);
-            AndroidUtils.setButtonBackground(this, btn, R.drawable.navbar_btn);
+            AndroidUtils.setButtonBackground(this, btn, R.drawable.nav_btn);
 
             Drawable iconImage = ContextCompat.getDrawable(this, drawable);
             btn.setImageDrawable(iconImage);
@@ -198,6 +223,7 @@ public class MyActivityAbstract extends AppCompatActivity {
 
         menuOverflowLayout.addView(textView);
 
+        setActionOverflowButtonListener(textView, title);
     }
 
 
@@ -208,7 +234,10 @@ public class MyActivityAbstract extends AppCompatActivity {
                 onActionButtonClicked(actionBarActionType);
 
                 if(actionBarActionType == ActionBarActionType.Overflow && menuOverflowLayout != null){
-                    menuOverflowLayout.setVisibility(View.VISIBLE);
+                    AnimateBuilder.fadeIn(MyActivityAbstract.this, menuOverflowLayout);
+                }
+                else if(actionBarActionType == ActionBarActionType.Back){
+                    finish();
                 }
 
             }
@@ -218,11 +247,11 @@ public class MyActivityAbstract extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
                     AndroidUtils.setButtonBackground(MyActivityAbstract.this,
-                            imageButton, R.drawable.navbar_btn_ontap);
+                            imageButton, R.drawable.nav_btn_ontap);
                 }
                 else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
                     AndroidUtils.setButtonBackground(MyActivityAbstract.this,
-                            imageButton, R.drawable.navbar_btn);
+                            imageButton, R.drawable.nav_btn);
                 }
                 return false;
             }
@@ -230,7 +259,22 @@ public class MyActivityAbstract extends AppCompatActivity {
 
     }
 
+    private void setActionOverflowButtonListener(final TextView textView,
+                                                 final String title){
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOverflowActionClicked(title);
+            }
+        });
+    }
+
+
     public void onActionButtonClicked(ActionBarActionType actionBarActionType){
+
+    }
+
+    public void onOverflowActionClicked(String title){
 
     }
 
@@ -261,10 +305,27 @@ public class MyActivityAbstract extends AppCompatActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
                 if(menuOverflowLayout != null) menuOverflowLayout.setVisibility(View.GONE);
                 break;
         }
         return super.dispatchTouchEvent(ev);
     }
+
+
+    protected MyModel getMyModel(){
+        if (myModel == null){
+            myModel = ((MyApplication) getApplication()).getMyModel();
+        }
+        return myModel;
+    }
+
+
+
+
+
+
+
+
+
 }

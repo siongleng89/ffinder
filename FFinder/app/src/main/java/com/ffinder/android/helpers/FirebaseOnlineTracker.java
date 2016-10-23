@@ -1,10 +1,8 @@
 package com.ffinder.android.helpers;
 
 import com.ffinder.android.models.OnlineRequest;
-import com.ffinder.android.utils.Logs;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;

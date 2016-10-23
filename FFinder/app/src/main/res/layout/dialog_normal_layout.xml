@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" android:background="@drawable/white_rounded_bg"
+              android:paddingBottom="20dp">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:paddingTop="20dp"
+            android:paddingBottom="20dp" android:paddingLeft="15dp" android:paddingRight="15dp"
+            android:background="@drawable/dialog_normal_title_bg" android:visibility="gone"
+            android:id="@+id/layoutTitle">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Sample Title"
+                android:id="@+id/txtTitle" android:gravity="center" android:textColor="@color/colorHighlighted"
+                android:textSize="18sp"/>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:padding="15dp"
+            android:layout_marginBottom="15dp" android:id="@+id/layoutContent">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lorem ipsum is a sample text that is great."
+                android:id="@+id/txtContent" android:textColor="#7b7a7a" android:textSize="15sp"
+                android:visibility="gone"/>
+    </RelativeLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:paddingLeft="15dp" android:paddingRight="15dp">
+
+        <com.ffinder.android.extensions.FFTextButton android:layout_width="0dp"
+                                                     android:layout_height="wrap_content"
+                                                     android:layout_weight="1" android:visibility="gone"
+                                                     android:id="@+id/btn0"/>
+
+        <com.ffinder.android.extensions.FFTextButton android:layout_width="0dp"
+                                                     android:layout_height="wrap_content"
+                                                     android:layout_weight="1"
+                                                     android:layout_marginLeft="10dp"
+                                                     app:ffBtnColorScheme="grey"
+                                                     android:visibility="gone" android:id="@+id/btn1"/>
+
+    </LinearLayout>
+</LinearLayout>

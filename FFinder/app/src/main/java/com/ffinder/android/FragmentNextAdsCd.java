@@ -18,17 +18,10 @@ import com.ffinder.android.absint.controls.INoCreditsListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.controls.NoCreditsDialog;
-import com.ffinder.android.enums.AnalyticEvent;
-import com.ffinder.android.enums.AnimateType;
-import com.ffinder.android.enums.PreferenceType;
-import com.ffinder.android.enums.Status;
-import com.ffinder.android.helpers.Analytics;
-import com.ffinder.android.helpers.AnimateBuilder;
-import com.ffinder.android.helpers.FirebaseDB;
-import com.ffinder.android.helpers.RestfulService;
+import com.ffinder.android.enums.*;
+import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.tasks.AdsFrag;
-import com.ffinder.android.utils.*;
 
 /**
  * Created by SiongLeng on 30/8/2016.
@@ -249,7 +242,13 @@ public class FragmentNextAdsCd extends Fragment {
     }
 
     private void showAds(){
-        final ProgressDialog dialog = AndroidUtils.loading(getString(R.string.loading), getContext(), null);
+
+
+        final AlertDialog dialog = OverlayBuilder.build(getActivity())
+                .setOverlayType(OverlayType.Loading)
+                .setContent(getString(R.string.loading))
+                .show();
+
         adsFrag.showAds(new Runnable() {
             @Override
             public void run() {

@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.RelativeLayout;
 import com.ffinder.android.ActivityPromo;
 import com.ffinder.android.ActivityVip;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.controls.INoCreditsListener;
+import com.ffinder.android.enums.OverlayType;
+import com.ffinder.android.helpers.OverlayBuilder;
 import com.ffinder.android.models.MyModel;
 
 /**
@@ -20,7 +21,7 @@ public class NoCreditsDialog {
 
     private Activity activity;
     private MyModel myModel;
-    private Button btnWatchAds, btnPromo, btnSubscript, btnQuit;
+    private RelativeLayout layoutWatchAds, layoutPromoCode, layoutSubscribe, layoutQuit;
     private AlertDialog dialog;
     private INoCreditsListener noCreditsListener;
 
@@ -31,35 +32,31 @@ public class NoCreditsDialog {
     }
 
     public void show(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
-        View viewInflated = LayoutInflater.from(activity).inflate(R.layout.dialog_no_credits,
-                (ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content), false);
+        View viewInflated = LayoutInflater.from(activity).inflate(R.layout.dialog_no_credits, null);
 
-        btnWatchAds = (Button) viewInflated.findViewById(R.id.btnWatchAds);
-        btnPromo = (Button) viewInflated.findViewById(R.id.btnPromo);
-        btnSubscript = (Button) viewInflated.findViewById(R.id.btnSubscript);
-        btnQuit = (Button) viewInflated.findViewById(R.id.btnQuit);
+        layoutWatchAds = (RelativeLayout) viewInflated.findViewById(R.id.layoutWatchAds);
+        layoutPromoCode = (RelativeLayout) viewInflated.findViewById(R.id.layoutPromoCode);
+        layoutSubscribe = (RelativeLayout) viewInflated.findViewById(R.id.layoutSubscribe);
+        layoutQuit = (RelativeLayout) viewInflated.findViewById(R.id.layoutQuit);
 
-        builder.setView(viewInflated);
-
-
-        dialog = builder.create();
-        dialog.show();
-
+        dialog = OverlayBuilder.build(activity)
+                        .setOverlayType(OverlayType.CustomView)
+                        .setCustomView(viewInflated)
+                        .show();
 
         setListeners();
     }
 
     public void setListeners(){
-        btnWatchAds.setOnClickListener(new View.OnClickListener() {
+        layoutWatchAds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 noCreditsListener.requestWatchAds();
             }
         });
-        btnPromo.setOnClickListener(new View.OnClickListener() {
+        layoutPromoCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -68,7 +65,7 @@ public class NoCreditsDialog {
                 activity.startActivity(intent);
             }
         });
-        btnSubscript.setOnClickListener(new View.OnClickListener() {
+        layoutSubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -77,7 +74,7 @@ public class NoCreditsDialog {
                 activity.startActivity(intent);
             }
         });
-        btnQuit.setOnClickListener(new View.OnClickListener() {
+        layoutQuit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

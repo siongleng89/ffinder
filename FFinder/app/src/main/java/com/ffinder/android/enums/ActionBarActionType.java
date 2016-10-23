@@ -5,6 +5,6 @@ package com.ffinder.android.enums;
  */
 public enum ActionBarActionType {
 
-    AppIcon, ShareKey, Overflow
+    AppIcon, ShareKey, Overflow, Back, OK, Share, Reload
 
 }

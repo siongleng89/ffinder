@@ -1,6 +1,6 @@
 package com.ffinder.android.enums;
 
-import com.ffinder.android.utils.Strings;
+import com.ffinder.android.helpers.Strings;
 
 /**
  * Created by SiongLeng on 2/9/2016.

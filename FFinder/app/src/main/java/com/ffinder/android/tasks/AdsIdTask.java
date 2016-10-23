@@ -2,13 +2,11 @@ package com.ffinder.android.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 import com.ffinder.android.helpers.FirebaseDB;
-import com.ffinder.android.utils.Strings;
+import com.ffinder.android.helpers.Strings;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.tagmanager.Container;
 
 import java.io.IOException;
 

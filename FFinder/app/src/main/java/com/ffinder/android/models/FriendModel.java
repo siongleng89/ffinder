@@ -1,22 +1,18 @@
 package com.ffinder.android.models;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.ffinder.android.absint.models.FriendModelChangedListener;
-import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.enums.SearchResult;
 import com.ffinder.android.enums.SearchStatus;
 import com.ffinder.android.statics.Vars;
-import com.ffinder.android.utils.Logs;
-import com.ffinder.android.utils.PreferenceUtils;
-import com.ffinder.android.utils.Strings;
+import com.ffinder.android.helpers.Logs;
+import com.ffinder.android.helpers.PreferenceUtils;
+import com.ffinder.android.helpers.Strings;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by SiongLeng on 30/8/2016.
@@ -32,6 +28,8 @@ public class FriendModel {
     private SearchStatus searchStatus;
     private SearchResult searchResult;
     private boolean recentlyFinishSearch;
+    private Bitmap friendProfileImage;
+    private Boolean hasProfileImage;
 
     public FriendModel() {
         searchResult = SearchResult.Normal;
@@ -101,6 +99,24 @@ public class FriendModel {
     @JsonIgnore
     public void setYourName(String yourName) {
         this.yourName = yourName;
+    }
+
+    @JsonIgnore
+    public Bitmap getFriendProfileImage() {
+        return friendProfileImage;
+    }
+
+    @JsonIgnore
+    public void setFriendProfileImage(Bitmap friendProfileImage) {
+        this.friendProfileImage = friendProfileImage;
+    }
+
+    public Boolean getHasProfileImage() {
+        return hasProfileImage;
+    }
+
+    public void setHasProfileImage(Boolean hasProfileImage) {
+        this.hasProfileImage = hasProfileImage;
     }
 
     public LocationModel getLastLocationModel() {

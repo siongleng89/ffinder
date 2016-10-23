@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.statics.Vars;
-import com.ffinder.android.utils.PreferenceUtils;
-import com.ffinder.android.utils.Strings;
+import com.ffinder.android.helpers.PreferenceUtils;
+import com.ffinder.android.helpers.Strings;
 
 import java.io.IOException;
 

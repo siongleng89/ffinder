@@ -1,46 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ActivityPromo">
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".ActivityPromo" android:background="@color/colorBackground" android:focusable="true"
+        android:focusableInTouchMode="true">
 
     <include layout="@layout/default_toolbar" android:id="@+id/my_toolbar"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/input_promo_code_title"
-            android:id="@+id/textView7" android:layout_below="@+id/my_toolbar" android:layout_centerHorizontal="true"
-            android:layout_marginTop="65dp"/>
 
-
-    <android.support.design.widget.TextInputLayout
-            android:id="@+id/promoCodeWrapper"
+    <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/textView7"
-            android:layout_alignLeft="@+id/textView7"
-            android:layout_alignStart="@+id/textView7" android:layout_marginTop="67dp"
-            android:layout_alignRight="@+id/textView7" android:layout_alignEnd="@+id/textView7">
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/my_toolbar">
 
-        <EditText
-                android:id="@+id/editTextPromoCode"
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/promo_code_title"/>
+                android:background="@color/colorBackgroundLight" android:paddingTop="30dp" android:paddingLeft="20dp"
+                android:paddingRight="20dp" android:paddingBottom="40dp">
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:gravity="center">
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView3" android:src="@drawable/promo_icon"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/input_promo_code_title"
+                        android:id="@+id/textView7"
+                        android:layout_toRightOf="@+id/imageView3" android:textColor="@color/colorHighlighted"
+                        android:layout_centerVertical="true" android:layout_marginLeft="10dp" android:textSize="18sp"/>
+            </RelativeLayout>
+            <com.ffinder.android.extensions.TextFieldWrapper
+                    android:id="@+id/newNameWrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    app:wrapperTitle="@string/promo_code_title"
+            />
 
-    </android.support.design.widget.TextInputLayout>
+            <com.ffinder.android.extensions.FFTextButton
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/submit"
+                    android:id="@+id/btnShareKey"
+                    android:layout_marginTop="30dp" android:layout_below="@+id/newNameWrapper"
+                    android:layout_centerHorizontal="true"
+                    app:ffBtnColorScheme="green"/>
+        </RelativeLayout>
+
+    </ScrollView>
 
 
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/submit"
-            android:id="@+id/btnSubmit"
-            android:layout_marginTop="62dp" android:layout_below="@+id/promoCodeWrapper"
-            android:layout_centerHorizontal="true"/>
+
 
 </RelativeLayout>

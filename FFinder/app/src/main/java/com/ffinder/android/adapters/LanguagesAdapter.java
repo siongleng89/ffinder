@@ -20,14 +20,11 @@ public class LanguagesAdapter extends ArrayAdapter<LanguageModel>{
 
     private Context context;
     private List<LanguageModel> languageModels;
-    private MyModel myModel;
 
-    public LanguagesAdapter(Context context, @LayoutRes int resource, @NonNull List<LanguageModel> objects,
-                          MyModel myModel) {
+    public LanguagesAdapter(Context context, @LayoutRes int resource, @NonNull List<LanguageModel> objects) {
         super(context, resource, objects);
         this.context = context;
         this.languageModels = objects;
-        this.myModel = myModel;
     }
 
     @Override
@@ -40,10 +37,11 @@ public class LanguagesAdapter extends ArrayAdapter<LanguageModel>{
             //  song = new HashMap <String, String>();
             mViewHolder = new ViewHolder();
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.lvitem_language, parent, false);
+            convertView = vi.inflate(R.layout.lvitem_single_text, parent, false);
 
-            mViewHolder.txtLanguage = (TextView) convertView.findViewById(R.id.txtLanguage);
-            mViewHolder.radioLanguage = (RadioButton) convertView.findViewById(R.id.radioLanguage);
+            mViewHolder.txtLanguage = (TextView) convertView.findViewById(R.id.textView);
+            mViewHolder.radioLanguage = (RadioButton) convertView.findViewById(R.id.radioButton);
+            mViewHolder.radioLanguage.setVisibility(View.VISIBLE);
 
             convertView.setTag(mViewHolder);
 

@@ -3,13 +3,12 @@ package com.ffinder.android.models;
 import android.content.Context;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ffinder.android.utils.AndroidUtils;
-import com.ffinder.android.utils.RunnableArgs;
-import com.ffinder.android.utils.Strings;
+import com.ffinder.android.helpers.AndroidUtils;
+import com.ffinder.android.helpers.RunnableArgs;
+import com.ffinder.android.helpers.Strings;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

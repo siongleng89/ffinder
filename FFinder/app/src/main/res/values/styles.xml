@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="FFAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+        <!-- CustomView your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -33,7 +33,15 @@
         <item name="android:windowBackground">@drawable/splash_image</item>
     </style>
 
+    <style name="FFListViewStyle">
+        <item name="android:background">@color/colorBackground</item>
+        <item name="android:divider">@drawable/horizontal_green_line</item>
+    </style>
 
+    <style name="FFListViewItemStyle">
+        <item name="android:background">@drawable/listview_bg</item>
+        <item name="android:padding">20dp</item>
+    </style>
 
 
 </resources>

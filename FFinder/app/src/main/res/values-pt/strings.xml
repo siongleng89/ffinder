@@ -132,9 +132,9 @@
 
     <string name="add_new_member_manually_title">Adicionar amigo / família</string>
 
-    <string name="user_key_hint">Chave do usuário (eg. 0123-4567-8901)</string>
-    <string name="member_name_hint">Como você lidar com ele/ela?</string>
-    <string name="your_name_hint">Como é que ele / ela lhe falar ?</string>
+    <string name="user_key_title">Chave do usuário (eg. 0123-4567-8901)</string>
+    <string name="member_name_title">Como você lidar com ele/ela?</string>
+    <string name="your_name_title">Como é que ele / ela lhe falar ?</string>
 
     <string name="no_user_key_msg">Por favor chave de entrada</string>
     <string name="no_member_name_msg">Por favor, nome do membro de entrada</string>
@@ -175,7 +175,7 @@
 
     <string name="btn_share_via_other_apps_text">Compartilhar</string>
 
-    <string name="expired_at_title">expirou no</string>
+    <string name="expired_at_title">expirou no %s</string>
     <string name="minutes_left">(%s minutos restantes)</string>
 
     <string name="regenerating_key_msg">chave de atualização…</string>

@@ -1,25 +1,20 @@
 package com.ffinder.android;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.*;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.AnimateType;
 import com.ffinder.android.enums.Status;
-import com.ffinder.android.helpers.AnimateBuilder;
-import com.ffinder.android.helpers.FirebaseDB;
+import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.tasks.AdsIdTask;
-import com.ffinder.android.utils.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -53,7 +48,7 @@ public class ActivitySetup extends MyActivityAbstract {
 
         setContentView(R.layout.activity_setup);
 
-        myModel = new MyModel(this);
+        myModel = getMyModel();
 
         txtStatus = (TextView) findViewById(R.id.txtStatus);
         setCurrentStatus(currentStatus);

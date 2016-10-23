@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.ffinder.android.ActivityPickProfileImage">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profileImage"
+            android:scaleType="fitCenter"
+            app:riv_corner_radius="20dip"
+            app:riv_mutate_background="true"
+            app:riv_oval="true"
+            android:layout_height="68dp"
+            android:layout_width="68dp" android:src="@drawable/add_friend2_1"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false" android:layout_marginTop="80dp"
+            android:layout_toRightOf="@+id/imageViewProfile"/>
+
+    <com.ffinder.android.extensions.ProfileImageView
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:background="@drawable/profile_image_bg"
+            android:id="@+id/imageViewProfile" android:layout_marginTop="35dp"
+            android:layout_alignBottom="@+id/profileImage">
+    </com.ffinder.android.extensions.ProfileImageView>
+    <include layout="@layout/default_toolbar" android:id="@+id/my_toolbar"/>
+    <ImageView
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:id="@+id/myImageView" android:layout_below="@+id/my_toolbar" android:layout_centerHorizontal="true"
+            android:layout_marginTop="132dp"/>
+
+
+
+</RelativeLayout>

@@ -1,16 +1,15 @@
 package com.ffinder.android.helpers;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.ffinder.android.enums.AnimateType;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.animation.*;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
-
-import static com.ffinder.android.enums.AnimateType.*;
 
 /**
  * Created by sionglengho on 19/10/16.
@@ -61,20 +60,138 @@ public class AnimateBuilder {
         return this;
     }
 
-    public static void fadeIn(Context context, View view){
+    public static void fadeIn(Context context, View view, final Runnable... runnables){
+        if(view.getVisibility() == View.VISIBLE && ViewHelper.getAlpha(view) == 1){
+            if(runnables != null){
+                for(Runnable runnable : runnables){
+                    runnable.run();
+                }
+            }
+            return;
+        }
+
         AnimateBuilder.build(context, view).setAnimateType(AnimateType.alpha)
-                .setValue(1).setDurationMs(300).start();
+                .setValue(1).setDurationMs(300).setFinishCallback(new Runnable() {
+            @Override
+            public void run() {
+                if(runnables != null){
+                    for(Runnable runnable : runnables){
+                        runnable.run();
+                    }
+                }
+            }
+        }).start();
     }
 
-    public static void fadeOut(Context context, View view){
+    public static void fadeOut(Context context, View view, final Runnable... runnables){
+        if(ViewHelper.getAlpha(view) == 0){
+            if(runnables != null){
+                for(Runnable runnable : runnables){
+                    runnable.run();
+                }
+            }
+            return;
+        }
+
         AnimateBuilder.build(context, view).setAnimateType(AnimateType.alpha)
-                .setValue(0).setDurationMs(300).start();
+                .setValue(0).setDurationMs(300).setFinishCallback(new Runnable() {
+            @Override
+            public void run() {
+                if(runnables != null){
+                    for(Runnable runnable : runnables){
+                        runnable.run();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    public static void fadeOutAndSetGone(Context context, final View view, final Runnable... runnables){
+        if(view.getVisibility() == View.GONE){
+            view.clearAnimation();
+            ViewPropertyAnimator.animate(view).setListener(null).cancel();
+            if(runnables != null){
+                for(Runnable runnable : runnables){
+                    runnable.run();
+                }
+            }
+            return;
+        }
+
+        AnimateBuilder.build(context, view).setAnimateType(AnimateType.alpha)
+                .setValue(0).setDurationMs(300).setFinishCallback(new Runnable() {
+            @Override
+            public void run() {
+                view.setVisibility(View.GONE);
+
+                if(runnables != null){
+                    for(Runnable runnable : runnables){
+                        runnable.run();
+                    }
+                }
+            }
+        }).start();
+    }
+
+
+    public static void animateSrcTintColor(int fromColor, int toColor, final ImageView view){
+        if (fromColor == toColor) return;
+
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
+        colorAnimation.setDuration(200); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+
+                view.setColorFilter((int) animator.getAnimatedValue(),
+                        PorterDuff.Mode.SRC_ATOP);
+            }
+
+        });
+        colorAnimation.start();
+    }
+
+    public static void animateBackgroundTintColor(int fromColor, int toColor, final View view){
+        if (fromColor == toColor) return;
+
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
+        colorAnimation.setDuration(200); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                view.getBackground().setColorFilter((int) animator.getAnimatedValue(),
+                        PorterDuff.Mode.SRC_ATOP);
+            }
+
+        });
+        colorAnimation.start();
+    }
+
+    public static void animateTextColor(int fromColor, int toColor, final TextView view){
+        if (fromColor == toColor) return;
+
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
+        colorAnimation.setDuration(200); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                view.setTextColor((int) animator.getAnimatedValue());
+            }
+
+        });
+        colorAnimation.start();
+    }
+
+    public static void stopAllAnimation(View view){
+        view.clearAnimation();
+        ViewPropertyAnimator.animate(view).cancel();
+
     }
 
     public void start(){
 
         view.clearAnimation();
-        ViewPropertyAnimator.animate(view).setListener(null).cancel();
+        ViewPropertyAnimator.animate(view).cancel();
 
         // have to use object animator if wanna use repeat, but will not be able to use finish listener
         if(repeat){
@@ -94,6 +211,9 @@ public class AnimateBuilder {
                     break;
 
             }
+
+
+
 
             anim.setDuration(durationMs);
             anim.setRepeatCount(ObjectAnimator.INFINITE);
@@ -135,7 +255,7 @@ public class AnimateBuilder {
                 viewPropertyAnimator.setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
-
+                        Logs.show("animation start");
                     }
 
                     @Override
@@ -145,7 +265,7 @@ public class AnimateBuilder {
 
                     @Override
                     public void onAnimationCancel(Animator animation) {
-
+                        Logs.show("animation cancel");
                     }
 
                     @Override
@@ -155,6 +275,10 @@ public class AnimateBuilder {
                 });
 
             }
+
+
+            viewPropertyAnimator.start();
+
         }
     }
 

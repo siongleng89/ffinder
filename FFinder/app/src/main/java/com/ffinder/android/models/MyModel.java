@@ -1,23 +1,16 @@
 package com.ffinder.android.models;
 
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
-import com.ffinder.android.absint.models.FriendModelChangedListener;
-import com.ffinder.android.absint.models.MyModelChangedListener;
 import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.enums.Status;
-import com.ffinder.android.helpers.FirebaseDB;
-import com.ffinder.android.helpers.RestfulService;
+import com.ffinder.android.helpers.*;
 import com.ffinder.android.statics.Constants;
 import com.ffinder.android.statics.Vars;
-import com.ffinder.android.utils.*;
-import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
@@ -128,6 +121,12 @@ public class MyModel implements Serializable {
     }
 
     public void loginFirebase(final int count, final RunnableArgs<Boolean> onFinish){
+        if(Strings.isEmpty(getUserId())){
+            Logs.show("Unable to get userid before login");
+            if(onFinish != null) onFinish.run(false);
+            return;
+        }
+
         if(firebaseLogon){
             if(onFinish != null) onFinish.run(true);
             return;
@@ -317,7 +316,7 @@ public class MyModel implements Serializable {
         Collections.sort(getFriendModels(), new Comparator<FriendModel>(){
             public int compare(FriendModel o1, FriendModel o2)
             {
-                return o1.getName().compareTo(o2.getName());
+                return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
             }
         });
     }

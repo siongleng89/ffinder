@@ -10,7 +10,7 @@ import com.ffinder.android.R;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.PhoneBrand;
 import com.ffinder.android.enums.PreferenceType;
-import com.ffinder.android.utils.PreferenceUtils;
+import com.ffinder.android.helpers.PreferenceUtils;
 
 /**
  * Created by SiongLeng on 19/9/2016.

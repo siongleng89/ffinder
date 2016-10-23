@@ -15,9 +15,6 @@ import com.ffinder.android.enums.Status;
 import com.ffinder.android.models.AutoNotificationModel;
 import com.ffinder.android.models.LocationModel;
 import com.ffinder.android.models.MyModel;
-import com.ffinder.android.utils.Logs;
-import com.ffinder.android.utils.RunnableArgs;
-import com.ffinder.android.utils.Strings;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -32,16 +29,20 @@ import java.util.ArrayList;
 public class LocationUpdater implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    private static long lastLastUpdatedMiliSecs;
     private GoogleApiClient googleApiClient;
     private Context context;
     private MyModel myModel;
     private String fromUserId;
     private String fromUserToken;
+    private String fromPlatform;
 
-    public LocationUpdater(Context context, String fromUserId, String fromUserToken) {
+
+    public LocationUpdater(Context context, String fromUserId, String fromPlatform, String fromUserToken) {
         this.context = context;
         this.fromUserId = fromUserId;
         this.fromUserToken = fromUserToken;
+        this.fromPlatform = fromPlatform;
         this.myModel = new MyModel(context);
 
         run();
@@ -116,7 +117,8 @@ public class LocationUpdater implements
 
     private void replyAliveMsg(String myUserId, String toUserToken){
         NotificationSender.sendWithToken(myUserId, toUserToken,
-                FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT, null);
+                FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT, null,
+                fromPlatform);
     }
 
     private void locationSuccessfullyRetrieved(final String latitude, final String longitude){
@@ -131,7 +133,7 @@ public class LocationUpdater implements
         if(!Strings.isEmpty(fromUserToken)){
             NotificationSender.sendWithToken(myModel.getUserId(), fromUserToken,
                     FCMMessageType.UserLocated, NotificationSender.TTL_INSTANT,
-                    null,
+                    null, fromPlatform,
                     new Pair<String, String>("latitude", latitude),
                     new Pair<String, String>("longitude", longitude),
                     //is auto notificaiton decide whether show push notification on user tray
@@ -139,38 +141,25 @@ public class LocationUpdater implements
 
         }
 
-        //now we can slowly update firebase
-        myModel.loginFirebase(0, new RunnableArgs<Boolean>() {
-            @Override
-            public void run() {
-                if(this.getFirstArg()){     //login success
-                    FirebaseDB.updateLocation(myModel.getUserId(), locationModel, new FirebaseListener() {
-                        @Override
-                        public void onResult(Object result, Status status) {
-                            if(status == Status.Success){
-                                FirebaseDB.getAutoNotifyList(myModel.getUserId(), new FirebaseListener<ArrayList<AutoNotificationModel>>(AutoNotificationModel.class) {
-                                    @Override
-                                    public void onResult(ArrayList<AutoNotificationModel> result, Status status) {
-                                        if(status == Status.Success && result != null){
-                                            for(AutoNotificationModel autoNotificationModel : result){
-                                                NotificationSender.sendWithUserId(myModel.getUserId(),
-                                                        autoNotificationModel.getWaitingUserId(),
-                                                        FCMMessageType.UserLocated, NotificationSender.TTL_LONG,
-                                                        null,
-                                                        new Pair<String, String>("latitude", latitude),
-                                                        new Pair<String, String>("longitude", longitude),
-                                                        new Pair<String, String>("isAutoNotification", "1"));
-                                            }
-                                            FirebaseDB.clearAllAutoNotification(myModel.getUserId());
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-            }
-        });
+        long current = System.currentTimeMillis();
+        //five seconds window, make sure dont keep sending
+        if(current - lastLastUpdatedMiliSecs > 1000 * 5){
+            lastLastUpdatedMiliSecs = current;
+
+            //send to those waiting auto notificaiton my userid topic subscribers
+            NotificationSender.sendToTopic(myModel.getUserId(),
+                    myModel.getUserId(),
+                    FCMMessageType.UserLocated, NotificationSender.TTL_LONG,
+                    null,
+                    new Pair<String, String>("latitude", latitude),
+                    new Pair<String, String>("longitude", longitude),
+                    new Pair<String, String>("isAutoNotification", "1"));
+
+            Logs.show("Send to topic");
+        }
+
+
+
 
 
 

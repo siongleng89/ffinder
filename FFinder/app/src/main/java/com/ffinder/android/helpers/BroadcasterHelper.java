@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.util.Pair;
 import com.ffinder.android.enums.BroadcastEvent;
-import com.ffinder.android.utils.RunnableArgs;
 
 /**
  * Created by sionglengho on 7/10/16.

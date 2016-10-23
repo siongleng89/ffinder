@@ -1,16 +1,14 @@
 package com.ffinder.android;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.adapters.SettingsAdapter;
-import com.ffinder.android.controls.LanguagesDialog;
+import com.ffinder.android.enums.ActionBarActionType;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.models.SettingsModel;
 
@@ -27,16 +25,14 @@ public class ActivitySettings extends MyActivityAbstract {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setTitle(R.string.settings_activity_title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        enableCustomActionBar();
+        setActionBarTitle(R.string.settings_activity_title);
+        addActionToActionBar(ActionBarActionType.Back, false, true);
 
         myModel = new MyModel(this);
         populateSettingsModel();
         listViewSettings = (ListView) findViewById(R.id.listViewSettings);
-        settingsAdapter = new SettingsAdapter(this, R.layout.lvitem_setting, settingsModels, myModel);
+        settingsAdapter = new SettingsAdapter(this, R.layout.lvitem_single_text, settingsModels, myModel);
         listViewSettings.setAdapter(settingsAdapter);
 
         setListeners();
@@ -67,8 +63,8 @@ public class ActivitySettings extends MyActivityAbstract {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SettingsModel settingsModel = settingsModels.get(position);
                 if(settingsModel.getTitle().equals(getString(R.string.settings_item_language_title))){
-                    LanguagesDialog languagesDialog = new LanguagesDialog(ActivitySettings.this, myModel);
-                    languagesDialog.show();
+                    Intent intent = new Intent(ActivitySettings.this, ActivityLanguage.class);
+                    startActivity(intent);
                 }
                 else if(settingsModel.getTitle().equals(getString(R.string.vip_title))){
                     Intent intent = new Intent(ActivitySettings.this, ActivityVip.class);

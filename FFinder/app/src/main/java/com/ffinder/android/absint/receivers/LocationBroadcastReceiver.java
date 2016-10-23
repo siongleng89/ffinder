@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import com.ffinder.android.helpers.LocationUpdater;
-import com.ffinder.android.models.MyModel;
-import com.ffinder.android.utils.RunnableArgs;
 
 /**
  * Created by SiongLeng on 21/9/2016.
  */
+
+//on gps/network changed
 public class LocationBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -28,7 +28,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
         } catch(Exception ex) {}
 
         if(network_enabled) {
-            new LocationUpdater(context, null, null);
+            new LocationUpdater(context, null, null, null);
         }
 
     }

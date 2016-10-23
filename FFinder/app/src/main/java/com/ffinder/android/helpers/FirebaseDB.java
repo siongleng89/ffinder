@@ -2,17 +2,11 @@ package com.ffinder.android.helpers;
 
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
-import com.ffinder.android.R;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.enums.Status;
-import com.ffinder.android.models.AutoNotificationModel;
-import com.ffinder.android.models.KeyModel;
-import com.ffinder.android.models.LocationModel;
-import com.ffinder.android.models.OnlineRequest;
+import com.ffinder.android.models.*;
 import com.ffinder.android.statics.Constants;
-import com.ffinder.android.utils.DateTimeUtils;
-import com.ffinder.android.utils.Strings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -51,10 +45,10 @@ public class FirebaseDB {
 
     public static void saveNewUser(final String userId, String token, final FirebaseListener listener){
         DatabaseReference db = getTable(TableName.users);
-        HashMap<String, String> map = new HashMap();
-        map.put("token", token);
-        map.put("platform", "android");
-        setValue(db.child(userId), map, listener);
+        UserModel userModel = new UserModel();
+        userModel.setToken(token);
+        userModel.setPlatform("android");
+        setValue(db.child(userId), userModel, listener);
     }
 
     public static void getUserIdByIdentifier(String identifier, final FirebaseListener<String> listener){
@@ -69,31 +63,9 @@ public class FirebaseDB {
         setValue(db.child(identifier).child("userId"), userId, listener);
     }
 
-    public static void getUserToken(String userId, final FirebaseListener<String> listener){
+    public static void getUserData(String userId, final FirebaseListener<UserModel> listener){
         DatabaseReference db = getTable(TableName.users);
-        getSingleData(db.child(userId).child("token"), listener);
-    }
-
-    public static void autoNotifyMe(String myUserId, String targetUserId, final FirebaseListener listener){
-        AutoNotificationModel autoNotificationModel = new AutoNotificationModel();
-        autoNotificationModel.setWaitingUserId(myUserId);
-        DatabaseReference db = getTable(TableName.autoNotifications);
-        setValue(db.child(targetUserId).child(myUserId), autoNotificationModel, listener);
-    }
-
-    public static void removeAutoNotify(String myUserId, String senderUserId){
-        DatabaseReference db = getTable(TableName.autoNotifications);
-        setValue(db.child(myUserId).child(senderUserId), null, null);
-    }
-
-    public static void getAutoNotifyList(String myUserId, FirebaseListener<ArrayList<AutoNotificationModel>> listener){
-        DatabaseReference db = getTable(TableName.autoNotifications);
-        getData(db.child(myUserId), listener);
-    }
-
-    public static void clearAllAutoNotification(String myUserId){
-        DatabaseReference db = getTable(TableName.autoNotifications);
-        setValue(db.child(myUserId), null, null);
+        getSingleData(db.child(userId), listener);
     }
 
     public static void updateMyToken(String myUserId, String newToken){

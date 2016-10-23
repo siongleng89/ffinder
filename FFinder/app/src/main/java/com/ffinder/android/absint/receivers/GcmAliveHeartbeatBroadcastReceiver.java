@@ -4,14 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import com.ffinder.android.enums.FCMMessageType;
-import com.ffinder.android.helpers.NotificationConsumer;
-import com.ffinder.android.services.GcmAliveHeartbeatService;
 import com.ffinder.android.services.HandoffToNotificationConsumerIntentService;
-import com.ffinder.android.utils.Strings;
-import com.ffinder.android.utils.Threadings;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by SiongLeng on 27/9/2016.

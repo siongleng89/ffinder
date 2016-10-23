@@ -3,6 +3,7 @@ package com.ffinder.android.absint.databases;
 import android.support.annotation.NonNull;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ffinder.android.enums.Status;
+import com.ffinder.android.helpers.Logs;
 import com.google.firebase.database.DatabaseError;
 
 /**
@@ -32,6 +33,7 @@ public abstract class FirebaseListener<T> {
 
     public void onResult(DatabaseError databaseError){
         if(databaseError != null){
+            Logs.show(databaseError.getMessage());
             onResult(null, Status.Failed);
         }
         else{

@@ -3,24 +3,14 @@ package com.ffinder.android.services;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v4.content.WakefulBroadcastReceiver;
 import com.ffinder.android.absint.receivers.GcmAliveHeartbeatBroadcastReceiver;
-import com.ffinder.android.enums.FCMMessageType;
-import com.ffinder.android.helpers.NotificationConsumer;
-import com.ffinder.android.statics.Constants;
-import com.ffinder.android.utils.Logs;
-import com.ffinder.android.utils.Strings;
-import com.ffinder.android.utils.Threadings;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.ffinder.android.helpers.Logs;
 
 /**
  * Created by SiongLeng on 18/9/2016.

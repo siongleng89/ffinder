@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:padding="15dp">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:padding="20dp"
+                android:background="@drawable/white_rounded_bg">
 
     <TextView
             android:layout_width="wrap_content"
@@ -10,29 +11,96 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/ran_out_free_search_msg"
             android:id="@+id/textView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-            android:gravity="center"/>
+            android:gravity="center" android:textColor="@color/colorHighlighted" android:textStyle="bold"
+            android:textSize="17sp"/>
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_below="@+id/textView"
-            android:gravity="center_horizontal" android:layout_marginTop="20dp">
-        <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="120dp"
-                android:layout_height="140dp"
-                android:text="@string/btn_watch_ads_earn_credits_text"
-                android:id="@+id/btnWatchAds" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
-        <Button style="?android:attr/buttonStyleSmall" android:layout_width="120dp" android:layout_height="140dp"
-                android:text="@string/btn_input_promo_code_earn_credits_text" android:id="@+id/btnPromo"
-                android:layout_alignParentTop="true" android:layout_toRightOf="@+id/btnWatchAds"
-                android:layout_toEndOf="@+id/btnWatchAds"/>
-        <Button style="?android:attr/buttonStyleSmall" android:layout_width="120dp" android:layout_height="140dp"
-                android:text="@string/btn_subscript_unlimited_searches_text" android:id="@+id/btnSubscript"
-                android:layout_below="@+id/btnWatchAds" android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
-        <Button style="?android:attr/buttonStyleSmall" android:layout_width="120dp" android:layout_height="140dp"
-                android:text="@string/btn_maybe_next_time_text" android:id="@+id/btnQuit"
-                android:layout_below="@+id/btnWatchAds" android:layout_alignRight="@+id/btnPromo"
-                android:layout_alignEnd="@+id/btnPromo"/>
+            android:layout_height="wrap_content" android:layout_below="@+id/textView" android:layout_marginTop="15dp">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/layoutUp" android:gravity="bottom"
+                android:divider="@drawable/vertical_grey_line" android:showDividers="middle">
+            <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1"
+                    android:layout_marginRight="10dp" android:paddingTop="10dp" android:id="@+id/layoutWatchAds">
+                <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/btn_watch_ads_earn_credits_text"
+                        android:id="@+id/textView8" android:layout_centerVertical="true" android:gravity="center"
+                        android:textColor="@color/colorHighlighted" android:layout_marginRight="10dp"
+                        android:textSize="13sp"/>
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnWatchAds"
+                        android:src="@drawable/watch_ads_illustration"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toRightOf="@+id/textView8" android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true" android:scaleType="fitEnd" android:background="@null"
+                        android:layout_marginRight="10dp" android:clickable="false" android:focusable="false"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent" android:layout_weight="1" android:gravity="left"
+                    android:layout_marginLeft="10dp" android:id="@+id/layoutPromoCode">
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:id="@+id/btnPromo"
+                             android:layout_alignParentTop="true"
+                             android:layout_toEndOf="@+id/btnWatchAds" android:src="@drawable/promo_code_illustration"
+                             android:background="@null"
+                             android:layout_marginLeft="10dp" android:layout_alignParentBottom="true"
+                             android:focusable="false" android:clickable="false"/>
+                <TextView android:layout_width="60dp" android:layout_height="wrap_content"
+                          android:text="@string/btn_input_promo_code_earn_credits_text"
+                          android:id="@+id/textView9" android:layout_centerVertical="true" android:gravity="center"
+                          android:textColor="@color/colorHighlighted"
+                          android:layout_alignParentEnd="true" android:layout_marginLeft="10dp"
+                          android:textSize="13sp"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/layoutDown"
+                android:showDividers="middle" android:divider="@drawable/vertical_grey_line"
+                android:layout_below="@+id/layoutSeparator">
+            <RelativeLayout android:layout_width="0dp" android:layout_height="fill_parent"
+                            android:layout_weight="0.5" android:id="@+id/layoutSubscribe">
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:text="@string/btn_subscript_unlimited_searches_text" android:id="@+id/btnSubscript"
+                             android:background="@null" android:src="@drawable/subscribe_illustration"
+                             android:layout_alignParentRight="false" android:layout_marginRight="10dp"
+                             android:layout_marginTop="20dp" android:paddingBottom="10dp"
+                             android:layout_toRightOf="@+id/textView25" android:scaleType="fitEnd"
+                             android:layout_alignParentEnd="true" android:clickable="false" android:focusable="false"/>
+                <TextView android:layout_width="60dp" android:layout_height="wrap_content"
+                          android:text="@string/btn_subscript_unlimited_searches_text"
+                          android:id="@+id/textView25" android:layout_centerVertical="true" android:gravity="center"
+                          android:textColor="@color/colorHighlighted" android:layout_marginRight="10dp"
+                          android:textSize="13sp"/>
+            </RelativeLayout>
+            <RelativeLayout android:layout_width="0dp" android:layout_height="fill_parent"
+                            android:layout_weight="0.5" android:id="@+id/layoutQuit">
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:text="@string/btn_maybe_next_time_text" android:id="@+id/btnQuit"
+                             android:src="@drawable/maybe_next_time_illustration" android:background="@null"
+                             android:layout_marginTop="10dp" android:paddingBottom="10dp" android:clickable="false"
+                             android:focusable="false"/>
+                <TextView android:layout_width="60dp" android:layout_height="wrap_content"
+                          android:text="@string/btn_maybe_next_time_text"
+                          android:id="@+id/textView26" android:layout_centerVertical="true" android:gravity="center"
+                          android:textColor="@color/colorHighlighted"
+                          android:layout_alignParentEnd="true" android:layout_marginLeft="10dp"
+                          android:textSize="13sp"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:layout_below="@+id/layoutUp"
+                android:id="@+id/layoutSeparator" android:background="@drawable/horizontal_grey_line">
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

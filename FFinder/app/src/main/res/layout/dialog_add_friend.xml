@@ -27,7 +27,7 @@
                     android:id="@+id/txtError" android:textColor="#db0303"
                     android:layout_marginBottom="10dp" android:visibility="gone"/>
             <android.support.design.widget.TextInputLayout
-                    android:id="@+id/keyWrapper"
+                    android:id="@+id/newNameWrapper"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -38,14 +38,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textFilter|textNoSuggestions|number"
-                        android:hint="@string/user_key_hint"/>
+                        android:hint="@string/user_key_title"/>
 
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                     android:id="@+id/memberNameWrapper"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/keyWrapper" android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/newNameWrapper" android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp">
 
                 <EditText
@@ -53,7 +53,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textFilter|textNoSuggestions"
-                        android:hint="@string/member_name_hint"/>
+                        android:hint="@string/member_name_title"/>
 
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
@@ -68,7 +68,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textFilter|textNoSuggestions"
-                        android:hint="@string/your_name_hint"/>
+                        android:hint="@string/your_name_title"/>
 
             </android.support.design.widget.TextInputLayout>
             <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -152,6 +152,16 @@
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
+    <RelativeLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp" android:background="#123456" android:layout_below="@+id/scrollView3"
+            android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:padding="30dp">
+        <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/imageView4" android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" android:src="@drawable/map_btn_icon"/>
+    </RelativeLayout>
 
 
 </RelativeLayout>

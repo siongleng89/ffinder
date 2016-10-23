@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:indeterminate="true"
-                android:indeterminateDrawable="@drawable/progress" android:id="@+id/progressBar"/>
+                android:indeterminateDrawable="@drawable/progress_white" android:id="@+id/progressBar"/>
 
 
         <TextView

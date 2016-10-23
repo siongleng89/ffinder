@@ -4,7 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import com.ffinder.android.absint.receivers.GcmAliveHeartbeatBroadcastReceiver;
 import com.ffinder.android.helpers.NotificationConsumer;
-import com.ffinder.android.utils.Threadings;
+import com.ffinder.android.helpers.Threadings;
 
 import java.util.HashMap;
 import java.util.Map;

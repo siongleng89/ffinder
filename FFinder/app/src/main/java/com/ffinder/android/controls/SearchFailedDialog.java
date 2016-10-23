@@ -1,18 +1,13 @@
 package com.ffinder.android.controls;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ffinder.android.ActivityKnownIssues;
@@ -20,11 +15,8 @@ import com.ffinder.android.R;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.controls.ISearchFailedListener;
 import com.ffinder.android.enums.AnalyticEvent;
-import com.ffinder.android.enums.PhoneBrand;
-import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.enums.SearchResult;
 import com.ffinder.android.helpers.Analytics;
-import com.ffinder.android.utils.PreferenceUtils;
 
 /**
  * Created by SiongLeng on 20/9/2016.

@@ -1,26 +1,18 @@
 package com.ffinder.android;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
-import com.ffinder.android.adapters.SettingsAdapter;
-import com.ffinder.android.controls.LanguagesDialog;
+import com.ffinder.android.enums.ActionBarActionType;
+import com.ffinder.android.enums.OverlayType;
 import com.ffinder.android.enums.PhoneBrand;
-import com.ffinder.android.models.MyModel;
-import com.ffinder.android.models.SettingsModel;
-import com.ffinder.android.utils.AndroidUtils;
+import com.ffinder.android.helpers.AndroidUtils;
+import com.ffinder.android.helpers.OverlayBuilder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ActivityKnownIssues extends MyActivityAbstract {
 
@@ -32,13 +24,9 @@ public class ActivityKnownIssues extends MyActivityAbstract {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_known_issues);
-
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setTitle(R.string.known_issues_title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        enableCustomActionBar();
+        setActionBarTitle(R.string.known_issues_title);
+        addActionToActionBar(ActionBarActionType.Back, false, true);
 
         populateKnownIssues();
         listViewKnownIssues = (ListView) findViewById(R.id.lvKnownIssues);
@@ -46,15 +34,6 @@ public class ActivityKnownIssues extends MyActivityAbstract {
         listViewKnownIssues.setAdapter(arrayAdapter);
 
         setListeners();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void populateKnownIssues(){
@@ -82,7 +61,11 @@ public class ActivityKnownIssues extends MyActivityAbstract {
                     msg = getString(R.string.issue_fix_sony);
                 }
 
-                AndroidUtils.showDialog(ActivityKnownIssues.this, "", msg, null, null);
+                OverlayBuilder.build(ActivityKnownIssues.this)
+                        .setOverlayType(OverlayType.OkOnly)
+                        .setContent(msg)
+                        .show();
+
             }
         });
     }

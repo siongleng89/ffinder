@@ -2,7 +2,7 @@ package com.ffinder.android.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ffinder.android.utils.Strings;
+import com.ffinder.android.helpers.Strings;
 
 import java.util.ArrayList;
 

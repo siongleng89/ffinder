@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FFTextButton">
+        <attr name="ffBtnColorScheme" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="TextFieldWrapper">
+        <attr name="wrapperTitle" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="ButtonWhite">
+        <attr name="innerPaddingTop" format="dimension" />
+        <attr name="innerPaddingLeft" format="dimension" />
+        <attr name="innerPaddingRight" format="dimension" />
+        <attr name="innerPaddingBottom" format="dimension" />
+        <attr name="innerPadding" format="dimension" />
+        <attr name="imageSrc" format="reference" />
+    </declare-styleable>
+</resources>

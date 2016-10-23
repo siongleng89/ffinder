@@ -3,8 +3,6 @@ package com.ffinder.android.helpers;
 import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.statics.Constants;
-import com.ffinder.android.utils.Logs;
-import com.ffinder.android.utils.Threadings;
 import com.firebase.client.utilities.Pair;
 
 import javax.net.ssl.HttpsURLConnection;

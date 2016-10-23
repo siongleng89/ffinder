@@ -41,9 +41,9 @@ public class SettingsAdapter extends ArrayAdapter<SettingsModel> {
             //  song = new HashMap <String, String>();
             mViewHolder = new ViewHolder();
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.lvitem_setting, parent, false);
+            convertView = vi.inflate(R.layout.lvitem_single_text, parent, false);
 
-            mViewHolder.txtItem = (TextView) convertView.findViewById(R.id.txtItem);
+            mViewHolder.textView = (TextView) convertView.findViewById(R.id.textView);
 
             convertView.setTag(mViewHolder);
 
@@ -57,7 +57,7 @@ public class SettingsAdapter extends ArrayAdapter<SettingsModel> {
 
     private void updateDesign(View convertView, SettingsModel settingsModel){
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        viewHolder.txtItem.setText(settingsModel.getTitle());
+        viewHolder.textView.setText(settingsModel.getTitle());
     }
 
 
@@ -68,7 +68,7 @@ public class SettingsAdapter extends ArrayAdapter<SettingsModel> {
     }
 
     static class ViewHolder {
-        private TextView txtItem;
+        private TextView textView;
     }
 
 }

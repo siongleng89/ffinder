@@ -1,12 +1,9 @@
 package com.ffinder.android.helpers;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.preference.PreferenceManager;
 import com.ffinder.android.models.UserInfoModel;
-import com.ffinder.android.utils.Strings;
 
 import java.util.Locale;
 
@@ -45,7 +42,7 @@ public class LocaleHelper {
         }
     }
 
-    private static void persist(Context context, String language) {
+    public static void persist(Context context, String language) {
         UserInfoModel userInfoModel = new UserInfoModel();
         userInfoModel.load(context);
         userInfoModel.setLanguage(language);

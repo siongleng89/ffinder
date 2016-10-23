@@ -2,15 +2,12 @@ package com.ffinder.android;
 
 import android.app.Application;
 import com.ffinder.android.helpers.Analytics;
-import com.ffinder.android.helpers.FirebaseOnlineTracker;
-import com.ffinder.android.helpers.LocaleHelper;
 import com.ffinder.android.helpers.VipAndProductsHelpers;
-import com.ffinder.android.utils.Logs;
-import com.ffinder.android.utils.Threadings;
+import com.ffinder.android.models.MyModel;
+import com.ffinder.android.helpers.Logs;
+import com.ffinder.android.helpers.Threadings;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * Created by SiongLeng on 4/9/2016.
@@ -19,11 +16,12 @@ public class MyApplication extends Application {
 
     private Tracker mTracker;
     private VipAndProductsHelpers vipAndProductsHelpers;
+    private MyModel myModel;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        LocaleHelper.onCreate(this);
+
         Logs.registerEventCatchingIFDebug();
         Threadings.setMainTreadId();
     }
@@ -53,7 +51,15 @@ public class MyApplication extends Application {
         return vipAndProductsHelpers;
     }
 
-
+    synchronized public MyModel getMyModel() {
+        if (myModel == null) {
+            myModel = new MyModel(this);
+            myModel.load();
+            myModel.loadAllFriendModels();
+            myModel.loginFirebase(0, null);
+        }
+        return myModel;
+    }
 
 
 

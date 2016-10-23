@@ -3,18 +3,17 @@ package com.ffinder.android;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
+import com.ffinder.android.enums.ActionBarActionType;
 import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.helpers.Analytics;
-import com.ffinder.android.utils.Strings;
+import com.ffinder.android.helpers.Strings;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 
@@ -27,10 +26,10 @@ public class ActivityMap extends MyActivityAbstract implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setTitle(R.string.map_activity_title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        enableCustomActionBar();
+        setActionBarTitle(R.string.map_activity_title);
+        addActionToActionBar(ActionBarActionType.Back, false, true);
+
 
         Bundle bundle = this.getIntent().getExtras();
         username = bundle.getString("username");

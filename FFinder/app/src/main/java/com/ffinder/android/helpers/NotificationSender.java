@@ -4,11 +4,9 @@ import android.util.Pair;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.FCMMessageType;
 import com.ffinder.android.enums.Status;
+import com.ffinder.android.models.UserModel;
 import com.ffinder.android.statics.Constants;
 import com.ffinder.android.statics.Vars;
-import com.ffinder.android.utils.Logs;
-import com.ffinder.android.utils.Strings;
-import com.ffinder.android.utils.Threadings;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -32,11 +30,13 @@ public class NotificationSender {
     public static void sendWithUserId(final String myUserId, final String targetUserId,
                                       final FCMMessageType fcmMessageType,
                                       final int ttl, final String msgId, final Pair<String, String>... appendsToMapPairs){
-        FirebaseDB.getUserToken(targetUserId, new FirebaseListener<String>(String.class) {
+        FirebaseDB.getUserData(targetUserId, new FirebaseListener<UserModel>(UserModel.class) {
             @Override
-            public void onResult(String token, Status status) {
-                if(status == Status.Success && !Strings.isEmpty(token)){
-                    sendFcm(myUserId, token, fcmMessageType, ttl, msgId, appendsToMapPairs);
+            public void onResult(UserModel userModel, Status status) {
+                if(status == Status.Success && userModel != null){
+                    sendFcm(myUserId, userModel.getToken(), fcmMessageType, ttl, msgId,
+                            userModel.getPlatform(),
+                            appendsToMapPairs);
                 }
             }
         });
@@ -44,52 +44,29 @@ public class NotificationSender {
 
     public static void sendWithToken(final String myUserId, final String targetToken,
                                       final FCMMessageType fcmMessageType,
-                                      final int ttl, String msgId, final Pair<String, String>... appendsToMapPairs){
-        sendFcm(myUserId, targetToken, fcmMessageType, ttl, msgId, appendsToMapPairs);
+                                      final int ttl, String msgId,
+                                     final String targetPlatform,
+                                     final Pair<String, String>... appendsToMapPairs){
+        sendFcm(myUserId, targetToken, fcmMessageType, ttl, msgId, targetPlatform, appendsToMapPairs);
     }
 
+    public static void sendToTopic(final String myUserId, final String topicId,
+                                   final FCMMessageType fcmMessageType,
+                                   final int ttl, String msgId,
+                                   final Pair<String, String>... appendsToMapPairs){
 
+        //we use configuration of android even sending to ios, since sendToTopic
+        //normally is not urgent msg (eg. auto notification)
+        sendFcm(myUserId, "/topics/" + topicId, fcmMessageType, ttl, msgId,
+                "android",
+                appendsToMapPairs);
+    }
 
-//    private static void sendOneSignal(String myUserId, String targetUserId, final FCMMessageType fcmMessageType, final int ttl){
-//        try {
-//
-//            HashMap<String, String> contentMap = new HashMap();
-//            contentMap.put("en", "msg");
-//            HashMap<String, String> dataMap = new HashMap();
-//            dataMap.put("action", fcmMessageType.name());
-//            dataMap.put("senderId", myUserId);
-//
-//            String[] playerIds = new String[1];
-//            playerIds[0] = targetUserId;
-//
-//            HashMap<String, Object> sendingMap = new HashMap();
-//            sendingMap.put("contents", contentMap);
-//            sendingMap.put("data", dataMap);
-//            sendingMap.put("include_player_ids", playerIds);
-//            sendingMap.put("priority", 10);
-//            sendingMap.put("ttl", ttl);
-//            String json = Vars.getObjectMapper().writeValueAsString(sendingMap);
-//            Logs.show("One signal sending json: "  + json);
-//
-//            OneSignal.postNotification(json, new OneSignal.PostNotificationResponseHandler() {
-//                @Override
-//                public void onSuccess(JSONObject response) {
-//                    Logs.show("Successfully sent one signal");
-//                }
-//
-//                @Override
-//                public void onFailure(JSONObject response) {
-//                    Logs.show("Failed to sent one signal");
-//                }
-//            });
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
-    private static void sendFcm(final String myUserId, final String toToken, final FCMMessageType fcmMessageType, final int ttl,
-                                final String msgId, final Pair<String, String>... appendsToMapPairs){
+    private static void sendFcm(final String myUserId, final String toToken,
+                                final FCMMessageType fcmMessageType, final int ttl,
+                                final String msgId,
+                                final String toPlatform,
+                                final Pair<String, String>... appendsToMapPairs){
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
@@ -114,7 +91,7 @@ public class NotificationSender {
                     HashMap<String, String> dataMap = new HashMap();
                     dataMap.put("action", fcmMessageType.name());
                     dataMap.put("senderId", myUserId);
-                    dataMap.put("fromPlatform", "Firebase");
+                    dataMap.put("fromPlatform", "android");
                     dataMap.put("messageId", finalMsgId);
 
                     if(appendsToMapPairs != null){
@@ -123,20 +100,23 @@ public class NotificationSender {
                         }
                     }
 
-                    HashMap<String, String> notificationMap = new HashMap();
-                    notificationMap.put("badge", "1");
-                    notificationMap.put("alert", "");
-                    notificationMap.put("sound", "");
-
-
                     HashMap<String, Object> hashMap = new HashMap();
                     hashMap.put("data", dataMap);
-                    hashMap.put("notification", notificationMap);
                     hashMap.put("to", toToken);
                     hashMap.put("priority", "high");
                     hashMap.put("delay_while_idle", false);
                     hashMap.put("time_to_live", ttl);
                     hashMap.put("content_available", true);
+
+                    //sending those to android device will cause empty system tray notf bugs
+                    if(toPlatform.toLowerCase().equals("ios")){
+                        HashMap<String, String> notificationMap = new HashMap();
+                        notificationMap.put("badge", "1");
+                        notificationMap.put("alert", "");
+                        notificationMap.put("sound", "");
+                        hashMap.put("notification", notificationMap);
+                    }
+
 
                     String json = Vars.getObjectMapper().writeValueAsString(hashMap);
 

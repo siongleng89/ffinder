@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,16 +17,14 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import com.ffinder.android.absint.activities.IAppsIntroductionListener;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.AnimateType;
+import com.ffinder.android.enums.OverlayType;
 import com.ffinder.android.enums.PreferenceType;
-import com.ffinder.android.helpers.AnimateBuilder;
-import com.ffinder.android.helpers.LocationUpdater;
+import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.services.GcmAliveHeartbeatService;
 import com.ffinder.android.statics.Vars;
-import com.ffinder.android.utils.*;
 
 import java.util.List;
 
@@ -45,6 +42,7 @@ public class ActivityLaunch extends MyActivityAbstract {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+        LocaleHelper.onCreate(this);
 
         imgViewIcon = (ImageView) findViewById(R.id.imgViewIcon);
         imgViewBg = (ImageView) findViewById(R.id.imgViewBg);
@@ -71,7 +69,7 @@ public class ActivityLaunch extends MyActivityAbstract {
     private void onPermissionFinishChecking(){
         populatePendingAddUserKey();
 
-        final MyModel myModel = new MyModel(this);
+        final MyModel myModel = getMyModel();
 
         if(Strings.isEmpty(myModel.getUserId())){
             this.intent = new Intent(this, ActivitySetup.class);
@@ -80,7 +78,7 @@ public class ActivityLaunch extends MyActivityAbstract {
             this.intent = new Intent(this, ActivityMain.class);
 
             //always update location when launch apps
-            new LocationUpdater(ActivityLaunch.this, null, null);
+            new LocationUpdater(ActivityLaunch.this, null, null, null);
         }
 
         readyStartActivity();
@@ -236,11 +234,15 @@ public class ActivityLaunch extends MyActivityAbstract {
             return true;
         }
         else{
-            AndroidUtils.showDialogWithButtonText(this, "", getString(R.string.required_location_provider_msg),
-                    getString(R.string.btn_go_to_location_settings_text), new RunnableArgs<DialogInterface>() {
+
+            OverlayBuilder.build(ActivityLaunch.this)
+                    .setOverlayType(OverlayType.CustomButtons)
+                    .setContent(getString(R.string.required_location_provider_msg))
+                    .setBtnTexts(getString(R.string.btn_go_to_location_settings_text),
+                            getString(R.string.quit))
+                    .setRunnables(new Runnable() {
                         @Override
                         public void run() {
-                            this.getFirstArg().dismiss();
                             startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                         }
                     }, new Runnable() {
@@ -248,7 +250,9 @@ public class ActivityLaunch extends MyActivityAbstract {
                         public void run() {
                             finish();
                         }
-                    });
+                    })
+                    .show();
+
             return false;
         }
     }
