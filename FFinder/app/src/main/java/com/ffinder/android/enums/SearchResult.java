@@ -8,8 +8,8 @@ import com.ffinder.android.R;
  */
 public enum SearchResult {
     Normal,
-    ErrorNoLink, ErrorUnknown, ErrorTimeoutUnknownReason, ErrorTimeoutLocationDisabled,
-    ErrorTimeoutNoConnection;
+    ErrorNoLink, ErrorTimeoutUnknownReason, ErrorTimeoutLocationDisabled,
+    ErrorTimeoutNoConnection, ErrorUserBlocked;
 
 
     public String getMessage(Context context){
@@ -22,6 +22,8 @@ public enum SearchResult {
                 return context.getString(R.string.error_timeout_msg);
             case ErrorTimeoutNoConnection:
                 return context.getString(R.string.error_timeout_no_connection_msg);
+            case ErrorUserBlocked:
+                return context.getString(R.string.error_user_blocked_msg);
         }
 
 
@@ -30,6 +32,10 @@ public enum SearchResult {
 
     public boolean isError(){
         return (this.name().startsWith("Error"));
+    }
+
+    public boolean errorTriggeredAutoNotification(){
+        return this == ErrorTimeoutLocationDisabled || this == ErrorTimeoutUnknownReason;
     }
 
 }

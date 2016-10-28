@@ -184,9 +184,30 @@ public class FirebaseDB {
         });
     }
 
-    public static void updateLocation(String userId, LocationModel locationModel, final FirebaseListener listener){
-        setValue(getTable(TableName.locations).child(userId), locationModel, listener);
+    public static void changeBlockUser(String myUserId, String targetUserId, boolean block,
+                                       FirebaseListener listener){
+        String value = null;
+        if(block) value = "1";
+
+        setValue(getTable(TableName.blockUsers).child(myUserId).child(targetUserId), value, listener);
     }
+
+    public static void checkMeIsBlock(String myUserId, String targetUserId,
+                                      final FirebaseListener<Boolean> listener){
+        getSingleData(getTable(TableName.blockUsers).child(targetUserId).child(myUserId),
+                new FirebaseListener<String>(String.class) {
+            @Override
+            public void onResult(String result, Status status) {
+                if(status == Status.Success && result != null){
+                    listener.onResult(result.equals("1"), Status.Success);
+                }
+                else{
+                    listener.onResult(false, Status.Success);
+                }
+            }
+        });
+    }
+
 
     public static void getCurrentTimestamp(final String userId, final FirebaseListener<String> listener){
         setValue(getTable(TableName.timestamps).child(userId), ServerValue.TIMESTAMP, new FirebaseListener() {
@@ -210,10 +231,6 @@ public class FirebaseDB {
                 }
             }
         });
-    }
-
-    public static void getUserLocation(String targetUserId, final FirebaseListener<LocationModel> listener){
-        getSingleData(getTable(TableName.locations).child(targetUserId), listener);
     }
 
     public static void setNextAdsCount(String myUserId, int newCount, final FirebaseListener listener){
@@ -382,7 +399,7 @@ public class FirebaseDB {
 
     private enum TableName{
         users, links, locations, timestamps, pings, autoNotifications, keys, nextAds, showAdsIn, promoCodes, promoUsages,
-        products, identifierToUserIdMaps, logs
+        products, identifierToUserIdMaps, logs, blockUsers
     }
 
 }

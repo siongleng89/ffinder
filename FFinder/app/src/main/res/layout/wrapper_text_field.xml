@@ -8,7 +8,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lorem Ipsum"
-            android:id="@+id/txtLabel" android:textColor="#a6a6a6"
+            android:id="@+id/txtLabel" android:textColor="@color/colorNormalText"
             />
     <EditText
             android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:imeOptions="actionDone"
             android:singleLine="true"
             android:inputType="textFilter|textNoSuggestions"
-            android:tag="editTxtField"/>
+            android:tag="editTxtField" android:textColor="@color/colorImportantText"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

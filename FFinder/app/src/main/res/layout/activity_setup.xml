@@ -19,11 +19,11 @@
                     android:layout_centerHorizontal="true" android:visibility="visible"
                     android:id="@+id/relativeLayout3">
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:textAppearance="?android:attr/textAppearanceMedium" android:text="Welcome To"
+                  android:textAppearance="?android:attr/textAppearanceMedium" android:text="@string/welcome_msg_1"
                   android:id="@+id/textView16" android:layout_alignParentTop="true"
                   android:layout_centerHorizontal="true" android:layout_marginTop="35dp" android:textColor="#FFF"/>
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:textAppearance="?android:attr/textAppearanceMedium" android:text="Flowerpot"
+                  android:textAppearance="?android:attr/textAppearanceMedium" android:text="@string/welcome_msg_2"
                   android:id="@+id/textView23" android:textColor="#FFF" android:layout_below="@+id/textView16"
                   android:layout_centerHorizontal="true" android:textSize="35dp" android:textStyle="bold"/>
     </RelativeLayout>
@@ -58,7 +58,8 @@
                     android:visibility="invisible" android:clipChildren="false" android:clipToPadding="false">
         <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                    android:id="@+id/imgViewRetryIcon" android:src="@drawable/retry_icon"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Retry?"
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="@string/retry"
                   android:id="@+id/textView24" android:layout_centerVertical="true"
                   android:layout_toRightOf="@+id/imgViewRetryIcon" android:layout_marginLeft="5dp"
                   android:textStyle="bold" android:textColor="#fff" android:textSize="17dp"/>

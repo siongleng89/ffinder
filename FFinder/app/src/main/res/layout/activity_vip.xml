@@ -12,7 +12,8 @@
     <ListView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:id="@+id/listViewVip" android:layout_below="@+id/my_toolbar" android:layout_alignParentLeft="true"
+            android:id="@+id/listViewVip" android:layout_below="@+id/my_toolbar"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" style="@style/FFListViewStyle"/>
 
 </RelativeLayout>

@@ -6,7 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.tasks.RequestLocationTaskFragListener;
 import com.ffinder.android.enums.FCMMessageType;
@@ -113,6 +113,12 @@ public class RequestLocationTaskFrag extends Fragment {
         this.requestLocationTaskFragListener = requestLocationTaskFragListener;
     }
 
+    //phase 0, 1, 2
+    public void notifyTimeoutPhase(int newPhase){
+        if(requestLocationTaskFragListener != null)
+            requestLocationTaskFragListener.onTimeoutPhaseChanged(targetUserId, newPhase);
+    }
+
     public void notifyProgress(SearchStatus searchStatus){
         currentStatus = searchStatus;
         if(requestLocationTaskFragListener != null) requestLocationTaskFragListener.onUpdateStatus(targetUserId, currentStatus);
@@ -166,40 +172,56 @@ public class RequestLocationTaskFrag extends Fragment {
 
             publishProgress(SearchStatus.CheckingData);
 
-            //check user is allowed to search the target user
-            checkCanSearch(myUserId, targetUserId, new RunnableArgs<Boolean>() {
+            monitorTimeoutPhase();
+
+            //check target user has me in his/her friend list
+            checkHasLink(myUserId, targetUserId, new RunnableArgs<Boolean>() {
                 @Override
                 public void run() {
                     if(finish) return;
 
-                    //can search, trigger fcm now
+                    //has me in his/her friend list
                     if(this.getFirstArg()){
 
-                        searchStatus = SearchStatus.WaitingUserRespond;
-                        publishProgress(SearchStatus.WaitingUserRespond);
+                        //check me is not blocked
+                        checkMeIsBlocked(myUserId, targetUserId, new RunnableArgs<Boolean>() {
+                            @Override
+                            public void run() {
+                                if(finish) return;
 
-                        NotificationSender.sendWithUserId(myUserId, targetUserId,
-                                FCMMessageType.UpdateLocation,
-                                RequestLocationTaskFrag.timeoutSecs, msgId,
-                                new Pair<String, String>("senderToken", myToken));
+                                //not blocked, can search, trigger fcm now
+                                if(!this.getFirstArg()){
+                                    searchStatus = SearchStatus.WaitingUserRespond;
+                                    publishProgress(SearchStatus.WaitingUserRespond);
 
+                                    NotificationSender.sendWithUserId(myUserId, targetUserId,
+                                            FCMMessageType.UpdateLocation,
+                                            RequestLocationTaskFrag.timeoutSecs, msgId,
+                                            new Pair<String, String>("senderToken", myToken));
 
-//                        Threadings.runInBackground(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                while (searchStatus == SearchStatus.WaitingUserRespond){
-//                                    NotificationSender.sendWithUserId(myUserId, targetUserId,
-//                                            FCMMessageType.UpdateLocation,
-//                                            RequestLocationTaskFrag.timeoutSecs, msgId,
-//                                            new Pair<String, String>("senderToken", myToken));
-//                                    Threadings.sleep(5000);
+//                                    Threadings.runInBackground(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            while (searchStatus == SearchStatus.WaitingUserRespond){
+//                                                NotificationSender.sendWithUserId(myUserId, targetUserId,
+//                                                        FCMMessageType.UpdateLocation,
+//                                                        RequestLocationTaskFrag.timeoutSecs, msgId,
+//                                                        new Pair<String, String>("senderToken", myToken));
+//                                                Threadings.sleep(5000);
 //
-//                                    if (finish){
-//                                        break;
-//                                    }
-//                                }
-//                            }
-//                        });
+//                                                if (finish){
+//                                                    break;
+//                                                }
+//                                            }
+//                                        }
+//                                    });
+
+                                }
+                                else{
+                                    setSearchResult(SearchResult.ErrorUserBlocked);
+                                }
+                            }
+                        });
                     }
                     else{
                         setSearchResult(SearchResult.ErrorNoLink);
@@ -240,7 +262,7 @@ public class RequestLocationTaskFrag extends Fragment {
             }
         }
 
-        private void checkCanSearch(String myUserId, String targetUserId, final RunnableArgs<Boolean> toRun){
+        private void checkHasLink(String myUserId, String targetUserId, final RunnableArgs<Boolean> toRun){
             FirebaseDB.checkLinkExist(myUserId, targetUserId, new FirebaseListener<Boolean>() {
                 @Override
                 public void onResult(Boolean result, com.ffinder.android.enums.Status status) {
@@ -254,6 +276,46 @@ public class RequestLocationTaskFrag extends Fragment {
             });
         }
 
+        private void checkMeIsBlocked(String myUserId, String targetUserId, final RunnableArgs<Boolean> toRun){
+            FirebaseDB.checkMeIsBlock(myUserId, targetUserId, new FirebaseListener<Boolean>() {
+                @Override
+                public void onResult(Boolean result, com.ffinder.android.enums.Status status) {
+                    if(status == com.ffinder.android.enums.Status.Success && result != null){
+                        toRun.run(result);
+                    }
+                    else{
+                        toRun.run(true);
+                    }
+                }
+            });
+        }
+
+        private void monitorTimeoutPhase(){
+            Threadings.runInBackground(new Runnable() {
+                @Override
+                public void run() {
+                    int sleepDuration = 1000;
+                    int totalSleepDuration = 0;
+                    int phase = 0;
+                    while (!finish){
+                        if((totalSleepDuration > (timeoutSecs * 1000 * 0.33))
+                                && phase == 0){
+                            phase = 1;
+                            notifyTimeoutPhase(phase);
+                        }
+                        else if((totalSleepDuration > (timeoutSecs * 1000 * 0.66))
+                                && phase == 1){
+                            phase = 2;
+                            notifyTimeoutPhase(phase);
+                        }
+
+                        Threadings.sleep(sleepDuration);
+                        totalSleepDuration += sleepDuration;
+                    }
+
+                }
+            });
+        }
 
         public void taskTimeout() {
             MyModel myModel = new MyModel(context);

@@ -1,6 +1,6 @@
 package com.ffinder.android.helpers;
 
-import android.util.Pair;
+import android.support.v4.util.Pair;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.enums.FCMMessageType;
 import com.ffinder.android.enums.Status;

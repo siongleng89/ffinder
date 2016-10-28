@@ -108,8 +108,6 @@ public class AnimateBuilder {
 
     public static void fadeOutAndSetGone(Context context, final View view, final Runnable... runnables){
         if(view.getVisibility() == View.GONE){
-            view.clearAnimation();
-            ViewPropertyAnimator.animate(view).setListener(null).cancel();
             if(runnables != null){
                 for(Runnable runnable : runnables){
                     runnable.run();
@@ -134,152 +132,194 @@ public class AnimateBuilder {
     }
 
 
-    public static void animateSrcTintColor(int fromColor, int toColor, final ImageView view){
+    public static void animateSrcTintColor(final int fromColor, final int toColor, final ImageView view){
         if (fromColor == toColor) return;
 
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
-        colorAnimation.setDuration(200); // milliseconds
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        Threadings.postRunnable(new Runnable() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
+            public void run() {
+                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
+                colorAnimation.setDuration(200); // milliseconds
+                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
 
-                view.setColorFilter((int) animator.getAnimatedValue(),
-                        PorterDuff.Mode.SRC_ATOP);
+                        view.setColorFilter((int) animator.getAnimatedValue(),
+                                PorterDuff.Mode.SRC_ATOP);
+                    }
+
+                });
+                colorAnimation.start();
+                view.setTag(colorAnimation);
             }
-
         });
-        colorAnimation.start();
+
+
     }
 
-    public static void animateBackgroundTintColor(int fromColor, int toColor, final View view){
+    public static void animateBackgroundTintColor(final int fromColor, final int toColor, final View view){
         if (fromColor == toColor) return;
 
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
-        colorAnimation.setDuration(200); // milliseconds
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        Threadings.postRunnable(new Runnable() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                view.getBackground().setColorFilter((int) animator.getAnimatedValue(),
-                        PorterDuff.Mode.SRC_ATOP);
-            }
+            public void run() {
+                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
+                colorAnimation.setDuration(200); // milliseconds
+                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
+                        view.getBackground().setColorFilter((int) animator.getAnimatedValue(),
+                                PorterDuff.Mode.SRC_ATOP);
+                    }
 
+                });
+                colorAnimation.start();
+                view.setTag(colorAnimation);
+            }
         });
-        colorAnimation.start();
+
+
     }
 
-    public static void animateTextColor(int fromColor, int toColor, final TextView view){
+    public static void animateTextColor(final int fromColor, final int toColor, final TextView view){
         if (fromColor == toColor) return;
 
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
-        colorAnimation.setDuration(200); // milliseconds
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        Threadings.postRunnable(new Runnable() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                view.setTextColor((int) animator.getAnimatedValue());
-            }
+            public void run() {
+                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
+                colorAnimation.setDuration(200); // milliseconds
+                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
+                        view.setTextColor((int) animator.getAnimatedValue());
+                    }
 
+                });
+                colorAnimation.start();
+                view.setTag(colorAnimation);
+            }
         });
-        colorAnimation.start();
+
+
     }
 
-    public static void stopAllAnimation(View view){
-        view.clearAnimation();
-        ViewPropertyAnimator.animate(view).cancel();
+    public static void stopAllAnimation(final View view){
+        Threadings.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                view.clearAnimation();
+                if(view.getAnimation() != null){
+                    view.getAnimation().cancel();
+                }
 
+                ViewPropertyAnimator.animate(view).cancel();
+
+                Object animatorObj = view.getTag();
+                if(animatorObj != null && animatorObj instanceof ValueAnimator){
+                    ((ValueAnimator) animatorObj).cancel();
+                }
+            }
+        });
     }
 
     public void start(){
+        Threadings.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                view.clearAnimation();
+                ViewPropertyAnimator.animate(view).cancel();
 
-        view.clearAnimation();
-        ViewPropertyAnimator.animate(view).cancel();
+                // have to use object animator if wanna use repeat, but will not be able to use finish listener
+                if(repeat){
+                    ObjectAnimator anim = null;
+                    switch (animateType){
+                        case alpha:
+                            anim =  ObjectAnimator.ofFloat(view, "alpha", value);
+                            break;
+                        case moveByX:
+                            anim =  ObjectAnimator.ofFloat(view, "translationX", dpToPixel(value));
+                            break;
+                        case moveByY:
+                            anim =  ObjectAnimator.ofFloat(view, "translationY", dpToPixel(value));
+                            break;
+                        case rotate:
+                            anim =  ObjectAnimator.ofFloat(view, "rotation", value);
+                            break;
 
-        // have to use object animator if wanna use repeat, but will not be able to use finish listener
-        if(repeat){
-            ObjectAnimator anim = null;
-            switch (animateType){
-                case alpha:
-                    anim =  ObjectAnimator.ofFloat(view, "alpha", value);
-                    break;
-                case moveByX:
-                    anim =  ObjectAnimator.ofFloat(view, "translationX", dpToPixel(value));
-                    break;
-                case moveByY:
-                    anim =  ObjectAnimator.ofFloat(view, "translationY", dpToPixel(value));
-                    break;
-                case rotate:
-                    anim =  ObjectAnimator.ofFloat(view, "rotation", value);
-                    break;
+                    }
 
+
+
+
+                    anim.setDuration(durationMs);
+                    anim.setRepeatCount(ObjectAnimator.INFINITE);
+                    anim.setRepeatMode(ObjectAnimator.REVERSE);
+                    anim.start();
+
+
+                }
+                else{
+                    ViewPropertyAnimator viewPropertyAnimator = null;
+
+                    switch (animateType){
+                        case alpha:
+                            if(value == 1){
+                                ViewHelper.setAlpha(view, 0);
+                                view.setVisibility(View.VISIBLE);
+                            }
+
+                            viewPropertyAnimator =
+                                    ViewPropertyAnimator.animate(view).setDuration(durationMs).alpha(value);
+                            break;
+                        case moveByX:
+                            viewPropertyAnimator = ViewPropertyAnimator.animate(view)
+                                    .setDuration(durationMs)
+                                    .translationXBy(dpToPixel(value));
+                            break;
+                        case moveByY:
+                            viewPropertyAnimator = ViewPropertyAnimator.animate(view)
+                                    .setDuration(durationMs)
+                                    .translationYBy(dpToPixel(value));
+                            break;
+                        case rotate:
+
+                            break;
+
+                    }
+
+                    if (finishCallback != null && viewPropertyAnimator != null){
+                        viewPropertyAnimator.setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                                Logs.show("animation start");
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                finishCallback.run();
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+                                Logs.show("animation cancel");
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+
+                    }
+
+
+                    viewPropertyAnimator.start();
+
+                }
             }
+        });
 
-
-
-
-            anim.setDuration(durationMs);
-            anim.setRepeatCount(ObjectAnimator.INFINITE);
-            anim.setRepeatMode(ObjectAnimator.REVERSE);
-            anim.start();
-
-
-        }
-        else{
-            ViewPropertyAnimator viewPropertyAnimator = null;
-
-            switch (animateType){
-                case alpha:
-                    if(value == 1){
-                        ViewHelper.setAlpha(view, 0);
-                        view.setVisibility(View.VISIBLE);
-                    }
-
-                    viewPropertyAnimator =
-                            ViewPropertyAnimator.animate(view).setDuration(durationMs).alpha(value);
-                    break;
-                case moveByX:
-                    viewPropertyAnimator = ViewPropertyAnimator.animate(view)
-                            .setDuration(durationMs)
-                            .translationXBy(dpToPixel(value));
-                    break;
-                case moveByY:
-                    viewPropertyAnimator = ViewPropertyAnimator.animate(view)
-                            .setDuration(durationMs)
-                            .translationYBy(dpToPixel(value));
-                    break;
-                case rotate:
-
-                    break;
-
-            }
-
-            if (finishCallback != null && viewPropertyAnimator != null){
-                viewPropertyAnimator.setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        Logs.show("animation start");
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        finishCallback.run();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        Logs.show("animation cancel");
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-
-            }
-
-
-            viewPropertyAnimator.start();
-
-        }
     }
 
 

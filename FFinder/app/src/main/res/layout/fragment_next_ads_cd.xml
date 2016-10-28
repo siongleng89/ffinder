@@ -18,7 +18,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3"
-                    android:id="@+id/txtNextAdsCount" android:paddingBottom="2dp" android:textColor="#ffff"
+                    android:id="@+id/txtNextAdsCount" android:paddingBottom="2dp"
+                    android:textColor="@color/colorContrast"
                     android:textSize="15dp" android:textStyle="bold" android:visibility="gone"/>
             <ImageView
                     android:layout_width="30dp"

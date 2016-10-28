@@ -1,6 +1,8 @@
 package com.ffinder.android;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.helpers.VipAndProductsHelpers;
 import com.ffinder.android.models.MyModel;
@@ -17,6 +19,12 @@ public class MyApplication extends Application {
     private Tracker mTracker;
     private VipAndProductsHelpers vipAndProductsHelpers;
     private MyModel myModel;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {

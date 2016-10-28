@@ -52,6 +52,11 @@ public class LocationModel {
     }
 
     @Exclude
+    public boolean hasCoordinates(){
+        return !Strings.isEmpty(latitude) && !Strings.isEmpty(longitude);
+    }
+
+    @Exclude
     public String getAddress() {
         if(address == null) address = "";
         return address;

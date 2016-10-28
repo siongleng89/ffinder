@@ -26,27 +26,23 @@ public class AdsIdTask extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... params) {
         AdvertisingIdClient.Info idInfo = null;
-        try {
-            idInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String advertId = null;
+
         try{
-            advertId = idInfo.getId();
-            if(!Strings.isEmpty(saveToDbUserId)){
-                FirebaseDB.saveIdentifier(saveToDbUserId, advertId, null);
+            AdvertisingIdClient.Info adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
+            String adId = adInfo != null ? adInfo.getId() : null;
+            // Use the advertising id
+            if(!Strings.isEmpty(saveToDbUserId) && !Strings.isEmpty(adId)){
+                FirebaseDB.saveIdentifier(saveToDbUserId, adId, null);
             }
+            return adId;
 
-        }catch (NullPointerException e){
-            e.printStackTrace();
+        } catch (IOException
+                | GooglePlayServicesRepairableException
+                | GooglePlayServicesNotAvailableException exception) {
+            // Error handling if needed
         }
 
-        return advertId;
+        return null;
     }
 
     @Override

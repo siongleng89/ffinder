@@ -9,19 +9,23 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" android:id="@+id/leftLinearLayout" android:gravity="center_vertical"
+            android:layout_height="match_parent" android:id="@+id/leftLinearLayout"
+            android:gravity="center_vertical"
             android:layout_marginLeft="10dp">
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" android:layout_alignParentRight="true"
-            android:id="@+id/rightLinearLayout" android:gravity="center_vertical" android:layout_marginRight="10dp"
+            android:id="@+id/rightLinearLayout" android:gravity="center_vertical"
+            android:layout_marginRight="10dp"
             android:clipChildren="false" android:clipToPadding="false">
     </LinearLayout>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/txtTitle" android:gravity="center_vertical" android:textColor="#ffffff"
-            android:layout_toRightOf="@+id/leftLinearLayout" android:layout_marginLeft="10dp" android:textSize="20sp"/>
+            android:id="@+id/txtTitle" android:gravity="center_vertical"
+            android:textColor="@color/colorContrast"
+            android:layout_toRightOf="@+id/leftLinearLayout" android:layout_marginLeft="10dp"
+            android:textSize="20sp"/>
 </RelativeLayout>

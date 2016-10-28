@@ -9,7 +9,8 @@
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/txtShortFormName" android:textColor="#588e7e" android:textSize="20dp"
+            android:id="@+id/txtShortFormName" android:textColor="@color/colorPrimaryDark"
+            android:textSize="20dp"
             android:gravity="center"/>
 
     <com.makeramen.roundedimageview.RoundedImageView

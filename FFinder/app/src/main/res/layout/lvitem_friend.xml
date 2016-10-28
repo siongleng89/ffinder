@@ -33,7 +33,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/txtLocation"
-                            android:textColor="#000"
+                            android:textColor="@color/colorImportantText"
                             android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
                             android:visibility="visible" android:textSize="13sp"/>
                     <TextView
@@ -51,26 +51,26 @@
                         android:layout_height="wrap_content" android:id="@+id/layoutStatus" android:visibility="invisible"
                         android:layout_toRightOf="@+id/imageViewProfile">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:id="@+id/txtStatus" android:textColor="#6eb301"
+                              android:id="@+id/txtStatus" android:textColor="@color/colorPrimaryDark"
                               android:text="Searching..."
                               android:visibility="visible" android:textSize="12sp" android:textStyle="bold"/>
                 </RelativeLayout>
             </RelativeLayout>
             <RelativeLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="match_parent" android:id="@+id/layoutBottom" android:layout_below="@+id/layoutTop"
+                    android:layout_height="wrap_content" android:id="@+id/layoutBottom" android:layout_below="@+id/layoutTop"
                     android:focusable="false" android:clickable="false">
                 <RelativeLayout
                         android:layout_width="68dp"
-                        android:layout_height="match_parent" android:layout_marginTop="6dp"
+                        android:layout_height="wrap_content" android:layout_marginTop="6dp"
                         android:layout_marginRight="10dp" android:id="@+id/layoutName" android:clickable="true"
                         android:focusable="true" android:focusableInTouchMode="true">
                     <TextView
                             android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_height="wrap_content"
                             android:text="Lorem Ipsum"
                             android:id="@+id/txtFriend"
-                            android:textColor="#588e7e" android:ellipsize="end"
+                            android:textColor="@color/colorPrimaryDark" android:ellipsize="end"
                             android:singleLine="true" android:textSize="16sp"
                             android:gravity="center_horizontal" android:clickable="false" android:focusable="false"
                             android:focusableInTouchMode="false"/>
@@ -109,25 +109,11 @@
         </RelativeLayout>
         <RelativeLayout
                 android:layout_width="63dp"
-                android:layout_height="fill_parent"
+                android:layout_height="97dp"
                 android:id="@+id/layoutRight" android:layout_marginLeft="10sp" android:layout_toRightOf="@+id/layoutTop"
                 android:layout_weight="0">
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="10/20/2016"
-                    android:id="@+id/txtLastUpdated"
-                    android:layout_alignParentLeft="false"
-                    android:layout_alignParentStart="true" android:textColor="#000"
-                    android:visibility="visible" android:textSize="11dp"
-                    android:singleLine="true" android:layout_alignParentRight="false" android:gravity="right"/>
-            <ImageButton
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/btnSearch" android:layout_below="@+id/txtLastUpdated"
-                    android:background="@drawable/white_btn" android:layout_marginTop="5dp"
-                    android:src="@drawable/search_icon" android:scaleType="fitCenter"
-                    android:tint="@color/colorHighlighted"/>
+
+
         </RelativeLayout>
     </LinearLayout>
 

@@ -23,6 +23,7 @@ import android.view.Display;
 import android.view.View;
 import android.widget.EditText;
 import com.ffinder.android.R;
+import com.ffinder.android.enums.PhoneBrand;
 import com.ffinder.android.models.GoogleGeoCodeResponse;
 import com.ffinder.android.statics.Vars;
 
@@ -387,9 +388,15 @@ public class AndroidUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
+
+    public static Uri getProfileImagePrivateDirUri(Context context, String friendId){
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("profileImages", Context.MODE_PRIVATE);
+        File to=new File(directory, friendId + ".png");
+        return Uri.fromFile(to);
+    }
+
 
     public static void copy(File src, File dst) throws IOException {
         dst.delete();
@@ -405,6 +412,20 @@ public class AndroidUtils {
         }
         in.close();
         out.close();
+    }
+
+    public static String getPhoneBrandKnownIssue(Context context, PhoneBrand phoneBrand){
+        String msg = "";
+        if(phoneBrand == PhoneBrand.Xiaomi){
+            msg = context.getString(R.string.issue_fix_xiaomi);
+        }
+        else if(phoneBrand == PhoneBrand.Huawei){
+            msg = context.getString(R.string.issue_fix_huawei);
+        }
+        else if(phoneBrand == PhoneBrand.Sony){
+            msg = context.getString(R.string.issue_fix_sony);
+        }
+        return msg;
     }
 
 }

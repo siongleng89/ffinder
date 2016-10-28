@@ -11,14 +11,16 @@
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imgViewBg" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+            android:id="@+id/imgViewBg" android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
             android:background="@drawable/bg_image" android:visibility="invisible"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imgViewIcon" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+            android:id="@+id/imgViewIcon" android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:src="@drawable/splash_screen_icon" android:visibility="invisible"
             android:layout_below="@+id/layoutWelcome" android:layout_marginTop="20dp"/>
     <RelativeLayout
@@ -29,11 +31,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Welcome To"
+                android:text="@string/welcome_msg_1"
                 android:id="@+id/textView10" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
                 android:layout_marginTop="35dp" android:textColor="#FFF"/>
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:textAppearance="?android:attr/textAppearanceMedium" android:text="Flowerpot"
+                  android:textAppearance="?android:attr/textAppearanceMedium" android:text="@string/welcome_msg_2"
                   android:id="@+id/textView11"
                   android:textColor="#FFF"
                   android:layout_below="@+id/textView10" android:layout_centerHorizontal="true"
@@ -52,7 +54,7 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Friends and Family Finder"
+                android:text="@string/app_title_long"
                 android:id="@+id/textView12" android:textColor="#fff" android:textStyle="bold"
                 android:layout_marginTop="-7dp" android:layout_centerHorizontal="true"/>
         <TextView
@@ -76,7 +78,7 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next"
+                android:text="@string/next"
                 android:id="@+id/textView14" android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/imgViewNextIcon" android:layout_marginLeft="5dp" android:textStyle="bold"
                 android:textColor="#fff" android:textSize="17dp"/>

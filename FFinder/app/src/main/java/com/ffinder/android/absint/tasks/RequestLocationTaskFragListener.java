@@ -9,6 +9,8 @@ import com.ffinder.android.models.LocationModel;
  */
 public abstract class RequestLocationTaskFragListener {
 
+    public abstract void onTimeoutPhaseChanged(String userId, int newPhase);
+
     public abstract void onUpdateStatus(String userId, SearchStatus newStatus);
 
     public abstract void onUpdateResult(String userId, LocationModel locationModel,

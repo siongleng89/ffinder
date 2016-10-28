@@ -11,7 +11,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/ran_out_free_search_msg"
             android:id="@+id/textView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-            android:gravity="center" android:textColor="@color/colorHighlighted" android:textStyle="bold"
+            android:gravity="center" android:textColor="@color/colorPrimaryDark" android:textStyle="bold"
             android:textSize="17sp"/>
     <RelativeLayout
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/btn_watch_ads_earn_credits_text"
                         android:id="@+id/textView8" android:layout_centerVertical="true" android:gravity="center"
-                        android:textColor="@color/colorHighlighted" android:layout_marginRight="10dp"
+                        android:textColor="@color/colorPrimaryDark" android:layout_marginRight="10dp"
                         android:textSize="13sp"/>
                 <ImageButton
                         android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
                 <TextView android:layout_width="60dp" android:layout_height="wrap_content"
                           android:text="@string/btn_input_promo_code_earn_credits_text"
                           android:id="@+id/textView9" android:layout_centerVertical="true" android:gravity="center"
-                          android:textColor="@color/colorHighlighted"
+                          android:textColor="@color/colorPrimaryDark"
                           android:layout_alignParentEnd="true" android:layout_marginLeft="10dp"
                           android:textSize="13sp"/>
             </RelativeLayout>
@@ -79,7 +79,7 @@
                 <TextView android:layout_width="60dp" android:layout_height="wrap_content"
                           android:text="@string/btn_subscript_unlimited_searches_text"
                           android:id="@+id/textView25" android:layout_centerVertical="true" android:gravity="center"
-                          android:textColor="@color/colorHighlighted" android:layout_marginRight="10dp"
+                          android:textColor="@color/colorPrimaryDark" android:layout_marginRight="10dp"
                           android:textSize="13sp"/>
             </RelativeLayout>
             <RelativeLayout android:layout_width="0dp" android:layout_height="fill_parent"
@@ -92,7 +92,7 @@
                 <TextView android:layout_width="60dp" android:layout_height="wrap_content"
                           android:text="@string/btn_maybe_next_time_text"
                           android:id="@+id/textView26" android:layout_centerVertical="true" android:gravity="center"
-                          android:textColor="@color/colorHighlighted"
+                          android:textColor="@color/colorPrimaryDark"
                           android:layout_alignParentEnd="true" android:layout_marginLeft="10dp"
                           android:textSize="13sp"/>
             </RelativeLayout>

@@ -2,6 +2,8 @@ package com.ffinder.android.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 /**
  * Created by SiongLeng on 9/12/2015.
@@ -21,7 +23,7 @@ public class Threadings {
     }
 
 
-    public static void delay(final long timeInMs, final Activity activity, final Runnable toRun){
+    public static void delay(final long timeInMs, final Runnable toRun){
         runInBackground(new Runnable() {
             @Override
             public void run() {
@@ -30,7 +32,7 @@ public class Threadings {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                postRunnable(activity, toRun);
+                postRunnable(toRun);
             }
         });
     }
@@ -57,9 +59,14 @@ public class Threadings {
         }
     }
 
-    public static void postRunnable(Activity context, Runnable runnable){
+    public static void postRunnable(final Runnable runnable){
         if(Thread.currentThread().getId() != mainTreadId){
-            context.runOnUiThread(runnable);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    runnable.run();
+                }
+            });
         }
         else{
             runnable.run();

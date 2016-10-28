@@ -28,6 +28,8 @@ public class FriendModel {
     private SearchStatus searchStatus;
     private SearchResult searchResult;
     private boolean recentlyFinishSearch;
+    private boolean blockSearch;
+    private int timeoutPhase;   //0,1,2 three phase before timeout
     private Bitmap friendProfileImage;
     private Boolean hasProfileImage;
 
@@ -70,10 +72,13 @@ public class FriendModel {
         this.setLastLocationModel(friendModel.getLastLocationModel());
         this.setSearchResult(friendModel.getSearchResult());
         this.setSearchStatus(friendModel.getSearchStatus());
+        this.setBlockSearch(friendModel.isBlockSearch());
     }
 
 
     public String getUserId() {
+        if(userId == null) userId = "";
+
         return userId;
     }
 
@@ -111,12 +116,22 @@ public class FriendModel {
         this.friendProfileImage = friendProfileImage;
     }
 
+    @JsonIgnore
     public Boolean getHasProfileImage() {
         return hasProfileImage;
     }
 
+    @JsonIgnore
     public void setHasProfileImage(Boolean hasProfileImage) {
         this.hasProfileImage = hasProfileImage;
+    }
+
+    public boolean isBlockSearch() {
+        return blockSearch;
+    }
+
+    public void setBlockSearch(boolean blockSearch) {
+        this.blockSearch = blockSearch;
     }
 
     public LocationModel getLastLocationModel() {
@@ -158,6 +173,16 @@ public class FriendModel {
     @JsonIgnore
     public void setRecentlyFinishSearch(boolean recentlyFinishSearch) {
         this.recentlyFinishSearch = recentlyFinishSearch;
+    }
+
+    @JsonIgnore
+    public int getTimeoutPhase() {
+        return timeoutPhase;
+    }
+
+    @JsonIgnore
+    public void setTimeoutPhase(int timeoutPhase) {
+        this.timeoutPhase = timeoutPhase;
     }
 
     public SearchResult getSearchResult() {

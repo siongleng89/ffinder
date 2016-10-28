@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.adapters.VipAdapter;
+import com.ffinder.android.enums.ActionBarActionType;
 import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.enums.OverlayType;
 import com.ffinder.android.helpers.Analytics;
@@ -31,10 +32,9 @@ public class ActivityVip extends MyActivityAbstract {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vip);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setTitle(R.string.vip_title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        enableCustomActionBar();
+        addActionToActionBar(ActionBarActionType.Back, false, true);
+        setActionBarTitle(R.string.vip_title);
 
         userId = getIntent().getStringExtra("userId");
 
@@ -46,15 +46,6 @@ public class ActivityVip extends MyActivityAbstract {
         listViewVip.setAdapter(vipAdapter);
         setListeners();
         refreshVIPInList();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

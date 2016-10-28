@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="63dp"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:visibility="visible"
+    >
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="12/10/2012"
+                android:id="@+id/txtLastUpdated" android:textColor="@color/colorPrimaryDark"
+                android:textSize="11dp" android:visibility="visible" android:singleLine="true"
+                android:gravity="center"/>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent" android:padding="5dp" android:id="@+id/layoutMainButton"
+                android:background="@drawable/white_btn">
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imgViewFlower" android:scaleType="fitCenter"
+                    android:tint="@color/colorPrimaryDark" android:layout_weight="1" android:paddingLeft="10dp"
+                    android:paddingRight="10dp" android:paddingBottom="5dp"/>
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lorem Ipsum"
+                    android:id="@+id/txtStatus" android:textSize="11dp" android:singleLine="true"
+                    android:gravity="center" android:textColor="@color/colorPrimaryDark"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_share_key_text"
-            android:id="@+id/button"
+            android:id="@+id/btnShare"
             android:layout_below="@+id/textView2" android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true"/>
 </RelativeLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:clipChildren="false" android:clipToPadding="false">
+
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_normal_title_bg" android:visibility="visible"
+            android:id="@+id/layoutTitle" android:clipChildren="false" android:clipToPadding="false">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Sample Title"
+                android:id="@+id/txtTitle" android:gravity="center" android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp" android:layout_marginTop="20dp"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sample Subtitle"
+                android:id="@+id/txtSubtitle" android:layout_below="@+id/txtTitle" android:gravity="center"
+                android:textSize="14sp" android:textColor="@color/colorPrimaryDark" android:layout_marginBottom="20dp"/>
+        <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imgViewClose" android:src="@drawable/close_icon" android:layout_alignParentRight="true"
+        />
+    </RelativeLayout>
+
+    <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="horizontal">
+
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:gravity="center">
+            <ImageView android:layout_width="50dp" android:layout_height="60dp" android:id="@+id/imgViewPrev"
+                       android:src="@drawable/tut_prev_icon" android:background="@drawable/tut_prev_icon_bg"
+                       android:paddingLeft="0dp" android:paddingRight="0dp" android:paddingTop="9dp"
+                       android:paddingBottom="9dp" android:scaleType="fitCenter"/>
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="300dp" android:layout_weight="1" android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/imgViewScreenshot" android:scaleType="fitCenter"/>
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:gravity="center">
+            <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
+                    android:id="@+id/imgViewNext" android:src="@drawable/tut_next_icon"
+                    android:background="@drawable/tut_next_icon_bg" android:paddingLeft="0dp" android:paddingRight="0dp"
+                    android:paddingTop="9dp" android:paddingBottom="9dp" android:scaleType="fitCenter"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

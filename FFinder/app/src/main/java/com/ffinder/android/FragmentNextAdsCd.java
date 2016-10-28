@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -100,7 +101,7 @@ public class FragmentNextAdsCd extends Fragment {
             @Override
             public void run() {
                 if(this.getFirstArg()){
-                    Threadings.postRunnable(getActivity(), new Runnable() {
+                    Threadings.postRunnable(new Runnable() {
                         @Override
                         public void run() {
                             completeProcessing = true;
@@ -109,7 +110,7 @@ public class FragmentNextAdsCd extends Fragment {
                             AnimateBuilder.fadeIn(getActivity(), imgViewTick);
                         }
                     });
-
+                    PreferenceUtils.delete(getContext(), PreferenceType.NoMoreCredits);
                 }
                 else{
                     recreateAdsFrag();
@@ -150,7 +151,17 @@ public class FragmentNextAdsCd extends Fragment {
     public void friendSearched(final RunnableArgs<Boolean> canRun){
         if(!completeProcessing){
             addingCount++;
-            canRun.run(true);
+
+            boolean noCredits = "1".equals(PreferenceUtils.get(getContext(), PreferenceType.NoMoreCredits));
+            canRun.run(!noCredits);
+            if(noCredits){
+                new NoCreditsDialog(getActivity(), myModel, new INoCreditsListener() {
+                    @Override
+                    public void requestWatchAds() {
+                        showAds();
+                    }
+                }).show();
+            }
             return;
         }
 
@@ -203,7 +214,7 @@ public class FragmentNextAdsCd extends Fragment {
     }
 
     private void refreshNextAdsCount(final int newAdsCount, final boolean animate){
-        Threadings.postRunnable(getActivity(), new Runnable() {
+        Threadings.postRunnable(new Runnable() {
             @Override
             public void run() {
                 if(getActivity() == null) return;
@@ -287,6 +298,14 @@ public class FragmentNextAdsCd extends Fragment {
     public void setCurrentNextAdsCount(Integer value){
         PreferenceUtils.put(getContext(), PreferenceType.NextAdsCount, value.toString());
         currentNextAdsCount = value;
+
+        if(currentNextAdsCount <= 0){
+            PreferenceUtils.put(getContext(), PreferenceType.NoMoreCredits, "1");
+        }
+        else{
+            PreferenceUtils.delete(getContext(), PreferenceType.NoMoreCredits);
+        }
+
     }
 
     private void setListeners(){

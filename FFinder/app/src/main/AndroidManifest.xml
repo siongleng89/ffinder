@@ -17,6 +17,7 @@
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
+            android:largeHeap="true"
             android:supportsRtl="true"
             android:theme="@style/FFAppTheme">
         <activity
@@ -25,7 +26,6 @@
         </activity>
         <activity
                 android:name=".ActivityLaunch"
-                android:noHistory="true"
                 android:screenOrientation="portrait"
                 android:theme="@style/splashScreenTheme">
             <intent-filter>
@@ -49,9 +49,7 @@
                         android:scheme="http"/>
             </intent-filter>
         </activity>
-        <activity
-                android:name=".ActivitySetup"
-                android:noHistory="true">
+        <activity android:name=".ActivitySetup">
         </activity>
         <activity android:name=".ActivityMap">
         </activity>
@@ -122,6 +120,9 @@
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
         <!-- end ads -->
 
+        <activity
+                android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+                android:theme="@style/Base.Theme.AppCompat"/>
 
         <!--
      Optionally, register AnalyticsReceiver and AnalyticsService to support background
@@ -167,8 +168,6 @@
         <activity android:name=".ActivityAddFriend">
         </activity>
         <activity android:name=".ActivityLanguage">
-        </activity>
-        <activity android:name=".ActivityPickProfileImage">
         </activity>
     </application>
 

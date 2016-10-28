@@ -17,5 +17,5 @@
             android:text="Lorem Ipsum..."
             android:id="@+id/loadingTextView" android:layout_toRightOf="@+id/progressBar2"
             android:layout_centerVertical="true" android:layout_marginLeft="20dp"
-            android:textColor="@color/colorHighlighted" android:textSize="20sp" android:textStyle="bold"/>
+            android:textColor="@color/colorPrimaryDark" android:textSize="20sp" android:textStyle="bold"/>
 </RelativeLayout>

@@ -11,10 +11,11 @@ android {
                                 onesignal_app_id: "d5a08298-fe8a-41b8-b227-00cbf1d8fe1a",
                                 onesignal_google_project_number: "704705208393"]
 
-        minSdkVersion 9
+        minSdkVersion 10
         targetSdkVersion 25
-        versionCode 27
-        versionName "3.0.0"
+        versionCode 30
+        versionName "3.0.2"
+        multiDexEnabled true
     }
     buildTypes {
         debug {
@@ -54,6 +55,9 @@ dependencies {
     compile 'com.anjlab.android.iab.v3:library:1.0+'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.makeramen:roundedimageview:2.2.1'
+    compile 'com.github.jd-alexander:library:1.1.0'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
+    compile 'com.android.support:multidex:1.0.1'
 
 }
 

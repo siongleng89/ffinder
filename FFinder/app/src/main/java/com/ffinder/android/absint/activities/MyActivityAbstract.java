@@ -313,7 +313,7 @@ public class MyActivityAbstract extends AppCompatActivity {
     }
 
 
-    protected MyModel getMyModel(){
+    public MyModel getMyModel(){
         if (myModel == null){
             myModel = ((MyApplication) getApplication()).getMyModel();
         }

@@ -26,7 +26,7 @@ public class NotificationShower {
                             String title, String content, boolean useBigText){
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_stat_notification)
+                        .setSmallIcon(R.drawable.ic_stat_notification_icon)
                         .setContentTitle(title)
                         .setContentText(content);
 

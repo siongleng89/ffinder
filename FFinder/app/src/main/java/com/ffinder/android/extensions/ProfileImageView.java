@@ -1,16 +1,15 @@
 package com.ffinder.android.extensions;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.ffinder.android.ActivityPickProfileImage;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.activities.IProfileImagePickerListener;
 import com.ffinder.android.helpers.AnimateBuilder;
@@ -57,9 +56,9 @@ public class ProfileImageView extends RelativeLayout {
         txtShortFormName = (TextView) this.findViewById(R.id.txtShortFormName);
         profileImage = (RoundedImageView) this.findViewById(R.id.profileImage);
 
-        backgroundOnTapColor = Color.parseColor("#497462");
-        srcNormalColor = Color.parseColor("#588e7e");
-        srcOnTapColor = Color.WHITE;
+        backgroundOnTapColor = ContextCompat.getColor(context, R.color.colorPrimaryDark);
+        srcNormalColor = ContextCompat.getColor(context, R.color.colorPrimaryDark);
+        srcOnTapColor = ContextCompat.getColor(context, R.color.colorContrast);
 
         this.setClickable(true);
         this.setFocusable(true);
@@ -116,14 +115,6 @@ public class ProfileImageView extends RelativeLayout {
                             txtShortFormName);
                 }
                 return false;
-            }
-        });
-
-        this.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ActivityPickProfileImage.class);
-                context.startActivity(intent);
             }
         });
 

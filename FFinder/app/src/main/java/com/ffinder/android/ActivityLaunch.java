@@ -161,8 +161,10 @@ public class ActivityLaunch extends MyActivityAbstract {
     }
 
     private void goToNextActivitiy(){
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(intent);
         this.overridePendingTransition(0, 0);
+        finish();
     }
 
     @Override
@@ -176,24 +178,22 @@ public class ActivityLaunch extends MyActivityAbstract {
 
                 if (permission.equals(Manifest.permission.ACCESS_FINE_LOCATION ) ||
                         permission.equals(Manifest.permission.ACCESS_COARSE_LOCATION) ||
-                        permission.equals(Manifest.permission.GET_ACCOUNTS)) {
+                        permission.equals(Manifest.permission.GET_ACCOUNTS) ||
+                        permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     if (grantResult == PackageManager.PERMISSION_GRANTED) {
                         granted++;
-                    } else {
-                        granted++;
                     }
-                    break;
                 }
             }
-            if(granted >= 3){
+            if(granted >= 4){
                 restartPermissionChecking();
             }
             else{
                 Toast.makeText(this,
                         R.string.some_permission_denied_toast_msg, Toast.LENGTH_LONG)
                         .show();
+                finish();
             }
-
         }
     }
 
@@ -204,11 +204,16 @@ public class ActivityLaunch extends MyActivityAbstract {
                     ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
+                            == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             == PackageManager.PERMISSION_GRANTED) {
                 return true;
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.GET_ACCOUNTS}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{
+                        android.Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.GET_ACCOUNTS,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         }

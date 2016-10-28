@@ -16,33 +16,6 @@
             style="@style/FFListViewStyle"/>
 
 
-    <RelativeLayout android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/layoutEmptyFriendFragment"
-                    android:visibility="gone" android:layout_above="@+id/linearLayout"
-                    android:layout_marginBottom="50dp"
-                    android:padding="10dp" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"
-                    android:background="@drawable/empty_friend_bg">
-
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/suggest_share_key_msg"
-                android:id="@+id/textView2" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-                android:gravity="center_horizontal" android:textColor="#000000"/>
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_share_key_text"
-                android:id="@+id/btnShareKey"
-                android:layout_below="@+id/textView2" android:layout_marginTop="15dp"
-                android:layout_centerHorizontal="true"/>
-    </RelativeLayout>
-
 
     <LinearLayout
             android:orientation="horizontal"

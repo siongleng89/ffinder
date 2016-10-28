@@ -216,7 +216,13 @@ public class MyModel implements Serializable {
 
     @JsonIgnore
     public ArrayList<FriendModel> getFriendModels() {
-        if(friendModels == null) friendModels = new ArrayList();
+        if(friendModels == null){
+            friendModels = new ArrayList();
+
+            //last model must be dummy
+            friendModels.add(new FriendModel());
+        }
+
         return friendModels;
     }
 
@@ -225,6 +231,14 @@ public class MyModel implements Serializable {
         if(friendModels == null) friendModels = new ArrayList();
         if(friendModels.size() == 1 && getFriendModelById(getUserId()) != null){
             return 0;
+        }
+        else if(friendModels.size() == 2 && getFriendModelById(getUserId()) != null){
+            for(FriendModel friendModel : friendModels){
+                if(Strings.isEmpty(friendModel.getUserId())){
+                    return 0;
+                }
+            }
+            return friendModels.size();
         }
         else{
             return friendModels.size();
@@ -250,7 +264,7 @@ public class MyModel implements Serializable {
         try {
             ArrayList<String> userIds = new ArrayList();
             for(FriendModel friendModel : getFriendModels()){
-                if(!userIds.contains(friendModel.getUserId())){
+                if(!userIds.contains(friendModel.getUserId()) && !Strings.isEmpty(friendModel.getUserId())){
                     userIds.add(friendModel.getUserId());
                 }
             }
@@ -316,7 +330,11 @@ public class MyModel implements Serializable {
         Collections.sort(getFriendModels(), new Comparator<FriendModel>(){
             public int compare(FriendModel o1, FriendModel o2)
             {
-                return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
+                if(Strings.isEmpty(o1.getUserId())) return Integer.MAX_VALUE;
+                else if (Strings.isEmpty(o2.getUserId())) return Integer.MIN_VALUE;
+                else{
+                    return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
+                }
             }
         });
     }

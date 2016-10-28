@@ -58,7 +58,7 @@ public class ActivityPromo extends MyActivityAbstract {
             RestfulService.usePromoCode(myUserId, promoCodeWrapper.getText(), new RestfulListener<String>() {
                 @Override
                 public void onResult(final String result, final Status status) {
-                    Threadings.postRunnable(ActivityPromo.this, new Runnable(){
+                    Threadings.postRunnable(new Runnable(){
                         @Override
                         public void run() {
                             progressDialog.dismiss();

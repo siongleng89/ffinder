@@ -47,6 +47,9 @@ public class ActivityShareKey extends MyActivityAbstract {
         if(actionBarActionType == ActionBarActionType.Reload){
             regenKeyPressed();
         }
+        else if(actionBarActionType == ActionBarActionType.Share){
+            shareKey();
+        }
 
     }
 
@@ -99,21 +102,24 @@ public class ActivityShareKey extends MyActivityAbstract {
                 .setNegativeButton(R.string.no, null).show();
     }
 
+    private void shareKey(){
+        Analytics.logEvent(AnalyticEvent.Share_Key_Button_Clicked);
+
+        String key = txtYourKey.getText().toString();
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = String.format(getString(R.string.share_msg), key, key);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_title)));
+    }
 
     public void setListeners(){
         btnShareKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Analytics.logEvent(AnalyticEvent.Share_Key_Button_Clicked);
-
-                String key = txtYourKey.getText().toString();
-
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                String shareBody = String.format(getString(R.string.share_msg), key, key);
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_title)));
+                shareKey();
             }
         });
 

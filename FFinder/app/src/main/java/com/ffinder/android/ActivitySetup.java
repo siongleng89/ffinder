@@ -1,5 +1,6 @@
 package com.ffinder.android;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class ActivitySetup extends MyActivityAbstract {
     private ImageView imgViewRetryIcon;
     private TextView txtStatus;
     private ProgressBar progressBar;
+    private final static int REQUEST_LOCATION_CHECK = 70;
 
 
     @Override
@@ -130,7 +132,7 @@ public class ActivitySetup extends MyActivityAbstract {
                             // Show the dialog by calling startResolutionForResult(),
                             // and check the result in onActivityResult().
                             status.startResolutionForResult(
-                                    ActivitySetup.this, 7);
+                                    ActivitySetup.this, REQUEST_LOCATION_CHECK);
                         } catch (IntentSender.SendIntentException e) {
                             // Ignore the error.
                         }
@@ -145,6 +147,29 @@ public class ActivitySetup extends MyActivityAbstract {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        final LocationSettingsStates states = LocationSettingsStates.fromIntent(intent);
+        switch (requestCode) {
+            case REQUEST_LOCATION_CHECK:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        onFinishChecking();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Toast.makeText(this,
+                                R.string.location_service_change_denied, Toast.LENGTH_LONG)
+                                .show();
+                        finish();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
+
     }
 
     private void onFinishChecking(){
@@ -226,17 +251,23 @@ public class ActivitySetup extends MyActivityAbstract {
                 try {
 
                     String adsId = adsIdTask.execute().get(3, TimeUnit.SECONDS);
-                    FirebaseDB.getUserIdByIdentifier(adsId, new FirebaseListener<String>(String.class) {
-                        @Override
-                        public void onResult(String recoverUserId, Status status) {
-                            if(status == Status.Success && !Strings.isEmpty(recoverUserId)){
-                                onResult.run(recoverUserId);
+
+                    if(Strings.isEmpty(adsId)){
+                        onResult.run(null);
+                    }
+                    else{
+                        FirebaseDB.getUserIdByIdentifier(adsId, new FirebaseListener<String>(String.class) {
+                            @Override
+                            public void onResult(String recoverUserId, Status status) {
+                                if(status == Status.Success && !Strings.isEmpty(recoverUserId)){
+                                    onResult.run(recoverUserId);
+                                }
+                                else{
+                                    onResult.run(null);
+                                }
                             }
-                            else{
-                                onResult.run(null);
-                            }
-                        }
-                    });
+                        });
+                    }
 
 
                 } catch (InterruptedException e) {
@@ -288,15 +319,19 @@ public class ActivitySetup extends MyActivityAbstract {
 
                             setCurrentStatus(getString(R.string.initialization_done));
                             Intent k = new Intent(ActivitySetup.this, ActivityMain.class);
+                            k.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             k.putExtra("firstRun", "1");
                             startActivity(k);
+                            finish();
                         }
                     });
                 }
                 else{
                     setCurrentStatus(getString(R.string.initialization_done));
                     Intent k = new Intent(ActivitySetup.this, ActivityMain.class);
+                    k.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(k);
+                    finish();
                 }
             }
         });
@@ -325,7 +360,7 @@ public class ActivitySetup extends MyActivityAbstract {
         this.currentStatus = currentStatus;
         if(txtStatus != null && currentStatus != null){
             System.out.println(this.currentStatus);
-            Threadings.postRunnable(this, new Runnable() {
+            Threadings.postRunnable(new Runnable() {
                 @Override
                 public void run() {
                     txtStatus.setText(currentStatus);

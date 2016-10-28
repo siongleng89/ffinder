@@ -98,8 +98,8 @@ public class TextFieldWrapper extends RelativeLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.wrapper_text_field, this, true);
 
-        labelNormalColor = Color.parseColor("#a6a6a6");
-        labelOnFocusColor = ContextCompat.getColor(context, R.color.colorHighlighted);
+        labelNormalColor = ContextCompat.getColor(context, R.color.colorNormalText);
+        labelOnFocusColor = ContextCompat.getColor(context, R.color.colorPrimaryDark);
 
 
         layoutWrapper = (LinearLayout) this.findViewById(R.id.layoutWrapper);

@@ -171,6 +171,13 @@ public class ActivityAddFriend extends MyActivityAbstract {
         BroadcasterHelper.broadcast(this, BroadcastEvent.RefreshFriend,
                 new Pair<String, String>("userId", addingUserId));
         loadingDialog.dismiss();
+
+        //notificate user added friend
+        NotificationSender.sendWithUserId(getMyModel().getUserId(), addingUserId,
+                FCMMessageType.FriendsAdded, NotificationSender.TTL_LONG, null,
+                new Pair<String, String>("username", myName));
+
+
         finish();
         Analytics.logEvent(AnalyticEvent.Add_Friend_Success);
     }

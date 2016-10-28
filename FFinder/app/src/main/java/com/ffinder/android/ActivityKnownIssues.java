@@ -50,16 +50,7 @@ public class ActivityKnownIssues extends MyActivityAbstract {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PhoneBrand brandName = PhoneBrand.valueOf(knownIssuesList.get(position));
 
-                String msg = "";
-                if(brandName == PhoneBrand.Xiaomi){
-                    msg = getString(R.string.issue_fix_xiaomi);
-                }
-                else if(brandName == PhoneBrand.Huawei){
-                    msg = getString(R.string.issue_fix_huawei);
-                }
-                else if(brandName == PhoneBrand.Sony){
-                    msg = getString(R.string.issue_fix_sony);
-                }
+                String msg = AndroidUtils.getPhoneBrandKnownIssue(ActivityKnownIssues.this, brandName);
 
                 OverlayBuilder.build(ActivityKnownIssues.this)
                         .setOverlayType(OverlayType.OkOnly)

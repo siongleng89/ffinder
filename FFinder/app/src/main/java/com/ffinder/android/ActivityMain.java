@@ -14,18 +14,17 @@ import android.support.v4.util.Pair;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.*;
-import android.widget.*;
+import android.view.ContextMenu;
+import android.view.View;
 import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
 import com.ffinder.android.absint.activities.IProfileImagePickerListener;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.adapters.IFriendItemListener;
-import com.ffinder.android.absint.controls.INoCreditsListener;
 import com.ffinder.android.absint.controls.ISearchFailedListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.tasks.RequestLocationTaskFragListener;
 import com.ffinder.android.adapters.FriendsAdapter;
-import com.ffinder.android.controls.*;
+import com.ffinder.android.controls.SearchFailedDialog;
 import com.ffinder.android.enums.*;
 import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.FriendModel;
@@ -36,6 +35,8 @@ import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.tasks.RequestLocationTaskFrag;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,11 +48,9 @@ public class ActivityMain extends MyActivityAbstract implements
 
     private FragmentNextAdsCd fragmentNextAdsCd;
     private MyModel myModel;
-    private Button btnShareKey;
     private RecyclerView listFriends;
-    private RelativeLayout layoutEmptyFriend;
     private FriendsAdapter friendsAdapter;
-    private final int pickImageCode = 100, cropImageCode = 101;
+    private final int pickImageCode = 100;
     private String pickingProfileImageForFriendId;
 
     public ActivityMain() {
@@ -70,9 +69,8 @@ public class ActivityMain extends MyActivityAbstract implements
 
         myModel = getMyModel();
 
-        btnShareKey = (Button) findViewById(R.id.btnShareKey);
-
-        fragmentNextAdsCd = (FragmentNextAdsCd) getSupportFragmentManager().findFragmentById(R.id.nextAdsCdFragment);
+        fragmentNextAdsCd = (FragmentNextAdsCd) getSupportFragmentManager()
+                                .findFragmentById(R.id.nextAdsCdFragment);
         fragmentNextAdsCd.setMyModel(myModel);
 
         listFriends = (RecyclerView) findViewById(R.id.listFriends);
@@ -87,8 +85,6 @@ public class ActivityMain extends MyActivityAbstract implements
                 layoutManager.getOrientation());
         listFriends.addItemDecoration(dividerItemDecoration);
         registerForContextMenu(listFriends);
-
-        layoutEmptyFriend = (RelativeLayout) findViewById(R.id.layoutEmptyFriendFragment);
 
         setListeners();
 
@@ -206,28 +202,29 @@ public class ActivityMain extends MyActivityAbstract implements
                 FragmentManager fm = getSupportFragmentManager();
 
                 for(FriendModel friendModel : getMyModel().getFriendModels()){
-                    RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
-                            fm.findFragmentByTag(friendModel.getUserId());
+                    if(!Strings.isEmpty(friendModel.getUserId())){
+                        RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
+                                fm.findFragmentByTag(friendModel.getUserId());
 
-                    friendModel.load(ActivityMain.this);
+                        friendModel.load(ActivityMain.this);
 
-                    // If the Fragment is non-null, then it is currently being
-                    // retained across a configuration change.
-                    if (taskFragment != null) {
-                        if(friendModel.getSearchStatus() == SearchStatus.End){
-                            taskFragment.terminate();
-                            getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
+                        // If the Fragment is non-null, then it is currently being
+                        // retained across a configuration change.
+                        if (taskFragment != null) {
+                            if(friendModel.getSearchStatus() == SearchStatus.End){
+                                taskFragment.terminate();
+                                getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
+                            }
+                        }
+                        //check if there is any leftoever stuck search, if there is
+                        //overwrite the search status
+                        else{
+                            if(friendModel.getSearchStatus() != SearchStatus.End){
+                                friendModel.setSearchStatus(SearchStatus.End);
+                                friendModel.save(ActivityMain.this);
+                            }
                         }
                     }
-                    //check if there is any leftoever stuck search, if there is
-                    //overwrite the search status
-                    else{
-                        if(friendModel.getSearchStatus() != SearchStatus.End){
-                            friendModel.setSearchStatus(SearchStatus.End);
-                            friendModel.save(ActivityMain.this);
-                        }
-                    }
-
                 }
                 ActivityMain.this.updateFriendsListAdapter();
             }
@@ -260,7 +257,7 @@ public class ActivityMain extends MyActivityAbstract implements
     }
 
     private void searchNow(final FriendModel friendModel){
-        Threadings.postRunnable(this, new Runnable() {
+        Threadings.postRunnable(new Runnable() {
             @Override
             public void run() {
                 fragmentNextAdsCd.friendSearched(new RunnableArgs<Boolean>() {
@@ -321,17 +318,31 @@ public class ActivityMain extends MyActivityAbstract implements
         boolean notify = Strings.isEmpty(PreferenceUtils.get(this, PreferenceType.DontRemindMeAgainPhoneIssue));
         if(notify){
             final String model = Build.BRAND;
-            if(model.equalsIgnoreCase(PhoneBrand.Huawei.name())
-                    || model.equalsIgnoreCase(PhoneBrand.Xiaomi.name())
-                    || model.equalsIgnoreCase(PhoneBrand.Sony.name())){
-                Threadings.postRunnable(ActivityMain.this, new Runnable() {
-                    @Override
-                    public void run() {
-                        KnownIssueDialog knownIssueDialog = new KnownIssueDialog(ActivityMain.this,
-                                                        PhoneBrand.valueOf(model));
-                        knownIssueDialog.show();
-                    }
-                });
+            PhoneBrand phoneBrand = PhoneBrand.convertStringToPhoneBrand(model);
+            if(phoneBrand != PhoneBrand.UnknownPhoneBrand){
+                String msg = AndroidUtils.getPhoneBrandKnownIssue(this, phoneBrand);
+                if(!Strings.isEmpty(msg)){
+                    final OverlayBuilder builder = OverlayBuilder.build(this);
+                    builder.setContent(msg)
+                        .setOverlayType(OverlayType.OkOnly)
+                        .setCheckboxTitle(getString(R.string.don_remind_me_again))
+                        .setOnDismissRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(builder.isChecked()){
+                                    PreferenceUtils.put(ActivityMain.this,
+                                            PreferenceType.DontRemindMeAgainPhoneIssue, "1");
+                                }
+                            }
+                        });
+                    Threadings.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            builder.show();
+                        }
+                    });
+
+                }
             }
         }
     }
@@ -366,6 +377,8 @@ public class ActivityMain extends MyActivityAbstract implements
                     if (taskFragment != null && friendModel.getSearchStatus() == SearchStatus.End) {
                         taskFragment.terminate();
                         fm.beginTransaction().remove(taskFragment).commit();
+                        friendModel.setRecentlyFinishSearch(true);
+                        friendModel.setTimeoutPhase(0);
                     }
 
                     ActivityMain.this.updateFriendsListAdapter(friendId);
@@ -394,6 +407,15 @@ public class ActivityMain extends MyActivityAbstract implements
     public void setRequestLocationTaskFragListener(final RequestLocationTaskFrag requestLocationTaskFrag){
         requestLocationTaskFrag.setRequestLocationTaskFragListener(new RequestLocationTaskFragListener() {
             @Override
+            public void onTimeoutPhaseChanged(String userId, int newPhase) {
+                FriendModel friendModel = myModel.getFriendModelById(userId);
+                if(newPhase != friendModel.getTimeoutPhase()){
+                    friendModel.setTimeoutPhase(newPhase);
+                }
+                ActivityMain.this.updateFriendsListAdapter(userId);
+            }
+
+            @Override
             public void onUpdateStatus(String userId, SearchStatus newStatus) {
                 FriendModel friendModel = myModel.getFriendModelById(userId);
                 if(newStatus != friendModel.getSearchStatus()){
@@ -408,9 +430,10 @@ public class ActivityMain extends MyActivityAbstract implements
                                        final SearchStatus finalSearchStatus, final SearchResult result) {
 
                 final FriendModel friendModel = myModel.getFriendModelById(userId);
-                friendModel.setRecentlyFinishSearch(true);
                 friendModel.setSearchStatus(finalSearchStatus);
                 friendModel.setSearchResult(result);
+                friendModel.setRecentlyFinishSearch(true);
+                friendModel.setTimeoutPhase(0);
                 friendModel.setSearchStatus(SearchStatus.End);
 
                 //location model could be null if unable to search user
@@ -440,7 +463,7 @@ public class ActivityMain extends MyActivityAbstract implements
 
     @Override
     public void updateFriendsListAdapter(final String friendId) {
-        Threadings.postRunnable(ActivityMain.this, new Runnable() {
+        Threadings.postRunnable(new Runnable() {
             @Override
             public void run() {
                 ArrayList<FriendModel> friendModels = getMyModel().getFriendModels();
@@ -463,19 +486,11 @@ public class ActivityMain extends MyActivityAbstract implements
     //notify friend models changed
     @Override
     public void updateFriendsListAdapter() {
-        Threadings.postRunnable(ActivityMain.this, new Runnable() {
+        Threadings.postRunnable(new Runnable() {
             @Override
             public void run() {
-                friendsAdapter.reset();
+                //friendsAdapter.reset();
                 friendsAdapter.notifyDataSetChanged();
-
-                if(myModel.getNonSelfFriendModelsCount() == 0){
-                    layoutEmptyFriend.setVisibility(View.VISIBLE);
-                }
-                else{
-                    layoutEmptyFriend.setVisibility(View.GONE);
-                }
-
             }
         });
     }
@@ -519,6 +534,7 @@ public class ActivityMain extends MyActivityAbstract implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         switch(requestCode){
             case pickImageCode:
                 if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
@@ -541,50 +557,37 @@ public class ActivityMain extends MyActivityAbstract implements
                     }
                 }
                 break;
-            case cropImageCode:
-                if(resultCode == Activity.RESULT_OK){
-
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
                     AndroidUtils.moveProfileImageToPrivateDir(this,
-                            AndroidUtils.getTempImageStorageUri(pickingProfileImageForFriendId),
+                            resultUri,
                             pickingProfileImageForFriendId);
 
                     //set to null to let it refresh image
                     getMyModel().getFriendModelById(pickingProfileImageForFriendId).setHasProfileImage(null);
                     updateFriendsListAdapter(pickingProfileImageForFriendId);
+
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
                 }
+
         }
     }
 
     private void performCrop(String picUri) {
         try {
-            //Start Crop Activity
 
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            File f = new File(picUri);
-            Uri contentUri = Uri.fromFile(f);
+            Uri targetUri = Uri.fromFile(new File(picUri));
 
-            cropIntent.setDataAndType(contentUri, "image/*");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 280);
-            cropIntent.putExtra("outputY", 280);
-
-            // retrieve data on return
-            cropIntent.putExtra("return-data", false);
-
-            // save temp image
-            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    AndroidUtils.getTempImageStorageUri(pickingProfileImageForFriendId));
-
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, cropImageCode);
+            CropImage.activity(targetUri)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setAutoZoomEnabled(false)
+                    .setFixAspectRatio(true)
+                    .setAspectRatio(280, 280)
+                    .start(this);
         }
-        // respond to users whose devices do not support the crop action
         catch (ActivityNotFoundException anfe) {
 
         }

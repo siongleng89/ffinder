@@ -7,6 +7,8 @@
 
     <string name="app_name">FFfinder</string>
 
+    <string name="app_title_long">Friends and Family Finder</string>
+
     <!--Apps info end-->
 
 
@@ -46,6 +48,16 @@
 
     <string name="add">Add</string>
 
+    <string name="address_myself">Me</string>
+
+    <string name="next">Next</string>
+
+    <string name="don_remind_me_again">Don\'t remind me again.</string>
+
+    <string name="dont_show_this_again">Don\'t show this again</string>
+
+    <string name="search">Search</string>
+
     <!--Common texts end-->
 
 
@@ -54,14 +66,9 @@
 
     <!--Launch Activity text start-->
 
+    <string name="welcome_msg_1">Welcome To</string>
 
-    <string name="no_google_service_error_msg">Please make sure Google Play service is properly configured before
-        running this app.
-    </string>
-
-    <string name="no_permission_error_msg">Please make sure location and user account permission are provided.</string>
-
-    <string name="first_time_msg_title">Welcome!</string>
+    <string name="welcome_msg_2">Flowerpot</string>
 
     <string name="first_time_msg_content">
         Thanks for choosing us, you now have a friend &amp; family finder that,
@@ -69,6 +76,16 @@
         \n\n- Does not drain battery as search is on demand
         \n- Offers some privacy as it does not track every move
         \n- Is free with Ads
+    </string>
+
+    <string name="required_location_provider_msg">
+        FFfinder required location service enabled to work.
+    </string>
+
+    <string name="btn_go_to_location_settings_text">Config Location</string>
+
+    <string name="some_permission_denied_toast_msg">
+        Please make sure all required permissions are allowed to start FFfinder.
     </string>
 
     <!--Launch Activity text end-->
@@ -82,17 +99,25 @@
 
     <string name="initializing">Initializing…</string>
 
+    <string name="checking_google_service_availability">Checking google service availability</string>
+
     <string name="retrieving_token">Retrieving Token…</string>
 
     <string name="initializing_user">Initializing user…</string>
 
     <string name="initialization_done">Initialization done.</string>
 
+    <string name="no_google_service_error_msg">
+        Please make sure Google Play service is properly configured before running this app.
+    </string>
+
     <string name="no_connection_msg">No connection found, please check your connection and try again.</string>
 
-    <string name="no_token_msg">Unable to retrieve token, please try again.</string>
-
     <string name="db_failed_msg">Unable to connect to server, please check your connection and try again.</string>
+
+    <string name="location_service_change_denied">
+        Please properly config location service before starting FFfinder.
+    </string>
 
     <!--Setup Activity text end-->
 
@@ -102,18 +127,17 @@
 
     <!--Main Activity text start-->
 
-
-    <string name="locating_user">Locating user…</string>
-
-    <string name="last_updated">"Last Updated: %s"</string>
-
     <string name="never_locate_user_msg">Click search to locate him/her!</string>
 
-    <string name="btn_show_map_text">Map</string>
-
-    <string name="btn_search_text">Search</string>
-
     <string name="unknown_address_msg">Unknown address, please see the location with map</string>
+
+    <string name="block_dialog_title">
+        Block %s?
+    </string>
+
+    <string name="block_dialog_content">
+        %s will not be able to locate you after this, however you will still able to locate him/her.
+    </string>
 
     <string name="search_status_starting_msg">Starting…</string>
 
@@ -144,7 +168,7 @@
         \n2) User has disabled location sharing
     </string>
 
-    <string name="don_remind_me_again">Don\'t remind me again.</string>
+    <string name="error_user_blocked_msg">User has blocked you from locating him/her.</string>
 
     <string name="failed_search_msg_text1">It seems like we are unable to locate this user the last time you search due
         to the possible reason(s):
@@ -182,6 +206,10 @@
 
     <string name="no_ads_available_toast_msg">No ads available, free searches will be rewarded.</string>
 
+    <string name="searching">Searching</string>
+
+    <string name="auto_searching">Auto</string>
+
     <!--Main Activity text end-->
 
 
@@ -214,8 +242,8 @@
 
     <string name="not_subscribed">Not Subscribed</string>
 
-    <string name="manage_subscriptions_introduction">To manage subscription, please open Google Play Store, tap Menu >
-        Account > Subscriptions
+    <string name="manage_subscriptions_introduction">
+        To manage subscription, please open Google Play Store, tap Menu > Account > Subscriptions
     </string>
 
     <!--Vip Activity text end-->
@@ -256,7 +284,15 @@
 
     <string name="map_activity_title">Map</string>
 
-    <string name="direction_to_place">Direction</string>
+    <string name="street_view_not_available_msg">Street view is not available at this area</string>
+
+    <string name="pick_your_travel_mode">Pick your travel mode</string>
+
+    <string name="duration">Duration</string>
+
+    <string name="distance">Distance</string>
+
+    <string name="directions">Directions</string>
 
     <!--Map Activity text end-->
 
@@ -289,7 +325,7 @@
     <!--_________________________________________________________________________________-->
 
 
-    <!--Add member popup dialog text start-->
+    <!--Add member Activity text start-->
 
     <string name="add_new_member_title">Add Friend/Family</string>
 
@@ -328,7 +364,7 @@
     <string name="passcode_tutorial_text_2_0">2.0 Copy the Passcode shared by your friend/family.</string>
     <string name="passcode_tutorial_text_2_1">2.1 Key in the Passcode and press OK.</string>
 
-    <!--Add member popup dialog text end-->
+    <!--Add member Activity text end-->
 
 
     <!--_________________________________________________________________________________-->
@@ -341,35 +377,21 @@
 
     <string name="new_name_title">New Name</string>
 
-    <string name="edit_name_empty_error_msg">Please input a name</string>
-
     <!--Edit member name popup dialog text end-->
 
-
     <!--_________________________________________________________________________________-->
 
 
-    <!--Delete member popup dialog text start-->
+    <!--Share key activity text start-->
 
+    <string name="share_key_activity_title">Passcode</string>
 
-    <string name="delete_user_title">Delete %s?</string>
-
-    <string name="confirm_delete_user_msg">Are you sure you want to delete this user, he/she will not be able to locate
-        you after you have deleted him/her.
-    </string>
-
-    <!--Delete member popup dialog text end-->
-
-
-    <!--_________________________________________________________________________________-->
-
-
-    <!--Share key popup dialog text start-->
-
+    <string name="share_key_title">Add Friend/Family By Sharing Your Passcode</string>
 
     <string name="btn_share_via_other_apps_text">Share</string>
 
-    <string name="your_key_title">Share this Passcode with your friends and family, and you can start tracking their
+    <string name="your_key_title">
+        Share this Passcode with your friends and family, and you can start tracking their
         location once they have added you
         \n(No action is required after sharing your Passcode)
     </string>
@@ -403,7 +425,23 @@
         \nMy Passcode: %s
     </string>
 
-    <!--Share key popup dialog text end-->
+    <!--Share key activity text end-->
+
+
+    <!--_________________________________________________________________________________-->
+
+
+    <!--Delete member popup dialog text start-->
+
+
+    <string name="delete_user_title">Delete %s?</string>
+
+    <string name="confirm_delete_user_msg">
+        Are you sure you want to delete this user, he/she will not be able to locate you after you
+        have deleted him/her.
+    </string>
+
+    <!--Delete member popup dialog text end-->
 
 
     <!--_________________________________________________________________________________-->
@@ -431,27 +469,16 @@
 
     <string name="notification_x_users_located_msg">%s of friends located.</string>
 
+    <string name="notification_x_added_you">
+        %s has added you! You may now locate each other.
+    </string>
+
+    <string name="notification_remember_to_add_friend_msg">
+        Get started! Share your Passcode to add your friends and family :)
+    </string>
 
     <!--Notifications end -->
 
-
-    <!--_________________________________________________________________________________-->
-
-
-    <!-- new texts _____________________________________________________________________________________-->
-    <string name="notification_x_added_you">%s has added you! You may now locate each other.</string>
-    <string name="notification_remember_to_add_friend_msg">Get started! Share your Passcode to add your friends and
-        family :)
-    </string>
-    <string name="address_myself">Me</string>
-    <string name="required_location_provider_msg">FFfinder required location service enabled to work.</string>
-    <string name="btn_go_to_location_settings_text">Config Location</string>
-    <string name="some_permission_denied_toast_msg">Please make sure all required permissions are allowed to start
-        FFfinder.
-    </string>
-    <string name="checking_google_service_availability">Checking google service availability</string>
-    <string name="share_key_activity_title">Passcode</string>
-    <string name="pick_avatar_activity_title">Pick Image</string>
 
 
 </resources>

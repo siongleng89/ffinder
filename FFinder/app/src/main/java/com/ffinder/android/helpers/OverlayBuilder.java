@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +25,13 @@ public class OverlayBuilder {
     private OverlayType overlayType;
     private String title;
     private String content;
+    private String checkboxTitle;
     private View contentView;
     private View customView;
     private Runnable onDismiss;
     private ArrayList<Runnable> runnables;
     private ArrayList<String> btnTexts;
+    private AppCompatCheckBox checkbox;
 
     public static OverlayBuilder build(Activity activity){
         OverlayBuilder overlayBuilder = new OverlayBuilder(activity);
@@ -53,6 +56,11 @@ public class OverlayBuilder {
 
     public OverlayBuilder setContent(String content) {
         this.content = content;
+        return this;
+    }
+
+    public OverlayBuilder setCheckboxTitle(String checkboxTitle) {
+        this.checkboxTitle = checkboxTitle;
         return this;
     }
 
@@ -103,7 +111,8 @@ public class OverlayBuilder {
                 viewInflated = LayoutInflater.from(activity).inflate(R.layout.dialog_empty_layout,
                         (ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content), false);
 
-                ((RelativeLayout) viewInflated).addView(customView);
+
+                ((RelativeLayout) viewInflated.findViewById(R.id.layoutContent)).addView(customView);
                 break;
 
             case OkCancel:
@@ -164,6 +173,19 @@ public class OverlayBuilder {
             }
         }
 
+        if(!Strings.isEmpty(checkboxTitle)) {
+            View layoutCheckbox = viewInflated.findViewById(R.id.layoutCheckbox);
+            if(layoutCheckbox != null){
+                layoutCheckbox.setVisibility(View.VISIBLE);
+            }
+
+
+            checkbox = (AppCompatCheckBox) viewInflated.findViewById(R.id.checkboxView);
+            if (checkbox != null){
+                checkbox.setText(checkboxTitle);
+            }
+        }
+
         if(contentView != null){
             ViewGroup layoutContent = (ViewGroup) viewInflated.findViewById(R.id.layoutContent);
             if(layoutContent != null){
@@ -217,41 +239,13 @@ public class OverlayBuilder {
 
         return dialog;
 
+    }
 
-
-
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//
-//        if(btnTexts.size() > 0){
-//            // Set up the buttons
-//            builder.setPositiveButton(btnTexts.get(0), new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    if (runnables.size() > 0){
-//                        runnables.get(0).run();
-//                    }
-//                    dialog.dismiss();
-//                }
-//            });
-//        }
-//
-//        if(btnTexts.size() > 1){
-//            // Set up the buttons
-//            builder.setNegativeButton(btnTexts.get(1), new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    if (runnables.size() > 1){
-//                        runnables.get(1).run();
-//                    }
-//                    dialog.dismiss();
-//                }
-//            });
-//        }
-//
-//
-
-
+    public boolean isChecked(){
+        if(checkbox != null){
+            return checkbox.isChecked();
+        }
+        return false;
     }
 
 }

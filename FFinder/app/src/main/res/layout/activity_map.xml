@@ -3,16 +3,200 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ActivityMap">
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".ActivityMap" android:background="@color/colorPrimary">
 
     <include layout="@layout/default_toolbar" android:id="@+id/my_toolbar"/>
 
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-              android:name="com.google.android.gms.maps.SupportMapFragment"
-              android:id="@+id/map"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" android:layout_below="@+id/my_toolbar"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:layout_below="@+id/my_toolbar">
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:name="com.google.android.gms.maps.SupportMapFragment"
+                  android:id="@+id/map"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dp" android:layout_below="@+id/my_toolbar" android:layout_weight="1"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp" android:layout_below="@+id/map" android:layout_weight="1"
+                android:orientation="vertical">
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp" android:id="@+id/layoutContent" android:layout_weight="1"
+                    android:background="#fff">
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:id="@+id/layoutStreetView"
+                        android:paddingTop="2dp" android:visibility="visible">
+                    <fragment
+                            android:name="com.google.android.gms.maps.SupportStreetViewPanoramaFragment"
+                            android:id="@+id/streetViewMap"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" android:gravity="center" android:background="#fff"
+                            android:id="@+id/layoutNoStreetView" android:visibility="gone">
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/street_view_not_available_msg"
+                                android:id="@+id/textView3" android:textColor="@color/colorPrimaryDark"
+                                android:textStyle="bold"/>
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:id="@+id/layoutDirections"
+                        android:visibility="gone">
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" android:id="@+id/layoutDirectionBtns">
+
+                        <com.ffinder.android.extensions.ButtonWhite
+                                android:layout_width="fill_parent"
+                                android:layout_height="30dp"
+                                android:id="@+id/btnDrive" android:layout_weight="1"
+                                android:layout_marginRight="5dp"
+                                app:imageSrc="@drawable/car_icon"
+                                app:innerPaddingTop="8dp"
+                                app:innerPaddingBottom="8dp"/>
+                        <com.ffinder.android.extensions.ButtonWhite
+                                android:layout_width="fill_parent"
+                                android:layout_height="30dp"
+                                android:id="@+id/btnTransit" android:layout_weight="1"
+                                android:layout_marginRight="5dp"
+                                app:imageSrc="@drawable/transit_icon"
+                                app:innerPaddingTop="5dp"
+                                app:innerPaddingBottom="5dp"/>
+                        <com.ffinder.android.extensions.ButtonWhite
+                                android:layout_width="fill_parent"
+                                android:layout_height="30dp"
+                                android:id="@+id/btnWalk" android:layout_weight="1"
+                                app:imageSrc="@drawable/walk_icon"
+                                app:innerPaddingTop="7dp"
+                                app:innerPaddingBottom="7dp"/>
+
+                    </LinearLayout>
+                    <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/scrollView" android:layout_below="@+id/layoutDirectionBtns"
+                            android:layout_marginTop="5dp">
+                        <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+                            <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" android:paddingLeft="10dp"
+                                    android:paddingRight="10dp" android:paddingBottom="10dp"
+                                    android:id="@+id/layoutDirectionContent" android:visibility="visible">
+                                <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/pick_your_travel_mode"
+                                        android:id="@+id/txtDirectonTitle" android:textStyle="bold"
+                                        android:textColor="@color/colorPrimaryDark" android:gravity="center"
+                                        android:layout_marginBottom="5dp"/>
+                                <LinearLayout
+                                        android:orientation="vertical"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent" android:layout_below="@+id/txtDirectonTitle"
+                                        android:id="@+id/layoutDirectionDetails"
+                                        android:visibility="gone">
+                                    <LinearLayout
+                                            android:orientation="horizontal"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent" android:layout_marginBottom="5dp">
+                                        <TextView
+                                                android:layout_width="80dp"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/duration"
+                                                android:id="@+id/textView4" android:layout_marginRight="10dp"
+                                                android:textColor="@color/colorNormalText" android:textStyle="bold"/>
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="25 mins"
+                                                android:id="@+id/txtDuration" android:textColor="@color/colorNormalText"/>
+                                    </LinearLayout>
+                                    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                                                  android:layout_height="match_parent" android:layout_marginBottom="5dp">
+                                        <TextView android:layout_width="80dp" android:layout_height="wrap_content"
+                                                  android:text="@string/distance" android:id="@+id/textView6"
+                                                  android:layout_marginRight="10dp" android:textColor="@color/colorNormalText"
+                                                  android:textStyle="bold"/>
+                                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                  android:text="10 km" android:id="@+id/txtDistance"
+                                                  android:textColor="@color/colorNormalText"/>
+                                    </LinearLayout>
+                                    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                                                  android:layout_height="match_parent">
+                                        <TextView android:layout_width="80dp" android:layout_height="wrap_content"
+                                                  android:text="@string/directions" android:id="@+id/textView29"
+                                                  android:layout_marginRight="10dp" android:textColor="@color/colorNormalText"
+                                                  android:textStyle="bold"/>
+                                        <TableLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content" android:id="@+id/tableDirections">
+
+                                        </TableLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </RelativeLayout>
+                            <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" android:id="@+id/layoutDirectionLoading"
+                                    android:gravity="center" android:layout_marginTop="10dp" android:visibility="gone">
+                                <ProgressBar
+                                        style="?android:attr/progressBarStyleLarge"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/progressBar2" android:indeterminate="true"
+                                        android:indeterminateDrawable="@drawable/progress_green"/>
+                                <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/loading"
+                                        android:id="@+id/loadingTextView" android:layout_toRightOf="@+id/progressBar2"
+                                        android:layout_centerVertical="true" android:layout_marginLeft="20dp"
+                                        android:textColor="@color/colorPrimaryDark" android:textSize="20sp" android:textStyle="bold"/>
+                            </RelativeLayout>
+                        </RelativeLayout>
+                    </ScrollView>
+                </RelativeLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" android:id="@+id/layoutBottomBar"
+                    android:layout_below="@+id/layoutContent" android:background="@drawable/bottom_bar">
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    <Button
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:text="Street View"
+                            android:id="@+id/btnStreetView" android:layout_weight="1"/>
+                    <Button
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:text="Directions"
+                            android:id="@+id/btnDirections" android:layout_weight="1"/>
+                    <Button
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:text="Open gps nav."
+                            android:id="@+id/btnGps" android:layout_weight="1"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
