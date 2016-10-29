@@ -5,7 +5,7 @@ package com.ffinder.android.enums;
  */
 public enum SearchAnimationState {
 
-    Sleeping, DoNothing, Starting, SearchingHappy, SearchingTrouble,
+    Sleeping, DoNothing, Satisfied, Starting, SearchingHappy, SearchingTrouble,
     SearchingDizzy, SearchSuccess, Ending, AutoSearching
 
 }

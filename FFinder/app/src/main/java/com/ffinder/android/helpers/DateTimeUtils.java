@@ -6,6 +6,7 @@ import com.ffinder.android.R;
 
 import java.text.DateFormat;
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -90,7 +91,7 @@ public class DateTimeUtils {
             DateFormat writeFormat = new SimpleDateFormat("hh:mm aa");
             result = writeFormat.format(date);
         }
-        else if(Integer.valueOf(formattedCurrent) - Integer.valueOf(formattedPrevious) == 1){
+        else if(checkDaysDifference(unixMiliSecs) == 1){
             result = context.getString(R.string.yesterday);
         }
         else{
@@ -101,6 +102,32 @@ public class DateTimeUtils {
         }
 
         return result;
+    }
+
+    public static long checkDaysDifference(long unixMiliSecs){
+        if(unixMiliSecs == 0){
+            return 99;
+        }
+
+        Date date = new Date();
+        date.setTime(unixMiliSecs);
+
+        Date currentDate = new Date();
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        String formattedPrevious = fmt.format(date);
+        String formattedCurrent = fmt.format(currentDate);
+
+        try {
+            Date date1 = fmt.parse(formattedPrevious);
+            Date date2 = fmt.parse(formattedCurrent);
+            long diff = date2.getTime() - date1.getTime();
+            return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return 99;
+
     }
 
     public static String convertUnixMiliSecsToUserPrefDateTimeString(Context context, long unixMiliSecs){

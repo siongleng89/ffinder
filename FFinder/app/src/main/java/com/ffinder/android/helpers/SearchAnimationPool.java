@@ -40,7 +40,6 @@ public class SearchAnimationPool {
 
 
 
-
     public static HashMap<String, ArrayList<Drawable>> getStorage() {
         if(storage == null) storage = new HashMap();
         return storage;

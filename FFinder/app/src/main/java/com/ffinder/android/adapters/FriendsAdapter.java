@@ -295,6 +295,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         friendModel.setRecentlyFinishSearch(false);
                         buttonSearch.changeSearchState(SearchAnimationState.SearchSuccess);
                     }
+                    else{
+                        //is same day
+                        if(DateTimeUtils.checkDaysDifference(
+                                friendModel.getLastLocationModel().getTimestampLastUpdatedLong()) == 0){
+                            buttonSearch.changeSearchState(SearchAnimationState.Satisfied);
+                        }
+                    }
 
                 }
 

@@ -94,6 +94,13 @@ public class ButtonSearch extends RelativeLayout {
                              SearchAnimationPool.getDrawables(context, "flower_sleeping_0", 1).get(0)
                         );
                 break;
+            case Satisfied:
+                animateInLastUpdated();
+                setStatusText(context.getString(R.string.search));
+                imgViewFlower.setImageDrawable(
+                        SearchAnimationPool.getDrawables(context, "flower_satisfied_0", 1).get(0)
+                );
+                break;
             case DoNothing:
                 setStatusText(context.getString(R.string.search));
                 imgViewFlower.setImageDrawable(
@@ -154,7 +161,7 @@ public class ButtonSearch extends RelativeLayout {
                                 Threadings.delay(1000, new Runnable() {
                                     @Override
                                     public void run() {
-                                        changeSearchState(SearchAnimationState.Ending);
+                                        changeSearchState(SearchAnimationState.Ending, "searchSucceed");
                                     }
                                 });
                             }
@@ -176,6 +183,10 @@ public class ButtonSearch extends RelativeLayout {
                                 if(extras != null && extras.length > 0){
                                     if(extras[0].equals("autoSearching")){
                                         changeSearchState(SearchAnimationState.AutoSearching);
+                                        return;
+                                    }
+                                    else if(extras[0].equals("searchSucceed")){
+                                        changeSearchState(SearchAnimationState.Satisfied);
                                         return;
                                     }
                                 }
