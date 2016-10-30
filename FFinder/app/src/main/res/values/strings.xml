@@ -58,6 +58,8 @@
 
     <string name="search">Search</string>
 
+    <string name="unknown">Unknown</string>
+
     <!--Common texts end-->
 
 
@@ -294,6 +296,8 @@
 
     <string name="directions">Directions</string>
 
+    <string name="no_route_found_error_msg">No route found</string>
+
     <!--Map Activity text end-->
 
 
@@ -478,7 +482,6 @@
     </string>
 
     <!--Notifications end -->
-
 
 
 </resources>

@@ -35,12 +35,21 @@ public class FragmentSearchButtonsHolder extends Fragment {
 
         ButtonSearch buttonSearch = storage.get(userId);
         if(buttonSearch.getParent() != null){
-            ((ViewGroup) buttonSearch.getParent()).removeAllViews();
+            ((ViewGroup) buttonSearch.getParent()).removeView(buttonSearch);
         }
 
         return storage.get(userId);
     }
 
+    public void remove(String userId){
+        if(storage.containsKey(userId)){
+            ButtonSearch buttonSearch = storage.get(userId);
+            if(buttonSearch.getParent() != null){
+                ((ViewGroup) buttonSearch.getParent()).removeView(buttonSearch);
+            }
+            storage.remove(userId);
+        }
+    }
 
 
 

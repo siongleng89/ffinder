@@ -360,6 +360,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             .setRunnables(new Runnable() {
                                 @Override
                                 public void run() {
+                                    fragmentSearchButtonsHolder.remove(friendModel.getUserId());
                                     friendsAdapterHolder.onDeleteFriend(friendModel);
                                 }
                             }).show();

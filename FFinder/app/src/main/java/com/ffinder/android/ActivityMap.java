@@ -188,7 +188,19 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
 
     @Override
     public void onRoutingFailure(RouteException e) {
+        txtDirectionTitle.setText(R.string.no_route_found_error_msg);
 
+        txtDistance.setText(R.string.unknown);
+        txtDuration.setText(R.string.unknown);
+
+        tableDirections.removeAllViews();
+
+        AnimateBuilder.fadeOut(ActivityMap.this, layoutDirectionLoading, new Runnable() {
+            @Override
+            public void run() {
+                AnimateBuilder.fadeIn(ActivityMap.this, layoutDirectionContent);
+            }
+        });
     }
 
     @Override
@@ -401,7 +413,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         btnDirections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AnimateBuilder.fadeOut(ActivityMap.this, layoutStreetView, new Runnable() {
+                AnimateBuilder.fadeOutAndSetGone(ActivityMap.this, layoutStreetView, new Runnable() {
                     @Override
                     public void run() {
                         AnimateBuilder.fadeIn(ActivityMap.this, layoutDirections);
@@ -413,7 +425,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         btnStreetView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AnimateBuilder.fadeOut(ActivityMap.this, layoutDirections, new Runnable() {
+                AnimateBuilder.fadeOutAndSetGone(ActivityMap.this, layoutDirections, new Runnable() {
                     @Override
                     public void run() {
                         AnimateBuilder.fadeIn(ActivityMap.this, layoutStreetView);

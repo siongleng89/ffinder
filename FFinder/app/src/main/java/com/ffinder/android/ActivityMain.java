@@ -91,11 +91,9 @@ public class ActivityMain extends MyActivityAbstract implements
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
-                myModel.loadAllFriendModels();
-                myModel.sortFriendModels();
-
-                //check if pending to add user, if yes, pop add user dialog automatically
-                checkHasPendingToAddUser();
+                if(myModel.loadAllFriendModels()){
+                    myModel.sortFriendModels();
+                }
 
                 //reload(recreate/remove) task fragments for friend searching (mostly for rotating device)
                 reloadFriendsDesignByRequestLocationTaskFrags();
@@ -135,8 +133,16 @@ public class ActivityMain extends MyActivityAbstract implements
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(myModel.loadAllFriendModels()){
+            myModel.sortFriendModels();
+        }
+
         reloadFriendsDesignByRequestLocationTaskFrags();
         PreferenceUtils.delete(this, PreferenceType.AutoNotifiedReceivedIds);
+
+        //check if pending to add user, if yes, pop add user dialog automatically
+        checkHasPendingToAddUser();
     }
 
     @Override
@@ -380,6 +386,10 @@ public class ActivityMain extends MyActivityAbstract implements
                         friendModel.setRecentlyFinishSearch(true);
                         friendModel.setTimeoutPhase(0);
                     }
+                    else{
+                        friendModel.setRecentlyFinishSearch(false);
+                        friendModel.setTimeoutPhase(0);
+                    }
 
                     ActivityMain.this.updateFriendsListAdapter(friendId);
                 }
@@ -390,10 +400,12 @@ public class ActivityMain extends MyActivityAbstract implements
             }
         });
 
-        registerBroadcastReceiver(BroadcastEvent.RefreshWholeFriendList, new RunnableArgs<Intent>() {
+        registerBroadcastReceiver(BroadcastEvent.RefreshNewlyAddedFriend, new RunnableArgs<Intent>() {
             @Override
             public void run() {
-                refreshFriendList();
+                myModel.loadAllFriendModels();
+                myModel.sortFriendModels();
+                updateFriendsListAdapter();
             }
         });
 

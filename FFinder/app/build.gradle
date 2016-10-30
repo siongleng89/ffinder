@@ -13,8 +13,8 @@ android {
 
         minSdkVersion 10
         targetSdkVersion 25
-        versionCode 31
-        versionName "3.0.3"
+        versionCode 32
+        versionName "3.0.4"
         multiDexEnabled true
     }
     buildTypes {

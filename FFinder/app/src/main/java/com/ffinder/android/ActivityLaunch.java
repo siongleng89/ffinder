@@ -67,8 +67,6 @@ public class ActivityLaunch extends MyActivityAbstract {
     }
 
     private void onPermissionFinishChecking(){
-        populatePendingAddUserKey();
-
         final MyModel myModel = getMyModel();
 
         if(Strings.isEmpty(myModel.getUserId())){
@@ -262,18 +260,6 @@ public class ActivityLaunch extends MyActivityAbstract {
         }
     }
 
-    //user is enter FFfinder through whatsapp msg
-    private void populatePendingAddUserKey(){
-        final Intent intent = getIntent();
-        final String action = intent.getAction();
-
-        if (Intent.ACTION_VIEW.equals(action)) {
-            final List<String> segments = intent.getData().getPathSegments();
-            if (segments.size() == 2) {
-                Vars.pendingAddUserKey = segments.get(1);
-            }
-        }
-    }
 
     private void setListeners(){
         layoutNext.setOnClickListener(new View.OnClickListener() {

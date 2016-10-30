@@ -37,8 +37,24 @@ public class NotificationConsumer {
             if(messageType == FCMMessageType.FriendsAdded){
                 String username = map.get("username");
                 final String senderId = map.get("senderId");
+
+
+                MyModel myModel = new MyModel(context);
+                myModel.load();
+                myModel.loadAllFriendModels();
+
+                FriendModel newFriendModel = new FriendModel();
+                newFriendModel.setUserId(senderId);
+                newFriendModel.setName(Strings.pickNonEmpty(username, ""));
+
+                myModel.addFriendModel(newFriendModel);
+                myModel.sortFriendModels();
+                newFriendModel.save(context);
+                myModel.commitFriendUserIds();
+
                 showFriendAddedNotification(senderId, username);
-                BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshWholeFriendList);
+                BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshNewlyAddedFriend,
+                        new Pair<String, String>("userId", senderId));
             }
 
             //someone has asked for my location, update location

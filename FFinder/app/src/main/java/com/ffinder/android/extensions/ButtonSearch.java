@@ -193,8 +193,10 @@ public class ButtonSearch extends RelativeLayout {
 
                                 setStatusText(context.getString(R.string.search));
                                 changeSearchState(SearchAnimationState.Sleeping);
+
                             }
                         });
+
                 imgViewFlower.setImageDrawable(searchEndingAnimation);
                 searchEndingAnimation.start();
                 break;

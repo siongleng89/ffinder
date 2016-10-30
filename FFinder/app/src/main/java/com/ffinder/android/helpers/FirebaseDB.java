@@ -96,7 +96,7 @@ public class FirebaseDB {
                             public void onResult(String result, Status status) {
                                 if(status == Status.Success && result != null){
                                     long differenceInSecs = DateTimeUtils.getDifferenceInSecs(keyModel.getInsertAtLong(), Long.valueOf(result));
-                                    if(differenceInSecs > Constants.KeyExpiredTotalSecs + (10 * 60)){
+                                    if(differenceInSecs > Constants.KeyExpiredTotalSecs){
                                         getTable(TableName.keys).child(key).setValue(toInsertModel, new DatabaseReference.CompletionListener() {
                                             @Override
                                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -122,6 +122,23 @@ public class FirebaseDB {
             }
         });
     }
+
+    public static void removeUserKey(String userId, final String key, final FirebaseListener listener){
+        checkMyKeyExist(userId, key, new FirebaseListener<KeyModel>(KeyModel.class) {
+            @Override
+            public void onResult(KeyModel result, Status status) {
+                if(result != null && status == Status.Success){
+                    //key is belong to me
+                    getTable(TableName.keys).child(key).setValue(null);
+                    if(listener != null) listener.onResult(null, Status.Success);
+                }
+                else{
+                    if(listener != null) listener.onResult(null, Status.Success);
+                }
+            }
+        });
+    }
+
 
     public static void checkUserHasAnyLink(final String userId, final FirebaseListener<Boolean> listener){
         DatabaseReference db = getTable(TableName.links);
@@ -154,16 +171,18 @@ public class FirebaseDB {
         getData(db.child(myUserId), listener);
     }
 
-    public static void checkKeyExist(final String userId, final String userKey, final FirebaseListener<KeyModel> listener){
-        getSingleData(getTable(TableName.keys).child(userKey), new FirebaseListener<KeyModel>(KeyModel.class) {
+    public static void checkKeyExist(final String myUserId, final String targetUserKey,
+                                     final FirebaseListener<KeyModel> listener){
+        getSingleData(getTable(TableName.keys).child(targetUserKey), new FirebaseListener<KeyModel>(KeyModel.class) {
             @Override
             public void onResult(final KeyModel keyModel, Status status) {
                 if(status == Status.Success && keyModel != null){
-                    getCurrentTimestamp(userId, new FirebaseListener<String>(String.class) {
+                    getCurrentTimestamp(myUserId, new FirebaseListener<String>(String.class) {
                         @Override
                         public void onResult(String result, Status status) {
                             if(result != null && status == Status.Success){
-                                long differenceInSecs = DateTimeUtils.getDifferenceInSecs(keyModel.getInsertAtLong(), Long.valueOf(result));
+                                long differenceInSecs = DateTimeUtils.
+                                        getDifferenceInSecs(keyModel.getInsertAtLong(), Long.valueOf(result));
                                 if(differenceInSecs < Constants.KeyExpiredTotalSecs){
                                     listener.onResult(keyModel, Status.Success);
                                 }
@@ -183,6 +202,46 @@ public class FirebaseDB {
             }
         });
     }
+
+    public static void checkMyKeyExist(final String myUserId, final String myUserKey,
+                                     final FirebaseListener<KeyModel> listener){
+        getSingleData(getTable(TableName.keys).child(myUserKey), new FirebaseListener<KeyModel>(KeyModel.class) {
+            @Override
+            public void onResult(final KeyModel keyModel, Status status) {
+                if(status == Status.Success && keyModel != null){
+                    //make sure keymodel userId is mine
+                    if(myUserId.equals(keyModel.getUserId())){
+                        getCurrentTimestamp(myUserId, new FirebaseListener<String>(String.class) {
+                            @Override
+                            public void onResult(String result, Status status) {
+                                if(result != null && status == Status.Success){
+                                    long differenceInSecs = DateTimeUtils.
+                                            getDifferenceInSecs(keyModel.getInsertAtLong(), Long.valueOf(result));
+                                    if(differenceInSecs < Constants.KeyExpiredTotalSecs){
+                                        listener.onResult(keyModel, Status.Success);
+                                    }
+                                    else{
+                                        listener.onResult(null, Status.Failed);
+                                    }
+                                }
+                                else{
+                                    listener.onResult(null, Status.Failed);
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        listener.onResult(null, Status.Failed);
+                    }
+                }
+                else{
+                    listener.onResult(null, Status.Failed);
+                }
+            }
+        });
+    }
+
+
 
     public static void changeBlockUser(String myUserId, String targetUserId, boolean block,
                                        FirebaseListener listener){

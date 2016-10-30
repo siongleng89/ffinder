@@ -148,6 +148,7 @@ public class FriendModel {
     }
 
     public String getName() {
+        if(name == null) name = "";
         return name;
     }
 

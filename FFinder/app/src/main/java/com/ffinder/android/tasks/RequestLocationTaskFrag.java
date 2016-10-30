@@ -218,13 +218,27 @@ public class RequestLocationTaskFrag extends Fragment {
 
                                 }
                                 else{
-                                    setSearchResult(SearchResult.ErrorUserBlocked);
+
+                                    //set a small delay to prevent jumpy animation bug
+                                    Threadings.delay(1000, new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            setSearchResult(SearchResult.ErrorUserBlocked);
+                                        }
+                                    });
+
                                 }
                             }
                         });
                     }
                     else{
-                        setSearchResult(SearchResult.ErrorNoLink);
+                        //set a small delay to prevent jumpy animation bug
+                        Threadings.delay(1000, new Runnable() {
+                            @Override
+                            public void run() {
+                                setSearchResult(SearchResult.ErrorNoLink);
+                            }
+                        });
                     }
                 }
             });

@@ -192,6 +192,12 @@ public class MyModel implements Serializable {
             @Override
             public void onResult(Boolean result, Status status) {
                 if(status == Status.Success && result != null && result){
+
+                    //remove user old key since new key already generated
+                    if(!Strings.isEmpty(getUserKey())){
+                        FirebaseDB.removeUserKey(getUserId(), getUserKey(), null);
+                    }
+
                     setUserKey(newKey);
                     setUserKeyGeneratedUnixTime(System.currentTimeMillis() / 1000L);
                     save();
@@ -218,9 +224,6 @@ public class MyModel implements Serializable {
     public ArrayList<FriendModel> getFriendModels() {
         if(friendModels == null){
             friendModels = new ArrayList();
-
-            //last model must be dummy
-            friendModels.add(new FriendModel());
         }
 
         return friendModels;
@@ -278,7 +281,9 @@ public class MyModel implements Serializable {
         }
     }
 
-    public void loadAllFriendModels(){
+    //return true if friend list changed, else false
+    public boolean loadAllFriendModels(){
+        boolean changed = false;
         String json = PreferenceUtils.get(context, PreferenceType.FriendUserIds);
         if(!Strings.isEmpty(json)){
             try {
@@ -290,6 +295,7 @@ public class MyModel implements Serializable {
                         friendModel.setUserId(userId);
                         friendModel.load(context);
                         addFriendModel(friendModel);
+                        changed = true;
                     }
                 }
 
@@ -297,6 +303,15 @@ public class MyModel implements Serializable {
                 e.printStackTrace();
             }
         }
+
+        //make sure dummy model is added at last item
+        if(getFriendModelById("") == null){
+            //last model must be dummy
+            friendModels.add(new FriendModel());
+        }
+
+
+        return changed;
     }
 
     public void loadFriend(String friendId){
