@@ -5,6 +5,6 @@ package com.ffinder.android.enums;
  */
 public enum AnimateType {
 
-    alpha, moveByY, moveByX, rotate
+    alpha, moveByY, moveByX, rotate, scaleY
 
 }

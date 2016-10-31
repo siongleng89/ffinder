@@ -11,9 +11,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.Pair;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.*;
 import android.view.ContextMenu;
 import android.view.View;
 import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
@@ -76,10 +74,11 @@ public class ActivityMain extends MyActivityAbstract implements
         listFriends = (RecyclerView) findViewById(R.id.listFriends);
         friendsAdapter = new FriendsAdapter(this, myModel.getFriendModels(), this, this, this);
         listFriends.setAdapter(friendsAdapter);
+        listFriends.setItemAnimator(new DefaultItemAnimator());
+        ((DefaultItemAnimator) listFriends.getItemAnimator()).setSupportsChangeAnimations(false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setAutoMeasureEnabled(false);
         listFriends.setLayoutManager(layoutManager);
-        listFriends.setItemAnimator(null);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                 layoutManager.getOrientation());
@@ -364,7 +363,6 @@ public class ActivityMain extends MyActivityAbstract implements
         registerBroadcastReceiver(BroadcastEvent.RefreshFriend, new RunnableArgs<Intent>() {
             @Override
             public void run() {
-                Logs.show("User location msg received");
                 Intent intent = this.getFirstArg();
                 final String friendId = intent.getStringExtra("userId");
                 if(getMyModel().checkFriendExist(friendId)) {
@@ -388,7 +386,6 @@ public class ActivityMain extends MyActivityAbstract implements
                     }
                     else{
                         friendModel.setRecentlyFinishSearch(false);
-                        friendModel.setTimeoutPhase(0);
                     }
 
                     ActivityMain.this.updateFriendsListAdapter(friendId);
@@ -488,7 +485,7 @@ public class ActivityMain extends MyActivityAbstract implements
                 }
 
                 if(row >= 0){
-                    friendsAdapter.notifyItemChanged(row);
+                    friendsAdapter.rowChanged(row);
                     Logs.show("row changed: " + row);
                 }
             }
@@ -501,7 +498,6 @@ public class ActivityMain extends MyActivityAbstract implements
         Threadings.postRunnable(new Runnable() {
             @Override
             public void run() {
-                //friendsAdapter.reset();
                 friendsAdapter.notifyDataSetChanged();
             }
         });
@@ -516,6 +512,9 @@ public class ActivityMain extends MyActivityAbstract implements
     @Override
     public void onDeleteFriend(FriendModel friendModel) {
         FirebaseDB.deleteLink(getMyModel().getUserId(), friendModel.getUserId(), null);
+        //remove blocking user since already deleted
+        FirebaseDB.changeBlockUser(myModel.getUserId(), friendModel.getUserId(), false, null);
+
         getMyModel().deleteFriend(friendModel);
         friendModel.delete(this);
         getMyModel().commitFriendUserIds();

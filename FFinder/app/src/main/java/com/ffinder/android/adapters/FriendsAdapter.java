@@ -7,11 +7,14 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.ffinder.android.ActivityMap;
 import com.ffinder.android.FragmentSearchButtonsHolder;
@@ -20,10 +23,7 @@ import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
 import com.ffinder.android.absint.activities.IProfileImagePickerListener;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.adapters.IFriendItemListener;
-import com.ffinder.android.enums.OverlayType;
-import com.ffinder.android.enums.PreferenceType;
-import com.ffinder.android.enums.SearchAnimationState;
-import com.ffinder.android.enums.SearchStatus;
+import com.ffinder.android.enums.*;
 import com.ffinder.android.extensions.ButtonSearch;
 import com.ffinder.android.extensions.ButtonWhite;
 import com.ffinder.android.extensions.ProfileImageView;
@@ -49,6 +49,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private IFriendsAdapterHolder friendsAdapterHolder;
     private ArrayList<String> animateOnNextUpdateFriendIds;
     private FragmentSearchButtonsHolder fragmentSearchButtonsHolder;
+    private int lastPosition = -1;
+    private final int FRIEND_ITEM_ROW = 0, FRIEND_ERROR_ROW = 1, ASK_ADD_FRIEND_ROW = 2;
 
 
     public FriendsAdapter(MyActivityAbstract context, @NonNull List<FriendModel> objects,
@@ -78,28 +80,39 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == 0){
+        if(viewType == FRIEND_ITEM_ROW){
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.lvitem_friend, parent, false);
 
             return new FriendViewHolder(this.context, view, profileImagePickerListener,
                     friendsAdapterHolder, animateOnNextUpdateFriendIds, fragmentSearchButtonsHolder);
         }
-        else{
+        else if(viewType == FRIEND_ERROR_ROW){
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.layout_dummy, parent, false);
+            return new FriendErrorViewHolder(this.context, view);
+        }
+        else if(viewType == ASK_ADD_FRIEND_ROW){
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.lvitem_ask_add_friend, parent, false);
 
             return new AskAddFriendViewHolder(this.context, view);
         }
+
+        return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof FriendViewHolder){
-            FriendModel friendModel = this.friendModels.get(position);
+            FriendModel friendModel = this.friendModels.get(position / 2);
             ((FriendViewHolder) holder).bindFriendModel(friendModel);
         }
-        else{
+        else if(holder instanceof FriendErrorViewHolder){
+            FriendModel friendModel = this.friendModels.get(position / 2);
+            ((FriendErrorViewHolder) holder).updateDesign(friendModel, position);
+        }
+        else if(holder instanceof AskAddFriendViewHolder){
             ((AskAddFriendViewHolder) holder).updateDesign();
         }
 
@@ -107,17 +120,27 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        if(position == friendModels.size() - 1){
-            return 1;
+        if(position == friendModels.size() * 2 - 2){
+            return ASK_ADD_FRIEND_ROW;
         }
         else{
-            return 0;
+            if(position % 2 == 0){
+                return FRIEND_ITEM_ROW;
+            }
+            else{
+                return FRIEND_ERROR_ROW;
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return friendModels.size();
+        return friendModels.size() * 2;
+    }
+
+    public void rowChanged(int row){
+        notifyItemChanged(row * 2);
+        notifyItemChanged(row * 2 + 1);
     }
 
 
@@ -148,11 +171,46 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
+    public class FriendErrorViewHolder extends RecyclerView.ViewHolder{
+
+        private View itemView;
+        private LinearLayout layoutMain;
+        private TextView txtMessage;
+        private Context context;
+
+        public FriendErrorViewHolder(Context context, View itemView) {
+            super(itemView);
+
+            this.itemView = itemView;
+            this.context = context;
+            layoutMain = (LinearLayout) itemView.findViewById(R.id.layoutMain);
+
+        }
+
+        public void updateDesign(FriendModel friendModel, int position){
+            if(friendModel.getSearchResult().isError()){
+                //animate show if necessary
+                layoutMain.removeAllViews();
+
+                View view = LayoutInflater.from(context)
+                        .inflate(R.layout.lvitem_friend_error, layoutMain, true);
+
+                txtMessage = (TextView) view.findViewById(R.id.txtMessage);
+                txtMessage.setText(friendModel.getSearchResult().getMessage(context));
+            }
+            else{
+                layoutMain.removeAllViews();
+            }
+
+        }
+    }
+
 
 
     public class FriendViewHolder extends RecyclerView.ViewHolder {
+        public View itemView;
         private TextView txtTextFriend,
-                txtLocation, txtMessage, txtStatus;
+                txtLocation, txtStatus;
         private ButtonWhite btnMap, btnToggleBlock, btnDelete;
         private RelativeLayout layoutResult, layoutStatus, layoutName, layoutRight;
         private ProfileImageView imageViewProfile;
@@ -169,6 +227,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     FragmentSearchButtonsHolder fragmentSearchButtonsHolder) {
             super(itemView);
 
+            this.itemView = itemView;
             this.fragmentSearchButtonsHolder = fragmentSearchButtonsHolder;
             this.friendsAdapterHolder = friendsAdapterHolder;
             this.animateOnNextUpdateFriendIds = animateOnNextUpdateFriendIds;
@@ -177,13 +236,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             txtTextFriend = (TextView) itemView.findViewById(R.id.txtFriend);
             txtLocation = (TextView) itemView.findViewById(R.id.txtLocation);
             txtStatus = (TextView) itemView.findViewById(R.id.txtStatus);
-            txtMessage = (TextView) itemView.findViewById(R.id.txtMessage);
 
             imageViewProfile = (ProfileImageView) itemView.findViewById(R.id.imageViewProfile);
 
             txtLocation.setText("");
             txtTextFriend.setText("");
-            txtMessage.setText("");
             txtStatus.setText("");
 
             btnMap = (ButtonWhite) itemView.findViewById(R.id.btnMap);
@@ -262,13 +319,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 //check got error
                 if (friendModel.getSearchResult().isError()){
-                    AnimateBuilder.fadeIn(context, txtMessage);
-                    txtMessage.setText(friendModel.getSearchResult().getMessage(context));
-
                     //recently searched failed, resort to auto notf
                     if(friendModel.isRecentlyFinishSearch()){
                         friendModel.setRecentlyFinishSearch(false);
-
                         if(friendModel.getSearchResult().errorTriggeredAutoNotification()){
                             buttonSearch.changeSearchState(SearchAnimationState.Ending, "autoSearching");
                         }
@@ -282,13 +335,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             buttonSearch.changeSearchState(SearchAnimationState.AutoSearching);
                         }
                         else{
-                            //buttonSearch.changeSearchState(SearchAnimationState.Ending);
+                            buttonSearch.changeSearchState(SearchAnimationState.Ending);
                         }
                     }
 
                 }
                 else{
-                    AnimateBuilder.fadeOut(context, txtMessage);
 
                     //recently searched success
                     if(friendModel.isRecentlyFinishSearch()){
@@ -351,7 +403,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     OverlayBuilder.build(context)
                             .setOverlayType(OverlayType.OkCancel)
                             .setTitle(String.format(context.getString(R.string.delete_user_title),

@@ -194,10 +194,13 @@ public class RequestLocationTaskFrag extends Fragment {
                                     searchStatus = SearchStatus.WaitingUserRespond;
                                     publishProgress(SearchStatus.WaitingUserRespond);
 
+
                                     NotificationSender.sendWithUserId(myUserId, targetUserId,
                                             FCMMessageType.UpdateLocation,
                                             RequestLocationTaskFrag.timeoutSecs, msgId,
                                             new Pair<String, String>("senderToken", myToken));
+
+
 
 //                                    Threadings.runInBackground(new Runnable() {
 //                                        @Override

@@ -306,6 +306,8 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         public MapReadyCallback() {
         }
 
+
+
         @Override
         public void onMapReady(GoogleMap googleMap) {
             this.googleMap = googleMap;
@@ -386,9 +388,11 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         public void onStreetViewPanoramaReady(final StreetViewPanorama streetViewPanorama) {
             streetViewPanorama.setPosition(new LatLng(Double.valueOf(latitude),
                     Double.valueOf(longitude)));
-            Threadings.delay(5000, new Runnable() {
+            Threadings.delay(5 * 1000, new Runnable() {
                 @Override
                 public void run() {
+                    if(disposed) return;
+
                     if (streetViewPanorama.getLocation() == null) {
                         AnimateBuilder.fadeIn(ActivityMap.this, layoutNoStreetView);
                     }

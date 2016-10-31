@@ -285,6 +285,10 @@ public class AnimateBuilder {
                         case rotate:
 
                             break;
+                        case scaleY:
+                            viewPropertyAnimator = ViewPropertyAnimator.animate(view)
+                                    .setDuration(durationMs)
+                                    .scaleYBy(dpToPixel(value));
 
                     }
 

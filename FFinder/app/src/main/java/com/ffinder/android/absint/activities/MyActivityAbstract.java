@@ -37,6 +37,7 @@ public class MyActivityAbstract extends AppCompatActivity {
     private LinearLayout menuOverflowLayout;
     private HashMap<BroadcastEvent, BroadcastReceiver> broadcastReceiverHashMap;
     private MyModel myModel;
+    protected boolean disposed;
 
 
     public MyActivityAbstract() {
@@ -60,6 +61,12 @@ public class MyActivityAbstract extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         paused = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        disposed = true;
+        super.onDestroy();
     }
 
     public boolean isPaused() {

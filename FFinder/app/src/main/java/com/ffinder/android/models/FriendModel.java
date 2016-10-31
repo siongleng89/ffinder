@@ -176,6 +176,7 @@ public class FriendModel {
         this.recentlyFinishSearch = recentlyFinishSearch;
     }
 
+
     @JsonIgnore
     public int getTimeoutPhase() {
         return timeoutPhase;
