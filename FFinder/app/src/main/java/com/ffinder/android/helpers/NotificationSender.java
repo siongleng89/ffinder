@@ -109,7 +109,7 @@ public class NotificationSender {
                     hashMap.put("content_available", true);
 
                     //sending those to android device will cause empty system tray notf bugs
-                    if(toPlatform.toLowerCase().equals("ios")){
+                    if(!Strings.isEmpty(toPlatform) && toPlatform.toLowerCase().equals("ios")){
                         HashMap<String, String> notificationMap = new HashMap();
                         notificationMap.put("badge", "1");
                         notificationMap.put("alert", "");

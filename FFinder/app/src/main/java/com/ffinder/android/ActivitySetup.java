@@ -3,6 +3,8 @@ package com.ffinder.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +25,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.*;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -77,9 +80,8 @@ public class ActivitySetup extends MyActivityAbstract {
                  checkGoogleServiceAvailable();
             }
         }).start();
-
-
     }
+
 
     private void checkGoogleServiceAvailable(){
         setCurrentStatus(getString(R.string.checking_google_service_availability));
@@ -315,6 +317,7 @@ public class ActivitySetup extends MyActivityAbstract {
                             myOwnModel.setName(getString(R.string.address_myself));
                             myOwnModel.save(ActivitySetup.this);
                             myModel.addFriendModel(myOwnModel);
+                            myModel.sortFriendModels();
                             myModel.commitFriendUserIds();
 
                             setCurrentStatus(getString(R.string.initialization_done));

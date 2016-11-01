@@ -27,6 +27,8 @@ public enum AnalyticEvent {
     Share_Key_Button_Clicked,
     Close_Share_Key_Dialog,
 
-    Change_Language
+    Change_Language,
+
+    ChangeScreen,
 
 }

@@ -71,7 +71,7 @@ public class LocationUpdater implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if(!checkPermission()){
+        if(!AndroidUtils.checkLocationPermission(context)){
             return;
         }
 
@@ -99,7 +99,7 @@ public class LocationUpdater implements
 
     @Override
     public void onLocationChanged(Location location) {
-        if(!checkPermission()){
+        if(!AndroidUtils.checkLocationPermission(context)){
             return;
         }
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
@@ -112,13 +112,6 @@ public class LocationUpdater implements
         }
     }
 
-    private boolean checkPermission(){
-        if (ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        }
-        return true;
-    }
 
     private void replyAliveMsg(String myUserId, String toUserToken){
         NotificationSender.sendWithToken(myUserId, toUserToken,

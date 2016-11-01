@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.helpers.IAdsMediationListener;
 import com.ffinder.android.helpers.AdsMediation;
+import com.ffinder.android.helpers.Threadings;
 
 /**
  * Created by SiongLeng on 15/9/2016.
@@ -51,7 +52,12 @@ public class AdsFrag extends Fragment {
             public void onResult(boolean success) {
                 showingAds = false;
                 if(!success){
-                    Toast.makeText(getContext(), R.string.no_ads_available_toast_msg, Toast.LENGTH_LONG).show();
+                    Threadings.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getContext(), R.string.no_ads_available_toast_msg, Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
                 onFinishAds.run();
             }

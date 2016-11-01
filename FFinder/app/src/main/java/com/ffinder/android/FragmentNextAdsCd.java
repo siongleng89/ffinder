@@ -125,9 +125,15 @@ public class FragmentNextAdsCd extends Fragment {
                                 needSaveToDb = true;
                             }
                             changeNextAdsCount(result, false);
-                            txtSearchLeft.setText(R.string.search_left);
-                            AnimateBuilder.fadeIn(getActivity(), txtSearchLeft);
-                            AnimateBuilder.fadeIn(getActivity(), txtNextAdsCount);
+                            Threadings.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    txtSearchLeft.setText(R.string.search_left);
+                                    AnimateBuilder.fadeIn(getActivity(), txtSearchLeft);
+                                    AnimateBuilder.fadeIn(getActivity(), txtNextAdsCount);
+                                }
+                            });
+
 
                             if(needSaveToDb){
                                 FirebaseDB.setNextAdsCount(myModel.getUserId(), getCurrentNextAdsCount(), new FirebaseListener() {

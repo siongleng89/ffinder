@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by SiongLeng on 1/9/2016.
@@ -28,7 +29,7 @@ public class MyModel implements Serializable {
     private UserInfoModel userInfoModel;
     private long userKeyGeneratedUnixTime;
     private Context context;
-    private ArrayList<FriendModel> friendModels;
+    private CopyOnWriteArrayList<FriendModel> friendModels;
     private boolean cancelGenerateKey;
     private boolean firebaseLogon;
 
@@ -221,9 +222,9 @@ public class MyModel implements Serializable {
 
 
     @JsonIgnore
-    public ArrayList<FriendModel> getFriendModels() {
+    public CopyOnWriteArrayList<FriendModel> getFriendModels() {
         if(friendModels == null){
-            friendModels = new ArrayList();
+            friendModels = new CopyOnWriteArrayList();
         }
 
         return friendModels;
@@ -231,7 +232,7 @@ public class MyModel implements Serializable {
 
     @JsonIgnore
     public int getNonSelfFriendModelsCount() {
-        if(friendModels == null) friendModels = new ArrayList();
+        if(friendModels == null) friendModels = new CopyOnWriteArrayList();
         if(friendModels.size() == 1 && getFriendModelById(getUserId()) != null){
             return 0;
         }
@@ -342,7 +343,8 @@ public class MyModel implements Serializable {
     }
 
     public void sortFriendModels(){
-        Collections.sort(getFriendModels(), new Comparator<FriendModel>(){
+        List arrayList = Arrays.asList(getFriendModels().toArray());
+        Collections.sort(arrayList, new Comparator<FriendModel>(){
             public int compare(FriendModel o1, FriendModel o2)
             {
                 if(Strings.isEmpty(o1.getUserId())) return Integer.MAX_VALUE;
@@ -352,6 +354,8 @@ public class MyModel implements Serializable {
                 }
             }
         });
+        getFriendModels().clear();
+        getFriendModels().addAll(arrayList);
     }
 
 

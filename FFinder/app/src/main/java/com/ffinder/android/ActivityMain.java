@@ -114,15 +114,6 @@ public class ActivityMain extends MyActivityAbstract implements
 
                 //subscribe for push notifications
                 FirebaseMessaging.getInstance().subscribeToTopic("allDevices");
-
-                //auto run search myself the first time user run apps
-                Bundle extras = getIntent().getExtras();
-                if(extras !=null && extras.containsKey("firstRun")) {
-                    if(myModel.getNonSelfFriendModelsCount() == 0){
-                        FriendModel myOwnModel = myModel.getFriendModelById(myModel.getUserId());
-                        searchNow(myOwnModel);
-                    }
-                }
             }
         });
 
@@ -142,6 +133,26 @@ public class ActivityMain extends MyActivityAbstract implements
 
         //check if pending to add user, if yes, pop add user dialog automatically
         checkHasPendingToAddUser();
+
+
+        //auto run search myself the first time user run apps
+
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null && extras.containsKey("firstRun")) {
+            getIntent().removeExtra("firstRun");
+            Threadings.delay(1000, new Runnable() {
+                @Override
+                public void run() {
+
+                    if(getMyModel().getNonSelfFriendModelsCount() == 0){
+                        FriendModel myOwnModel = getMyModel().getFriendModelById(getMyModel().getUserId());
+                        searchNow(myOwnModel);
+                    }
+
+                }
+            });
+        }
+
     }
 
     @Override
@@ -475,10 +486,9 @@ public class ActivityMain extends MyActivityAbstract implements
         Threadings.postRunnable(new Runnable() {
             @Override
             public void run() {
-                ArrayList<FriendModel> friendModels = getMyModel().getFriendModels();
                 int row = -1;
-                for (int i = 0; i < friendModels.size(); i++){
-                    if(friendModels.get(i).getUserId().equals(friendId)){
+                for (int i = 0; i < getMyModel().getFriendModels().size(); i++){
+                    if(getMyModel().getFriendModels().get(i).getUserId().equals(friendId)){
                         row = i;
                         break;
                     }

@@ -7,6 +7,8 @@ import com.ffinder.android.enums.AnalyticEvent;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import static com.ffinder.android.enums.AnalyticEvent.ChangeScreen;
+
 /**
  * Created by SiongLeng on 13/9/2016.
  */
@@ -22,6 +24,8 @@ public class Analytics {
 
         tracker.setScreenName(activity.getClass().getSimpleName());
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        logEvent(ChangeScreen, activity.getClass().getSimpleName());
     }
 
 

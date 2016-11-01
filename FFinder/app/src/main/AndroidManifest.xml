@@ -73,9 +73,6 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyADQK5vtpa2ZcipurNx8g4CVNRXUZ_qIX0"/>
 
-        <activity android:name=".ActivitySettings">
-        </activity>
-
         <receiver
                 android:name=".absint.receivers.LocationBroadcastReceiver"
                 android:exported="true">
@@ -154,8 +151,9 @@
         </activity>
         <activity android:name=".ActivityLanguage">
         </activity>
-        <activity android:name=".ActivityRedirect"
-                  android:theme="@style/splashScreenTheme">
+        <activity
+                android:name=".ActivityRedirect"
+                android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
