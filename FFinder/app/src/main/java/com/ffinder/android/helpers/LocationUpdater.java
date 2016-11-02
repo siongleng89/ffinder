@@ -88,7 +88,7 @@ public class LocationUpdater implements
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Logs.show("Fused connection suspended: " + i);
     }
 
     @Override
@@ -133,8 +133,7 @@ public class LocationUpdater implements
 
             Logs.show("Updating my location to: " + latitude + ", " + longitude);
 
-            //immediately reply fcm with current location, then save to firebase later,
-            //to avoid firebase login delay
+            //immediately reply fcm with current location
             if(!Strings.isEmpty(fromUserToken)){
                 NotificationSender.sendWithToken(myModel.getUserId(), fromUserToken,
                         FCMMessageType.UserLocated, NotificationSender.TTL_INSTANT,

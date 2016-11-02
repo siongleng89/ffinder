@@ -349,7 +349,14 @@ public class ActivitySetup extends MyActivityAbstract {
                 if(failed){
                     AnimateBuilder.fadeOut(ActivitySetup.this, layoutRetry);
                     AnimateBuilder.fadeIn(ActivitySetup.this, progressBar);
-                    startProcess();
+                    txtStatus.setText("");
+                    Threadings.delay(1000, new Runnable() {
+                        @Override
+                        public void run() {
+                            startProcess();
+                        }
+                    });
+
                 }
             }
         });

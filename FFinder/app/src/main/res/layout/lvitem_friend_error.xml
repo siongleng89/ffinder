@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+              android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content" android:background="@color/colorContrast" android:padding="10dp">
+              android:layout_height="wrap_content" android:background="@color/colorErrorLight" android:paddingLeft="10dp"
+              android:paddingRight="10dp" android:paddingTop="5dp" android:paddingBottom="5dp">
 
+    <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageView4" android:src="@drawable/friend_error_icon" android:layout_marginRight="10dp"/>
     <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:text="Lorem ipsum ehheheh and is simplet eje and gogo"
             android:id="@+id/txtMessage"
             android:visibility="visible"
-            android:layout_below="@+id/txtLocation" android:singleLine="true" android:textSize="11sp"
-            android:layout_marginTop="2dp" android:textColor="@color/colorError"
-            android:textStyle="italic"/>
+            android:layout_below="@+id/txtLocation" android:singleLine="true" android:textSize="12sp"
+            android:textColor="@color/colorError"
+            android:gravity="center_vertical"/>
 </LinearLayout>

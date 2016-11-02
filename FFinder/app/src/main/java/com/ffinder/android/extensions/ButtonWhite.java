@@ -85,7 +85,12 @@ public class ButtonWhite extends RelativeLayout {
         layoutBtn = (RelativeLayout) this.findViewById(R.id.layoutBtn);
         imgBtn = (ImageView) layoutBtn.findViewById(R.id.imgBtn);
 
-        backgroundNormalColor = Color.WHITE;
+        int color= ContextCompat.getColor(context, R.color.colorPrimaryDark);
+        int red=   (color >> 16) & 0xFF;
+        int green= (color >> 8) & 0xFF;
+        int blue=  (color >> 0) & 0xFF;
+
+        backgroundNormalColor = Color.argb(0, red, green, blue);
         backgroundOnTapColor = ContextCompat.getColor(context, R.color.colorPrimaryDark);
         backgroundDisabledColor = Color.parseColor("#CCCCCC");
 
@@ -100,7 +105,7 @@ public class ButtonWhite extends RelativeLayout {
 
         imgBtn.setColorFilter(srcNormalColor,
                 PorterDuff.Mode.SRC_ATOP);
-        AndroidUtils.setButtonBackground(context, layoutBtn, R.drawable.btn_bg);
+        AndroidUtils.setButtonBackground(context, layoutBtn, R.drawable.btn_border_bg);
 
         this.setClickable(true);
         this.setFocusable(true);
@@ -158,35 +163,17 @@ public class ButtonWhite extends RelativeLayout {
         AnimateBuilder.stopAllAnimation(layoutBtn);
         AnimateBuilder.stopAllAnimation(imgBtn);
 
-        if(animate){
-            AnimateBuilder.stopAllAnimation(layoutBtn);
-            AnimateBuilder.stopAllAnimation(imgBtn);
-            if(selected){
-                AnimateBuilder.animateBackgroundTintColor(backgroundNormalColor,
-                        backgroundOnTapColor, layoutBtn);
-                AnimateBuilder.animateSrcTintColor(srcNormalColor, srcOnTapColor,
-                        imgBtn);
-            }
-            else{
-                AnimateBuilder.animateBackgroundTintColor(backgroundOnTapColor,
-                        backgroundNormalColor, layoutBtn);
-                AnimateBuilder.animateSrcTintColor(srcOnTapColor, srcNormalColor,
-                        imgBtn);
-            }
+        if(selected){
+            layoutBtn.getBackground().setColorFilter((int) backgroundOnTapColor,
+                    PorterDuff.Mode.SRC_ATOP);
+            imgBtn.setColorFilter(srcOnTapColor,
+                    PorterDuff.Mode.SRC_ATOP);
         }
         else{
-            if(selected){
-                layoutBtn.getBackground().setColorFilter((int) backgroundOnTapColor,
-                        PorterDuff.Mode.SRC_ATOP);
-                imgBtn.setColorFilter(srcOnTapColor,
-                        PorterDuff.Mode.SRC_ATOP);
-            }
-            else{
-                layoutBtn.getBackground().setColorFilter((int) backgroundNormalColor,
-                        PorterDuff.Mode.SRC_ATOP);
-                imgBtn.setColorFilter(srcNormalColor,
-                        PorterDuff.Mode.SRC_ATOP);
-            }
+            layoutBtn.getBackground().setColorFilter((int) backgroundNormalColor,
+                    PorterDuff.Mode.SRC_ATOP);
+            imgBtn.setColorFilter(srcNormalColor,
+                    PorterDuff.Mode.SRC_ATOP);
         }
 
     }

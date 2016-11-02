@@ -2,14 +2,10 @@ package com.ffinder.android;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.directions.route.*;
@@ -21,7 +17,6 @@ import com.ffinder.android.helpers.*;
 import com.ffinder.android.statics.Constants;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -227,6 +222,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
 
         handleRoutingResult(route);
 
+        Analytics.logEvent(AnalyticEvent.Use_Direction, "Use direction: " + currentTravelMode.name());
     }
 
     @Override
@@ -405,7 +401,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         btnGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Analytics.logEvent(AnalyticEvent.Use_Direction);
+                Analytics.logEvent(AnalyticEvent.Use_GPS_NAV);
                 String uri = "geo:" + latitude + ","
                         + longitude + "?q=" + latitude
                         + "," + longitude;

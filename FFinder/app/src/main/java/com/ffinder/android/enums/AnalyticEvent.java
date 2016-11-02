@@ -16,14 +16,15 @@ public enum AnalyticEvent {
     Click_Subscribe,
     User_Subscribed,
     Watch_Ads,
-    Open_Add_Friend_Dialog,
+    No_Ads_Available,
     Add_Friend_Failed,
     Add_Friend_Success,
     Insert_PromoCode_Success,
     Insert_PromoCode_Failed,
     Use_Direction,
+    Use_GPS_NAV,
+    Change_Block_User,
 
-    Open_Share_Key_Dialog,
     Share_Key_Button_Clicked,
     Close_Share_Key_Dialog,
 

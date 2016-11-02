@@ -288,7 +288,7 @@ public class AnimateBuilder {
                         case scaleY:
                             viewPropertyAnimator = ViewPropertyAnimator.animate(view)
                                     .setDuration(durationMs)
-                                    .scaleYBy(dpToPixel(value));
+                                    .scaleY(value);
 
                     }
 

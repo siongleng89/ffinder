@@ -8,7 +8,9 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.helpers.IAdsMediationListener;
+import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.helpers.AdsMediation;
+import com.ffinder.android.helpers.Analytics;
 import com.ffinder.android.helpers.Threadings;
 
 /**
@@ -17,7 +19,6 @@ import com.ffinder.android.helpers.Threadings;
 public class AdsFrag extends Fragment {
 
     private AdsMediation adsMediation;
-    private boolean showingAds;
     private Activity activity;
 
     public static AdsFrag newInstance() {
@@ -27,7 +28,6 @@ public class AdsFrag extends Fragment {
 
     public AdsFrag() {
         adsMediation = new AdsMediation(getActivity());
-        showingAds = false;
     }
 
     @Override
@@ -44,18 +44,15 @@ public class AdsFrag extends Fragment {
     }
 
     public void showAds(final Runnable onFinishAds){
-        if(showingAds) return;
-
-        showingAds = true;
         adsMediation.setAdsMediationListener(new IAdsMediationListener() {
             @Override
             public void onResult(boolean success) {
-                showingAds = false;
                 if(!success){
                     Threadings.postRunnable(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(getContext(), R.string.no_ads_available_toast_msg, Toast.LENGTH_LONG).show();
+                            Analytics.logEvent(AnalyticEvent.No_Ads_Available);
                         }
                     });
                 }

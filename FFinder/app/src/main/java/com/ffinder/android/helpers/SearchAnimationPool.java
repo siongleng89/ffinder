@@ -25,17 +25,21 @@ public class SearchAnimationPool {
     private static HashMap<String, ArrayList<Drawable>> storage;
 
     public static ArrayList<Drawable> getDrawables(Context context, String name, int totalFrames){
-        if(!getStorage().containsKey(name)){
-            ArrayList<Drawable> arr = new ArrayList();
-            for (int i = 0; i < totalFrames; i++) {
-                String id = name + String.format("%02d", i);
-                int resID = context.getResources().getIdentifier(id, "drawable", context.getPackageName());
-                arr.add(ContextCompat.getDrawable(context, resID));
-            }
-            getStorage().put(name, arr);
-        }
+//        if(!getStorage().containsKey(name)){
+//
+//            getStorage().put(name, arr);
+//        }
+//
+//        return getStorage().get(name);
 
-        return getStorage().get(name);
+        ArrayList<Drawable> arr = new ArrayList();
+        for (int i = 0; i < totalFrames; i++) {
+            String id = name + String.format("%02d", i);
+            int resID = context.getResources().getIdentifier(id, "drawable", context.getPackageName());
+            arr.add(ContextCompat.getDrawable(context, resID));
+        }
+        return arr;
+
     }
 
 

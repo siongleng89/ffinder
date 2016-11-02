@@ -1,12 +1,14 @@
 package com.ffinder.android.extensions;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -15,6 +17,7 @@ import com.ffinder.android.R;
 import com.ffinder.android.enums.AnimateType;
 import com.ffinder.android.enums.SearchAnimationState;
 import com.ffinder.android.helpers.AnimateBuilder;
+import com.ffinder.android.helpers.Logs;
 import com.ffinder.android.helpers.SearchAnimationPool;
 import com.ffinder.android.helpers.Threadings;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -28,13 +31,15 @@ import java.util.ArrayList;
 public class ButtonSearch extends RelativeLayout {
 
     private Context context;
-    private ImageView imgViewFlower;
+    private ImageView imgViewFlower, imgViewButtonHolder;
     private ViewGroup viewGroup;
     private LinearLayout layoutMainButton;
     private TextView txtLastUpdated, txtStatus;
     private int originalSrcColor, onTapSrcColor, originalBackgroundColor, onTapBackgroundColor;
     private SearchAnimationState currentState;
     private AnimatorSet statusFadingAnimatorSet;
+    private boolean locked;
+    private boolean isTouchDown;
 
     public ButtonSearch(Context context) {
         super(context);
@@ -58,6 +63,7 @@ public class ButtonSearch extends RelativeLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.viewGroup = (ViewGroup) inflater.inflate(R.layout.btn_search, this, true);
 
+        imgViewButtonHolder = (ImageView) viewGroup.findViewById(R.id.imgViewButtonHolder);
         imgViewFlower = (ImageView) viewGroup.findViewById(R.id.imgViewFlower);
         layoutMainButton = (LinearLayout) viewGroup.findViewById(R.id.layoutMainButton);
         txtLastUpdated = (TextView) viewGroup.findViewById(R.id.txtLastUpdated);
@@ -65,7 +71,12 @@ public class ButtonSearch extends RelativeLayout {
 
         originalSrcColor = ContextCompat.getColor(context, R.color.colorPrimaryDark);
         onTapSrcColor = ContextCompat.getColor(context, R.color.colorContrast);
-        originalBackgroundColor = ContextCompat.getColor(context, R.color.colorContrast);
+
+        int color= ContextCompat.getColor(context, R.color.colorPrimaryDark);
+        int red=   (color >> 16) & 0xFF;
+        int green= (color >> 8) & 0xFF;
+        int blue=  (color >> 0) & 0xFF;
+        originalBackgroundColor = Color.argb(0, red, green, blue);
         onTapBackgroundColor = ContextCompat.getColor(context, R.color.colorPrimaryDark);
 
 
@@ -73,17 +84,38 @@ public class ButtonSearch extends RelativeLayout {
 
         this.setClickable(true);
         imgViewFlower.setColorFilter(originalSrcColor, PorterDuff.Mode.SRC_ATOP);
-        layoutMainButton.getBackground().setColorFilter(originalBackgroundColor, PorterDuff.Mode.SRC_ATOP);
+        imgViewButtonHolder.getBackground().setColorFilter(originalBackgroundColor, PorterDuff.Mode.SRC_ATOP);
+
+        ViewTreeObserver vto = imgViewButtonHolder.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                imgViewButtonHolder.setPivotY(imgViewButtonHolder.getMeasuredHeight());
+                // handle viewWidth here...
+                if (Build.VERSION.SDK_INT < 16) {
+                    imgViewButtonHolder.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                } else {
+                    imgViewButtonHolder.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            }
+        });
     }
 
     public void changeSearchState(SearchAnimationState newState, final String... extras){
+
+        Logs.show(newState);
+
         if(newState == SearchAnimationState.Starting
                 && currentState == SearchAnimationState.SearchingHappy){
             return;
         }
 
-        if(newState == currentState) return;
+        if(newState == SearchAnimationState.Ending
+                && currentState == SearchAnimationState.Sleeping){
+            return;
+        }
 
+        if(newState == currentState) return;
         currentState = newState;
 
         switch (newState){
@@ -217,6 +249,8 @@ public class ButtonSearch extends RelativeLayout {
     }
 
     public void animateOutLastUpdated(){
+        locked = true;
+
         if(ViewHelper.getX(txtLastUpdated) == 100) return;
 
         AnimateBuilder.build(context, txtLastUpdated)
@@ -225,9 +259,20 @@ public class ButtonSearch extends RelativeLayout {
                 .setValue(100)
                 .start();
 
+        AnimateBuilder.build(context, imgViewButtonHolder)
+                .setAnimateType(AnimateType.scaleY)
+                .setDurationMs(200)
+                .setValue(1.2f)
+                .start();
+
+        colorDown();
+
+
     }
 
     public void animateInLastUpdated(){
+        locked = false;
+
         if(ViewHelper.getX(txtLastUpdated) == 0) return;
 
         AnimateBuilder.build(context, txtLastUpdated)
@@ -235,6 +280,15 @@ public class ButtonSearch extends RelativeLayout {
                 .setDurationMs(200)
                 .setValue(-100)
                 .start();
+
+        AnimateBuilder.build(context, imgViewButtonHolder)
+                .setAnimateType(AnimateType.scaleY)
+                .setDurationMs(200)
+                .setValue(1f)
+                .start();
+
+        colorUp();
+
     }
 
     public void setLastUpdated(String input){
@@ -294,6 +348,21 @@ public class ButtonSearch extends RelativeLayout {
     }
 
 
+    public void colorDown(){
+        imgViewFlower.setColorFilter(onTapSrcColor, PorterDuff.Mode.SRC_ATOP);
+        txtStatus.setTextColor(onTapSrcColor);
+        imgViewButtonHolder.getBackground().setColorFilter(onTapBackgroundColor,
+                PorterDuff.Mode.SRC_ATOP);
+    }
+
+    public void colorUp(){
+
+        txtStatus.setTextColor(originalSrcColor);
+        imgViewButtonHolder.getBackground().setColorFilter(originalBackgroundColor,
+                PorterDuff.Mode.SRC_ATOP);
+        imgViewFlower.setColorFilter(originalSrcColor, PorterDuff.Mode.SRC_ATOP);
+
+    }
 
 
 }

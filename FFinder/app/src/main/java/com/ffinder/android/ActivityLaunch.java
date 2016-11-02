@@ -36,6 +36,7 @@ public class ActivityLaunch extends MyActivityAbstract {
     private Intent intent;
     private ImageView imgViewIcon, imgViewBg, imgViewNextIcon;
     private RelativeLayout layoutDefault, layoutWelcome, layoutIntroduction, layoutNext;
+    private boolean startChecking;
 
 
     @Override
@@ -52,18 +53,24 @@ public class ActivityLaunch extends MyActivityAbstract {
         layoutIntroduction = (RelativeLayout) findViewById(R.id.layoutIntroduction);
         layoutNext = (RelativeLayout) findViewById(R.id.layoutNext);
 
-        restartPermissionChecking();
-
         //start heart beat service singleton
         Intent intent = new Intent(this, GcmAliveHeartbeatService.class);
         startService(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(!startChecking){
+            restartPermissionChecking();
+        }
     }
 
     private void restartPermissionChecking(){
         if(isLocationPermissionGranted() && isLocationServicesEnabled()){
             onPermissionFinishChecking();
         }
-
     }
 
     private void onPermissionFinishChecking(){
@@ -247,6 +254,7 @@ public class ActivityLaunch extends MyActivityAbstract {
                         @Override
                         public void run() {
                             startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            startChecking = false;
                         }
                     }, new Runnable() {
                         @Override

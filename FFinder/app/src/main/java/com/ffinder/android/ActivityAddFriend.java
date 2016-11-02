@@ -139,15 +139,15 @@ public class ActivityAddFriend extends MyActivityAbstract {
         switch (addMemberError){
             case UserAlreadyAdded:
                 msg = String.format(getString(R.string.user_already_added_error_msg), extra[0]);
-                errorMsg = msg;
+                errorMsg = addMemberError.name();
                 break;
             case KeyNotExistOrExpired:
                 msg = getString(R.string.key_expired_or_not_exist_msg);
-                errorMsg = msg + "--" + extra[0];
+                errorMsg = addMemberError.name() + "--" + extra[0];
                 break;
             case UnknownError:
                 msg = getString(R.string.unknown_error_msg);
-                errorMsg = msg;
+                errorMsg = addMemberError.name();
                 break;
         }
 

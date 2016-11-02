@@ -91,6 +91,7 @@ public class NotificationConsumer {
 
                 myModel.loadFriend(senderId);
                 final FriendModel friendModel = myModel.getFriendModelById(senderId);
+
                 if(friendModel != null){
                     final LocationModel locationModel = new LocationModel();
                     locationModel.setLatitude(latitude);
@@ -115,8 +116,6 @@ public class NotificationConsumer {
                             }
                         }
                     });
-
-
                 }
             }
 

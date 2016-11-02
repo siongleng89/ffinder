@@ -31,7 +31,7 @@ public class RequestLocationTaskFrag extends Fragment {
     private String userId, myToken, targetUserId;
     private SearchStatus currentStatus;
     private SearchResult currentResult;
-    public static int timeoutSecs = 30;
+    public static int timeoutSecs = 40;
     private RequestLocationTask requestLocationTask;
 
     public static RequestLocationTaskFrag newInstance(String userId, String myToken, String targetUserId) {
@@ -157,11 +157,9 @@ public class RequestLocationTaskFrag extends Fragment {
         private Context context;
         private SearchStatus searchStatus;
         private SearchResult searchResult;
-        private String msgId;
 
         public RequestLocationTask(Context context) {
             this.context = context;
-            this.msgId = Strings.generateUniqueRandomKey(30);
         }
 
         @Override
@@ -197,27 +195,34 @@ public class RequestLocationTaskFrag extends Fragment {
 
                                     NotificationSender.sendWithUserId(myUserId, targetUserId,
                                             FCMMessageType.UpdateLocation,
-                                            RequestLocationTaskFrag.timeoutSecs, msgId,
+                                            timeoutSecs / 2,
+                                            Strings.generateUniqueRandomKey(30),
                                             new Pair<String, String>("senderToken", myToken));
 
 
 
-//                                    Threadings.runInBackground(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            while (searchStatus == SearchStatus.WaitingUserRespond){
-//                                                NotificationSender.sendWithUserId(myUserId, targetUserId,
-//                                                        FCMMessageType.UpdateLocation,
-//                                                        RequestLocationTaskFrag.timeoutSecs, msgId,
-//                                                        new Pair<String, String>("senderToken", myToken));
-//                                                Threadings.sleep(5000);
-//
-//                                                if (finish){
-//                                                    break;
-//                                                }
-//                                            }
-//                                        }
-//                                    });
+                                    Threadings.runInBackground(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            while (searchStatus == SearchStatus.WaitingUserRespond){
+                                                if (finish){
+                                                    break;
+                                                }
+
+                                                Threadings.sleep((timeoutSecs / 2) * 1000 + 500);
+
+                                                if (finish){
+                                                    break;
+                                                }
+
+                                                NotificationSender.sendWithUserId(myUserId, targetUserId,
+                                                        FCMMessageType.UpdateLocation,
+                                                        RequestLocationTaskFrag.timeoutSecs,
+                                                        Strings.generateUniqueRandomKey(30),
+                                                        new Pair<String, String>("senderToken", myToken));
+                                            }
+                                        }
+                                    });
 
                                 }
                                 else{
@@ -368,7 +373,7 @@ public class RequestLocationTaskFrag extends Fragment {
                 // when it has connection
                 NotificationSender.sendWithUserId(userId, targetUserId,
                         FCMMessageType.UpdateLocation,
-                        NotificationSender.TTL_LONG, msgId,
+                        NotificationSender.TTL_LONG, Strings.generateUniqueRandomKey(30),
                         new Pair<String, String>("senderToken", myToken));
             }
         }

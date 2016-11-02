@@ -80,9 +80,6 @@ public class ActivityMain extends MyActivityAbstract implements
         layoutManager.setAutoMeasureEnabled(false);
         listFriends.setLayoutManager(layoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                layoutManager.getOrientation());
-        listFriends.addItemDecoration(dividerItemDecoration);
         registerForContextMenu(listFriends);
 
         setListeners();
@@ -377,7 +374,9 @@ public class ActivityMain extends MyActivityAbstract implements
                 Intent intent = this.getFirstArg();
                 final String friendId = intent.getStringExtra("userId");
                 if(getMyModel().checkFriendExist(friendId)) {
+
                     final FriendModel friendModel = getMyModel().getFriendModelById(friendId);
+                    SearchStatus originalSearchStatus = friendModel.getSearchStatus();
                     friendModel.load(ActivityMain.this);
 
                     FragmentManager fm = getSupportFragmentManager();
@@ -397,6 +396,12 @@ public class ActivityMain extends MyActivityAbstract implements
                     }
                     else{
                         friendModel.setRecentlyFinishSearch(false);
+                    }
+
+                    //this alive msg is redundant in auto search
+                    if(originalSearchStatus == SearchStatus.End &&
+                            friendModel.getSearchStatus() == SearchStatus.WaitingUserLocation){
+                        return;
                     }
 
                     ActivityMain.this.updateFriendsListAdapter(friendId);

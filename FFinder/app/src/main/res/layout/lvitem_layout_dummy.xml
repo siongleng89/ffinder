@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/layoutMain">
+    </RelativeLayout>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView5" android:src="@drawable/horizontal_line"
+            android:layout_below="@+id/layoutMain" android:tint="@color/colorPrimaryDark" android:tintMode="src_atop"/>
+</RelativeLayout>

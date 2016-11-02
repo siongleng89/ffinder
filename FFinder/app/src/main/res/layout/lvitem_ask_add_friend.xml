@@ -6,17 +6,9 @@
 
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/suggest_share_key_msg"
-            android:id="@+id/textView2" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_share_key_text"
-            android:id="@+id/btnShare"
-            android:layout_below="@+id/textView2" android:layout_marginTop="15dp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/tap_plus_to_add_friend_family"
+            android:id="@+id/txtViewTapToAdd" android:textSize="12sp" android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark" android:gravity="center"/>
 </RelativeLayout>

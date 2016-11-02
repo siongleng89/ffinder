@@ -5,11 +5,11 @@
     <color name="colorAccent">#497462</color>
 
     <color name="colorNormalText">#7b7a7a</color>
-    <color name="colorImportantText">#000000</color>
+    <color name="colorImportantText">#2f483f</color>
 
     <color name="colorContrast">#FFFFFF</color>
-    <color name="colorError">#b86521</color>
-
+    <color name="colorError">#ff5b45</color>
+    <color name="colorErrorLight">#fff9f9</color>
 
 
 

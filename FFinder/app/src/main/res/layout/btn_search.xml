@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="63dp"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content" android:clipChildren="false" android:clipToPadding="false">
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:visibility="visible"
-    >
+            android:layout_height="wrap_content" android:visibility="visible"
+            android:clipChildren="false" android:clipToPadding="false">
         <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -17,25 +17,34 @@
                 android:textSize="11dp" android:visibility="visible" android:singleLine="true"
                 android:gravity="center"/>
 
-        <LinearLayout
-                android:orientation="vertical"
+        <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent" android:padding="5dp" android:id="@+id/layoutMainButton"
-                android:background="@drawable/white_btn">
-
+                android:layout_height="wrap_content" android:layout_marginTop="5dp" android:clipChildren="false"
+                android:clipToPadding="false">
             <ImageView
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/imgViewFlower" android:scaleType="fitCenter"
-                    android:tint="@color/colorPrimaryDark" android:layout_weight="1" android:paddingLeft="10dp"
-                    android:paddingRight="10dp" android:paddingBottom="5dp"/>
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Lorem Ipsum"
-                    android:id="@+id/txtStatus" android:textSize="11dp" android:singleLine="true"
-                    android:gravity="center" android:textColor="@color/colorPrimaryDark"/>
+                    android:id="@+id/imgViewButtonHolder" android:background="@drawable/btn_border_bg"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:padding="5dp" android:id="@+id/layoutMainButton"
+            >
 
-        </LinearLayout>
+                <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/imgViewFlower" android:scaleType="fitCenter"
+                        android:tint="@color/colorPrimaryDark" android:layout_weight="1" android:paddingLeft="10dp"
+                        android:paddingRight="10dp" android:paddingBottom="5dp"/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lorem Ipsum"
+                        android:id="@+id/txtStatus" android:textSize="11dp" android:singleLine="true"
+                        android:gravity="center" android:textColor="@color/colorPrimaryDark"/>
+
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

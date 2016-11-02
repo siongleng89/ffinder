@@ -1,22 +1,18 @@
 package com.ffinder.android.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.ffinder.android.ActivityMap;
+import com.ffinder.android.ActivityShareKey;
 import com.ffinder.android.FragmentSearchButtonsHolder;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
@@ -30,11 +26,8 @@ import com.ffinder.android.extensions.ProfileImageView;
 import com.ffinder.android.extensions.TextFieldWrapper;
 import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.FriendModel;
-import com.ffinder.android.tasks.RequestLocationTaskFrag;
-import com.nineoldandroids.view.ViewHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -89,7 +82,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         else if(viewType == FRIEND_ERROR_ROW){
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.layout_dummy, parent, false);
+                    .inflate(R.layout.lvitem_layout_dummy, parent, false);
             return new FriendErrorViewHolder(this.context, view);
         }
         else if(viewType == ASK_ADD_FRIEND_ROW){
@@ -146,35 +139,33 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public class AskAddFriendViewHolder extends RecyclerView.ViewHolder{
 
-        private Button btnShare;
+        private TextView txtViewTapToAdd;
 
-        public AskAddFriendViewHolder(Context context, View itemView) {
+        public AskAddFriendViewHolder(final Context context, View itemView) {
             super(itemView);
 
-            btnShare = (Button) itemView.findViewById(R.id.btnShare);
+            txtViewTapToAdd = (TextView) itemView.findViewById(R.id.txtViewTapToAdd);
 
-            setListeners();
+            txtViewTapToAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ActivityShareKey.class);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         public void updateDesign(){
 
         }
 
-        private void setListeners(){
-            btnShare.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Logs.show("hi");
-                }
-            });
-        }
 
     }
 
     public class FriendErrorViewHolder extends RecyclerView.ViewHolder{
 
         private View itemView;
-        private LinearLayout layoutMain;
+        private RelativeLayout layoutMain;
         private TextView txtMessage;
         private Context context;
 
@@ -183,7 +174,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             this.itemView = itemView;
             this.context = context;
-            layoutMain = (LinearLayout) itemView.findViewById(R.id.layoutMain);
+            layoutMain = (RelativeLayout) itemView.findViewById(R.id.layoutMain);
 
         }
 
@@ -264,9 +255,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             updateDesign(friendModel);
         }
 
-        private void updateDesignAskAddFriend(){
-
-        }
 
         private void updateDesign(FriendModel friendModel){
 
@@ -434,6 +422,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                             FirebaseDB.changeBlockUser(context.getMyModel().getUserId(),
                                     friendModel.getUserId(), friendModel.isBlockSearch(), null);
+
+                            Analytics.logEvent(AnalyticEvent.Change_Block_User,
+                                    "BlockUser: " + String.valueOf(friendModel.isBlockSearch()));
+
                         }
                     };
 
@@ -451,7 +443,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         builder.setTitle(String.format(context.getString(R.string.block_dialog_title),
                                 friendModel.getName()))
                                 .setContent(String.format(context.getString(R.string.block_dialog_content),
-                                        friendModel.getName()))
+                                        friendModel.getName(), friendModel.getName()))
                                 .setOverlayType(OverlayType.OkCancel)
                                 .setCheckboxTitle(context.getString(R.string.dont_show_this_again))
                                 .setRunnables(blockRunnable)
@@ -520,7 +512,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         }
 
-        private void setButtonSearchListener(ButtonSearch buttonSearch, final FriendModel friendModel){
+        private void setButtonSearchListener(final ButtonSearch buttonSearch, final FriendModel friendModel){
             buttonSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
