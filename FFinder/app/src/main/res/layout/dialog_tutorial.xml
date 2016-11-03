@@ -17,24 +17,25 @@
                 android:layout_height="wrap_content"
                 android:text="Sample Title"
                 android:id="@+id/txtTitle" android:gravity="center" android:textColor="@color/colorPrimaryDark"
-                android:textSize="18sp" android:layout_marginTop="20dp"/>
+                android:textSize="18sp" android:layout_marginTop="20dp" android:visibility="gone"/>
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sample Subtitle"
+                android:text="Lorem ipsum is a great text to be included in this part"
                 android:id="@+id/txtSubtitle" android:layout_below="@+id/txtTitle" android:gravity="center"
-                android:textSize="14sp" android:textColor="@color/colorPrimaryDark" android:layout_marginBottom="20dp"/>
+                android:textSize="16sp" android:textColor="@color/colorPrimaryDark" android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp" android:layout_marginLeft="40dp" android:layout_marginRight="40dp"/>
         <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:id="@+id/imgViewClose" android:src="@drawable/close_icon" android:layout_alignParentRight="true"
         />
     </RelativeLayout>
 
     <LinearLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" android:paddingTop="10dp" android:paddingBottom="10dp">
 
         <RelativeLayout
                 android:layout_width="wrap_content"

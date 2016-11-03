@@ -118,11 +118,13 @@ public class VipAndProductsHelpers implements BillingProcessor.IBillingHandler  
                 }
 
                 List<SkuDetails> skuDetails = bp.getSubscriptionListingDetails(subscriptionIds);
-                for(SkuDetails skuDetail : skuDetails){
-                    if(skuDetail != null && !Strings.isEmpty(skuDetail.description) &&
-                            !Strings.isEmpty(skuDetail.priceText)){
-                        subscriptionModels.add(new SubscriptionModel(
-                                skuDetail.description, skuDetail.priceText, skuDetail));
+                if(skuDetails != null) {
+                    for (SkuDetails skuDetail : skuDetails) {
+                        if (skuDetail != null && !Strings.isEmpty(skuDetail.description) &&
+                                !Strings.isEmpty(skuDetail.priceText)) {
+                            subscriptionModels.add(new SubscriptionModel(
+                                    skuDetail.description, skuDetail.priceText, skuDetail));
+                        }
                     }
                 }
 

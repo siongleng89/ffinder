@@ -11,10 +11,7 @@ import android.text.method.KeyListener;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.ffinder.android.R;
 import com.ffinder.android.enums.AnimateType;
 import com.ffinder.android.helpers.AnimateBuilder;
@@ -30,6 +27,7 @@ public class TextFieldWrapper extends RelativeLayout {
     private LinearLayout layoutWrapper;
     private TextView txtLabel, txtError;
     private EditText editTxtField;
+    private ImageView imgViewHelp;
     private int labelNormalColor, labelOnFocusColor;
 
     public TextFieldWrapper(Context context) {
@@ -105,6 +103,7 @@ public class TextFieldWrapper extends RelativeLayout {
         layoutWrapper = (LinearLayout) this.findViewById(R.id.layoutWrapper);
         txtLabel = (TextView) layoutWrapper.findViewById(R.id.txtLabel);
         txtError = (TextView) layoutWrapper.findViewById(R.id.txtError);
+        imgViewHelp = (ImageView) layoutWrapper.findViewById(R.id.imgViewHelp);
         //cannot use id and must use tag for rotation problem
         editTxtField = (EditText) layoutWrapper.findViewWithTag("editTxtField");
 
@@ -143,6 +142,11 @@ public class TextFieldWrapper extends RelativeLayout {
     public void setNumericOnly(){
         KeyListener keyListener = DigitsKeyListener.getInstance("0123456789-");
         editTxtField.setKeyListener(keyListener);
+    }
+
+    public void setHelpClickListener(OnClickListener clickListener){
+        imgViewHelp.setVisibility(VISIBLE);
+        imgViewHelp.setOnClickListener(clickListener);
     }
 
     private void setListeners(){

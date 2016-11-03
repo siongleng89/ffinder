@@ -38,6 +38,7 @@ public class SearchAnimationPool {
             int resID = context.getResources().getIdentifier(id, "drawable", context.getPackageName());
             arr.add(ContextCompat.getDrawable(context, resID));
         }
+
         return arr;
 
     }

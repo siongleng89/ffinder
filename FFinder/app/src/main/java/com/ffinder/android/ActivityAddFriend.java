@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.databases.FirebaseListener;
+import com.ffinder.android.controls.TutorialDialog;
 import com.ffinder.android.enums.*;
 import com.ffinder.android.extensions.TextFieldWrapper;
 import com.ffinder.android.helpers.*;
@@ -103,26 +104,34 @@ public class ActivityAddFriend extends MyActivityAbstract {
                             memberNameWrapper.setText(targetName);
                         }
 
-                        if(!getMyModel().checkFriendExist(keyModel.getUserId())){
-                            final String finalTargetName = targetName;
-                            FirebaseDB.addNewLink(getMyModel().getUserId(), keyModel.getUserId(), myName,
-                                    targetName, new FirebaseListener() {
-                                        @Override
-                                        public void onResult(Object result, Status status) {
-                                            if(status == Status.Success){
-                                                successAddUser(keyModel.getUserId(),
-                                                        finalTargetName, myName);
-                                            }
-                                            else{
-                                                errorOccurred(AddMemberError.UnknownError);
-                                            }
-                                        }
-                                    });
-                        }
-                        else{
-                            errorOccurred(AddMemberError.UserAlreadyAdded,
-                                    getMyModel().getFriendModelById(keyModel.getUserId()).getName());
-                        }
+                        final String finalTargetName = targetName;
+                        checkBothWayLinkExist(getMyModel().getUserId(), keyModel.getUserId(),
+                                new RunnableArgs<Boolean>() {
+                            @Override
+                            public void run() {
+                                boolean bothLinkExistInDb = this.getFirstArg();
+
+                                if(bothLinkExistInDb && getMyModel().checkFriendExist(keyModel.getUserId())){
+                                    errorOccurred(AddMemberError.UserAlreadyAdded,
+                                            getMyModel().getFriendModelById(keyModel.getUserId()).getName());
+                                }
+                                else{
+                                    FirebaseDB.addNewLink(getMyModel().getUserId(), keyModel.getUserId(), myName,
+                                            finalTargetName, new FirebaseListener() {
+                                                @Override
+                                                public void onResult(Object result, Status status) {
+                                                    if(status == Status.Success){
+                                                        successAddUser(keyModel.getUserId(),
+                                                                finalTargetName, myName);
+                                                    }
+                                                    else{
+                                                        errorOccurred(AddMemberError.UnknownError);
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
                     }
                     else{
                         errorOccurred(AddMemberError.KeyNotExistOrExpired, targetKey);
@@ -159,17 +168,21 @@ public class ActivityAddFriend extends MyActivityAbstract {
     }
 
     private void successAddUser(String addingUserId, String targetName, String myName){
-        FriendModel newFriendModel = new FriendModel();
-        newFriendModel.setUserId(addingUserId);
-        newFriendModel.setName(Strings.pickNonEmpty(targetName, ""));
+        if(getMyModel().getFriendModelById(addingUserId) == null){
+            FriendModel newFriendModel = new FriendModel();
+            newFriendModel.setUserId(addingUserId);
+            newFriendModel.setName(Strings.pickNonEmpty(targetName, ""));
 
-        getMyModel().addFriendModel(newFriendModel);
-        getMyModel().sortFriendModels();
-        newFriendModel.save(this);
-        getMyModel().commitFriendUserIds();
+            getMyModel().addFriendModel(newFriendModel);
+            getMyModel().sortFriendModels();
+            newFriendModel.save(this);
+            getMyModel().commitFriendUserIds();
 
-        BroadcasterHelper.broadcast(this, BroadcastEvent.RefreshFriend,
-                new Pair<String, String>("userId", addingUserId));
+            BroadcasterHelper.broadcast(this, BroadcastEvent.RefreshFriend,
+                    new Pair<String, String>("userId", addingUserId));
+
+        }
+
         loadingDialog.dismiss();
 
         //notificate user added friend
@@ -182,6 +195,59 @@ public class ActivityAddFriend extends MyActivityAbstract {
         Analytics.logEvent(AnalyticEvent.Add_Friend_Success);
     }
 
+    private void checkBothWayLinkExist(final String myUserId, final String targetUserId,
+                                       final RunnableArgs<Boolean> onResult){
+        Threadings.runInBackground(new Runnable() {
+            @Override
+            public void run() {
+
+                final int[] counter = {0};
+                final boolean[] linkExist = new boolean[2];
+
+                FirebaseDB.checkLinkExist(myUserId, targetUserId, new FirebaseListener<Boolean>() {
+                    @Override
+                    public void onResult(Boolean result, Status status) {
+                        if(status == Status.Success && result != null){
+                            linkExist[0] = result;
+                        }
+
+                        counter[0]++;
+                    }
+                });
+
+                FirebaseDB.checkLinkExist(targetUserId, myUserId, new FirebaseListener<Boolean>() {
+                    @Override
+                    public void onResult(Boolean result, Status status) {
+                        if(status == Status.Success && result != null){
+                            linkExist[1] = result;
+                        }
+
+                        counter[0]++;
+                    }
+                });
+
+
+                while (counter[0] < 2){
+                    Threadings.sleep(500);
+                    if(disposed) return;
+                }
+
+                boolean allExist = true;
+
+                for(boolean result : linkExist){
+                    if(!result){
+                        allExist = false;
+                        break;
+                    }
+                }
+
+                onResult.run(allExist);
+
+            }
+        });
+
+
+    }
 
     private void setListeners(){
         userKeyWrapper.getEditTxtField().addTextChangedListener(new TextWatcher() {
@@ -243,6 +309,13 @@ public class ActivityAddFriend extends MyActivityAbstract {
                 }
 
                 isFormatting = false;
+            }
+        });
+
+        userKeyWrapper.setHelpClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TutorialDialog(ActivityAddFriend.this, TutorialType.AddManuallyPasscode).show();
             }
         });
 

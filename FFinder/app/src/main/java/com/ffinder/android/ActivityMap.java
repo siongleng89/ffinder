@@ -104,28 +104,50 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
 
         if(map == null) return;
 
+        if(travelMode == AbstractRouting.TravelMode.DRIVING){
+            btnTransit.setSelected(false, false);
+            btnWalk.setSelected(false, false);
+            btnDrive.setSelected(true, false);
+        }
+        else if(travelMode == AbstractRouting.TravelMode.WALKING){
+            btnTransit.setSelected(false, false);
+            btnWalk.setSelected(true, false);
+            btnDrive.setSelected(false, false);
+        }
+        else if(travelMode == AbstractRouting.TravelMode.TRANSIT){
+            btnTransit.setSelected(true, false);
+            btnWalk.setSelected(false, false);
+            btnDrive.setSelected(false, false);
+        }
+
         AnimateBuilder.fadeOutAndSetGone(this, layoutDirectionContent, new Runnable() {
             @Override
             public void run() {
                 layoutDirectionDetails.setVisibility(View.VISIBLE);
             }
         });
-        AnimateBuilder.fadeIn(this, layoutDirectionLoading);
 
-
-        if (Strings.isEmpty(myLatitude)){
-            new LocationUpdater(this, new RunnableArgs<Pair<String, String>>() {
-                @Override
-                public void run() {
-                    myLatitude = this.getFirstArg().first;
-                    myLongitude = this.getFirstArg().second;
+        AnimateBuilder.fadeIn(this, layoutDirectionLoading, new Runnable() {
+            @Override
+            public void run() {
+                if (Strings.isEmpty(myLatitude)){
+                    new LocationUpdater(ActivityMap.this, new RunnableArgs<Pair<String, String>>() {
+                        @Override
+                        public void run() {
+                            myLatitude = this.getFirstArg().first;
+                            myLongitude = this.getFirstArg().second;
+                            startGetDirections(travelMode);
+                        }
+                    });
+                }
+                else{
                     startGetDirections(travelMode);
                 }
-            });
-        }
-        else{
-            startGetDirections(travelMode);
-        }
+            }
+        });
+
+
+
 
     }
 

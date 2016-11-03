@@ -1,9 +1,12 @@
 package com.ffinder.android.extensions;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
@@ -117,6 +120,8 @@ public class ButtonSearch extends RelativeLayout {
 
         if(newState == currentState) return;
         currentState = newState;
+
+        destroyFlowerBitmap();
 
         switch (newState){
             case Sleeping:
@@ -356,7 +361,6 @@ public class ButtonSearch extends RelativeLayout {
     }
 
     public void colorUp(){
-
         txtStatus.setTextColor(originalSrcColor);
         imgViewButtonHolder.getBackground().setColorFilter(originalBackgroundColor,
                 PorterDuff.Mode.SRC_ATOP);
@@ -364,5 +368,25 @@ public class ButtonSearch extends RelativeLayout {
 
     }
 
+    public void destroyFlowerBitmap(){
+//        final Drawable drawable = imgViewFlower.getDrawable();
+//
+//        if (drawable instanceof AnimationDrawable) {
+//            AnimationDrawable ad = (AnimationDrawable) drawable;
+//            ad.stop();
+//            for(int i = 0; i < ad.getNumberOfFrames(); i++){
+//                Drawable frame = ad.getFrame(i);
+//                if (frame instanceof BitmapDrawable) {
+//                    ((BitmapDrawable)frame).getBitmap().recycle();
+//                }
+//                frame.setCallback(null);
+//            }
+//        }
+//        else if(drawable instanceof BitmapDrawable){
+//            ((BitmapDrawable)drawable).getBitmap().recycle();
+//        }
+
+        imgViewFlower.setImageDrawable(null);
+    }
 
 }

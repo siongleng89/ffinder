@@ -80,8 +80,6 @@ public class ActivityMain extends MyActivityAbstract implements
         layoutManager.setAutoMeasureEnabled(false);
         listFriends.setLayoutManager(layoutManager);
 
-        registerForContextMenu(listFriends);
-
         setListeners();
 
         Threadings.runInBackground(new Runnable() {
@@ -176,15 +174,6 @@ public class ActivityMain extends MyActivityAbstract implements
             Intent intent = new Intent(this, ActivitySettings.class);
             startActivity(intent);
         }
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.setHeaderTitle("");
-        menu.add(getString(R.string.edit_name_context_menu));
-        menu.add(getString(R.string.delete_user_context_menu));
-
     }
 
     @Override
@@ -587,6 +576,7 @@ public class ActivityMain extends MyActivityAbstract implements
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK) {
                     Uri resultUri = result.getUri();
+                    AndroidUtils.resizeAndShrinkProfileImage(new File(resultUri.getPath()));
                     AndroidUtils.moveProfileImageToPrivateDir(this,
                             resultUri,
                             pickingProfileImageForFriendId);

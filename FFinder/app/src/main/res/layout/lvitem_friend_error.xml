@@ -15,7 +15,7 @@
             android:text="Lorem ipsum ehheheh and is simplet eje and gogo"
             android:id="@+id/txtMessage"
             android:visibility="visible"
-            android:layout_below="@+id/txtLocation" android:singleLine="true" android:textSize="12sp"
+            android:layout_below="@+id/txtLocation" android:singleLine="false" android:textSize="12sp"
             android:textColor="@color/colorError"
             android:gravity="center_vertical"/>
 </LinearLayout>

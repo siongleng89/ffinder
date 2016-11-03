@@ -8,5 +8,6 @@ public enum PreferenceType {
     MyModel, FriendUserIds, AutoNotifiedReceivedIds, FirebaseToken,
     UserInfo, SeenAppsIntroduction, NextAdsCount,
     CheckedGoogleService, DontRemindMeAgainPhoneIssue, ProcessedMessageIds,
-    DontShowAgainBlockUserWarning, NoMoreCredits
+    DontShowAgainBlockUserWarning, NoMoreCredits,
+    SeenShareKeyTutorial
 }

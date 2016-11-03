@@ -24,8 +24,6 @@
     <!--Common texts start-->
 
 
-
-
     <string name="retry">Retry</string>
 
 
@@ -88,6 +86,8 @@
 
     <string name="unknown">Unknown</string>
 
+
+    <string name="tutorial">Tutorial</string>
 
     <!--Common texts end-->
 
@@ -213,13 +213,18 @@
     <string name="search_status_geodecoding_msg">Getting user\'s address…</string>
 
 
-    <string name="error_no_link_msg">Cannot retrieve address as user does not have you on the list.</string>
+    <string name="error_no_link_msg">
+        Cannot retrieve address as user does not have you on the list.
+    </string>
 
 
-    <string name="error_timeout_msg">Unable to get user\'s latest location.</string>
+    <string name="error_timeout_msg">
+        Unable to get user\'s latest location.
+    </string>
 
 
-    <string name="error_timeout_no_connection_msg">Unable to connect, please check your connection and try again.
+    <string name="error_timeout_no_connection_msg">
+        Unable to connect, please check your connection and try again.
     </string>
 
 
@@ -255,20 +260,6 @@
 
 
     <string name="btn_wait_autonotification_text">Wait for auto notification</string>
-
-
-    <string name="edit_name_context_menu">Edit Name</string>
-
-
-    <string name="delete_user_context_menu">Delete This User</string>
-
-
-    <string name="suggest_share_key_msg">Add your first friend or family by sharing your Passcode\nYour friends &amp;
-        family will appear here once they have added you.
-    </string>
-
-
-    <string name="btn_share_key_text">Share your Passcode here</string>
 
 
     <string name="search_left">Search Left</string>
@@ -509,27 +500,12 @@
     <string name="user_already_added_error_msg">User has already existed in your list as %s</string>
 
 
-    <string name="key_expired_or_not_exist_msg">Passcode does not exist or has expired. (Scroll below for more info)
+    <string name="key_expired_or_not_exist_msg">
+        Passcode does not exist or has expired.
     </string>
-
-
-    <string name="passcode_tutorial_title1">Looks like you are having trouble adding friend/family. Did you receive a
-        message from
-        your friend/family? If yes, please follow the following instructions,
-        \n
-        <b>(Please get a new Passcode from your friend/family if the message is one day old)</b>
-    </string>
-    <string name="passcode_tutorial_text_1_0">1.0 Click on the link shared by your friend/family to add them</string>
-    <string name="passcode_tutorial_text_1_1">1.1 Choose open with FFfinder</string>
-    <string name="passcode_tutorial_text_1_2">1.2 Add friend success!
-    </string>
-    <string name="passcode_tutorial_title2">Or alternatively, you can also add friend manually.</string>
-    <string name="passcode_tutorial_text_2_0">2.0 Copy the Passcode shared by your friend/family.</string>
-    <string name="passcode_tutorial_text_2_1">2.1 Key in the Passcode and press OK.</string>
 
 
     <!--Add member Activity text end-->
-
 
 
 
@@ -599,21 +575,15 @@
     <string name="share_subject">FFfinder Passcode</string>
 
 
-    <string name="share_msg" formatted="false">Hi, please download Simple Friend and Family Finder to find your friends and family with a click
+    <string name="share_msg" formatted="false">
+        Hi, please download Simple Friend and Family Finder to find your friends and family with a click
         for FREE
         at
         \nhttps://play.google.com/store/apps/details?id=com.ffinder.android
-        \n------------------------------------------------------
 
-
-        \n\nand add me by clicking on this link (Open with FFfinder)
+        \n\nThen add me by clicking on this link (Open with FFfinder)
         \nhttp://ff-finder.com/addnew/%s
-
-
-        \n\nOr manually:
-        \nMy Passcode: %s
     </string>
-
 
     <!--Share key activity text end-->
 
@@ -675,6 +645,50 @@
 
     <!--Notifications end -->
 
+
+    <!--Everything about tutorials -->
+    <string name="first_time_see_passcode">
+        Hi, it is your first time adding friend/family, do you want to see a short tutorial guide?
+    </string>
+
+    <string name="share_passcode_s1">
+        Every user has his/her unique temporary passcode,
+        you must share your personal passcode with your friend/family to connect.
+    </string>
+
+    <string name="share_passcode_s2">
+        Click on the Share Passcode button and pick your favourite method to share your passcode.
+    </string>
+
+    <string name="share_passcode_s3">
+        After it you don\'t need to take any more action.
+    </string>
+
+    <string name="share_passcode_s4">
+        After your friend/family has followed the instruction to add you,
+        both of you can start tracking each other.
+    </string>
+
+
+
+    <string name="add_manually_a1">
+        Every user has his/her unique temporary passcode,
+        get the passcode from them by asking them to click on the PLUS icon.
+    </string>
+
+    <string name="add_manually_a2">
+        Upon receiving the passcode from them, note down their passcode here.
+    </string>
+
+    <string name="add_manually_a3">
+        Key in the code at "Your friend\'s Passcode"
+    </string>
+
+    <string name="add_manually_a4">
+        Voila! You can start tracking each other.
+    </string>
+
+    <!-- Tutorials end -->
 
 
 

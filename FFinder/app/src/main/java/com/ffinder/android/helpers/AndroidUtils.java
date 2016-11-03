@@ -379,6 +379,25 @@ public class AndroidUtils {
         return Uri.fromFile(sdImageMainDirectory);
     }
 
+    public static void resizeAndShrinkProfileImage(File file){
+        Bitmap b= BitmapFactory.decodeFile(file.getAbsolutePath());
+        Bitmap out = Bitmap.createScaledBitmap(b, 150, 150, false);
+
+        FileOutputStream fOut;
+        try {
+            fOut = new FileOutputStream(file);
+            out.compress(Bitmap.CompressFormat.JPEG, 90, fOut);
+            fOut.flush();
+            fOut.close();
+            b.recycle();
+            out.recycle();
+        } catch (Exception e) {}
+
+    }
+
+
+
+
     public static void moveProfileImageToPrivateDir(Context context, Uri fromUri, String friendId){
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("profileImages", Context.MODE_PRIVATE);
@@ -440,6 +459,14 @@ public class AndroidUtils {
             return false;
         }
         return true;
+    }
+
+    public static int getStringIdentifier(Context context, String name) {
+        return context.getResources().getIdentifier(name, "string", context.getPackageName());
+    }
+
+    public static int getDrawableIdentifier(Context context, String name) {
+        return context.getResources().getIdentifier(name, "drawable", context.getPackageName());
     }
 
 }

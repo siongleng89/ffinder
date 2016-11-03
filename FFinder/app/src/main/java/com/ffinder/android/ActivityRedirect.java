@@ -31,6 +31,12 @@ public class ActivityRedirect extends AppCompatActivity {
         } else {
             // App was already running, so just finish, which will drop the user
             //  in to the activity that was at the top of the task stack
+            Intent i = getBaseContext().getPackageManager()
+                    .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+
+
             finish();
         }
 

@@ -8,18 +8,19 @@ import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
-import com.ffinder.android.enums.ActionBarActionType;
-import com.ffinder.android.enums.AnalyticEvent;
-import com.ffinder.android.enums.OverlayType;
+import com.ffinder.android.controls.TutorialDialog;
+import com.ffinder.android.enums.*;
 import com.ffinder.android.helpers.*;
 
 public class ActivityShareKey extends MyActivityAbstract {
 
     private TextView txtYourKey, txtExpiredDateTime;
     private Button btnShareKey;
+    private ImageButton imgButtonTutorial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,9 @@ public class ActivityShareKey extends MyActivityAbstract {
         txtYourKey = (TextView) findViewById(R.id.txtYourKey);
         txtExpiredDateTime = (TextView) findViewById(R.id.txtExpiredDateTime);
         btnShareKey = (Button) findViewById(R.id.btnShareKey);
+        imgButtonTutorial = (ImageButton) findViewById(R.id.imgButtonTutorial);
 
-        resetKey();
+        checkNeedToShowTutorial();
         setListeners();
     }
 
@@ -59,6 +61,30 @@ public class ActivityShareKey extends MyActivityAbstract {
         Analytics.logEvent(AnalyticEvent.Close_Share_Key_Dialog);
     }
 
+    public void checkNeedToShowTutorial(){
+        if(Strings.isEmpty(PreferenceUtils.get(this, PreferenceType.SeenShareKeyTutorial))){
+            OverlayBuilder.build(this).setOverlayType(OverlayType.YesNo)
+                    .setTitle(getString(R.string.tutorial))
+                    .setContent(getString(R.string.first_time_see_passcode))
+                    .setRunnables(new Runnable() {
+                        @Override
+                        public void run() {
+                            new TutorialDialog(ActivityShareKey.this, TutorialType.SharePasscode).show();
+                        }
+                    })
+                    .setOnDismissRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            PreferenceUtils.put(ActivityShareKey.this, PreferenceType.SeenShareKeyTutorial, "1");
+                            resetKey();
+                        }
+                    }).show();
+
+        }
+        else{
+            resetKey();
+        }
+    }
 
     public void resetKey(){
         if(getMyModel().checkUserKeyValid()){
@@ -109,7 +135,7 @@ public class ActivityShareKey extends MyActivityAbstract {
 
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = String.format(getString(R.string.share_msg), key, key);
+        String shareBody = String.format(getString(R.string.share_msg), key);
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_title)));
@@ -143,7 +169,15 @@ public class ActivityShareKey extends MyActivityAbstract {
             }
         });
 
+        imgButtonTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TutorialDialog(ActivityShareKey.this, TutorialType.SharePasscode).show();
+            }
+        });
+
     }
+
 
 
 

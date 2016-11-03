@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.ffinder.android.R;
 import com.ffinder.android.enums.OverlayType;
+import com.ffinder.android.enums.TutorialType;
+import com.ffinder.android.helpers.AndroidUtils;
 import com.ffinder.android.helpers.AnimateBuilder;
 import com.ffinder.android.helpers.OverlayBuilder;
 import com.ffinder.android.helpers.Threadings;
@@ -28,9 +30,11 @@ public class TutorialDialog {
     private AlertDialog dialog;
     private ArrayList<TutorialStepModel> tutorialStepModels;
     private int currentIndex;
+    private TutorialType tutorialType;
 
-    public TutorialDialog(Activity activity) {
+    public TutorialDialog(Activity activity, TutorialType tutorialType) {
         this.activity = activity;
+        this.tutorialType = tutorialType;
         tutorialStepModels = new ArrayList();
         populateModels();
     }
@@ -94,12 +98,29 @@ public class TutorialDialog {
     }
 
     private void populateModels(){
-        tutorialStepModels.add(new TutorialStepModel("Test", "test again", R.drawable.add_friend1));
-        tutorialStepModels.add(new TutorialStepModel("Test2", "test again2", R.drawable.add_friend1_1));
-        tutorialStepModels.add(new TutorialStepModel("Test3", "test again3", R.drawable.add_friend1_2));
+        ArrayList<String> ids = new ArrayList();
+
+
+        if(this.tutorialType == TutorialType.AddManuallyPasscode){
+            ids.add("add_manually_a1");
+            ids.add("add_manually_a2");
+            ids.add("add_manually_a3");
+            ids.add("add_manually_a4");
+        }
+        else if(this.tutorialType == TutorialType.SharePasscode){
+            ids.add("share_passcode_s1");
+            ids.add("share_passcode_s2");
+            ids.add("share_passcode_s3");
+            ids.add("share_passcode_s4");
+        }
+
+        for(String id : ids){
+            tutorialStepModels.add(new TutorialStepModel("",
+                    activity.getString(AndroidUtils.getStringIdentifier(activity, id)),
+                    AndroidUtils.getDrawableIdentifier(activity, id)));
+        }
+
     }
-
-
 
     public void setListeners(){
         imgViewClose.setOnClickListener(new View.OnClickListener() {
