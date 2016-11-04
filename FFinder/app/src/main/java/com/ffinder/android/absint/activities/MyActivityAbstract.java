@@ -319,6 +319,15 @@ public class MyActivityAbstract extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(menuOverflowLayout != null && menuOverflowLayout.getVisibility() == View.VISIBLE){
+            menuOverflowLayout.setVisibility(View.GONE);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
 
     public MyModel getMyModel(){
         if (myModel == null){

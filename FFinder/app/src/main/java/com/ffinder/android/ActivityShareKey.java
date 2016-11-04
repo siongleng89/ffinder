@@ -21,6 +21,7 @@ public class ActivityShareKey extends MyActivityAbstract {
     private TextView txtYourKey, txtExpiredDateTime;
     private Button btnShareKey;
     private ImageButton imgButtonTutorial;
+    private final int SHARE_KEY_REQUEST = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +57,27 @@ public class ActivityShareKey extends MyActivityAbstract {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Analytics.logEvent(AnalyticEvent.Close_Share_Key_Dialog);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == SHARE_KEY_REQUEST){
+            if(Strings.isEmpty(PreferenceUtils.get(this, PreferenceType.SeenAfterShareKeyReminder))){
+                final OverlayBuilder overlayBuilder = OverlayBuilder.build(this);
+                overlayBuilder.setOverlayType(OverlayType.OkOnly)
+                        .setCheckboxTitle(getString(R.string.dont_show_this_again))
+                        .setContent(getString(R.string.after_share_passcode_reminder))
+                        .setOnDismissRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(overlayBuilder.isChecked()){
+                                    PreferenceUtils.put(ActivityShareKey.this,
+                                            PreferenceType.SeenAfterShareKeyReminder, "1");
+                                }
+                            }
+                        })
+                        .show();
+            }
+        }
     }
 
     public void checkNeedToShowTutorial(){
@@ -118,14 +137,17 @@ public class ActivityShareKey extends MyActivityAbstract {
     }
 
     public void regenKeyPressed(){
-        new AlertDialog.Builder(this)
-                .setMessage(getString(R.string.regen_key_confirm_msg))
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
+
+
+        new OverlayBuilder(this).setOverlayType(OverlayType.YesNo)
+                .setContent(getString(R.string.regen_key_confirm_msg))
+                .setRunnables(new Runnable() {
+                    @Override
+                    public void run() {
                         getMyModel().setUserKeyGeneratedUnixTime(0);
                         resetKey();
-                    }})
-                .setNegativeButton(R.string.no, null).show();
+                    }
+                }).show();
     }
 
     private void shareKey(){
@@ -138,7 +160,7 @@ public class ActivityShareKey extends MyActivityAbstract {
         String shareBody = String.format(getString(R.string.share_msg), key);
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-        startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_title)));
+        startActivityForResult(Intent.createChooser(sharingIntent, getString(R.string.share_title)), SHARE_KEY_REQUEST);
     }
 
     public void setListeners(){

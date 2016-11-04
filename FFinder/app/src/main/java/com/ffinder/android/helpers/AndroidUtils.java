@@ -77,46 +77,6 @@ public class AndroidUtils {
         return px;
     }
 
-    public static boolean validateEditText(EditText editText, TextInputLayout textInputLayout, String emptyMsg){
-        if(Strings.isEmpty(editText.getText().toString())){
-            textInputLayout.setError(emptyMsg);
-            textInputLayout.setErrorEnabled(true);
-            return false;
-        }
-        else{
-            textInputLayout.setError("");
-            textInputLayout.setErrorEnabled(false);
-            return true;
-        }
-    }
-
-
-    public static AlertDialog showDialogWithButtonText(Context context, String title, String content, String buttonText,
-                                                       final RunnableArgs<DialogInterface> onPositivePress, final Runnable onDismiss){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        if(!Strings.isEmpty(title)) builder.setTitle(title);
-        builder.setMessage(content);
-        // Set up the buttons
-        builder.setPositiveButton(buttonText, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(onPositivePress != null) onPositivePress.run(dialog);
-                else{
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                if(onDismiss != null) onDismiss.run();
-            }
-        });
-
-        return builder.show();
-    }
-
 
     public static String getUsername(Context context){
         String name = getUsername1(context);
