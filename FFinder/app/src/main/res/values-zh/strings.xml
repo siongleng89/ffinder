@@ -159,7 +159,7 @@ ________________________________________________________________________________
 Add member Activity text start -->
 <string name="add_new_member_title">"加入朋友或家人"</string>
 <string name="add_new_member_manually_title">"手动加入朋友或家人"</string>
-<string name="user_key_title">"您的家人或朋友的密码"</string>
+<string name="user_key_title">"您的家人或朋友的用号"</string>
 <string name="member_name_title">"您的家人或朋友的称呼"</string>
 <string name="no_user_key_msg">"请输入您想添加的用户的用号"</string>
 <string name="no_member_name_msg">"请输入用户名字"</string>
@@ -185,7 +185,7 @@ Share key activity text start -->
 <string name="expired_at_title">"( %s 后过期)"</string>
 <string name="minutes_left">"(%s 分钟后过期)"</string>
 <string name="copied_to_clipboard_toast_msg">"已拷贝"</string>
-<string name="regenerating_key_msg">"更新密码…"</string>
+<string name="regenerating_key_msg">"更新用号中…"</string>
 <string name="regen_key_confirm_msg">"您确定要更新您的用号吗？其他用户将不能使用旧用号添加您"</string>
 <string name="share_title">"分享用号"</string>
 <string name="share_subject">"简易家人朋友搜寻器用号"</string>
@@ -228,4 +228,7 @@ Everything about tutorials -->
 <string name="add_manually_a2">"在收到对方用户的分享信息后，如图所示，这是对方的用号"</string>
 <string name="add_manually_a3">"在此输入对方的用号"</string>
 <string name="add_manually_a4">"好了！你们就能互相定位对方了"</string>
+<string name="huawei">"华为"</string>
+<string name="xiaomi">"小米"</string>
+<string name="sony">"索尼"</string>
 </resources>
