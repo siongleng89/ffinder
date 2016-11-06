@@ -24,9 +24,10 @@ public class ActivityAddFriend extends MyActivityAbstract {
     private boolean processCanceled;
 
     private TextView txtError;
-    private TextFieldWrapper userKeyWrapper, memberNameWrapper, yourNameWrapper;
+    private TextFieldWrapper userKeyWrapper, memberNameWrapper;
     private AlertDialog loadingDialog;
     private Button btnAdd;
+    private String myName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +43,11 @@ public class ActivityAddFriend extends MyActivityAbstract {
 
         userKeyWrapper = (TextFieldWrapper) findViewById(R.id.newNameWrapper);
         memberNameWrapper = (TextFieldWrapper) findViewById(R.id.memberNameWrapper);
-        yourNameWrapper = (TextFieldWrapper) findViewById(R.id.yourNameWrapper);
         btnAdd = (Button) findViewById(R.id.btnAdd);
 
         userKeyWrapper.setNumericOnly();
 
-        yourNameWrapper.setText(AndroidUtils.getUsername(ActivityAddFriend.this));
-
+        myName = AndroidUtils.getUsername(ActivityAddFriend.this);
 
         //check got pending auto add user key (eg. click redirect from whatsapp)
         String pendingAddUserKey = Vars.pendingAddUserKey;
@@ -75,8 +74,7 @@ public class ActivityAddFriend extends MyActivityAbstract {
         processCanceled = false;
 
         //use & not &&, to force evaluate all conditions
-        if (yourNameWrapper.validateNotEmpty(getString(R.string.no_your_name_msg)) &
-                userKeyWrapper.validateNotEmpty(getString(R.string.no_user_key_msg))){
+        if (userKeyWrapper.validateNotEmpty(getString(R.string.no_user_key_msg))){
 
             loadingDialog = OverlayBuilder.build(this)
                                 .setOverlayType(OverlayType.Loading)
@@ -95,7 +93,6 @@ public class ActivityAddFriend extends MyActivityAbstract {
                     if(processCanceled) return;
 
                     String targetKey = userKeyWrapper.getText();
-                    final String myName = yourNameWrapper.getText();
                     String targetName = memberNameWrapper.getText();
 
                     if(status == Status.Success && keyModel != null){

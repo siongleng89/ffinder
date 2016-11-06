@@ -129,12 +129,14 @@ public class NotificationConsumer {
                 myModel.loadFriend(senderId);
                 final FriendModel friendModel = myModel.getFriendModelById(senderId);
                 if(friendModel != null){
-                    friendModel.setSearchStatus(SearchStatus.WaitingUserLocation);
-                    friendModel.save(context);
+                    //if not waiting user respond, this msg is useless, should discarded
+                    if(friendModel.getSearchStatus() == SearchStatus.WaitingUserRespond){
+                        friendModel.setSearchStatus(SearchStatus.WaitingUserLocation);
+                        friendModel.save(context);
+                        BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshFriend,
+                                new Pair<String, String>("userId", senderId));
+                    }
                 }
-
-                BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshFriend,
-                        new Pair<String, String>("userId", senderId));
 
             }
 
