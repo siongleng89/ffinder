@@ -71,13 +71,13 @@ Main Activity text start -->
 <string name="error_no_link_msg">"Cannot retrieve address as user does not have you on the list."</string>
 <string name="error_timeout_msg">"Unable to get user's latest location."</string>
 <string name="error_timeout_no_connection_msg">"Unable to connect, please check your connection and try again."</string>
-<string name="error_timeout_unknown_reason_possible_reasons1">"1) User's device does not have active internet connection 
-\n2) User has forced close FFfinder"</string>
+<string name="error_timeout_unknown_reason_possible_reasons1">"1) User's device does not have active internet connection
+2) User has forced close FFfinder"</string>
 <string name="error_timeout_unknown_reason_possible_reasons2">"3) Configurations not set up for some specific phone models"</string>
 <string name="error_timeout_location_disabled_reasons">"1) User's device does not have active internet connection 
-\n2) User has disabled location sharing"</string>
+2) User has disabled location sharing"</string>
 <string name="error_user_blocked_msg">"User has blocked you."</string>
-<string name="failed_search_msg_text1">"It seems like we are unable to locate this user the last time you search due to the possible reason(s):"</string>
+<string name="failed_search_msg_text1">"It seems like we are unable to locate this user the last time you search because:"</string>
 <string name="failed_search_msg_text2">"We will keep searching this user and send you a free notification later, or you can try to search again."</string>
 <string name="btn_search_again_text">"Search again anyway"</string>
 <string name="btn_wait_autonotification_text">"Wait for auto notification"</string>
@@ -114,22 +114,21 @@ Known Issues Activity text start -->
 <string name="known_issues_title">"Known Issues"</string>
 <string name="issue_fix_xiaomi">"For Xiao Mi, when using FFfinder, to ensure your loved ones can always find you,
 please enable our apps to able to run in background by following these steps:
-\n
-\n1) Go to Security Apps
-\n2) Go to permission then click on Auto Start Management
-\n3) Add/Enable auto start apps, allow FFfinder"</string>
+1) Go to Security Apps
+2) Go to permission then click on Auto Start Management
+3) Add/Enable auto start apps, allow FFfinder"</string>
+
 <string name="issue_fix_huawei">"For Huawei, when using FFfinder, to ensure your loved one can always find you,
 please enable our apps to able to run in background by following these steps:
-\n
-\n1) Go to Settings
-\n2) Click on Protected Apps 
-\n3) Add FFfinder as protected apps"</string>
-<string name="issue_fix_sony">"For Sony, when using FFfinder, if you are using Stamina Mode in Power Management (You may ignore this instruction if you are not using Stamina Mode), please follow these steps to ensure that your loved one can always find you: 
-\n
-\n1) Go to Power Management 
-\n2) Click on STAMINA mode 
-\n3) Apps active in standby 
-\n4) Add FFfinder"</string>
+1) Go to Settings
+2) Click on Protected Apps 
+3) Add FFfinder as protected apps"</string>
+
+<string name="issue_fix_sony">"For Sony, when using FFfinder, if you are using Stamina Mode in Power Management (You may ignore this instruction if you are not using Stamina Mode), please follow these steps to ensure that your loved one can always find you:
+1) Go to Power Management 
+2) Click on STAMINA mode 
+3) Apps active in standby 
+4) Add FFfinder"</string>
 
 <!-- Known Issues Activity text end
 _________________________________________________________________________________
@@ -182,7 +181,7 @@ Share key activity text start -->
 <string name="btn_share_via_other_apps_text">"Share"</string>
 <string name="your_key_title">"Share this Passcode with your friends and family, and you can start tracking their 
 location once they have added you
-\n(No action is required after sharing your Passcode)"</string>
+(No action is required after sharing your Passcode)"</string>
 <string name="expired_at_title">"(Expire at %s)"</string>
 <string name="minutes_left">"(%s mins left)"</string>
 <string name="copied_to_clipboard_toast_msg">"Copied"</string>
@@ -195,8 +194,7 @@ https://play.google.com/store/apps/details?id=com.ffinder.android
 
 Then add me by clicking on this link (Open with FFfinder)
 http://ff-finder.com/addnew/%s"</string>
-<string name="after_share_passcode_reminder">"Thanks for sharing your passcode, just wait for your friend or family
-to add you and you can start tracking each other."</string>
+<string name="after_share_passcode_reminder">"Thanks for sharing your passcode, just wait for your friend or family to add you and you can start tracking each other."</string>
 
 <!-- Share key activity text end
 _________________________________________________________________________________
@@ -226,7 +224,7 @@ Everything about tutorials -->
 <string name="share_passcode_s3">"After this, no action is required."</string>
 <string name="share_passcode_s4">"After your friend/family has added you, both of you can start tracking each other."</string>
 <string name="add_manually_a1">"Every user has a unique temporary passcode, get the passcode from them by asking them to click on the PLUS icon."</string>
-<string name="add_manually_a2">"Upon receiving the passcode from them, note down their passcode here."</string>
+<string name="add_manually_a2">"Upon receiving the message, note down their passcode here."</string>
 <string name="add_manually_a3">"Key in the code at Your friend's Passcode"</string>
 <string name="add_manually_a4">"Voila! You can start tracking each other."</string>
 </resources>
