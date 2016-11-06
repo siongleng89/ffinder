@@ -142,7 +142,6 @@ Add member Activity text start -->
 <string name="add_new_member_manually_title">"Adicionar amigo/familiar manualmente"</string>
 <string name="user_key_title">"Senha do seu amigo"</string>
 <string name="member_name_title">"Como você aborda a ele/ela?"</string>
-<string name="your_name_title"></string>
 <string name="no_user_key_msg">"Introduza o código secreto do membro"</string>
 <string name="no_member_name_msg">"Insira o nome do membro"</string>
 <string name="no_your_name_msg"></string>
@@ -209,4 +208,7 @@ Everything about tutorials -->
 <string name="add_manually_a2">"Upon receiving the message, note down their passcode here."</string>
 <string name="add_manually_a3">"Chave no código em código secreto do seu amigo"</string>
 <string name="add_manually_a4">"Voila! Você pode iniciar rastreamento uns dos outros."</string>
+<string name="huawei">"Huawei"</string>
+<string name="xiaomi">"Xiaomi"</string>
+<string name="sony">"Sony"</string>
 </resources>
