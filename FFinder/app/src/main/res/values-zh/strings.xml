@@ -62,7 +62,7 @@ Main Activity text start -->
 <string name="never_locate_user_msg">"请按搜寻，开始寻找"</string>
 <string name="unknown_address_msg">"无地址，请看地图已确认位置"</string>
 <string name="block_dialog_title">"禁止%s搜寻？"</string>
-<string name="block_dialog_content">" %s 不能搜寻你的位置。你能继续搜寻%s的位置"</string>
+<string name="block_dialog_content">"%1$s 将不能搜寻你的位置，但你还能继续搜寻%2$s的位置"</string>
 <string name="search_status_starting_msg">"启动中…"</string>
 <string name="search_status_checking_data_msg">"连接信号位置…"</string>
 <string name="search_status_waiting_user_respond_msg">"等候信号回复…"</string>
