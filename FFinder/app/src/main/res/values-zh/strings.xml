@@ -76,7 +76,7 @@ Main Activity text start -->
 <string name="error_timeout_unknown_reason_possible_reasons2">"3) 某些手机型号的设置没更动"</string>
 <string name="error_timeout_location_disabled_reasons">"1) 用户手机没有网络信号
 2) 用户关闭了定位设置"</string>
-<string name="error_user_blocked_msg">"用户手机禁止你的搜寻"</string>
+<string name="error_user_blocked_msg">"用户禁止您的搜寻"</string>
 <string name="failed_search_msg_text1">"我们现在无法找到你的家人朋友，原因可能是；"</string>
 <string name="failed_search_msg_text2">"我们会继续搜寻，并通知让您知道搜寻结果, 或你可以再启动搜寻"</string>
 <string name="btn_search_again_text">"重新搜寻"</string>
@@ -193,7 +193,7 @@ Share key activity text start -->
 https://play.google.com/store/apps/details?id=com.ffinder.android
 让我可以知道您的所在。
 
-下载后，请使用简易家人朋友搜寻器打开以下网址添加我，
+下载后，请使用家人朋友搜寻器打开以下网址添加我，
 http://ff-finder.com/addnew/%s"</string>
 <string name="after_share_passcode_reminder">"谢谢您分享您的用号，请等待您的家人或朋友的添加。过后你们就能互相定位。"</string>
 
@@ -227,7 +227,7 @@ Everything about tutorials -->
 <string name="add_manually_a1">"每个用户都有一个独有的用号，如您想添加新的家人或朋友，您必须要求他与您分享他的用号，他可在按下这个“加”按键后看到他的用号"</string>
 <string name="add_manually_a2">"在收到对方用户的分享信息后，如图所示，这是对方的用号"</string>
 <string name="add_manually_a3">"在此输入对方的用号"</string>
-<string name="add_manually_a4">"好了！你们就能互相定位对方了"</string>
+<string name="add_manually_a4">"好了！你们从现在开始就能互相定位对方了"</string>
 <string name="huawei">"华为"</string>
 <string name="xiaomi">"小米"</string>
 <string name="sony">"索尼"</string>
