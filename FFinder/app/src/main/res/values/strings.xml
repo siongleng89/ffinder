@@ -71,7 +71,7 @@ Main Activity text start -->
 <string name="error_no_link_msg">"Cannot retrieve address as user does not have you on the list."</string>
 <string name="error_timeout_msg">"Unable to get user's latest location."</string>
 <string name="error_timeout_no_connection_msg">"Unable to connect, please check your connection and try again."</string>
-<string name="error_timeout_unknown_reason_possible_reasons1">"1) User's device does not have active internet connection
+<string name="error_timeout_unknown_reason_possible_reasons1">"1) User's device does not have active internet connection 
 2) User has forced close FFfinder"</string>
 <string name="error_timeout_unknown_reason_possible_reasons2">"3) Configurations not set up for some specific phone models"</string>
 <string name="error_timeout_location_disabled_reasons">"1) User's device does not have active internet connection 
@@ -114,17 +114,18 @@ Known Issues Activity text start -->
 <string name="known_issues_title">"Known Issues"</string>
 <string name="issue_fix_xiaomi">"For Xiao Mi, when using FFfinder, to ensure your loved ones can always find you,
 please enable our apps to able to run in background by following these steps:
+
 1) Go to Security Apps
 2) Go to permission then click on Auto Start Management
 3) Add/Enable auto start apps, allow FFfinder"</string>
-
 <string name="issue_fix_huawei">"For Huawei, when using FFfinder, to ensure your loved one can always find you,
 please enable our apps to able to run in background by following these steps:
+
 1) Go to Settings
 2) Click on Protected Apps 
 3) Add FFfinder as protected apps"</string>
+<string name="issue_fix_sony">"For Sony, when using FFfinder, if you are using Stamina Mode in Power Management (You may ignore this instruction if you are not using Stamina Mode), please follow these steps to ensure that your loved one can always find you: 
 
-<string name="issue_fix_sony">"For Sony, when using FFfinder, if you are using Stamina Mode in Power Management (You may ignore this instruction if you are not using Stamina Mode), please follow these steps to ensure that your loved one can always find you:
 1) Go to Power Management 
 2) Click on STAMINA mode 
 3) Apps active in standby 
@@ -159,7 +160,6 @@ Add member Activity text start -->
 <string name="add_new_member_manually_title">"Add Friend/Family Manually"</string>
 <string name="user_key_title">"Your friend's Passcode"</string>
 <string name="member_name_title">"How do you address him/her?"</string>
-<string name="your_name_title">"How does he/she address you?"</string>
 <string name="no_user_key_msg">"Please input member's passcode"</string>
 <string name="no_member_name_msg">"Please input member's name"</string>
 <string name="no_your_name_msg">"Please input your name"</string>
@@ -227,4 +227,7 @@ Everything about tutorials -->
 <string name="add_manually_a2">"Upon receiving the message, note down their passcode here."</string>
 <string name="add_manually_a3">"Key in the code at Your friend's Passcode"</string>
 <string name="add_manually_a4">"Voila! You can start tracking each other."</string>
+<string name="huawei">"Huawei"</string>
+<string name="xiaomi">"Xiaomi"</string>
+<string name="sony">"Sony"</string>
 </resources>
