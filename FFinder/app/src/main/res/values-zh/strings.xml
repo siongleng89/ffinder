@@ -231,4 +231,10 @@ Everything about tutorials -->
 <string name="huawei">"华为"</string>
 <string name="xiaomi">"小米"</string>
 <string name="sony">"索尼"</string>
+<string name="driving">"驾车"</string>
+<string name="transit">"公共交通工具"</string>
+<string name="walking">"步行"</string>
+<string name="street_view_btn_text">"街景"</string>
+<string name="directions_btn_text">"方向"</string>
+<string name="gps_nav_btn_text">"使用地图应用"</string>
 </resources>
