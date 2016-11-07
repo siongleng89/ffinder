@@ -34,6 +34,7 @@ public class MyActivityAbstract extends AppCompatActivity {
     private HashMap<BroadcastEvent, BroadcastReceiver> broadcastReceiverHashMap;
     private MyModel myModel;
     protected boolean disposed;
+    private int overflowCurrentIndex;
 
 
     public MyActivityAbstract() {
@@ -227,7 +228,8 @@ public class MyActivityAbstract extends AppCompatActivity {
 
         menuOverflowLayout.addView(textView);
 
-        setActionOverflowButtonListener(textView, title);
+        setActionOverflowButtonListener(textView, title, overflowCurrentIndex);
+        overflowCurrentIndex++;
     }
 
 
@@ -264,11 +266,11 @@ public class MyActivityAbstract extends AppCompatActivity {
     }
 
     private void setActionOverflowButtonListener(final TextView textView,
-                                                 final String title){
+                                                 final String title, final int position){
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onOverflowActionClicked(title);
+                onOverflowActionClicked(title, position);
             }
         });
     }
@@ -278,7 +280,7 @@ public class MyActivityAbstract extends AppCompatActivity {
 
     }
 
-    public void onOverflowActionClicked(String title){
+    public void onOverflowActionClicked(String title, int position){
 
     }
 

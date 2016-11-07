@@ -165,14 +165,14 @@ public class ActivityMain extends MyActivityAbstract implements
     }
 
     @Override
-    public void onOverflowActionClicked(String title) {
-        super.onOverflowActionClicked(title);
+    public void onOverflowActionClicked(String title, int position) {
+        super.onOverflowActionClicked(title, position);
 
-        if(title.equals(getString(R.string.add_new_member_manually_title))){
+        if(position == 0){
             Intent intent = new Intent(this, ActivityAddFriend.class);
             startActivity(intent);
         }
-        else if(title.equals(getString(R.string.settings_activity_title))){
+        else if(position == 1){
             Intent intent = new Intent(this, ActivitySettings.class);
             startActivity(intent);
         }
