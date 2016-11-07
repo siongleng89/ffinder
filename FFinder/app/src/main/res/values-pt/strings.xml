@@ -229,4 +229,10 @@ Everything about tutorials -->
 <string name="huawei">"Huawei"</string>
 <string name="xiaomi">"Xiaomi"</string>
 <string name="sony">"Sony"</string>
+<string name="driving">"Driving"</string>
+<string name="transit">"Transit"</string>
+<string name="walking">"Walking"</string>
+<string name="street_view_btn_text">"Street View"</string>
+<string name="directions_btn_text">"Direcções"</string>
+<string name="gps_nav_btn_text">"Open GPS Nav."</string>
 </resources>
