@@ -90,7 +90,7 @@ Main Activity text start -->
 <string name="no_ads_available_toast_msg">"无广告供应，给予免费搜索"</string>
 <string name="searching">"搜索中"</string>
 <string name="auto_searching">"自动搜索"</string>
-<string name="tap_plus_to_add_friend_family">"+ 加入更多家人与朋友"</string>
+<string name="tap_plus_to_add_friend_family">"+ 添加更多家人与朋友"</string>
 
 <!-- Main Activity text end
 _________________________________________________________________________________
@@ -157,8 +157,8 @@ Promo Code Activity text start -->
 <!-- Promo Code Activity text end
 _________________________________________________________________________________
 Add member Activity text start -->
-<string name="add_new_member_title">"加入朋友或家人"</string>
-<string name="add_new_member_manually_title">"手动加入朋友或家人"</string>
+<string name="add_new_member_title">"添加朋友或家人"</string>
+<string name="add_new_member_manually_title">"手动添加朋友或家人"</string>
 <string name="user_key_title">"您的家人或朋友的用号"</string>
 <string name="member_name_title">"您的家人或朋友的称呼"</string>
 <string name="no_user_key_msg">"请输入您想添加的用户的用号"</string>
