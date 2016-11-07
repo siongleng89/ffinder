@@ -35,7 +35,10 @@ Common texts start -->
 _________________________________________________________________________________
 Launch Activity text start -->
 <string name="welcome_msg_1">"Bem-vindo ao"</string>
-<string name="first_time_msg_content"></string>
+<string name="first_time_msg_content">"Thanks for choosing us, you now have a friend &amp; family finder that,
+- Does not drain battery as search is on demand
+- Offers some privacy as it allows you to block search and does not track every move
+- Is free with Ads "</string>
 <string name="required_location_provider_msg">"FFfinder solicita que você habilite o serviço de localização"</string>
 <string name="btn_go_to_location_settings_text">"Localização Config"</string>
 <string name="some_permission_denied_toast_msg">"Por favor certifique-se de que todas as permissões necessárias são fornecidas"</string>
@@ -103,15 +106,30 @@ Vip Activity text start -->
 <string name="manage_subscriptions_item_title">"Gerenciar assinaturas"</string>
 <string name="subscribed">"Subscrito"</string>
 <string name="not_subscribed">"Não subscrito"</string>
-<string name="manage_subscriptions_introduction"></string>
+<string name="manage_subscriptions_introduction">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
 
 <!-- Vip Activity text end
 _________________________________________________________________________________
 Known Issues Activity text start -->
 <string name="known_issues_title">"Problemas conhecidos"</string>
-<string name="issue_fix_xiaomi"></string>
-<string name="issue_fix_huawei"></string>
-<string name="issue_fix_sony"></string>
+<string name="issue_fix_xiaomi">"For Xiao Mi, when using FFfinder, to ensure your loved ones can always find you,
+please enable our apps to able to run in background by following these steps:
+
+1) Go to Security Apps
+2) Go to permission then click on Auto Start Management
+3) Add/Enable auto start apps, allow FFfinder"</string>
+<string name="issue_fix_huawei">"For Huawei, when using FFfinder, to ensure your loved one can always find you,
+please enable our apps to able to run in background by following these steps:
+
+1) Go to Settings
+2) Click on Protected Apps 
+3) Add FFfinder as protected apps"</string>
+<string name="issue_fix_sony">"For Sony, when using FFfinder, if you are using Stamina Mode in Power Management (You may ignore this instruction if you are not using Stamina Mode), please follow these steps to ensure that your loved one can always find you: 
+
+1) Go to Power Management 
+2) Click on STAMINA mode 
+3) Apps active in standby 
+4) Add FFfinder"</string>
 
 <!-- Known Issues Activity text end
 _________________________________________________________________________________
@@ -144,7 +162,7 @@ Add member Activity text start -->
 <string name="member_name_title">"Como você aborda a ele/ela?"</string>
 <string name="no_user_key_msg">"Introduza o código secreto do membro"</string>
 <string name="no_member_name_msg">"Insira o nome do membro"</string>
-<string name="no_your_name_msg"></string>
+<string name="no_your_name_msg">"Please input your name"</string>
 <string name="adding_friend_msg">"Acrescentar Registro…"</string>
 <string name="user_already_added_error_msg">"Usuário já existe na lista como %s"</string>
 <string name="key_expired_or_not_exist_msg">"Senha não existe ou já expirou"</string>
