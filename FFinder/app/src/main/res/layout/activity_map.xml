@@ -184,17 +184,17 @@
                     <Button
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
-                            android:text="Street View"
+                            android:text="@string/street_view_btn_text"
                             android:id="@+id/btnStreetView" android:layout_weight="1"/>
                     <Button
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
-                            android:text="Directions"
+                            android:text="@string/directions_btn_text"
                             android:id="@+id/btnDirections" android:layout_weight="1"/>
                     <Button
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
-                            android:text="Open gps nav."
+                            android:text="@string/gps_nav_btn_text"
                             android:id="@+id/btnGps" android:layout_weight="1"/>
                 </LinearLayout>
             </RelativeLayout>

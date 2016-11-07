@@ -155,7 +155,8 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         start = new LatLng(Double.valueOf(myLatitude), Double.valueOf(myLongitude));
         end = new LatLng(Double.valueOf(latitude), Double.valueOf(longitude));
 
-        txtDirectionTitle.setText(travelMode.name());
+        txtDirectionTitle.setText(getString(
+                AndroidUtils.getStringIdentifier(this, travelMode.name().toLowerCase())));
 
         if(routing != null){
             routing.cancel(true);
@@ -195,6 +196,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
                 .withListener(this)
                 .waypoints(start, end)
                 .key(Constants.GoogleApiKey)
+                .language(LocaleHelper.getLanguage(this))
                 .build();
         routing.execute();
 
