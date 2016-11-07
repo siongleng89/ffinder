@@ -19,6 +19,10 @@ class SetupViewController: MyViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //start()
+    }
+    
+    private func start(){
         self.keychain = KeychainSwift()
         changeStatus(SetupStatus.CheckingToken)
         
@@ -44,13 +48,13 @@ class SetupViewController: MyViewController {
             
             //at this point we already have userId, can try to login Firebase now
             self.changeStatus(SetupStatus.CheckingUser)
-
+            
             self.loginUser(finalUserId, {
                 (exception:SetupException?) in
-                    guard exception == nil else{
-                        self.changeStatus(SetupStatus.Failed)
-                        return
-                    }
+                guard exception == nil else{
+                    self.changeStatus(SetupStatus.Failed)
+                    return
+                }
                 
                 
                 //save user token into database
@@ -74,12 +78,12 @@ class SetupViewController: MyViewController {
                                 let navController = UINavigationController(rootViewController: vc)
                                 self.present(navController, animated: false, completion: nil)
                                 
-                              }
+                    }
                 )
             })
         })
-        
     }
+    
     
     private func tryRetrieveFromKeyChain(_ callback:@escaping (String?, SetupException?) -> Void){
         //id exist, check database get userId

@@ -30,7 +30,8 @@ public class ActivityKnownIssues extends MyActivityAbstract {
 
         populateKnownIssues();
         listViewKnownIssues = (ListView) findViewById(R.id.lvKnownIssues);
-        arrayAdapter = new ArrayAdapter<String>(this, R.layout.lvitem_single_text, R.id.textView, knownIssuesList);
+        arrayAdapter = new ArrayAdapter<String>(this, R.layout.lvitem_single_text,
+                R.id.textView, knownIssuesList);
         listViewKnownIssues.setAdapter(arrayAdapter);
 
         setListeners();
@@ -38,9 +39,14 @@ public class ActivityKnownIssues extends MyActivityAbstract {
 
     private void populateKnownIssues(){
         knownIssuesList = new ArrayList();
-        knownIssuesList.add(PhoneBrand.Huawei.name());
-        knownIssuesList.add(PhoneBrand.Xiaomi.name());
-        knownIssuesList.add(PhoneBrand.Sony.name());
+
+        for(PhoneBrand phoneBrand : PhoneBrand.values()){
+            if(phoneBrand == PhoneBrand.UnknownPhoneBrand) continue;
+
+            knownIssuesList.add(getString(
+                    AndroidUtils.getStringIdentifier(this, phoneBrand.name().toLowerCase())));
+        }
+
     }
 
 
@@ -48,14 +54,32 @@ public class ActivityKnownIssues extends MyActivityAbstract {
         listViewKnownIssues.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PhoneBrand brandName = PhoneBrand.valueOf(knownIssuesList.get(position));
 
-                String msg = AndroidUtils.getPhoneBrandKnownIssue(ActivityKnownIssues.this, brandName);
+                PhoneBrand brandName = null;
+                int i = 0;
+                for(PhoneBrand phoneBrand : PhoneBrand.values()){
+                    if(phoneBrand == PhoneBrand.UnknownPhoneBrand) {
+                        i++;
+                        continue;
+                    }
 
-                OverlayBuilder.build(ActivityKnownIssues.this)
-                        .setOverlayType(OverlayType.OkOnly)
-                        .setContent(msg)
-                        .show();
+                    if(position == i){
+                        brandName = phoneBrand;
+                        break;
+                    }
+                    i++;
+                }
+
+                if(brandName != null){
+                    String msg = AndroidUtils.getPhoneBrandKnownIssue(ActivityKnownIssues.this, brandName);
+
+                    OverlayBuilder.build(ActivityKnownIssues.this)
+                            .setOverlayType(OverlayType.OkOnly)
+                            .setContent(msg)
+                            .show();
+                }
+
+
 
             }
         });

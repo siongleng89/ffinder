@@ -10,6 +10,8 @@
 		487F7DCD9911CEAE200CD6CA /* Pods_FFfinderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93654CADEF0E755CF0D7419D /* Pods_FFfinderTests.framework */; };
 		63FA832F58F702A3A5BFA474 /* Pods_FFfinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A332A46B645B8EDC567E93 /* Pods_FFfinder.framework */; };
 		6C0A48DC1DAF48AD0063CAAE /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0A48DB1DAF48AD0063CAAE /* MapKit.framework */; };
+		6C1560161DCF5362001C65E3 /* bg_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C1560151DCF5362001C65E3 /* bg_image.png */; };
+		6C15601A1DCF61D2001C65E3 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1560191DCF61D2001C65E3 /* ColorExtension.swift */; };
 		6C24672B1DB3A51300290569 /* SearchStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C24672A1DB3A51300290569 /* SearchStatus.swift */; };
 		6C24672D1DB3A51C00290569 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C24672C1DB3A51C00290569 /* SearchResult.swift */; };
 		6C24672F1DB3B36300290569 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C24672E1DB3B36300290569 /* NotificationExtension.swift */; };
@@ -81,6 +83,8 @@
 		15EFE9500EFE4705D5D3A527 /* Pods-FFfinder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FFfinder.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FFfinder/Pods-FFfinder.debug.xcconfig"; sourceTree = "<group>"; };
 		56B3355703BABB429184AF83 /* Pods-FFfinder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FFfinder.release.xcconfig"; path = "Pods/Target Support Files/Pods-FFfinder/Pods-FFfinder.release.xcconfig"; sourceTree = "<group>"; };
 		6C0A48DB1DAF48AD0063CAAE /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		6C1560151DCF5362001C65E3 /* bg_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bg_image.png; path = Images/bg_image.png; sourceTree = "<group>"; };
+		6C1560191DCF61D2001C65E3 /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		6C24672A1DB3A51300290569 /* SearchStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchStatus.swift; sourceTree = "<group>"; };
 		6C24672C1DB3A51C00290569 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		6C24672E1DB3B36300290569 /* NotificationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
@@ -185,6 +189,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6C1560141DCF5322001C65E3 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				6C1560151DCF5362001C65E3 /* bg_image.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
 		6C25EA501DB1C83D007441A6 /* controls */ = {
 			isa = PBXGroup;
 			children = (
@@ -253,6 +265,7 @@
 				6C72DDE51DADF7560065EF02 /* MyViewController.swift */,
 				6C8F37DF1DAE785B00D7291F /* FirebaseModelProtocol.swift */,
 				6C24672E1DB3B36300290569 /* NotificationExtension.swift */,
+				6C1560191DCF61D2001C65E3 /* ColorExtension.swift */,
 			);
 			name = absint;
 			sourceTree = "<group>";
@@ -317,8 +330,9 @@
 				6C90955F1DAB765300FA114B /* helpers */,
 				6C72DDF21DAE38960065EF02 /* statics */,
 				6C72DDE81DAE20AD0065EF02 /* thirdParties */,
-				6CE26B2B1DA2929E0062ECDF /* AppDelegate.swift */,
+				6C1560141DCF5322001C65E3 /* images */,
 				6CE26B321DA2929E0062ECDF /* Assets.xcassets */,
+				6CE26B2B1DA2929E0062ECDF /* AppDelegate.swift */,
 				6C5C7BAD1DAF6A7B00CC6E9D /* GoogleService-Info.plist */,
 				6CCABA561DACFFF2009831B8 /* Localizable.strings */,
 				6CE26B371DA2929E0062ECDF /* Info.plist */,
@@ -506,6 +520,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CCABA5A1DAD021E009831B8 /* Localizable.strings in Resources */,
+				6C1560161DCF5362001C65E3 /* bg_image.png in Resources */,
 				6C3DE2F21DB3625B00CF8BDF /* FriendTableViewCell.xib in Resources */,
 				6CCABA491DACDD50009831B8 /* Main.storyboard in Resources */,
 				6C5C7BAE1DAF6A7B00CC6E9D /* GoogleService-Info.plist in Resources */,
@@ -705,6 +720,7 @@
 				6C72DDED1DAE235A0065EF02 /* KeyChainSwift.swift in Sources */,
 				6C3DE2EB1DB33A6000CF8BDF /* LocationModel.swift in Sources */,
 				6C9095611DAB768A00FA114B /* FirebaseDB.swift in Sources */,
+				6C15601A1DCF61D2001C65E3 /* ColorExtension.swift in Sources */,
 				6C2467371DB3C75200290569 /* LocationUpdater.swift in Sources */,
 				6C24672D1DB3A51C00290569 /* SearchResult.swift in Sources */,
 				6C3DE2ED1DB341F500CF8BDF /* ArrayExtension.swift in Sources */,
@@ -901,6 +917,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
+				colorPrimaryDark = "#ffffff";
 			};
 			name = Debug;
 		};
@@ -918,6 +935,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lightweightstudioapps.FFfinderIphone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				colorPrimaryDark = "#ffffff";
 			};
 			name = Release;
 		};

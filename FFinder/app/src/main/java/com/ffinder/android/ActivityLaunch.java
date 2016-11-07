@@ -43,7 +43,6 @@ public class ActivityLaunch extends MyActivityAbstract {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
-        LocaleHelper.onCreate(this);
 
         imgViewIcon = (ImageView) findViewById(R.id.imgViewIcon);
         imgViewBg = (ImageView) findViewById(R.id.imgViewBg);

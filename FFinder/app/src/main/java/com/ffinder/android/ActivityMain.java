@@ -59,7 +59,9 @@ public class ActivityMain extends MyActivityAbstract implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         enableCustomActionBar();
-        addActionToActionBar(ActionBarActionType.AppIcon, true, true);
+
+        setActionBarTitle(R.string.app_name);
+
         addActionToActionBar(ActionBarActionType.ShareKey, false, false);
         addActionToActionBar(ActionBarActionType.Overflow, false, false);
         addActionToOverflow(getString(R.string.add_new_member_manually_title));

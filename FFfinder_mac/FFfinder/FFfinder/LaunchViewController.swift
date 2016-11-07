@@ -79,20 +79,34 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func goToNextScreen(){
-        //userId is not empty, can straight go to main page
-        if self.myModel.userId != nil{
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: MainPageViewController.getMyClassName()) as! MainPageViewController
-            vc.myModel = self.myModel
-            let navController = UINavigationController(rootViewController: vc)
-            self.present(navController, animated: false, completion: nil)
-
-        }
-        //userId is empty, go to setup page
-        else{
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
-            vc.myModel = self.myModel
-            self.present(vc, animated: false, completion: nil)
-        }
+        
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
+        vc.myModel = self.myModel
+        self.present(vc, animated: false, completion: nil)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        //userId is not empty, can straight go to main page
+//        if self.myModel.userId != nil{
+//            let vc = self.storyboard?.instantiateViewController(withIdentifier: MainPageViewController.getMyClassName()) as! MainPageViewController
+//            vc.myModel = self.myModel
+//            let navController = UINavigationController(rootViewController: vc)
+//            self.present(navController, animated: false, completion: nil)
+//
+//        }
+//        //userId is empty, go to setup page
+//        else{
+//            let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
+//            vc.myModel = self.myModel
+//            self.present(vc, animated: false, completion: nil)
+//        }
         
     }
     

@@ -18,12 +18,8 @@ import com.ffinder.android.MyApplication;
 import com.ffinder.android.R;
 import com.ffinder.android.enums.ActionBarActionType;
 import com.ffinder.android.enums.BroadcastEvent;
-import com.ffinder.android.helpers.Analytics;
-import com.ffinder.android.helpers.AnimateBuilder;
-import com.ffinder.android.helpers.BroadcasterHelper;
+import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.MyModel;
-import com.ffinder.android.helpers.AndroidUtils;
-import com.ffinder.android.helpers.RunnableArgs;
 
 import java.util.HashMap;
 
@@ -47,6 +43,7 @@ public class MyActivityAbstract extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocaleHelper.onCreate(this);
         Analytics.logToScreen(this);
 
     }

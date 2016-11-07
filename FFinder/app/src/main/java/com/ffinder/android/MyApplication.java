@@ -3,11 +3,8 @@ package com.ffinder.android;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
-import com.ffinder.android.helpers.Analytics;
-import com.ffinder.android.helpers.VipAndProductsHelpers;
+import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.MyModel;
-import com.ffinder.android.helpers.Logs;
-import com.ffinder.android.helpers.Threadings;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -33,6 +30,8 @@ public class MyApplication extends Application {
         Logs.registerEventCatchingIFDebug();
         Threadings.setMainTreadId();
     }
+
+
 
     /**
      * Gets the default {@link Tracker} for this {@link Application}.

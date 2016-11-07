@@ -18,6 +18,26 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
     public static func getMyClassName() -> String{
         return NSStringFromClass(self).components(separatedBy: ".").last!
     }
+    
+    override func viewDidLoad() {
+        let app = UIApplication.shared
+        let statusBarHeight: CGFloat = app.statusBarFrame.size.height
+
+        if let nav = self.navigationController{
+            let view = UIView(frame: CGRect(x: 0, y: -statusBarHeight,
+                                            width: UIScreen.main.bounds.size.width, height: 20))
+            view.backgroundColor = UIColor.colorPrimaryDark()
+            nav.navigationBar.addSubview(view)
+        }
+        else{
+            let view = UIView(frame: CGRect(x: 0, y: 0,
+                                            width: UIScreen.main.bounds.size.width, height: 20))
+            view.backgroundColor = UIColor.colorPrimaryDark()
+            self.view.addSubview(view)
+
+        }
+        
+    }
 
     func setLeftTabButtonAsBack(){
         let backButton:UIBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonTapped))
