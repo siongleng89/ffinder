@@ -242,8 +242,7 @@ public class ActivityMain extends MyActivityAbstract implements
         //not in search
         if (taskFragment == null || taskFragment.getCurrentResult() != null) {
             if(friendModel.getSearchResult() != null){
-                if(friendModel.getSearchResult() == SearchResult.ErrorTimeoutUnknownReason
-                        || friendModel.getSearchResult() == SearchResult.ErrorTimeoutLocationDisabled){
+                if(friendModel.getSearchResult() == SearchResult.ErrorTimeoutUnknownReason){
 
                     new SearchFailedDialog(ActivityMain.this,
                             friendModel.getSearchResult(), new ISearchFailedListener() {

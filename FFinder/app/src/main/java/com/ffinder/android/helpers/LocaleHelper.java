@@ -12,14 +12,9 @@ import java.util.Locale;
  */
 public class LocaleHelper {
 
-    private static String currentLang;
-
     public static void onCreate(Context context) {
         String lang = getPersistedData(context, Locale.getDefault().getLanguage());
-        if(currentLang == null || !currentLang.equals(lang)){
-            setLocale(context, lang);
-            currentLang = lang;
-        }
+        setLocale(context, lang);
     }
 
     public static void onCreate(Context context, String defaultLanguage) {
@@ -32,6 +27,7 @@ public class LocaleHelper {
     }
 
     public static void setLocale(Context context, String language) {
+        Logs.show("Setting language to: " + language);
         persist(context, language);
         updateResources(context, language);
     }
@@ -52,7 +48,6 @@ public class LocaleHelper {
         userInfoModel.load(context);
         userInfoModel.setLanguage(language);
         userInfoModel.save(context);
-        currentLang = null;
     }
 
     private static void updateResources(Context context, String language) {

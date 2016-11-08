@@ -68,11 +68,6 @@ public class SearchFailedDialog {
             txtPartFour.setText(activity.getString(R.string.failed_search_msg_text2));
             setListenerForKnownIssue(txtPartThree);
         }
-        else if(searchResult == SearchResult.ErrorTimeoutLocationDisabled){
-            txtPartTwo.setText(activity.getString(R.string.error_timeout_location_disabled_reasons));
-            txtPartThree.setText(activity.getString(R.string.failed_search_msg_text2));
-            txtPartFour.setVisibility(View.GONE);
-        }
 
         layoutMessage.addView(searchFailedView);
 

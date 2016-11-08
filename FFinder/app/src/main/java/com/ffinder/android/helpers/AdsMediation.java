@@ -34,7 +34,7 @@ public class AdsMediation {
         return hasAds;
     }
 
-    public void showRewardedVideo(Activity activity, final boolean showAds, final RunnableArgs<Boolean> runnable) {
+    public void showRewardedVideo(final Activity activity, final boolean showAds, final RunnableArgs<Boolean> runnable) {
         AerServEventListener listener = new AerServEventListener() {
             @Override
             public void onAerServEvent(AerServEvent event, List<Object> args) {
@@ -57,6 +57,10 @@ public class AdsMediation {
 
                     case VC_REWARDED:
                         if(adsMediationListener != null) adsMediationListener.onResult(true);
+                        break;
+
+                    case AD_DISMISSED:
+                        LocaleHelper.onCreate(activity);
                         break;
 
                 }

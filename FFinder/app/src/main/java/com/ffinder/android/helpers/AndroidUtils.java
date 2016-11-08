@@ -8,11 +8,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -25,7 +27,9 @@ import android.util.Patterns;
 import android.view.Display;
 import android.view.View;
 import android.widget.EditText;
+import com.ffinder.android.ActivityLaunch;
 import com.ffinder.android.R;
+import com.ffinder.android.enums.OverlayType;
 import com.ffinder.android.enums.PhoneBrand;
 import com.ffinder.android.models.GoogleGeoCodeResponse;
 import com.ffinder.android.statics.Vars;
@@ -411,7 +415,11 @@ public class AndroidUtils {
     }
 
 
-    public static boolean checkLocationPermission(Context context) {
+    public static boolean checkLocationSharingAllowed(Context context){
+       return checkLocationPermission(context) && checkLocationEnabled(context);
+    }
+
+    private static boolean checkLocationPermission(Context context) {
         if (ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(
@@ -420,6 +428,28 @@ public class AndroidUtils {
         }
         return true;
     }
+
+    private static boolean checkLocationEnabled(Context context){
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(network_enabled || gps_enabled) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 
     public static int getStringIdentifier(Context context, String name) {
         return context.getResources().getIdentifier(name, "string", context.getPackageName());

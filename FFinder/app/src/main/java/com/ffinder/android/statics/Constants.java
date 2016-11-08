@@ -12,5 +12,5 @@ public class Constants {
     public static String GCMHeartbeatReceivedEvent = "GCMHeartbeatReceived";
     public static long KeyExpiredTotalSecs = 60 * 60 * 24;  //1 day
     public static String GoogleApiKey = "AIzaSyAGx4_MQ__XWSC1mR3rY9QwGniwjoWsNgE";
-
+    public static int RequestLocationTimeoutSecs = 40;
 }

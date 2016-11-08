@@ -85,7 +85,7 @@ public class NotificationConsumer {
             else if(messageType == FCMMessageType.UserLocated){
                 final String senderId = map.get("senderId");
                 String latitude = map.get("latitude");
-                String longitude = map.get("longitude");
+                final String longitude = map.get("longitude");
                 final String isAutoNotification = map.get("isAutoNotification");
                 MyModel myModel = new MyModel(context);
 
@@ -123,6 +123,10 @@ public class NotificationConsumer {
             //broadcast refresh single friend model to trigger update design
             else if(messageType == FCMMessageType.IsAliveMsg){
                 String senderId = map.get("senderId");
+                boolean locationDisabled = false;
+                if(map.containsKey("locationDisabled")){
+                    locationDisabled = map.get("locationDisabled").equals("1");
+                }
 
                 //must save to preference to preserve state when apps is in background
                 MyModel myModel = new MyModel(context);
@@ -131,7 +135,14 @@ public class NotificationConsumer {
                 if(friendModel != null){
                     //if not waiting user respond, this msg is useless, should discarded
                     if(friendModel.getSearchStatus() == SearchStatus.WaitingUserRespond){
-                        friendModel.setSearchStatus(SearchStatus.WaitingUserLocation);
+                        //location is disabled, straight stop the process
+                        if(locationDisabled){
+                            friendModel.setSearchStatus(SearchStatus.End);
+                            friendModel.setSearchResult(SearchResult.ErrorLocationDisabled);
+                        }
+                        else{
+                            friendModel.setSearchStatus(SearchStatus.WaitingUserLocation);
+                        }
                         friendModel.save(context);
                         BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshFriend,
                                 new Pair<String, String>("userId", senderId));

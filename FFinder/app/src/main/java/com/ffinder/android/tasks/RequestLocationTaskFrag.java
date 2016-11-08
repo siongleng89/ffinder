@@ -16,6 +16,7 @@ import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.LocationModel;
 import com.ffinder.android.models.MyModel;
+import com.ffinder.android.statics.Constants;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.concurrent.ExecutionException;
@@ -31,7 +32,6 @@ public class RequestLocationTaskFrag extends Fragment {
     private String userId, myToken, targetUserId;
     private SearchStatus currentStatus;
     private SearchResult currentResult;
-    public static int timeoutSecs = 40;
     private RequestLocationTask requestLocationTask;
 
     public static RequestLocationTaskFrag newInstance(String userId, String myToken, String targetUserId) {
@@ -76,12 +76,12 @@ public class RequestLocationTaskFrag extends Fragment {
                     if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
                         requestLocationTask
                                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, userId, myToken, targetUserId)
-                                .get(timeoutSecs, TimeUnit.SECONDS);
+                                .get(Constants.RequestLocationTimeoutSecs, TimeUnit.SECONDS);
 
                     }
                     else {
                         requestLocationTask.execute(userId, myToken, targetUserId)
-                                .get(timeoutSecs, TimeUnit.SECONDS);
+                                .get(Constants.RequestLocationTimeoutSecs, TimeUnit.SECONDS);
                     }
 
 
@@ -195,7 +195,7 @@ public class RequestLocationTaskFrag extends Fragment {
 
                                     NotificationSender.sendWithUserId(myUserId, targetUserId,
                                             FCMMessageType.UpdateLocation,
-                                            timeoutSecs / 2,
+                                            Constants.RequestLocationTimeoutSecs / 2,
                                             Strings.generateUniqueRandomKey(30),
                                             new Pair<String, String>("senderToken", myToken));
 
@@ -209,7 +209,9 @@ public class RequestLocationTaskFrag extends Fragment {
                                                     break;
                                                 }
 
-                                                Threadings.sleep((timeoutSecs / 2) * 1000 + 500);
+                                                Threadings.sleep(
+                                                        (Constants.RequestLocationTimeoutSecs / 2)
+                                                                * 1000 + 500);
 
                                                 if (finish){
                                                     break;
@@ -217,7 +219,7 @@ public class RequestLocationTaskFrag extends Fragment {
 
                                                 NotificationSender.sendWithUserId(myUserId, targetUserId,
                                                         FCMMessageType.UpdateLocation,
-                                                        RequestLocationTaskFrag.timeoutSecs,
+                                                        Constants.RequestLocationTimeoutSecs,
                                                         Strings.generateUniqueRandomKey(30),
                                                         new Pair<String, String>("senderToken", myToken));
                                             }
@@ -320,12 +322,14 @@ public class RequestLocationTaskFrag extends Fragment {
                     int totalSleepDuration = 0;
                     int phase = 0;
                     while (!finish){
-                        if((totalSleepDuration > (timeoutSecs * 1000 * 0.33))
+                        if((totalSleepDuration >
+                                (Constants.RequestLocationTimeoutSecs * 1000 * 0.33))
                                 && phase == 0){
                             phase = 1;
                             notifyTimeoutPhase(phase);
                         }
-                        else if((totalSleepDuration > (timeoutSecs * 1000 * 0.66))
+                        else if((totalSleepDuration >
+                                (Constants.RequestLocationTimeoutSecs * 1000 * 0.66))
                                 && phase == 1){
                             phase = 2;
                             notifyTimeoutPhase(phase);
@@ -354,7 +358,7 @@ public class RequestLocationTaskFrag extends Fragment {
 
 
             if(searchStatus == SearchStatus.WaitingUserLocation){
-                setSearchResult(SearchResult.ErrorTimeoutLocationDisabled);
+                setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
                 shouldAutoNotify = true;
             }
             else if(searchStatus == SearchStatus.WaitingUserRespond){

@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -12,6 +14,7 @@ import android.support.v4.util.Pair;
 import com.ffinder.android.enums.FCMMessageType;
 import com.ffinder.android.models.LocationModel;
 import com.ffinder.android.models.MyModel;
+import com.ffinder.android.statics.Constants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -22,7 +25,8 @@ import com.google.android.gms.location.LocationServices;
  * Created by SiongLeng on 29/8/2016.
  */
 public class LocationUpdater implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        LocationListener, android.location.LocationListener {
 
     private static long lastLastUpdatedMiliSecs;
     private GoogleApiClient googleApiClient;
@@ -31,8 +35,11 @@ public class LocationUpdater implements
     private String fromUserId;
     private String fromUserToken;
     private String fromPlatform;
+    private boolean locationSharingAllowed;
     private RunnableArgs<Pair<String, String>> callback;
-
+    private Location lastLocation;
+    private boolean finish;
+    private LocationManager locationManager;
 
     public LocationUpdater(Context context, String fromUserId,
                            String fromPlatform, String fromUserToken) {
@@ -55,35 +62,76 @@ public class LocationUpdater implements
 
     private void run(){
 
+        locationSharingAllowed = AndroidUtils.checkLocationSharingAllowed(context);
+
         //if from usertoken not empty, means it is through normal search, reply alive msg
         if(!Strings.isEmpty(fromUserToken)) {
             replyAliveMsg(myModel.getUserId(), fromUserToken);
         }
 
-        //start retrieve location
-        googleApiClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        googleApiClient.connect();
+        if(locationSharingAllowed){
+            //start retrieve location
+            googleApiClient = new GoogleApiClient.Builder(context)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            googleApiClient.connect();
+        }
+
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if(!AndroidUtils.checkLocationPermission(context)){
-            return;
-        }
-
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(2000);
         mLocationRequest.setFastestInterval(50);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                googleApiClient, mLocationRequest, this);
 
+        try{
+            lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    googleApiClient, mLocationRequest, this);
+            startMonitoring();
+        }
+        catch (SecurityException ex){
+
+        }
+
+    }
+
+    //monitor for some time, if still cannot get location,
+    //resort to old location manager
+    private void startMonitoring(){
+        Threadings.runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                int i = 0;
+                double timeout = Constants.RequestLocationTimeoutSecs * 0.20;
+                while (i < timeout){
+                    if(finish) return;
+                    else{
+                        Threadings.sleep(1000);
+                    }
+                    i++;
+                }
+
+                // use last known location with lower accuracy
+                if(!finish){
+                    try{
+                        locationManager = (LocationManager)
+                                context.getSystemService(Context.LOCATION_SERVICE);
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                                0, 0, LocationUpdater.this, Looper.getMainLooper());
+                    }
+                    catch (SecurityException ex){
+
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -99,27 +147,53 @@ public class LocationUpdater implements
 
     @Override
     public void onLocationChanged(Location location) {
-        if(!AndroidUtils.checkLocationPermission(context)){
-            return;
-        }
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        if (mLastLocation != null) {
-            String latitude = String.valueOf(mLastLocation.getLatitude());
-            String longitude = String.valueOf(mLastLocation.getLongitude());
+        if (location != null) {
+            String latitude = String.valueOf(location.getLatitude());
+            String longitude = String.valueOf(location.getLongitude());
             locationSuccessfullyRetrieved(latitude, longitude);
+        }
 
+        if(googleApiClient != null) {
             googleApiClient.disconnect();
         }
+        if(locationManager != null) {
+            try{
+                locationManager.removeUpdates(this);
+            }
+            catch(SecurityException ex){
+
+            }
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
     }
 
 
     private void replyAliveMsg(String myUserId, String toUserToken){
         NotificationSender.sendWithToken(myUserId, toUserToken,
                 FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT, null,
-                fromPlatform);
+                fromPlatform, new Pair<String, String>("locationDisabled",
+                        locationSharingAllowed ? "0" : "1"));
     }
 
     private void locationSuccessfullyRetrieved(final String latitude, final String longitude){
+        if(finish){
+           return;
+        }
+        finish = true;
 
         //instant callback type location updater
         if(callback != null){
