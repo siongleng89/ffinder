@@ -10,80 +10,81 @@ import UIKit
 import CoreLocation
 import Firebase
 
-class LaunchViewController: UIViewController, CLLocationManagerDelegate {
+class LaunchViewController: MyViewController, CLLocationManagerDelegate {
     
-    @IBOutlet weak var introductionTextView: UITextView!
-    @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet var mainView: UIView!
+    @IBOutlet weak var layoutNext: UIView!
+    @IBOutlet weak var layoutIntro: UIView!
+    @IBOutlet weak var layoutWelcome: UIView!
+    @IBOutlet weak var imageViewNextIcon: UIImageView!
+    @IBOutlet weak var imageViewSplash: UIImageView!
+    @IBOutlet weak var labelIntro: LocalizedLabel!
+    @IBOutlet weak var constraintHeightLayoutIntro: NSLayoutConstraint!
+
     var locationManager:CLLocationManager!
-    var myModel:MyModel!;
     var locationUpdater:LocationUpdater!
    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        print("instanceToken: \(FIRInstanceID.instanceID().token())")
-        
-        myModel = MyModel()
-        myModel.load()
-        myModel.loadAllFriendModels()
-        
-//        locationManager = CLLocationManager()
-//        locationManager.delegate = self
-//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//        if #available(iOS 9.0, *) {
-//            locationManager.allowsBackgroundLocationUpdates = true
-//        } else {
-//           // Fallback on earlier versions
-//        }
-//        locationManager.startUpdatingLocation()
-
-//        locationUpdater = LocationUpdater()
-//        locationUpdater.startMonitoring()
-        
-        
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name:NSNotification.Name(rawValue: "UIApplicationDidBecomeActiveNotification"), object: nil)
+    }
+    
+    func didBecomeActive(){
+        //CLLocationManager().requestAlwaysAuthorization()
     }
     
     //must check at viewDidAppear since we cannot go to another view controller in viewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         checkNeedToShowIntroduction();
     }
-    
-    func didBecomeActive(){
-        //locationManager.requestAlwaysAuthorization()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations.last
-        print("\(location?.coordinate.latitude), \(location?.coordinate.longitude)")
-    }
-    
+   
     func checkNeedToShowIntroduction(){
-        if let seenIntroduction = Preferences.get(PreferenceType.SeenIntroduction){
-            if seenIntroduction == "1"{
-                goToNextScreen();
-            }
-            else{
-                showIntroduction();
-            }
-        }
-        else{
-            showIntroduction();
-        }
+        showIntroduction()
+        
+//        if let seenIntroduction = Preferences.get(PreferenceType.SeenIntroduction){
+//            if seenIntroduction == "1"{
+//                goToNextScreen();
+//            }
+//            else{
+//                showIntroduction();
+//            }
+//        }
+//        else{
+//            showIntroduction();
+//        }
     }
     
     func showIntroduction(){
-        introductionTextView.text = "first_time_msg_content".localized
-        mainView.isHidden = false
+        let toY:CGFloat =  layoutWelcome.bounds.height +
+                            layoutWelcome.frame.origin.y +
+                            self.imageViewSplash.bounds.height / 2 + 15
+        
+        AnimateBuilder.build(self.imageViewSplash)
+            .setAnimateType(AnimateType.MoveToY).setValue(toY)
+            .setDurationMs(1000).setFinishCallback ({
+                AnimateBuilder.fadeIn(self.layoutWelcome, speed:AnimateBuilder.Slow, {
+                    AnimateBuilder.fadeIn(self.layoutIntro, speed:AnimateBuilder.Slow, {
+                        AnimateBuilder.fadeIn(self.layoutNext, speed:AnimateBuilder.Fast, {
+                            AnimateBuilder.build(self.imageViewNextIcon)
+                                .setAnimateType(AnimateType.MoveByX).setDurationMs(400)
+                                .setRepeat(true).setValue(3).start()
+                        })
+                    })
+                })
+            }).start()
+        
+         constraintHeightLayoutIntro.constant = labelIntro.frame.height + 40
+        
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(LaunchViewController.onNextLayoutTapped(_:)))
+        self.layoutNext.addGestureRecognizer(gesture)
     }
     
     func goToNextScreen(){
         
         
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
-        vc.myModel = self.myModel
-        self.present(vc, animated: false, completion: nil)
+//        let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
+//        vc.myModel = self.myModel
+//        self.present(vc, animated: false, completion: nil)
         
         
         
@@ -109,12 +110,12 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
 //        }
         
     }
+  
     
-    @IBAction func onNextButtonTapped(_ sender: AnyObject) {
-        Preferences.put(PreferenceType.SeenIntroduction, "1")
-        goToNextScreen()
+    // or for Swift 3
+    func onNextLayoutTapped(_ sender:UITapGestureRecognizer){
+        print("tttt")
     }
-    
     
     
     /*

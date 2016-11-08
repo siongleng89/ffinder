@@ -18,6 +18,15 @@ class MyModel:EVObject{
     var friendModels = [FriendModel]()
     
     
+    static let shared = MyModel()
+    
+    internal required init(){
+        super.init()
+        load()
+        loadAllFriendModels()
+    }
+    
+    
     //selected properties will be excluded when converting to json
     override public func propertyMapping() -> [(String?, String?)] {
         return [("friendModels",nil), (nil,"friendModels")]

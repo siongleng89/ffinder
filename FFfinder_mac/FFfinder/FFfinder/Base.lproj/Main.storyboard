@@ -20,31 +20,88 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_image.png" translatesAutoresizingMaskIntoConstraints="NO" id="sv5-Kk-PUc"/>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y67-Dg-J0t">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_screen_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="HoV-Cq-ES1"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y67-Dg-J0t">
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpO-nR-nQY">
-                                        <frame key="frameInset" minX="16" minY="24" width="343" height="398"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                        <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="20"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="snd-Su-AHM">
+                                    <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wr1-KM-sn5">
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="welcome_msg_1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VQu-GD-QW2" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
+                                                <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="26"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="app_name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K27-f6-Vhu" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="ucn-Ne-pQg"/>
+                                            <constraint firstItem="VQu-GD-QW2" firstAttribute="top" secondItem="wr1-KM-sn5" secondAttribute="top" constant="10" id="1WY-SD-f4E"/>
+                                            <constraint firstAttribute="width" constant="240" id="AvA-a1-0i0"/>
+                                            <constraint firstItem="VQu-GD-QW2" firstAttribute="centerX" secondItem="wr1-KM-sn5" secondAttribute="centerX" id="KVw-Xi-SYw"/>
+                                            <constraint firstItem="K27-f6-Vhu" firstAttribute="top" secondItem="VQu-GD-QW2" secondAttribute="bottom" constant="5.5" id="LaG-UG-cK9"/>
+                                            <constraint firstAttribute="height" constant="100" id="lLn-de-pqt"/>
+                                            <constraint firstItem="K27-f6-Vhu" firstAttribute="centerX" secondItem="VQu-GD-QW2" secondAttribute="centerX" id="oSl-Bz-QbF"/>
                                         </constraints>
-                                        <state key="normal" title="Button"/>
-                                        <connections>
-                                            <action selector="onNextButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Kyl-S6-sgO"/>
-                                        </connections>
-                                    </button>
+                                    </view>
+                                    <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yge-v6-cJW">
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white_box.9.png" translatesAutoresizingMaskIntoConstraints="NO" id="0TA-fN-pr3" customClass="SWNinePatchImageView">
+                                                <accessibility key="accessibilityConfiguration" identifier="white_box.9.png"/>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="app_title_long" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CUt-pd-Qo7" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="first_time_msg_content" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sCU-dx-9QL" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="sCU-dx-9QL" firstAttribute="top" secondItem="CUt-pd-Qo7" secondAttribute="bottom" constant="15" id="3Zy-BR-djm"/>
+                                            <constraint firstItem="sCU-dx-9QL" firstAttribute="leading" secondItem="Yge-v6-cJW" secondAttribute="leading" constant="15" id="DgD-oo-bDY"/>
+                                            <constraint firstAttribute="bottom" secondItem="0TA-fN-pr3" secondAttribute="bottom" id="HCj-YU-xab"/>
+                                            <constraint firstAttribute="height" constant="180" id="K9a-cv-X4e"/>
+                                            <constraint firstAttribute="trailing" secondItem="sCU-dx-9QL" secondAttribute="trailing" constant="15" id="NBQ-fx-aPN"/>
+                                            <constraint firstItem="0TA-fN-pr3" firstAttribute="leading" secondItem="Yge-v6-cJW" secondAttribute="leading" id="PY2-Kp-HCp"/>
+                                            <constraint firstAttribute="trailing" secondItem="0TA-fN-pr3" secondAttribute="trailing" id="a8V-7g-oX4"/>
+                                            <constraint firstAttribute="trailing" secondItem="CUt-pd-Qo7" secondAttribute="trailing" constant="20" id="cDS-XA-scE"/>
+                                            <constraint firstItem="0TA-fN-pr3" firstAttribute="top" secondItem="Yge-v6-cJW" secondAttribute="top" id="h6W-b1-aVo"/>
+                                            <constraint firstItem="CUt-pd-Qo7" firstAttribute="top" secondItem="Yge-v6-cJW" secondAttribute="top" constant="-8" id="qgh-6g-Fa3"/>
+                                            <constraint firstItem="CUt-pd-Qo7" firstAttribute="leading" secondItem="Yge-v6-cJW" secondAttribute="leading" constant="20" id="sfn-TV-ggS"/>
+                                        </constraints>
+                                    </view>
+                                    <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HAG-oD-Uor">
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="next_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="AeC-UJ-IZz"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="next" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZrK-5k-YOY" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="ZrK-5k-YOY" firstAttribute="leading" secondItem="AeC-UJ-IZz" secondAttribute="trailing" constant="10" id="edg-bc-jod"/>
+                                            <constraint firstItem="ZrK-5k-YOY" firstAttribute="centerY" secondItem="AeC-UJ-IZz" secondAttribute="centerY" id="lQd-3c-0FG"/>
+                                            <constraint firstAttribute="width" constant="100" id="vRS-Yy-UmH"/>
+                                            <constraint firstItem="AeC-UJ-IZz" firstAttribute="leading" secondItem="HAG-oD-Uor" secondAttribute="leading" constant="15" id="vk0-a5-epD"/>
+                                            <constraint firstItem="AeC-UJ-IZz" firstAttribute="centerY" secondItem="HAG-oD-Uor" secondAttribute="centerY" id="wot-rP-7Tm"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="xpO-nR-nQY" firstAttribute="centerX" secondItem="Y67-Dg-J0t" secondAttribute="centerX" id="2e0-ET-hdR"/>
-                                    <constraint firstItem="snd-Su-AHM" firstAttribute="top" secondItem="xpO-nR-nQY" secondAttribute="bottom" constant="8" symbolic="YES" id="DDd-Yp-fMS"/>
-                                    <constraint firstAttribute="bottom" secondItem="snd-Su-AHM" secondAttribute="bottom" constant="207" id="Nkt-x7-rLd"/>
-                                    <constraint firstItem="xpO-nR-nQY" firstAttribute="centerX" secondItem="snd-Su-AHM" secondAttribute="centerX" id="ynm-Q9-IJW"/>
+                                    <constraint firstAttribute="trailing" secondItem="Yge-v6-cJW" secondAttribute="trailing" constant="30" id="DeD-BL-Csn"/>
+                                    <constraint firstItem="Yge-v6-cJW" firstAttribute="leading" secondItem="Y67-Dg-J0t" secondAttribute="leading" constant="30" id="NVN-ab-Z0k"/>
+                                    <constraint firstAttribute="bottom" secondItem="Yge-v6-cJW" secondAttribute="bottom" constant="60" id="Pqc-rH-hP9"/>
+                                    <constraint firstItem="wr1-KM-sn5" firstAttribute="centerX" secondItem="Y67-Dg-J0t" secondAttribute="centerX" id="gpI-DZ-QT5"/>
+                                    <constraint firstAttribute="trailing" secondItem="HAG-oD-Uor" secondAttribute="trailing" constant="15" id="ixm-oG-Dfw"/>
+                                    <constraint firstItem="wr1-KM-sn5" firstAttribute="top" secondItem="Y67-Dg-J0t" secondAttribute="top" constant="47" id="kjD-Lo-L8C"/>
+                                    <constraint firstItem="HAG-oD-Uor" firstAttribute="top" secondItem="Yge-v6-cJW" secondAttribute="bottom" constant="8" symbolic="YES" id="thN-Se-X6u"/>
+                                    <constraint firstItem="HAG-oD-Uor" firstAttribute="bottom" secondItem="Y67-Dg-J0t" secondAttribute="bottomMargin" id="wlt-qb-6Ka"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -55,10 +112,21 @@
                             <constraint firstItem="sv5-Kk-PUc" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="MUU-3t-caA"/>
                             <constraint firstItem="Y67-Dg-J0t" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="R4q-az-Li8"/>
                             <constraint firstAttribute="trailing" secondItem="Y67-Dg-J0t" secondAttribute="trailing" id="WQ0-7A-WPI"/>
+                            <constraint firstItem="HoV-Cq-ES1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="baX-x7-4Oa"/>
                             <constraint firstItem="Y67-Dg-J0t" firstAttribute="trailing" secondItem="sv5-Kk-PUc" secondAttribute="trailing" id="cti-5F-nu8"/>
+                            <constraint firstItem="HoV-Cq-ES1" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="vGh-fD-Mpy"/>
                             <constraint firstItem="Y67-Dg-J0t" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="yhG-a2-B5D"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="constraintHeightLayoutIntro" destination="K9a-cv-X4e" id="9ZW-AP-xcZ"/>
+                        <outlet property="imageViewNextIcon" destination="AeC-UJ-IZz" id="qwu-I1-rJ5"/>
+                        <outlet property="imageViewSplash" destination="HoV-Cq-ES1" id="FyM-2X-QN9"/>
+                        <outlet property="labelIntro" destination="sCU-dx-9QL" id="fiY-ZQ-0n0"/>
+                        <outlet property="layoutIntro" destination="Yge-v6-cJW" id="FAn-m2-geP"/>
+                        <outlet property="layoutNext" destination="HAG-oD-Uor" id="QV3-bC-cGh"/>
+                        <outlet property="layoutWelcome" destination="wr1-KM-sn5" id="5Np-5k-RFE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -295,5 +363,8 @@
     </scenes>
     <resources>
         <image name="bg_image.png" width="360" height="639"/>
+        <image name="next_icon.png" width="19" height="19"/>
+        <image name="splash_screen_icon.png" width="71" height="111"/>
+        <image name="white_box.9.png" width="34" height="45"/>
     </resources>
 </document>

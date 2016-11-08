@@ -25,10 +25,13 @@
                                     <constraint firstAttribute="height" constant="20" id="EgC-Zc-vZD"/>
                                 </constraints>
                             </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_screen_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Dq6-Z5-748"/>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="NTF-oo-WD7" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="3uY-vY-BbE"/>
+                            <constraint firstItem="Dq6-Z5-748" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="467-bL-oGg"/>
+                            <constraint firstItem="Dq6-Z5-748" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="5n3-wo-nT1"/>
                             <constraint firstItem="Qhf-Te-t9j" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="JTb-2D-7Ma"/>
                             <constraint firstItem="NTF-oo-WD7" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="LCL-VD-Mq1"/>
                             <constraint firstItem="Qhf-Te-t9j" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="LhB-49-T1r"/>
@@ -45,5 +48,6 @@
     </scenes>
     <resources>
         <image name="bg_image.png" width="360" height="639"/>
+        <image name="splash_screen_icon.png" width="71" height="111"/>
     </resources>
 </document>

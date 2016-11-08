@@ -59,6 +59,15 @@
 		6CE3B62C1DAB999E000EFB52 /* ModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE3B62B1DAB999E000EFB52 /* ModelProtocol.swift */; };
 		6CE3B62F1DABA17E000EFB52 /* FriendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE3B62E1DABA17E000EFB52 /* FriendModel.swift */; };
 		6CE7E0F51DB27B2B000C6863 /* IOSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE7E0F41DB27B2B000C6863 /* IOSUtils.swift */; };
+		6CE8E5671DD1F58F00538F82 /* splash_screen_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CE8E5661DD1F58F00538F82 /* splash_screen_icon.png */; };
+		6CE8E5691DD1F8D000538F82 /* LocalizationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE8E5681DD1F8D000538F82 /* LocalizationViews.swift */; };
+		6CE8E56B1DD2079E00538F82 /* AnimateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE8E56A1DD2079E00538F82 /* AnimateBuilder.swift */; };
+		6CE8E56D1DD2084F00538F82 /* AnimateType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE8E56C1DD2084F00538F82 /* AnimateType.swift */; };
+		6CE8E56F1DD219AE00538F82 /* white_box.9.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CE8E56E1DD219AE00538F82 /* white_box.9.png */; };
+		6CE8E5751DD21C4600538F82 /* SWNinePatchImageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE8E5721DD21C4600538F82 /* SWNinePatchImageFactory.m */; };
+		6CE8E5761DD21C4600538F82 /* SWNinePatchImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE8E5741DD21C4600538F82 /* SWNinePatchImageView.m */; };
+		6CE8E57B1DD22F7300538F82 /* next_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CE8E5791DD22F7300538F82 /* next_icon.png */; };
+		6CE8E57C1DD22F7300538F82 /* retry_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CE8E57A1DD22F7300538F82 /* retry_icon.png */; };
 		D08351F2821526DA2544C5DF /* Pods_FFfinderUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F74F86AD394D14CB113269E /* Pods_FFfinderUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -140,6 +149,18 @@
 		6CE3B62B1DAB999E000EFB52 /* ModelProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelProtocol.swift; sourceTree = "<group>"; };
 		6CE3B62E1DABA17E000EFB52 /* FriendModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendModel.swift; sourceTree = "<group>"; };
 		6CE7E0F41DB27B2B000C6863 /* IOSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOSUtils.swift; sourceTree = "<group>"; };
+		6CE8E5661DD1F58F00538F82 /* splash_screen_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = splash_screen_icon.png; path = Images/splash_screen_icon.png; sourceTree = "<group>"; };
+		6CE8E5681DD1F8D000538F82 /* LocalizationViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationViews.swift; sourceTree = "<group>"; };
+		6CE8E56A1DD2079E00538F82 /* AnimateBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimateBuilder.swift; sourceTree = "<group>"; };
+		6CE8E56C1DD2084F00538F82 /* AnimateType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimateType.swift; sourceTree = "<group>"; };
+		6CE8E56E1DD219AE00538F82 /* white_box.9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = white_box.9.png; path = Images/white_box.9.png; sourceTree = "<group>"; };
+		6CE8E5701DD21C4600538F82 /* FFfinder-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FFfinder-Bridging-Header.h"; sourceTree = "<group>"; };
+		6CE8E5711DD21C4600538F82 /* SWNinePatchImageFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWNinePatchImageFactory.h; sourceTree = "<group>"; };
+		6CE8E5721DD21C4600538F82 /* SWNinePatchImageFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWNinePatchImageFactory.m; sourceTree = "<group>"; };
+		6CE8E5731DD21C4600538F82 /* SWNinePatchImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWNinePatchImageView.h; sourceTree = "<group>"; };
+		6CE8E5741DD21C4600538F82 /* SWNinePatchImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWNinePatchImageView.m; sourceTree = "<group>"; };
+		6CE8E5791DD22F7300538F82 /* next_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = next_icon.png; path = Images/next_icon.png; sourceTree = "<group>"; };
+		6CE8E57A1DD22F7300538F82 /* retry_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = retry_icon.png; path = Images/retry_icon.png; sourceTree = "<group>"; };
 		712953160234FDE23380567C /* Pods-FFfinderUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FFfinderUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FFfinderUITests/Pods-FFfinderUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8F74F86AD394D14CB113269E /* Pods_FFfinderUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FFfinderUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		93654CADEF0E755CF0D7419D /* Pods_FFfinderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FFfinderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -192,6 +213,10 @@
 		6C1560141DCF5322001C65E3 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				6CE8E5791DD22F7300538F82 /* next_icon.png */,
+				6CE8E57A1DD22F7300538F82 /* retry_icon.png */,
+				6CE8E56E1DD219AE00538F82 /* white_box.9.png */,
+				6CE8E5661DD1F58F00538F82 /* splash_screen_icon.png */,
 				6C1560151DCF5362001C65E3 /* bg_image.png */,
 			);
 			name = images;
@@ -202,6 +227,7 @@
 			children = (
 				6C25EA511DB1C854007441A6 /* AutoHeightTextView.swift */,
 				6C25EA531DB1D52C007441A6 /* AutoHeightLabel.swift */,
+				6CE8E5681DD1F8D000538F82 /* LocalizationViews.swift */,
 			);
 			name = controls;
 			sourceTree = "<group>";
@@ -218,7 +244,12 @@
 		6C72DDE81DAE20AD0065EF02 /* thirdParties */ = {
 			isa = PBXGroup;
 			children = (
+				6CE8E5711DD21C4600538F82 /* SWNinePatchImageFactory.h */,
+				6CE8E5721DD21C4600538F82 /* SWNinePatchImageFactory.m */,
+				6CE8E5731DD21C4600538F82 /* SWNinePatchImageView.h */,
+				6CE8E5741DD21C4600538F82 /* SWNinePatchImageView.m */,
 				6C72DDEC1DAE235A0065EF02 /* KeyChainSwift.swift */,
+				6CE8E5701DD21C4600538F82 /* FFfinder-Bridging-Header.h */,
 			);
 			name = thirdParties;
 			sourceTree = "<group>";
@@ -241,6 +272,7 @@
 		6C90955F1DAB765300FA114B /* helpers */ = {
 			isa = PBXGroup;
 			children = (
+				6CE8E56A1DD2079E00538F82 /* AnimateBuilder.swift */,
 				6C9095601DAB768A00FA114B /* FirebaseDB.swift */,
 				6CCABA401DACCF41009831B8 /* Preferences.swift */,
 				6C72DDF01DAE37580065EF02 /* RestfulService.swift */,
@@ -279,6 +311,7 @@
 				6C24672A1DB3A51300290569 /* SearchStatus.swift */,
 				6C24672C1DB3A51C00290569 /* SearchResult.swift */,
 				6C2467321DB3B64D00290569 /* FCMMessageType.swift */,
+				6CE8E56C1DD2084F00538F82 /* AnimateType.swift */,
 			);
 			name = enums;
 			sourceTree = "<group>";
@@ -399,7 +432,6 @@
 				6CE26B261DA2929E0062ECDF /* Resources */,
 				A567663BBFCBE5F584A48B98 /* [CP] Embed Pods Frameworks */,
 				B051AD6B4FB2B824C615211A /* [CP] Copy Pods Resources */,
-				6CCABA441DACD64E009831B8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -458,6 +490,9 @@
 		6CE26B201DA2929E0062ECDF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 0810;
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Lightweight Studio Apps";
@@ -465,6 +500,7 @@
 					6CE26B271DA2929E0062ECDF = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = NL93D97HC6;
+						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -522,8 +558,12 @@
 				6CCABA5A1DAD021E009831B8 /* Localizable.strings in Resources */,
 				6C1560161DCF5362001C65E3 /* bg_image.png in Resources */,
 				6C3DE2F21DB3625B00CF8BDF /* FriendTableViewCell.xib in Resources */,
+				6CE8E56F1DD219AE00538F82 /* white_box.9.png in Resources */,
+				6CE8E5671DD1F58F00538F82 /* splash_screen_icon.png in Resources */,
+				6CE8E57C1DD22F7300538F82 /* retry_icon.png in Resources */,
 				6CCABA491DACDD50009831B8 /* Main.storyboard in Resources */,
 				6C5C7BAE1DAF6A7B00CC6E9D /* GoogleService-Info.plist in Resources */,
+				6CE8E57B1DD22F7300538F82 /* next_icon.png in Resources */,
 				6CCABA4C1DACDD74009831B8 /* LaunchScreen.storyboard in Resources */,
 				6CE26B331DA2929E0062ECDF /* Assets.xcassets in Resources */,
 			);
@@ -575,19 +615,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FFfinderUITests/Pods-FFfinderUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		6CCABA441DACD64E009831B8 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${PROJECT_DIR}/LocalizeStringsFromAndroid.rb ${PROJECT_NAME}";
 		};
 		8FBB0B2FAEFB887217A23C8A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -709,6 +736,7 @@
 				6C24672F1DB3B36300290569 /* NotificationExtension.swift in Sources */,
 				6C3DE2F41DB3664300CF8BDF /* AddManuallyViewController.swift in Sources */,
 				6C25EA561DB1DE2A007441A6 /* Threadings.swift in Sources */,
+				6CE8E5691DD1F8D000538F82 /* LocalizationViews.swift in Sources */,
 				6C2467351DB3C55F00290569 /* NotificationConsumer.swift in Sources */,
 				6CE3B62F1DABA17E000EFB52 /* FriendModel.swift in Sources */,
 				6CE3B62C1DAB999E000EFB52 /* ModelProtocol.swift in Sources */,
@@ -719,8 +747,10 @@
 				6CCABA3F1DACCF27009831B8 /* SetupViewController.swift in Sources */,
 				6C72DDED1DAE235A0065EF02 /* KeyChainSwift.swift in Sources */,
 				6C3DE2EB1DB33A6000CF8BDF /* LocationModel.swift in Sources */,
+				6CE8E5751DD21C4600538F82 /* SWNinePatchImageFactory.m in Sources */,
 				6C9095611DAB768A00FA114B /* FirebaseDB.swift in Sources */,
 				6C15601A1DCF61D2001C65E3 /* ColorExtension.swift in Sources */,
+				6CE8E56B1DD2079E00538F82 /* AnimateBuilder.swift in Sources */,
 				6C2467371DB3C75200290569 /* LocationUpdater.swift in Sources */,
 				6C24672D1DB3A51C00290569 /* SearchResult.swift in Sources */,
 				6C3DE2ED1DB341F500CF8BDF /* ArrayExtension.swift in Sources */,
@@ -734,12 +764,14 @@
 				6C25EA541DB1D52C007441A6 /* AutoHeightLabel.swift in Sources */,
 				6C2467311DB3B5EB00290569 /* NotificationSender.swift in Sources */,
 				6C3DE2F11DB3625B00CF8BDF /* FriendTableViewCell.swift in Sources */,
+				6CE8E5761DD21C4600538F82 /* SWNinePatchImageView.m in Sources */,
 				6CCABA3C1DACA471009831B8 /* LaunchViewController.swift in Sources */,
 				6C8F37E01DAE785B00D7291F /* FirebaseModelProtocol.swift in Sources */,
 				6C72DDE61DADF7560065EF02 /* MyViewController.swift in Sources */,
 				6CCABA4E1DACE5E3009831B8 /* StringExtension.swift in Sources */,
 				6CE2BA001DB23E4700137BE2 /* KeyModel.swift in Sources */,
 				6CCABA411DACCF41009831B8 /* Preferences.swift in Sources */,
+				6CE8E56D1DD2084F00538F82 /* AnimateType.swift in Sources */,
 				6CE2B9FC1DB239D200137BE2 /* DateTimeUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -905,6 +937,7 @@
 			baseConfigurationReference = 15EFE9500EFE4705D5D3A527 /* Pods-FFfinder.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FFfinder/FFfinder.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
@@ -916,6 +949,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "FFfinder/FFfinder-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				colorPrimaryDark = "#ffffff";
 			};
@@ -926,6 +961,7 @@
 			baseConfigurationReference = 56B3355703BABB429184AF83 /* Pods-FFfinder.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FFfinder/FFfinder.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -934,6 +970,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lightweightstudioapps.FFfinderIphone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FFfinder/FFfinder-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				colorPrimaryDark = "#ffffff";
 			};
