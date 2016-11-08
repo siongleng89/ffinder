@@ -237,4 +237,5 @@ Everything about tutorials -->
 <string name="street_view_btn_text">"街景"</string>
 <string name="directions_btn_text">"方向"</string>
 <string name="gps_nav_btn_text">"使用地图应用"</string>
+<string name="error_location_disabled_msg">"用户已禁止分享所在位置"</string>
 </resources>
