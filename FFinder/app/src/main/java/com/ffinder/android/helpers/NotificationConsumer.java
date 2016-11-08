@@ -43,18 +43,21 @@ public class NotificationConsumer {
                 myModel.load();
                 myModel.loadAllFriendModels();
 
-                FriendModel newFriendModel = new FriendModel();
-                newFriendModel.setUserId(senderId);
-                newFriendModel.setName(Strings.pickNonEmpty(username, ""));
+                if(myModel.getFriendModelById(senderId) == null){
+                    FriendModel newFriendModel = new FriendModel();
+                    newFriendModel.setUserId(senderId);
+                    newFriendModel.setName(Strings.pickNonEmpty(username, ""));
 
-                myModel.addFriendModel(newFriendModel);
-                myModel.sortFriendModels();
-                newFriendModel.save(context);
-                myModel.commitFriendUserIds();
+                    myModel.addFriendModel(newFriendModel);
+                    myModel.sortFriendModels();
+                    newFriendModel.save(context);
+                    myModel.commitFriendUserIds();
 
-                showFriendAddedNotification(senderId, username);
-                BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshNewlyAddedFriend,
-                        new Pair<String, String>("userId", senderId));
+                    showFriendAddedNotification(senderId, username);
+                    BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshNewlyAddedFriend,
+                            new Pair<String, String>("userId", senderId));
+                }
+
             }
 
             //someone has asked for my location, update location

@@ -424,20 +424,25 @@ public class ActivityMain extends MyActivityAbstract implements
             @Override
             public void onTimeoutPhaseChanged(String userId, int newPhase) {
                 FriendModel friendModel = myModel.getFriendModelById(userId);
-                if(newPhase != friendModel.getTimeoutPhase()){
-                    friendModel.setTimeoutPhase(newPhase);
+                if(friendModel != null){
+                    if(newPhase != friendModel.getTimeoutPhase()){
+                        friendModel.setTimeoutPhase(newPhase);
+                    }
+                    ActivityMain.this.updateFriendsListAdapter(userId);
                 }
-                ActivityMain.this.updateFriendsListAdapter(userId);
             }
 
             @Override
             public void onUpdateStatus(String userId, SearchStatus newStatus) {
                 FriendModel friendModel = myModel.getFriendModelById(userId);
-                if(newStatus != friendModel.getSearchStatus()){
-                    friendModel.setSearchStatus(newStatus);
-                    friendModel.save(ActivityMain.this);
+                if(friendModel != null){
+                    if(newStatus != friendModel.getSearchStatus()){
+                        friendModel.setSearchStatus(newStatus);
+                        friendModel.save(ActivityMain.this);
+                    }
+                    ActivityMain.this.updateFriendsListAdapter(userId);
                 }
-                ActivityMain.this.updateFriendsListAdapter(userId);
+
             }
 
             @Override
@@ -445,24 +450,27 @@ public class ActivityMain extends MyActivityAbstract implements
                                        final SearchStatus finalSearchStatus, final SearchResult result) {
 
                 final FriendModel friendModel = myModel.getFriendModelById(userId);
-                friendModel.setSearchStatus(finalSearchStatus);
-                friendModel.setSearchResult(result);
-                friendModel.setRecentlyFinishSearch(true);
-                friendModel.setTimeoutPhase(0);
-                friendModel.setSearchStatus(SearchStatus.End);
+                if(friendModel != null){
+                    friendModel.setSearchStatus(finalSearchStatus);
+                    friendModel.setSearchResult(result);
+                    friendModel.setRecentlyFinishSearch(true);
+                    friendModel.setTimeoutPhase(0);
+                    friendModel.setSearchStatus(SearchStatus.End);
 
-                //location model could be null if unable to search user
-                if(locationModel != null){
-                    friendModel.setLastLocationModel(locationModel);
+                    //location model could be null if unable to search user
+                    if(locationModel != null){
+                        friendModel.setLastLocationModel(locationModel);
+                    }
+
+                    friendModel.getLastLocationModel().geodecodeCoordinatesIfNeeded(ActivityMain.this, new Runnable() {
+                        @Override
+                        public void run() {
+                            friendModel.save(ActivityMain.this);
+                            ActivityMain.this.updateFriendsListAdapter(userId);
+                        }
+                    });
                 }
 
-                friendModel.getLastLocationModel().geodecodeCoordinatesIfNeeded(ActivityMain.this, new Runnable() {
-                    @Override
-                    public void run() {
-                        friendModel.save(ActivityMain.this);
-                        ActivityMain.this.updateFriendsListAdapter(userId);
-                    }
-                });
 
 
                 if(!isPaused()){
