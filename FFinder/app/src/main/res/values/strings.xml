@@ -236,4 +236,5 @@ Everything about tutorials -->
 <string name="street_view_btn_text">"Street View"</string>
 <string name="directions_btn_text">"Directions"</string>
 <string name="gps_nav_btn_text">"Open GPS Nav."</string>
+<string name="error_location_disabled_msg">"User has disabled location sharing."</string>
 </resources>
