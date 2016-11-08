@@ -208,3 +208,4 @@ Everything about tutorials*/
 "street_view_btn_text" = "Street View";
 "directions_btn_text" = "Directions";
 "gps_nav_btn_text" = "Open GPS Nav.";
+"error_location_disabled_msg" = "User has disabled location sharing.";
