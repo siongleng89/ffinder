@@ -201,7 +201,7 @@ http://ff-finder.com/addnew/%s"</string>
 _________________________________________________________________________________
 Delete member popup dialog text start -->
 <string name="delete_user_title">"删除 %s?"</string>
-<string name="confirm_delete_user_msg">"确定删除 %s? 删除后你们将不能搜寻对方位置。"</string>
+<string name="confirm_delete_user_msg">"确定删除此用户? 删除后你们将不能搜寻对方位置。"</string>
 
 <!-- Delete member popup dialog text end
 _________________________________________________________________________________
