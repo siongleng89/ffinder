@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -77,6 +78,7 @@ public class FFTextButton extends Button {
         }
 
         this.setTransformationMethod(null);
+        FFTextButton.this.setTypeface(null, Typeface.BOLD);
         FFTextButton.this.setTextColor(textNormalColor);
         FFTextButton.this.getBackground().setColorFilter(btnNormalColor,
                                                 PorterDuff.Mode.SRC_ATOP);

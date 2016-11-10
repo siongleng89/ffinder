@@ -36,7 +36,6 @@ public class VipAndProductsHelpers implements BillingProcessor.IBillingHandler  
     public VipAndProductsHelpers(Context context) {
         this.context = context;
         subscriptionModels = new ArrayList();
-        subscriptionModels.add(new SubscriptionModel(context.getString(R.string.manage_subscriptions_item_title), "", null));
         bp = new BillingProcessor(context, Constants.IABKey, this);
     }
 
@@ -79,11 +78,9 @@ public class VipAndProductsHelpers implements BillingProcessor.IBillingHandler  
                 List<String> list = bp.listOwnedSubscriptions();
                 if(list.size() > 0){
                     subscribed = true;
-                    subscriptionModels.get(0).setContent(context.getString(R.string.subscribed));
                 }
                 else{
                     subscribed = false;
-                    subscriptionModels.get(0).setContent(context.getString(R.string.not_subscribed));
                 }
 
                 if(onDone != null) onDone.run();

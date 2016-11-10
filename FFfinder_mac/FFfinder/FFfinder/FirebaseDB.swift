@@ -46,11 +46,23 @@ class FirebaseDB{
         });
     }
     
+    //must use identifier table since it is public,
+    //because usually at this step user havent login firebase
     public static func checkUserIdExist(_ userId:String,
                                         _ callback:@escaping (Bool, Status) -> Void){
-        checkExist(getTable(TableName.users).child(userId), callback)
+        let identifier = userId + "ios";
+        checkExist(getTable(TableName.identifierToUserIdMaps).child(identifier), callback)
     }
     
+    public static func saveToIdentifier(_ userId:String,
+                                       _ callback:((Status) -> Void)?){
+        let identifier = userId + "ios";
+        var map = [String:String]()
+        map[identifier] = userId;
+
+        setValue(getTable(TableName.identifierToUserIdMaps), map, callback)
+    }
+
     
     public static func updateUserToken(_ userId:String, _ token:String,
                                         _ callback:((Status) -> Void)?){
@@ -59,6 +71,7 @@ class FirebaseDB{
         map["platform"] = "ios"
         setValue(getTable(TableName.users).child(userId), map, callback)
     }
+    
     
     public static func tryInsertKey(_ userId:String, _ username:String, _ key:String,
                                     _ callback:@escaping (Bool, Status) -> Void){
@@ -89,9 +102,9 @@ class FirebaseDB{
                                 let diffInMs = timestampInMiliSecs - currentKeyModel.insertAt!
                                 let diffSecs = diffInMs / 1000
                                 
-                                //more than expired total secs and 10 mins(600s) of tolerance time
+                                //more than expired total secs
                                 //change the key owner to me now
-                                if diffSecs > Constants.KeyExpiredTotalSecs + 600{
+                                if diffSecs > Constants.KeyExpiredTotalSecs{
                                     setValue(getTable(TableName.keys).child(key), toInsertKeyModel.toAnyObject(),
                                              {(status) in
                                                 callback(status == Status.Success, Status.Success)
@@ -131,6 +144,11 @@ class FirebaseDB{
         
         setValue(db.child(myUserId), map1, nil)
         setValue(db.child(targetUserId), map2, callback)
+    }
+    
+    public static func checkUserHasAnyLink(_ myUserId:String,
+                                           _ callback: @escaping (Bool, Status) -> Void){
+        checkExist(getTable(TableName.links).child(myUserId), callback)
     }
     
     
@@ -214,7 +232,7 @@ class FirebaseDB{
                                    _ callback:@escaping (Bool, Status) -> Void){
         reference.observeSingleEvent(of: .value,
                                     with: {(snapshot) -> Void in
-                                        if snapshot.value != nil {
+                                        if snapshot.exists() {
                                             callback(true, Status.Success)
                                         }
                                         else{

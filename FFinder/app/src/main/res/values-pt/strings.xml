@@ -108,15 +108,11 @@ ________________________________________________________________________________
 Settings Activity text start -->
 <string name="settings_activity_title">"Definições"</string>
 <string name="settings_item_language_title">"Idioma"</string>
-
-<!-- activityVip -->
+<!-- Settings Activity text end
+_________________________________________________________________________________
+Vip Activity text start -->
 <string name="vip_title">"VIP"</string>
-
-<!-- activityVip -->
 <string name="manage_subscriptions_item_title">"Gerenciar assinaturas"</string>
-
-<!-- activityVip -->
-<!-- Fuzzy -->
 <string name="manage_subscriptions_introduction_android">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
 
 <!-- Vip Activity text end

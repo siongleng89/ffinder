@@ -117,15 +117,8 @@ ________________________________________________________________________________
 Vip Activity text start -->
 <!-- activityVip -->
 <string name="vip_member">"VIP (%s/year)"</string>
-
-<!-- activityVip -->
 <string name="vip_title">"VIP"</string>
-
-<!-- activityVip -->
 <string name="manage_subscriptions_item_title">"Manage Subscriptions"</string>
-
-<!-- activityVip -->
-<!-- Fuzzy -->
 <string name="manage_subscriptions_introduction_android">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
 
 <!-- Vip Activity text end

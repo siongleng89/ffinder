@@ -1,7 +1,6 @@
 package com.ffinder.android.controls;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -13,9 +12,7 @@ import com.ffinder.android.R;
 import com.ffinder.android.enums.OverlayType;
 import com.ffinder.android.enums.TutorialType;
 import com.ffinder.android.helpers.AndroidUtils;
-import com.ffinder.android.helpers.AnimateBuilder;
 import com.ffinder.android.helpers.OverlayBuilder;
-import com.ffinder.android.helpers.Threadings;
 
 import java.util.ArrayList;
 
@@ -47,7 +44,7 @@ public class TutorialDialog {
         imgViewNext = (ImageView) viewInflated.findViewById(R.id.imgViewNext);
         imgViewScreenshot = (ImageView) viewInflated.findViewById(R.id.imgViewScreenshot);
         imgViewClose = (ImageView) viewInflated.findViewById(R.id.imgViewClose);
-        txtTitle = (TextView) viewInflated.findViewById(R.id.txtTitle);
+        txtTitle = (TextView) viewInflated.findViewById(R.id.txtSubscriptionTitle);
         txtSubtitle = (TextView) viewInflated.findViewById(R.id.txtSubtitle);
 
         goToIndex(0);

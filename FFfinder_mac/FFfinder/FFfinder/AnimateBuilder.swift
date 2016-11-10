@@ -74,6 +74,11 @@ class AnimateBuilder{
                     self.view?.center.x += self.value!
                 }
                 break
+            case AnimateType.RotateBy:
+                animationClosure = {
+                   self.view?.transform = (self.view?.transform.rotated(by: self.value!))!
+                }
+                break
             }
             
             var options:UIViewAnimationOptions = [];
@@ -88,10 +93,8 @@ class AnimateBuilder{
                            options: options,
                            animations: animationClosure!,
                            completion:{ (finished) in
-                                if(finished){
-                                    if let callback = self.finishCallback{
-                                        callback()
-                                    }
+                                if let callback = self.finishCallback{
+                                    callback()
                                 }
                             }
                         )
@@ -118,6 +121,20 @@ class AnimateBuilder{
         
     }
     
+    public static func fadeOut(_ view:UIView,
+                              speed:Int? = Fast,
+                              _ callback:(() -> Void)? = nil){
+        let builder = AnimateBuilder.build(view)
+            .setDurationMs(speed!).setAnimateType(AnimateType.Alpha)
+            .setValue(0)
+        
+        if let callback = callback{
+            _ = builder.setFinishCallback(callback)
+        }
+        
+        builder.start()
+        
+    }
     
     
     

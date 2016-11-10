@@ -139,7 +139,7 @@ public class ActivityAddFriend extends MyActivityAbstract {
 
     }
 
-    private void errorOccurred(AddMemberError addMemberError, String... extra){
+    private void errorOccurred(final AddMemberError addMemberError, String... extra){
         String errorMsg = "";
         String msg = "";
         switch (addMemberError){
@@ -157,9 +157,31 @@ public class ActivityAddFriend extends MyActivityAbstract {
                 break;
         }
 
-        txtError.setText(msg);
-        AnimateBuilder.fadeIn(this, txtError);
-        loadingDialog.dismiss();
+        final String finalMsg = msg;
+        Threadings.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.dismiss();
+
+                //back to main page, since user already added
+                if(addMemberError == AddMemberError.UserAlreadyAdded){
+                    OverlayBuilder.build(ActivityAddFriend.this).setOverlayType(OverlayType.OkOnly)
+                            .setContent(finalMsg).setOnDismissRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }).show();
+                }
+                else{
+                    txtError.setText(finalMsg);
+                    AnimateBuilder.fadeIn(ActivityAddFriend.this, txtError);
+                }
+
+            }
+        });
+
+
 
         Analytics.logEvent(AnalyticEvent.Add_Friend_Failed, errorMsg);
     }
@@ -188,8 +210,8 @@ public class ActivityAddFriend extends MyActivityAbstract {
                 new Pair<String, String>("username", myName));
 
 
-        finish();
         Analytics.logEvent(AnalyticEvent.Add_Friend_Success);
+        finish();
     }
 
     private void checkBothWayLinkExist(final String myUserId, final String targetUserId,

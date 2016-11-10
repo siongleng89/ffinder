@@ -12,5 +12,6 @@ enum AnimateType:String{
     case Alpha
     case MoveToY
     case MoveByX
+    case RotateBy
     
 }

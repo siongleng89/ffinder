@@ -19,38 +19,37 @@ class LaunchViewController: MyViewController, CLLocationManagerDelegate {
     @IBOutlet weak var imageViewSplash: UIImageView!
     @IBOutlet weak var labelIntro: LocalizedLabel!
     @IBOutlet weak var constraintHeightLayoutIntro: NSLayoutConstraint!
-
-    var locationManager:CLLocationManager!
-    var locationUpdater:LocationUpdater!
-   
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name:NSNotification.Name(rawValue: "UIApplicationDidBecomeActiveNotification"), object: nil)
-    }
-    
-    func didBecomeActive(){
-        //CLLocationManager().requestAlwaysAuthorization()
-    }
+    private var locationManager: CLLocationManager?
     
     //must check at viewDidAppear since we cannot go to another view controller in viewDidLoad
     override func viewDidAppear(_ animated: Bool) {
-        checkNeedToShowIntroduction();
+        locationManager = CLLocationManager()
+        if !IOSUtils.checkLocationServiceEnabledAndRequestIfNeeded(locationManager){
+            showConfirmDialog(title: "", message: "some_permission_denied_toast_msg".localized, positiveText: "ok", positiveToRun: {
+                    UIApplication.shared.openURL(NSURL(string: UIApplicationOpenSettingsURLString)! as URL)
+                    self.checkNeedToShowIntroduction();
+                }, negativeToRun: {
+                    self.checkNeedToShowIntroduction();
+            })
+            
+        }
+        else{
+            checkNeedToShowIntroduction();
+        }
     }
    
     func checkNeedToShowIntroduction(){
-        showIntroduction()
-        
-//        if let seenIntroduction = Preferences.get(PreferenceType.SeenIntroduction){
-//            if seenIntroduction == "1"{
-//                goToNextScreen();
-//            }
-//            else{
-//                showIntroduction();
-//            }
-//        }
-//        else{
-//            showIntroduction();
-//        }
+        if let seenIntroduction = Preferences.get(PreferenceType.SeenIntroduction){
+            if seenIntroduction == "1"{
+                goToNextScreen();
+            }
+            else{
+                showIntroduction();
+            }
+        }
+        else{
+            showIntroduction();
+        }
     }
     
     func showIntroduction(){
@@ -80,52 +79,26 @@ class LaunchViewController: MyViewController, CLLocationManagerDelegate {
     }
     
     func goToNextScreen(){
-        
-        
-//        let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
-//        vc.myModel = self.myModel
-//        self.present(vc, animated: false, completion: nil)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-//        //userId is not empty, can straight go to main page
-//        if self.myModel.userId != nil{
-//            let vc = self.storyboard?.instantiateViewController(withIdentifier: MainPageViewController.getMyClassName()) as! MainPageViewController
-//            vc.myModel = self.myModel
-//            let navController = UINavigationController(rootViewController: vc)
-//            self.present(navController, animated: false, completion: nil)
-//
-//        }
-//        //userId is empty, go to setup page
-//        else{
-//            let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
-//            vc.myModel = self.myModel
-//            self.present(vc, animated: false, completion: nil)
-//        }
+        //userId is not empty, can straight go to main page
+        if self.myModel.userId != nil{
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: MainPageViewController.getMyClassName()) as! MainPageViewController
+            let navController = UINavigationController(rootViewController: vc)
+            self.present(navController, animated: false, completion: nil)
+
+        }
+        //userId is empty, go to setup page
+        else{
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
+            self.present(vc, animated: false, completion: nil)
+        }
         
     }
   
     
-    // or for Swift 3
     func onNextLayoutTapped(_ sender:UITapGestureRecognizer){
-        print("tttt")
+        Preferences.put(PreferenceType.SeenIntroduction, "1")
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
+        self.present(vc, animated: false, completion: nil)
     }
     
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

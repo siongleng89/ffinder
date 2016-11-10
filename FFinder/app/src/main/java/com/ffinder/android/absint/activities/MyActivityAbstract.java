@@ -111,7 +111,8 @@ public class MyActivityAbstract extends AppCompatActivity {
     }
 
     protected void setActionBarTitle(int titleId){
-        TextView txtTitle = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.txtTitle);
+        TextView txtTitle = (TextView) getSupportActionBar()
+                .getCustomView().findViewById(R.id.txtTitle);
         txtTitle.setText(getString(titleId));
     }
 

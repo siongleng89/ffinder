@@ -13,6 +13,11 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
     
     var myModel:MyModel!
     var alertController:UIAlertController?
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.myModel = MyModel.shared
+    }
     
     
     public static func getMyClassName() -> String{
@@ -120,11 +125,7 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
     }
     
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? MyViewController{
-            vc.myModel = self.myModel
-        }
-    }
+  
  
     
 }

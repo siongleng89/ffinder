@@ -18,12 +18,16 @@ class MyModel:EVObject{
     var friendModels = [FriendModel]()
     
     
-    static let shared = MyModel()
+    static let shared = MyModel(true)
     
-    internal required init(){
+    private init(_ staticInit:Bool){
         super.init()
         load()
         loadAllFriendModels()
+    }
+    
+    internal required init(){
+        super.init()
     }
     
     
@@ -217,6 +221,10 @@ class MyModel:EVObject{
         return getFriendModelById(userId) != nil
     }
     
+    
+    public func sortFriendModels(){
+        //todo
+    }
     
     
     

@@ -12,12 +12,12 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var friendsTableView: UITableView!
     let friendTableCellIdentifier:String = "FriendTableViewCell"
-    
+    var firstTimeRun:Bool?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        myModel.loginFirebase(0, nil)
+        FirebaseDB.saveToIdentifier(self.myModel!.userId!, nil)
         
         // Do any additional setup after loading the view.
         self.navigationItem.title = "app_name".localized

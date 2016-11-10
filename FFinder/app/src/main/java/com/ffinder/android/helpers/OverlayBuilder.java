@@ -112,7 +112,7 @@ public class OverlayBuilder {
                         (ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content), false);
 
 
-                ((RelativeLayout) viewInflated.findViewById(R.id.layoutContent)).addView(customView);
+                ((RelativeLayout) viewInflated.findViewById(R.id.layoutSubscribe)).addView(customView);
                 break;
 
             case OkCancel:
@@ -159,7 +159,7 @@ public class OverlayBuilder {
                 layoutTitle.setVisibility(View.VISIBLE);
             }
 
-            TextView txtTitle = (TextView) viewInflated.findViewById(R.id.txtTitle);
+            TextView txtTitle = (TextView) viewInflated.findViewById(R.id.txtSubscriptionTitle);
             if (txtTitle != null){
                 txtTitle.setText(title);
             }
@@ -187,7 +187,7 @@ public class OverlayBuilder {
         }
 
         if(contentView != null){
-            ViewGroup layoutContent = (ViewGroup) viewInflated.findViewById(R.id.layoutContent);
+            ViewGroup layoutContent = (ViewGroup) viewInflated.findViewById(R.id.layoutSubscribe);
             if(layoutContent != null){
                 layoutContent.addView(contentView);
             }

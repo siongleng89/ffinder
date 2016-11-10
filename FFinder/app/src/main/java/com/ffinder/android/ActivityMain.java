@@ -14,6 +14,7 @@ import android.support.v4.util.Pair;
 import android.support.v7.widget.*;
 import android.view.ContextMenu;
 import android.view.View;
+import android.widget.LinearLayout;
 import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
 import com.ffinder.android.absint.activities.IProfileImagePickerListener;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
@@ -44,7 +45,8 @@ import java.util.List;
 public class ActivityMain extends MyActivityAbstract implements
         IFriendItemListener, IFriendsAdapterHolder, IProfileImagePickerListener {
 
-    private FragmentNextAdsCd fragmentNextAdsCd;
+    private LinearLayout layoutBottom;
+    private LayoutNextAdsCd layoutNextAdsCd;
     private MyModel myModel;
     private RecyclerView listFriends;
     private FriendsAdapter friendsAdapter;
@@ -69,9 +71,9 @@ public class ActivityMain extends MyActivityAbstract implements
 
         myModel = getMyModel();
 
-        fragmentNextAdsCd = (FragmentNextAdsCd) getSupportFragmentManager()
-                                .findFragmentById(R.id.nextAdsCdFragment);
-        fragmentNextAdsCd.setMyModel(myModel);
+        layoutBottom = (LinearLayout) findViewById(R.id.layoutBottom);
+        layoutNextAdsCd = new LayoutNextAdsCd(this, myModel);
+        layoutBottom.addView(layoutNextAdsCd.getView());
 
         listFriends = (RecyclerView) findViewById(R.id.listFriends);
         friendsAdapter = new FriendsAdapter(this, myModel.getFriendModels(), this, this, this);
@@ -121,6 +123,8 @@ public class ActivityMain extends MyActivityAbstract implements
     protected void onResume() {
         super.onResume();
 
+        layoutNextAdsCd.onResume();
+
         if(myModel.loadAllFriendModels()){
             myModel.sortFriendModels();
         }
@@ -150,6 +154,13 @@ public class ActivityMain extends MyActivityAbstract implements
             });
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        layoutNextAdsCd.onPause();
     }
 
     @Override
@@ -219,6 +230,10 @@ public class ActivityMain extends MyActivityAbstract implements
                                 taskFragment.terminate();
                                 getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
                             }
+                            else{
+                                //reset listener
+                                setRequestLocationTaskFragListener(taskFragment);
+                            }
                         }
                         //check if there is any leftoever stuck search, if there is
                         //overwrite the search status
@@ -245,12 +260,7 @@ public class ActivityMain extends MyActivityAbstract implements
                 if(friendModel.getSearchResult() == SearchResult.ErrorTimeoutUnknownReason){
 
                     new SearchFailedDialog(ActivityMain.this,
-                            friendModel.getSearchResult(), new ISearchFailedListener() {
-                        @Override
-                        public void onSearchAnywayChoose() {
-                            searchNow(friendModel);
-                        }
-                    }).show();
+                            friendModel).show();
                     return;
                 }
             }
@@ -263,7 +273,7 @@ public class ActivityMain extends MyActivityAbstract implements
         Threadings.postRunnable(new Runnable() {
             @Override
             public void run() {
-                fragmentNextAdsCd.friendSearched(new RunnableArgs<Boolean>() {
+                layoutNextAdsCd.friendSearched(new RunnableArgs<Boolean>() {
                     @Override
                     public void run() {
                         if(this.getFirstArg()){
@@ -409,6 +419,25 @@ public class ActivityMain extends MyActivityAbstract implements
                 myModel.loadAllFriendModels();
                 myModel.sortFriendModels();
                 updateFriendsListAdapter();
+            }
+        });
+
+        registerBroadcastReceiver(BroadcastEvent.SearchAgainAnyway, new RunnableArgs<Intent>() {
+            @Override
+            public void run() {
+                Intent intent = this.getFirstArg();
+                final String friendId = intent.getStringExtra("friendId");
+                FriendModel friendModel = getMyModel().getFriendModelById(friendId);
+                if(friendModel != null){
+                    searchNow(friendModel);
+                }
+            }
+        });
+
+        registerBroadcastReceiver(BroadcastEvent.SearchSuccess, new RunnableArgs<Intent>() {
+            @Override
+            public void run() {
+                Analytics.logEvent(AnalyticEvent.Search_Result, "SearchSuccess");
             }
         });
 

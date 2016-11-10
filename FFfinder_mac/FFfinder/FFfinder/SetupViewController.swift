@@ -11,21 +11,25 @@ import FirebaseInstanceID
 
 class SetupViewController: MyViewController {
 
-    @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var retryButton: UIButton!
+    @IBOutlet weak var layoutRetry: UIView!
+    @IBOutlet weak var labelStatus: UILabel!
+    @IBOutlet weak var loadingIcon: UIActivityIndicatorView!
+    @IBOutlet weak var imageViewRetryIcon: UIImageView!
     var keychain:KeychainSwift?
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidAppear(_ animated: Bool) {
+        AnimateBuilder.build(imageViewRetryIcon).setAnimateType(AnimateType.RotateBy)
+            .setValue(3.14).setDurationMs(2000).setRepeat(true).start();
         
-        //start()
+        self.keychain = KeychainSwift()
+        start()
+        
+        setListeners()
     }
     
     private func start(){
-        self.keychain = KeychainSwift()
-        changeStatus(SetupStatus.CheckingToken)
-        
+               changeStatus(SetupStatus.CheckingToken)
+                
         tryRetrieveFromKeyChain({
             (userId:String?, exception:SetupException?) in
             
@@ -45,6 +49,7 @@ class SetupViewController: MyViewController {
                 finalUserId = self.createNewUser();
             }
             
+            self.myModel.userId = finalUserId
             
             //at this point we already have userId, can try to login Firebase now
             self.changeStatus(SetupStatus.CheckingUser)
@@ -71,13 +76,7 @@ class SetupViewController: MyViewController {
                                 self.keychain!.set(self.myModel.userId!, forKey: KeyChainType.UserId.rawValue)
                                 
                                 self.changeStatus(SetupStatus.Success)
-                                
-                                //go to mainpage vc
-                                let vc = self.storyboard?.instantiateViewController(withIdentifier: MainPageViewController.getMyClassName()) as! MainPageViewController
-                                vc.myModel = self.myModel
-                                let navController = UINavigationController(rootViewController: vc)
-                                self.present(navController, animated: false, completion: nil)
-                                
+                                self.finishProcessAndGoToNextScreen()
                     }
                 )
             })
@@ -146,11 +145,45 @@ class SetupViewController: MyViewController {
         )
     }
     
+    private func finishProcessAndGoToNextScreen(){
+        FirebaseDB.checkUserHasAnyLink(self.myModel.userId!, {
+            (exist, status) in
+            //no link found, add me in
+            if !exist{
+                FirebaseDB.addNewLink(self.myModel.userId!, self.myModel.userId!,
+                                      "address_myself".localized, "address_myself".localized, {
+                                            (status) in
+                                        let myOwnModel:FriendModel = FriendModel()
+                                        myOwnModel.userId = self.myModel.userId!
+                                        myOwnModel.username = "address_myself".localized
+                                        myOwnModel.save()
+                                        self.myModel.addFriendModel(myOwnModel)
+                                        self.myModel.sortFriendModels()
+                                        self.myModel.commitFriendUserIds()
+                                        
+                                        let vc = self.storyboard?.instantiateViewController(withIdentifier: MainPageViewController.getMyClassName()) as! MainPageViewController
+                                        vc.firstTimeRun = true
+                                        let navController = UINavigationController(rootViewController: vc)
+                                        self.present(navController, animated: false, completion: nil)
+                
+                })
+            }
+            else{
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: MainPageViewController.getMyClassName()) as! MainPageViewController
+                let navController = UINavigationController(rootViewController: vc)
+                self.present(navController, animated: true, completion: nil)
+            }
+            
+        })
+    
+    }
     
     private func changeStatus(_ status:SetupStatus){
         var msg:String = "";
         
-        retryButton.isHidden = true
+        layoutRetry.alpha = 0
+        layoutRetry.isHidden = true
+        loadingIcon.alpha = 1
         
         switch status {
             case SetupStatus.CheckingToken:
@@ -159,13 +192,27 @@ class SetupViewController: MyViewController {
                 msg = "initializing_user".localized
             case SetupStatus.Failed:
                 msg = "no_connection_msg".localized
-                retryButton.isHidden = false
+                layoutRetry.isHidden = false
+                loadingIcon.alpha = 0
+                AnimateBuilder.fadeIn(layoutRetry)
             case SetupStatus.Success:
-                msg = "ok".localized
+                msg = "initialization_done".localized
         }
         
-        statusLabel.text = msg
+        labelStatus.text = msg
     }
+    
+    
+    private func setListeners(){
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(SetupViewController.onLayoutRetryTapped(_:)))
+        self.layoutRetry.addGestureRecognizer(gesture)
+    }
+    
+    @objc private func onLayoutRetryTapped(_ sender:UITapGestureRecognizer){
+        start()
+    }
+    
+    
     
     
     enum SetupStatus{

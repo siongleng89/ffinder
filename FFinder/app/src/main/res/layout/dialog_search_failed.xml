@@ -1,28 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" android:padding="15dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:background="@drawable/dialog_grey_bg" android:clipChildren="false"
+              android:clipToPadding="false" android:paddingBottom="15dp"
+>
 
-    <RelativeLayout
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/layoutMessage"/>
+            android:text="@string/failed_search_msg_text1"
+            android:id="@+id/textView2" android:padding="15dp" android:textColor="@color/colorImportantText"
+    />
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_below="@+id/layoutMessage"
-            android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:gravity="center"
-            android:layout_marginTop="15dp">
-        <Button
-                android:layout_width="130dp"
-                android:layout_height="100dp"
-                android:text="@string/btn_search_again_text"
-                android:id="@+id/btnSearchAgain"/>
-        <Button
-                android:layout_width="130dp"
-                android:layout_height="100dp"
-                android:text="@string/btn_wait_autonotification_text"
-                android:id="@+id/btnWait" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/btnSearchAgain"
-                android:layout_toEndOf="@+id/btnSearchAgain" android:layout_marginLeft="15dp"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutSubscribe" android:background="@color/colorContrast" android:paddingTop="20dp"
+            android:paddingBottom="20dp" android:layout_marginTop="25dp" android:clipChildren="false"
+            android:clipToPadding="false" android:clickable="true">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_centerVertical="true" android:clipChildren="false"
+                android:clipToPadding="false" android:id="@+id/layoutClickToSeeReasons" android:visibility="visible">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/click_to_see_possible_reasons"
+                    android:id="@+id/textView5" android:layout_centerHorizontal="true"
+                    android:textColor="@color/colorPrimaryDark"/>
+        </RelativeLayout>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView6" android:src="@mipmap/search_failed_expand_box_icon_top"
+                android:layout_centerHorizontal="true" android:layout_marginTop="-41dp"/>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/layoutReasons" android:paddingLeft="15dp"
+                android:paddingRight="15dp" android:visibility="gone">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/error_timeout_unknown_reason_possible_reasons"
+                    android:id="@+id/textView17" android:textStyle="bold"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/error_timeout_unknown_reason_possible_reasons2"
+                    android:id="@+id/textViewGoToKnownIssue" android:textColor="@color/colorPrimaryDark" android:textStyle="bold"
+                    android:clickable="true"/>
+        </LinearLayout>
     </RelativeLayout>
-</RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView7" android:src="@mipmap/search_failed_expand_box_icon_bottom"
+                android:layout_centerHorizontal="true" android:layout_alignParentBottom="false"/>
+    </RelativeLayout>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/failed_search_msg_text2"
+            android:id="@+id/textView15" android:padding="15dp" android:textColor="@color/colorImportantText"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp" android:visibility="visible" android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+        <com.ffinder.android.extensions.FFTextButton android:layout_width="0dp"
+                                                     android:layout_height="fill_parent"
+                                                     android:layout_weight="1"
+                                                     android:text="@string/btn_search_again_text"
+                                                     android:id="@+id/btnSearchAgain"
+                                                     android:layout_marginRight="15dp" android:paddingLeft="5dp"
+                                                     android:paddingRight="5dp"/>
+
+        <com.ffinder.android.extensions.FFTextButton android:layout_width="0dp"
+                                                     android:layout_height="wrap_content"
+                                                     android:layout_weight="1"
+                                                     android:text="@string/btn_wait_autonotification_text"
+                                                     android:id="@+id/btnWait" android:paddingLeft="5dp"
+                                                     android:paddingRight="5dp"/>
+
+    </LinearLayout>
+</LinearLayout>

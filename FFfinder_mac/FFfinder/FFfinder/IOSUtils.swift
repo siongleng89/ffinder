@@ -151,7 +151,27 @@ class IOSUtils{
     }
     
     
-    
+    public static func checkLocationServiceEnabledAndRequestIfNeeded(
+                                            _ locationManager:CLLocationManager? = nil) -> Bool{
+        if CLLocationManager.locationServicesEnabled() {
+            switch(CLLocationManager.authorizationStatus()) {
+            case .notDetermined:
+                if let locationManager = locationManager{
+                    locationManager.requestAlwaysAuthorization()
+                    return true
+                }
+                else{
+                    return false
+                }
+            case .denied, .restricted:
+                return false
+            case .authorizedAlways, .authorizedWhenInUse:
+                return true
+            }
+        } else {
+            return false
+        }
+    }
     
     
     

@@ -16,13 +16,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Sample Title"
-                android:id="@+id/txtTitle" android:gravity="center" android:textColor="@color/colorPrimaryDark"
+                android:id="@+id/txtSubscriptionTitle" android:gravity="center" android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp" android:layout_marginTop="20dp" android:visibility="gone"/>
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Lorem ipsum is a great text to be included in this part"
-                android:id="@+id/txtSubtitle" android:layout_below="@+id/txtTitle" android:gravity="center"
+                android:id="@+id/txtSubtitle" android:layout_below="@+id/txtSubscriptionTitle" android:gravity="center"
                 android:textSize="16sp" android:textColor="@color/colorPrimaryDark" android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp" android:layout_marginLeft="40dp" android:layout_marginRight="40dp"/>
         <ImageView

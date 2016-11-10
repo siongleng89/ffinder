@@ -19,7 +19,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Sample Title"
-                    android:id="@+id/txtTitle" android:gravity="center" android:textColor="@color/colorPrimaryDark"
+                    android:id="@+id/txtSubscriptionTitle" android:gravity="center" android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"/>
         </RelativeLayout>
 
@@ -28,7 +28,7 @@
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:padding="15dp"
-                android:layout_marginBottom="15dp" android:id="@+id/layoutContent">
+                android:layout_marginBottom="15dp" android:id="@+id/layoutSubscribe">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

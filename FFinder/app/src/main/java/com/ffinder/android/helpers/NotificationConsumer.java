@@ -112,11 +112,16 @@ public class NotificationConsumer {
                             BroadcasterHelper.broadcast(context, BroadcastEvent.RefreshFriend,
                                     new Pair<String, String>("userId", senderId));
 
+                            BroadcasterHelper.broadcast(context, BroadcastEvent.SearchSuccess,
+                                    new Pair<String, String>("userId", senderId));
+
                             //only show notification on user system tray if it is from auto notification
                             if(isAutoNotification.equals("1")){
                                 showLocatedNotification(friendModel.getUserId(), friendModel.getName());
                                 FirebaseMessaging.getInstance().unsubscribeFromTopic(senderId);
                             }
+
+
                         }
                     });
                 }

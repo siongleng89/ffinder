@@ -12,7 +12,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/listFriends" android:layout_below="@+id/my_toolbar"
-            android:layout_above="@+id/linearLayout"
+            android:layout_above="@+id/layoutBottom"
             style="@style/FFListViewStyle"/>
 
 
@@ -22,15 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true" android:layout_alignParentStart="false"
-            android:weightSum="2" android:id="@+id/linearLayout"
+            android:id="@+id/layoutBottom"
             android:baselineAligned="false">
-
-        <fragment
-                android:name="com.ffinder.android.FragmentNextAdsCd"
-                android:id="@+id/nextAdsCdFragment"
-                android:layout_weight="2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" android:gravity="center_vertical"/>
 
     </LinearLayout>
 

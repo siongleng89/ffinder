@@ -1,20 +1,16 @@
 package com.ffinder.android;
 
-import android.app.ProgressDialog;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.preference.Preference;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.controls.INoCreditsListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
@@ -25,10 +21,11 @@ import com.ffinder.android.models.MyModel;
 import com.ffinder.android.tasks.AdsFrag;
 
 /**
- * Created by SiongLeng on 30/8/2016.
+ * Created by sionglengho on 10/11/16.
  */
-public class FragmentNextAdsCd extends Fragment {
+public class LayoutNextAdsCd {
 
+    private AppCompatActivity activity;
     private TextView txtNextAdsCount, txtSearchLeft;
     private RelativeLayout layoutCount, layoutControl;
     private ImageView imgViewTick;
@@ -39,29 +36,19 @@ public class FragmentNextAdsCd extends Fragment {
     private int addingCount;
     private boolean afterSavedInstanceState;
 
-    public static FragmentNextAdsCd newInstance() {
-        return new FragmentNextAdsCd();
+
+    public LayoutNextAdsCd(AppCompatActivity activity, MyModel myModel){
+        this.activity = activity;
+        this.myModel = myModel;
     }
 
+    public View getView(){
+        View nextAdsFragmentView = activity.getLayoutInflater().inflate(
+                R.layout.fragment_next_ads_cd, null, false);
 
-    public FragmentNextAdsCd() {
-    }
-
-
-    public void setMyModel(MyModel newModel){
-        this.myModel = newModel;
-    }
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View nextAdsFragmentView = inflater.inflate(R.layout.fragment_next_ads_cd, container, false);
+        nextAdsFragmentView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
 
         txtNextAdsCount = (TextView) nextAdsFragmentView.findViewById(R.id.txtNextAdsCount);
         txtSearchLeft = (TextView) nextAdsFragmentView.findViewById(R.id.txtSearchLeft);
@@ -78,23 +65,16 @@ public class FragmentNextAdsCd extends Fragment {
         return nextAdsFragmentView;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
 
-    @Override
     public void onPause() {
-        super.onPause();
         afterSavedInstanceState = true;
     }
 
-    @Override
     public void onResume() {
-        super.onResume();
         afterSavedInstanceState = false;
         initiate();
     }
+
 
     private void initiate(){
         checkIsVip(new RunnableArgs<Boolean>() {
@@ -106,11 +86,11 @@ public class FragmentNextAdsCd extends Fragment {
                         public void run() {
                             completeProcessing = true;
                             txtSearchLeft.setText(R.string.vip_member);
-                            AnimateBuilder.fadeIn(getActivity(), txtSearchLeft);
-                            AnimateBuilder.fadeIn(getActivity(), imgViewTick);
+                            AnimateBuilder.fadeIn(getMyActivity(), txtSearchLeft);
+                            AnimateBuilder.fadeIn(getMyActivity(), imgViewTick);
                         }
                     });
-                    PreferenceUtils.delete(getContext(), PreferenceType.NoMoreCredits);
+                    PreferenceUtils.delete(getMyActivity(), PreferenceType.NoMoreCredits);
                 }
                 else{
                     recreateAdsFrag();
@@ -129,8 +109,8 @@ public class FragmentNextAdsCd extends Fragment {
                                 @Override
                                 public void run() {
                                     txtSearchLeft.setText(R.string.search_left);
-                                    AnimateBuilder.fadeIn(getActivity(), txtSearchLeft);
-                                    AnimateBuilder.fadeIn(getActivity(), txtNextAdsCount);
+                                    AnimateBuilder.fadeIn(getMyActivity(), txtSearchLeft);
+                                    AnimateBuilder.fadeIn(getMyActivity(), txtNextAdsCount);
                                 }
                             });
 
@@ -151,17 +131,17 @@ public class FragmentNextAdsCd extends Fragment {
     }
 
     private void checkIsVip(RunnableArgs<Boolean> onResult){
-        ((MyApplication) getActivity().getApplication()).getVipAndProductsHelpers().isInVipPeriod(onResult);
+        ((MyApplication) getMyActivity().getApplication()).getVipAndProductsHelpers().isInVipPeriod(onResult);
     }
 
     public void friendSearched(final RunnableArgs<Boolean> canRun){
         if(!completeProcessing){
             addingCount++;
 
-            boolean noCredits = "1".equals(PreferenceUtils.get(getContext(), PreferenceType.NoMoreCredits));
+            boolean noCredits = "1".equals(PreferenceUtils.get(getMyActivity(), PreferenceType.NoMoreCredits));
             canRun.run(!noCredits);
             if(noCredits){
-                new NoCreditsDialog(getActivity(), myModel, new INoCreditsListener() {
+                new NoCreditsDialog(getMyActivity(), myModel, new INoCreditsListener() {
                     @Override
                     public void requestWatchAds() {
                         showAds();
@@ -177,7 +157,7 @@ public class FragmentNextAdsCd extends Fragment {
                 if(!this.getFirstArg()){
                     if(getCurrentNextAdsCount() <= 0){
                         canRun.run(false);
-                        new NoCreditsDialog(getActivity(), myModel, new INoCreditsListener() {
+                        new NoCreditsDialog(getMyActivity(), myModel, new INoCreditsListener() {
                             @Override
                             public void requestWatchAds() {
                                 showAds();
@@ -210,7 +190,7 @@ public class FragmentNextAdsCd extends Fragment {
     private void recreateAdsFrag(){
         if(afterSavedInstanceState) return;
 
-        FragmentManager fm = getActivity().getSupportFragmentManager();
+        FragmentManager fm = getMyActivity().getSupportFragmentManager();
         adsFrag = (AdsFrag) fm.findFragmentByTag("adsFrag");
         //not in search
         if (adsFrag == null) {
@@ -223,8 +203,6 @@ public class FragmentNextAdsCd extends Fragment {
         Threadings.postRunnable(new Runnable() {
             @Override
             public void run() {
-                if(getActivity() == null) return;
-
                 Logs.show("refresh next ads count: " + newAdsCount);
 
                 String finalString = "";
@@ -238,13 +216,13 @@ public class FragmentNextAdsCd extends Fragment {
 
                 if (animate){
                     final String finalString1 = finalString;
-                    AnimateBuilder.build(getActivity(), txtNextAdsCount)
+                    AnimateBuilder.build(getMyActivity(), txtNextAdsCount)
                             .setDurationMs(200).setValue(0).setAnimateType(AnimateType.alpha)
                             .setFinishCallback(new Runnable() {
                                 @Override
                                 public void run() {
                                     txtNextAdsCount.setText(finalString1);
-                                    AnimateBuilder.fadeIn(getActivity(), txtNextAdsCount);
+                                    AnimateBuilder.fadeIn(getMyActivity(), txtNextAdsCount);
 
                                 }
                             }).start();
@@ -261,9 +239,9 @@ public class FragmentNextAdsCd extends Fragment {
     private void showAds(){
 
 
-        final AlertDialog dialog = OverlayBuilder.build(getActivity())
+        final AlertDialog dialog = OverlayBuilder.build(getMyActivity())
                 .setOverlayType(OverlayType.Loading)
-                .setContent(getString(R.string.loading))
+                .setContent(getMyActivity().getString(R.string.loading))
                 .show();
 
         adsFrag.showAds(new Runnable() {
@@ -290,7 +268,7 @@ public class FragmentNextAdsCd extends Fragment {
 
     public Integer getCurrentNextAdsCount() {
         if(currentNextAdsCount == null){
-            String value = PreferenceUtils.get(getContext(), PreferenceType.NextAdsCount);
+            String value = PreferenceUtils.get(getMyActivity(), PreferenceType.NextAdsCount);
             if(Strings.isNumeric(value)){
                 currentNextAdsCount = Integer.valueOf(value);
             }
@@ -302,14 +280,14 @@ public class FragmentNextAdsCd extends Fragment {
     }
 
     public void setCurrentNextAdsCount(Integer value){
-        PreferenceUtils.put(getContext(), PreferenceType.NextAdsCount, value.toString());
+        PreferenceUtils.put(getMyActivity(), PreferenceType.NextAdsCount, value.toString());
         currentNextAdsCount = value;
 
         if(currentNextAdsCount <= 0){
-            PreferenceUtils.put(getContext(), PreferenceType.NoMoreCredits, "1");
+            PreferenceUtils.put(getMyActivity(), PreferenceType.NoMoreCredits, "1");
         }
         else{
-            PreferenceUtils.delete(getContext(), PreferenceType.NoMoreCredits);
+            PreferenceUtils.delete(getMyActivity(), PreferenceType.NoMoreCredits);
         }
 
     }
@@ -318,11 +296,17 @@ public class FragmentNextAdsCd extends Fragment {
         layoutControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ActivityVip.class);
+                Intent intent = new Intent(getMyActivity(), ActivityVip.class);
                 intent.putExtra("userId", myModel.getUserId());
-                startActivity(intent);
+                getMyActivity().startActivity(intent);
             }
         });
     }
+
+
+    private AppCompatActivity getMyActivity(){
+        return activity;
+    }
+
 
 }
