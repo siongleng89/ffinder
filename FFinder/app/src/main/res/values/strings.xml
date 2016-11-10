@@ -73,12 +73,10 @@ Main Activity text start -->
 <string name="error_timeout_no_connection_msg">"Unable to connect, please check your connection and try again."</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="error_timeout_unknown_reason_possible_reasons">"1) User's device does not have active internet connection
 2) User has forced close FFfinder"</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="error_timeout_unknown_reason_possible_reasons2">"3) Configurations not set up for some specific phone models"</string>
 <string name="error_user_blocked_msg">"User has blocked you."</string>
 
@@ -86,11 +84,9 @@ Main Activity text start -->
 <string name="failed_search_msg_text1">"Unable to locate this user."</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="failed_search_msg_text2">"We will keep searching this user and send you a free notification later, or you can try to search again."</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="btn_search_again_text">"Search again anyway"</string>
 
 <!-- search_failed_dialog -->
@@ -117,8 +113,14 @@ ________________________________________________________________________________
 Vip Activity text start -->
 <!-- activityVip -->
 <string name="vip_member">"VIP (%s/year)"</string>
+
+<!-- activityVip -->
 <string name="vip_title">"VIP"</string>
+
+<!-- activityVip -->
 <string name="manage_subscriptions_item_title">"Manage Subscriptions"</string>
+
+<!-- activityVip -->
 <string name="manage_subscriptions_introduction_android">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
 
 <!-- Vip Activity text end
@@ -243,17 +245,36 @@ Everything about tutorials -->
 <string name="huawei">"Huawei"</string>
 <string name="xiaomi">"Xiaomi"</string>
 <string name="sony">"Sony"</string>
+
+<!-- activityMap -->
 <string name="driving">"Driving"</string>
+
+<!-- activityMap -->
 <string name="transit">"Transit"</string>
+
+<!-- activityMap -->
 <string name="walking">"Walking"</string>
+
+<!-- activityMap -->
 <string name="street_view_btn_text">"Street View"</string>
+
+<!-- activityMap -->
 <string name="directions_btn_text">"Directions"</string>
+
+<!-- activityMap -->
 <string name="gps_nav_btn_text">"Open GPS Nav."</string>
 <string name="error_location_disabled_msg">"User has disabled location sharing."</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="click_to_see_possible_reasons">"Click to see possible reasons"</string>
+
+<!-- activityVip -->
+<string name="manage_subscriptions_introduction_ios">"To manage subscription,
+1) Launch the Settings app on your iPhone or iPad.
+2) Tap on iTunes &amp; App Store.
+3) Tap on your Apple ID at the top.
+4) Choose View Apple ID from the popup menu.
+5) Tap on Manage under Subscriptions."</string>
 
 <!-- activityVip -->
 <string name="vip_benefits">"For Unlimited Searches"</string>
