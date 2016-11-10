@@ -35,10 +35,6 @@ Common texts start -->
 _________________________________________________________________________________
 Launch Activity text start -->
 <string name="welcome_msg_1">"Bem-vindo ao"</string>
-<string name="first_time_msg_content">"Thanks for choosing us, you now have a friend &amp; family finder that,
-- Does not drain battery as search is on demand
-- Offers some privacy as it allows you to block search and does not track every move
-- Is free with Ads "</string>
 <string name="required_location_provider_msg">"FFfinder solicita que você habilite o serviço de localização"</string>
 <string name="btn_go_to_location_settings_text">"Localização Config"</string>
 <string name="some_permission_denied_toast_msg">"Por favor certifique-se de que todas as permissões necessárias são fornecidas"</string>
@@ -73,21 +69,17 @@ Main Activity text start -->
 <string name="error_timeout_no_connection_msg">"Não é possível conectar, verifique sua conexão e tente novamente"</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="error_timeout_unknown_reason_possible_reasons">"1) O dispositivo do usuário não tem conexão ativa com a internet
 2) Usuário tem forçado fechado FFfinder"</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="error_timeout_unknown_reason_possible_reasons2">"3) As configurações não configurado para alguns modelos de telefone específico"</string>
 <string name="error_user_blocked_msg">"Utilizador tiver bloqueado a você."</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="failed_search_msg_text2">"Vamos continuar a procurar este usuário e lhe enviar uma notificação de livre posterior, ou você pode tentar pesquisar novamente"</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="btn_search_again_text">"Pesquisar novamente anyway"</string>
 
 <!-- search_failed_dialog -->
@@ -108,12 +100,12 @@ ________________________________________________________________________________
 Settings Activity text start -->
 <string name="settings_activity_title">"Definições"</string>
 <string name="settings_item_language_title">"Idioma"</string>
-<!-- Settings Activity text end
-_________________________________________________________________________________
-Vip Activity text start -->
+
+<!-- activityVip -->
 <string name="vip_title">"VIP"</string>
+
+<!-- activityVip -->
 <string name="manage_subscriptions_item_title">"Gerenciar assinaturas"</string>
-<string name="manage_subscriptions_introduction_android">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
 
 <!-- Vip Activity text end
 _________________________________________________________________________________
@@ -233,13 +225,4 @@ Everything about tutorials -->
 <string name="add_manually_a2">"Upon receiving the message, note down their passcode here."</string>
 <string name="add_manually_a3">"Chave no código em código secreto do seu amigo"</string>
 <string name="add_manually_a4">"Voila! Você pode iniciar rastreamento uns dos outros."</string>
-<string name="huawei">"Huawei"</string>
-<string name="xiaomi">"Xiaomi"</string>
-<string name="sony">"Sony"</string>
-<string name="driving">"Driving"</string>
-<string name="transit">"Transit"</string>
-<string name="walking">"Walking"</string>
-<string name="street_view_btn_text">"Street View"</string>
-<string name="directions_btn_text">"Direcções"</string>
-<string name="gps_nav_btn_text">"Open GPS Nav."</string>
 </resources>
