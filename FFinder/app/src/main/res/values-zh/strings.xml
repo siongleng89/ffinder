@@ -73,12 +73,10 @@ Main Activity text start -->
 <string name="error_timeout_no_connection_msg">"无法连接，请检查网络信号"</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="error_timeout_unknown_reason_possible_reasons">"1) 用户手机没有网络信号
 2) 用户强制关闭软件"</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="error_timeout_unknown_reason_possible_reasons2">"3) 某些手机型号用户未按照指示进行设置更动"</string>
 <string name="error_user_blocked_msg">"用户禁止您的搜寻"</string>
 
@@ -86,11 +84,9 @@ Main Activity text start -->
 <string name="failed_search_msg_text1">"无法定位此用户。"</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="failed_search_msg_text2">"我们将持续尝试搜索此用户，定位成功后我们将发送免费信息提醒您，又或者您可以现在就尝试手动重新搜索此用户。"</string>
 
 <!-- search_failed_dialog -->
-<!-- Fuzzy -->
 <string name="btn_search_again_text">"重新搜寻"</string>
 
 <!-- search_failed_dialog -->
@@ -115,10 +111,14 @@ Settings Activity text start -->
 <!-- Settings Activity text end
 _________________________________________________________________________________
 Vip Activity text start -->
+<!-- activityVip -->
 <string name="vip_member">"高级用户 (%s/一年）"</string>
+
+<!-- activityVip -->
 <string name="vip_title">"高级用户"</string>
+
+<!-- activityVip -->
 <string name="manage_subscriptions_item_title">"注册管理"</string>
-<string name="manage_subscriptions_introduction_android">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
 
 <!-- Vip Activity text end
 _________________________________________________________________________________
@@ -243,11 +243,23 @@ Everything about tutorials -->
 <string name="huawei">"华为"</string>
 <string name="xiaomi">"小米"</string>
 <string name="sony">"索尼"</string>
+
+<!-- activityMap -->
 <string name="driving">"驾车"</string>
+
+<!-- activityMap -->
 <string name="transit">"公共交通工具"</string>
+
+<!-- activityMap -->
 <string name="walking">"步行"</string>
+
+<!-- activityMap -->
 <string name="street_view_btn_text">"街景"</string>
+
+<!-- activityMap -->
 <string name="directions_btn_text">"方向"</string>
+
+<!-- activityMap -->
 <string name="gps_nav_btn_text">"使用地图应用"</string>
 <string name="error_location_disabled_msg">"用户已禁止分享所在位置"</string>
 
