@@ -74,20 +74,23 @@ Main Activity text start -->
 
 <!-- search_failed_dialog -->
 <!-- Fuzzy -->
-<string name="error_timeout_unknown_reason_possible_reasons">"1) User's device does not have active internet connection 
+<string name="error_timeout_unknown_reason_possible_reasons">"1) User's device does not have active internet connection
 2) User has forced close FFfinder"</string>
 
 <!-- search_failed_dialog -->
+<!-- Fuzzy -->
 <string name="error_timeout_unknown_reason_possible_reasons2">"3) Configurations not set up for some specific phone models"</string>
 <string name="error_user_blocked_msg">"User has blocked you."</string>
 
 <!-- search_failed_dialog -->
-<string name="failed_search_msg_text1">"It seems like we are unable to locate this user the last time you search because:"</string>
+<string name="failed_search_msg_text1">"Unable to locate this user."</string>
 
 <!-- search_failed_dialog -->
+<!-- Fuzzy -->
 <string name="failed_search_msg_text2">"We will keep searching this user and send you a free notification later, or you can try to search again."</string>
 
 <!-- search_failed_dialog -->
+<!-- Fuzzy -->
 <string name="btn_search_again_text">"Search again anyway"</string>
 
 <!-- search_failed_dialog -->
@@ -112,12 +115,18 @@ Settings Activity text start -->
 <!-- Settings Activity text end
 _________________________________________________________________________________
 Vip Activity text start -->
-<string name="vip_member">"VIP Member"</string>
-<string name="vip_title">"Subscription"</string>
+<!-- activityVip -->
+<string name="vip_member">"VIP (%s/year)"</string>
+
+<!-- activityVip -->
+<string name="vip_title">"VIP"</string>
+
+<!-- activityVip -->
 <string name="manage_subscriptions_item_title">"Manage Subscriptions"</string>
-<string name="subscribed">"Subscribed"</string>
-<string name="not_subscribed">"Not Subscribed"</string>
-<string name="manage_subscriptions_introduction">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
+
+<!-- activityVip -->
+<!-- Fuzzy -->
+<string name="manage_subscriptions_introduction_android">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
 
 <!-- Vip Activity text end
 _________________________________________________________________________________
@@ -250,5 +259,9 @@ Everything about tutorials -->
 <string name="error_location_disabled_msg">"User has disabled location sharing."</string>
 
 <!-- search_failed_dialog -->
+<!-- Fuzzy -->
 <string name="click_to_see_possible_reasons">"Click to see possible reasons"</string>
+
+<!-- activityVip -->
+<string name="vip_benefits">"For Unlimited Searches"</string>
 </resources>
