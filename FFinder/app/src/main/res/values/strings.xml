@@ -71,15 +71,26 @@ Main Activity text start -->
 <string name="error_no_link_msg">"Cannot retrieve address as user does not have you on the list."</string>
 <string name="error_timeout_msg">"Unable to get user's latest location."</string>
 <string name="error_timeout_no_connection_msg">"Unable to connect, please check your connection and try again."</string>
-<string name="error_timeout_unknown_reason_possible_reasons1">"1) User's device does not have active internet connection 
+
+<!-- search_failed_dialog -->
+<!-- Fuzzy -->
+<string name="error_timeout_unknown_reason_possible_reasons">"1) User's device does not have active internet connection 
 2) User has forced close FFfinder"</string>
+
+<!-- search_failed_dialog -->
 <string name="error_timeout_unknown_reason_possible_reasons2">"3) Configurations not set up for some specific phone models"</string>
-<string name="error_timeout_location_disabled_reasons">"1) User's device does not have active internet connection 
-2) User has disabled location sharing"</string>
 <string name="error_user_blocked_msg">"User has blocked you."</string>
+
+<!-- search_failed_dialog -->
 <string name="failed_search_msg_text1">"It seems like we are unable to locate this user the last time you search because:"</string>
+
+<!-- search_failed_dialog -->
 <string name="failed_search_msg_text2">"We will keep searching this user and send you a free notification later, or you can try to search again."</string>
+
+<!-- search_failed_dialog -->
 <string name="btn_search_again_text">"Search again anyway"</string>
+
+<!-- search_failed_dialog -->
 <string name="btn_wait_autonotification_text">"Wait for auto notification"</string>
 <string name="search_left">"Search Left"</string>
 <string name="ran_out_free_search_msg">"You have run out of free search, you can earn free searches by"</string>
@@ -237,4 +248,7 @@ Everything about tutorials -->
 <string name="directions_btn_text">"Directions"</string>
 <string name="gps_nav_btn_text">"Open GPS Nav."</string>
 <string name="error_location_disabled_msg">"User has disabled location sharing."</string>
+
+<!-- search_failed_dialog -->
+<string name="click_to_see_possible_reasons">"Click to see possible reasons"</string>
 </resources>
