@@ -71,15 +71,26 @@ Main Activity text start -->
 <string name="error_no_link_msg">"Não é possível recuperar o endereço como usuário não tem você na lista"</string>
 <string name="error_timeout_msg">"Não é possível obter a última localização do usuário"</string>
 <string name="error_timeout_no_connection_msg">"Não é possível conectar, verifique sua conexão e tente novamente"</string>
-<string name="error_timeout_unknown_reason_possible_reasons1">"1) O dispositivo do usuário não tem conexão ativa com a internet
+
+<!-- search_failed_dialog -->
+<!-- Fuzzy -->
+<string name="error_timeout_unknown_reason_possible_reasons">"1) O dispositivo do usuário não tem conexão ativa com a internet
 2) Usuário tem forçado fechado FFfinder"</string>
-<string name="error_timeout_unknown_reason_possible_reasons2">"As configurações não configurado para alguns modelos de telefone específico"</string>
-<string name="error_timeout_location_disabled_reasons">"1) O dispositivo do usuário não tem conexão ativa com a internet
-2) Usuário desativou o compartilhamento de local"</string>
+
+<!-- search_failed_dialog -->
+<!-- Fuzzy -->
+<string name="error_timeout_unknown_reason_possible_reasons2">"3) As configurações não configurado para alguns modelos de telefone específico"</string>
 <string name="error_user_blocked_msg">"Utilizador tiver bloqueado a você."</string>
-<string name="failed_search_msg_text1">"Parece que não foi possível localizar este usuário a última vez que você busca porque:"</string>
+
+<!-- search_failed_dialog -->
+<!-- Fuzzy -->
 <string name="failed_search_msg_text2">"Vamos continuar a procurar este usuário e lhe enviar uma notificação de livre posterior, ou você pode tentar pesquisar novamente"</string>
+
+<!-- search_failed_dialog -->
+<!-- Fuzzy -->
 <string name="btn_search_again_text">"Pesquisar novamente anyway"</string>
+
+<!-- search_failed_dialog -->
 <string name="btn_wait_autonotification_text">"Aguardar a notificação automática"</string>
 <string name="search_left">"Número de pesquisa"</string>
 <string name="ran_out_free_search_msg">"Você tiver executado fora da pesquisa livre, você pode ganhar acesso pesquisas por"</string>
@@ -98,15 +109,15 @@ Settings Activity text start -->
 <string name="settings_activity_title">"Definições"</string>
 <string name="settings_item_language_title">"Idioma"</string>
 
-<!-- Settings Activity text end
-_________________________________________________________________________________
-Vip Activity text start -->
-<string name="vip_member">"Membro VIP"</string>
-<string name="vip_title">"Subscrição"</string>
+<!-- activityVip -->
+<string name="vip_title">"VIP"</string>
+
+<!-- activityVip -->
 <string name="manage_subscriptions_item_title">"Gerenciar assinaturas"</string>
-<string name="subscribed">"Subscrito"</string>
-<string name="not_subscribed">"Não subscrito"</string>
-<string name="manage_subscriptions_introduction">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
+
+<!-- activityVip -->
+<!-- Fuzzy -->
+<string name="manage_subscriptions_introduction_android">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
 
 <!-- Vip Activity text end
 _________________________________________________________________________________
