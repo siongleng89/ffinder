@@ -85,9 +85,10 @@ public class LayoutNextAdsCd {
                         @Override
                         public void run() {
                             completeProcessing = true;
-                            txtSearchLeft.setText(R.string.vip_member);
+                            txtSearchLeft.setText(R.string.vip_title);
                             AnimateBuilder.fadeIn(getMyActivity(), txtSearchLeft);
                             AnimateBuilder.fadeIn(getMyActivity(), imgViewTick);
+                            txtNextAdsCount.setVisibility(View.GONE);
                         }
                     });
                     PreferenceUtils.delete(getMyActivity(), PreferenceType.NoMoreCredits);

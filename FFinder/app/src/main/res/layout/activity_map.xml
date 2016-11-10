@@ -17,15 +17,17 @@
                   android:name="com.google.android.gms.maps.SupportMapFragment"
                   android:id="@+id/map"
                   android:layout_width="match_parent"
-                  android:layout_height="0dp" android:layout_below="@+id/my_toolbar" android:layout_weight="1"/>
-        <LinearLayout
+                  android:layout_height="0dp" android:layout_weight="1"
+                  android:layout_above="@+id/layoutBottom"/>
+        <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp" android:layout_below="@+id/map" android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_height="0dp" android:layout_weight="1"
+                android:orientation="vertical" android:layout_alignParentBottom="true" android:id="@+id/layoutBottom">
             <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp" android:id="@+id/layoutSubscribe" android:layout_weight="1"
-                    android:background="#fff">
+                    android:layout_height="fill_parent" android:id="@+id/layoutContent" android:layout_weight="1"
+                    android:layout_above="@+id/layoutBottomBar"
+                    android:visibility="visible" android:background="#fff">
                 <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" android:id="@+id/layoutStreetView"
@@ -173,32 +175,36 @@
                     </ScrollView>
                 </RelativeLayout>
             </RelativeLayout>
-            <RelativeLayout
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp" android:id="@+id/layoutBottomBar"
+                android:layout_alignParentBottom="true">
+            <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp" android:id="@+id/layoutBottomBar"
-                    android:layout_below="@+id/layoutSubscribe" android:background="@drawable/bottom_bar">
-                <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    <Button
-                            android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:text="@string/street_view_btn_text"
-                            android:id="@+id/btnStreetView" android:layout_weight="1"/>
-                    <Button
-                            android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:text="@string/directions_btn_text"
-                            android:id="@+id/btnDirections" android:layout_weight="1"/>
-                    <Button
-                            android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:text="@string/gps_nav_btn_text"
-                            android:id="@+id/btnGps" android:layout_weight="1"/>
-                </LinearLayout>
-            </RelativeLayout>
-        </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:background="#000">
+                <com.ffinder.android.extensions.ButtonTab
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        app:tabText="@string/street_view_btn_text"
+                        app:tabImageSrc="@mipmap/street_view_icon"
+                        android:id="@+id/btnStreetView" android:layout_weight="1"/>
+                <com.ffinder.android.extensions.ButtonTab
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        app:tabText="@string/directions_btn_text"
+                        app:tabImageSrc="@mipmap/map_direction_icon"
+                        android:id="@+id/btnDirections" android:layout_weight="1"/>
+                <com.ffinder.android.extensions.ButtonTab
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        app:tabText="@string/gps_nav_btn_text"
+                        app:tabImageSrc="@mipmap/gps_icon"
+                        android:id="@+id/btnGps" android:layout_weight="1"/>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

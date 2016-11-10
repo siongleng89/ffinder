@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/custom_marker_view"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:background="@drawable/map_marker_icon">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageViewProfile"
+            android:scaleType="fitCenter"
+            app:riv_corner_radius="20dip"
+            app:riv_mutate_background="true"
+            app:riv_oval="true"
+            android:layout_width="35dp"
+            android:layout_height="35dp" android:layout_marginLeft="25dp" android:layout_marginTop="25dp"/>
+    <TextView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:text="YOU"
+            android:id="@+id/txtName" android:layout_marginLeft="23dp" android:layout_marginTop="24dp"
+            android:visibility="gone" android:textColor="@color/colorPrimaryDark" android:textStyle="bold"
+            android:textAlignment="center" android:gravity="center" android:textSize="14dp"/>
+
+</FrameLayout>

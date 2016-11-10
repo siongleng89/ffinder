@@ -43,7 +43,6 @@ public class ActivitySetup extends MyActivityAbstract {
     private ProgressBar progressBar;
     private final static int REQUEST_LOCATION_CHECK = 70;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

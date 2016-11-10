@@ -16,4 +16,9 @@
         <attr name="innerPadding" format="dimension" />
         <attr name="imageSrc" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="ButtonTab">
+        <attr name="tabImageSrc" format="reference" />
+        <attr name="tabText" format="string" />
+    </declare-styleable>
 </resources>

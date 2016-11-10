@@ -1,22 +1,28 @@
 package com.ffinder.android;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.*;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.directions.route.*;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.ActionBarActionType;
 import com.ffinder.android.enums.AnalyticEvent;
+import com.ffinder.android.extensions.ButtonTab;
 import com.ffinder.android.extensions.ButtonWhite;
 import com.ffinder.android.helpers.*;
 import com.ffinder.android.statics.Constants;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +33,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
             latitude, longitude, address, datetime;
     private String myLatitude, myLongitude;
 
-    private Button btnDirections, btnStreetView, btnGps;
+    private ButtonTab btnDirections, btnStreetView, btnGps;
     private RelativeLayout layoutDirections, layoutStreetView;
 
     private ButtonWhite btnDrive, btnTransit, btnWalk;
@@ -43,6 +49,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
     private Routing routing;
     private Route driveRoute, transitRoute, walkRoute;
     private AbstractRouting.TravelMode currentTravelMode;
+    private Bitmap bitmapProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +61,9 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         addActionToActionBar(ActionBarActionType.Back, false, true);
 
 
-        btnDirections = (Button) findViewById(R.id.btnDirections);
-        btnStreetView = (Button) findViewById(R.id.btnStreetView);
-        btnGps = (Button) findViewById(R.id.btnGps);
+        btnDirections = (ButtonTab) findViewById(R.id.btnDirections);
+        btnStreetView = (ButtonTab) findViewById(R.id.btnStreetView);
+        btnGps = (ButtonTab) findViewById(R.id.btnGps);
         layoutDirections = (RelativeLayout) findViewById(R.id.layoutDirections);
         layoutStreetView = (RelativeLayout) findViewById(R.id.layoutStreetView);
 
@@ -83,6 +90,8 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         address = bundle.getString("address");
         datetime = bundle.getString("datetime");
 
+        bitmapProfile = AndroidUtils.loadImageFromStorage(ActivityMap.this, userId);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapReadyCallback = new MapReadyCallback();
@@ -93,6 +102,8 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
                 (SupportStreetViewPanoramaFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.streetViewMap);
         streetViewPanoramaFragment.getStreetViewPanoramaAsync(new MapStreetViewReadyCallback());
+
+        btnStreetView.setSelected(true);
 
         setListeners();
     }
@@ -262,11 +273,24 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
             }
         });
 
+        map.clear();
 
-        CameraUpdate center = CameraUpdateFactory.newLatLng(start);
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
-        map.moveCamera(center);
+        builder.include(start);
+        builder.include(end);
+        LatLngBounds bounds = builder.build();
+
+        int padding = 0; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        map.animateCamera(cu);
+
+
+
+//        CameraUpdate center = CameraUpdateFactory.newLatLng(start);
+//        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+//
+//        map.moveCamera(center);
 
 
         //draw polylines
@@ -278,7 +302,6 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
 
         polylines = new ArrayList<>();
         PolylineOptions polyOptions = new PolylineOptions();
-        // polyOptions.color(getResources().getColor(COLORS[colorIndex]));
         polyOptions.color(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         polyOptions.width(10);
         polyOptions.addAll(route.getPoints());
@@ -287,16 +310,13 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
 
 
         // Start marker
-        MarkerOptions options = new MarkerOptions();
-        options.position(start);
-        //options.icon(BitmapDescriptorFactory.fromResource(R.drawable.));
+        MarkerOptions options = getMarkerOptions(start, null, getString(R.string.address_myself));
         map.addMarker(options);
 
         // End marker
-        options = new MarkerOptions();
-        options.position(end);
-        //options.icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green));
-        map.addMarker(options);
+        options = getMarkerOptions(end, bitmapProfile,
+                Strings.safeSubstring(username, 0, 2).toUpperCase());
+        map.addMarker(options).setTag("infoWindow");
 
         //update ui
         txtDistance.setText(route.getDistanceText());
@@ -318,6 +338,42 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         }
     }
 
+    private MarkerOptions getMarkerOptions(LatLng latLng, Bitmap bitmap, String text){
+        return new MarkerOptions().alpha(1)
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(bitmap,
+                        Strings.safeSubstring(text, 0, 2).toUpperCase())))
+                .anchor(0.5f, 1)
+                .infoWindowAnchor(0.5f, 0.15f);
+    }
+
+    private Bitmap getMarkerBitmapFromView(Bitmap bitmap, String text) {
+        View customMarkerView = ((LayoutInflater)
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
+        TextView txtName = (TextView) customMarkerView.findViewById(R.id.txtName);
+        RoundedImageView markerImageView = (RoundedImageView) customMarkerView.findViewById(R.id.imageViewProfile);
+        if(bitmap != null){
+            markerImageView.setImageBitmap(bitmap);
+        }
+        else{
+            txtName.setText(text);
+            txtName.setVisibility(View.VISIBLE);
+        }
+
+        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+        customMarkerView.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = customMarkerView.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        customMarkerView.draw(canvas);
+        return returnedBitmap;
+    }
+
 
     private class MapReadyCallback implements OnMapReadyCallback{
 
@@ -329,7 +385,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
 
 
         @Override
-        public void onMapReady(GoogleMap googleMap) {
+        public void onMapReady(final GoogleMap googleMap) {
             this.googleMap = googleMap;
 
             if(Strings.isEmpty(latitude) || Strings.isEmpty(longitude)) return;
@@ -338,30 +394,27 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
 
                 @Override
                 public View getInfoWindow(Marker arg0) {
-                    return null;
+                    if(arg0.getTag() != null && arg0.getTag().equals("infoWindow")){
+                        View v = getLayoutInflater().inflate(R.layout.marker_layout, null);
+
+                        TextView txtUserName = (TextView) v.findViewById(R.id.txtName);
+                        TextView txtAddress = (TextView) v.findViewById(R.id.txtAddress);
+                        TextView txtDateTime = (TextView) v.findViewById(R.id.txtDateTime);
+
+                        txtUserName.setText(username);
+                        txtAddress.setText(address);
+                        txtDateTime.setText(datetime);
+
+                        return v;
+                    }
+                    else{
+                        return null;
+                    }
                 }
 
                 @Override
                 public View getInfoContents(Marker arg0) {
-                    View v = getLayoutInflater().inflate(R.layout.marker_layout, null);
-
-                    ImageView imgViewProfile = (ImageView) v.findViewById(R.id.imageViewProfile);
-                    TextView txtUserName = (TextView) v.findViewById(R.id.txtName);
-                    TextView txtAddress = (TextView) v.findViewById(R.id.txtAddress);
-                    TextView txtDateTime = (TextView) v.findViewById(R.id.txtDateTime);
-
-                    txtUserName.setText(username);
-                    txtAddress.setText(address);
-                    txtDateTime.setText(datetime);
-
-                    Bitmap bitmap = AndroidUtils.loadImageFromStorage(ActivityMap.this, userId);
-                    if (bitmap != null){
-                        imgViewProfile.setImageBitmap(bitmap);
-                    }
-
-
-                    return v;
-
+                    return null;
                 }
             });
 
@@ -369,21 +422,15 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
             LatLng latLng = new LatLng(Double.valueOf(latitude), Double.valueOf(longitude));
             LatLng markerLatLng = new LatLng(Double.valueOf(latitude), Double.valueOf(longitude));
 
-            Marker mapMarker = googleMap.addMarker(new MarkerOptions().alpha(1)
-                    .position(markerLatLng));
-            mapMarker.showInfoWindow();
+            final Marker marker = googleMap.addMarker(getMarkerOptions(markerLatLng, bitmapProfile,
+                    Strings.safeSubstring(username, 0, 2).toUpperCase()));
+            marker.setTag("infoWindow");
 
-
-//            Circle circle = googleMap.addCircle(new CircleOptions()
-//                    .center(latLng)
-//                    .radius(500)
-//                    .strokeColor(Color.RED)
-//                    .fillColor(Color.argb(50, 170, 57, 57)));
-
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15), 1, new GoogleMap.CancelableCallback() {
+            googleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(latLng, 15), 1, new GoogleMap.CancelableCallback() {
                 @Override
                 public void onFinish() {
-
+                    showMarkerInfoWindow(marker, googleMap);
                 }
 
                 @Override
@@ -391,6 +438,16 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
 
                 }
             });
+
+
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    showMarkerInfoWindow(marker, googleMap);
+                    return true; // Consume the event since it was dealt with
+                }
+            });
+
         }
 
         public GoogleMap getGoogleMap() {
@@ -400,6 +457,24 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         public void setGoogleMap(GoogleMap googleMap) {
             this.googleMap = googleMap;
         }
+    }
+
+    private void showMarkerInfoWindow(Marker marker, GoogleMap map){
+        // Calculate required horizontal shift for current screen density
+        final int dX = AndroidUtils.dpToPx(ActivityMap.this, 0);
+        // Calculate required vertical shift for current screen density
+        final int dY = AndroidUtils.dpToPx(ActivityMap.this, -100);
+        final Projection projection = map.getProjection();
+        final Point markerPoint = projection.toScreenLocation(
+                marker.getPosition()
+        );
+        // Shift the point we will use to center the map
+        markerPoint.offset(dX, dY);
+        final LatLng newLatLng = projection.fromScreenLocation(markerPoint);
+        // Buttery smooth camera swoop :)
+        map.animateCamera(CameraUpdateFactory.newLatLng(newLatLng));
+        // Show the info window (as the overloaded method would)
+        marker.showInfoWindow();
     }
 
     private class MapStreetViewReadyCallback implements OnStreetViewPanoramaReadyCallback{
@@ -437,6 +512,9 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         btnDirections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnDirections.setSelected(true);
+                btnStreetView.setSelected(false);
+
                 AnimateBuilder.fadeOutAndSetGone(ActivityMap.this, layoutStreetView, new Runnable() {
                     @Override
                     public void run() {
@@ -449,6 +527,9 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         btnStreetView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnDirections.setSelected(false);
+                btnStreetView.setSelected(true);
+
                 AnimateBuilder.fadeOutAndSetGone(ActivityMap.this, layoutDirections, new Runnable() {
                     @Override
                     public void run() {

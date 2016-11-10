@@ -6,15 +6,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.ffinder.android.ActivityVip" android:background="@mipmap/subscribe_bg">
+        tools:context="com.ffinder.android.ActivityVip" android:background="@mipmap/subscribe_bg"
+>
 
     <include layout="@layout/default_toolbar" android:id="@+id/my_toolbar"/>
-    <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id="@+id/listViewVip" android:layout_below="@+id/my_toolbar"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" style="@style/FFListViewStyle" android:visibility="gone"/>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:layout_below="@+id/my_toolbar" android:id="@+id/layoutDummy">
+    </RelativeLayout>
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="250dp"
@@ -24,13 +23,12 @@
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="VIP ($0.99/year)"
                 android:id="@+id/txtSubscriptionTitle" android:padding="10dp" android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark" android:textStyle="bold" android:textSize="18dp"/>
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="For Unlimited Searches"
+                android:text="@string/vip_benefits"
                 android:id="@+id/txtSubscriptionSubtitle" android:padding="10dp" android:textSize="12dp"
                 android:textAlignment="center" android:textColor="@color/colorPrimaryDark"/>
     </LinearLayout>

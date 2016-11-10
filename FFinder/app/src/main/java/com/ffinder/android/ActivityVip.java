@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.ActionBarActionType;
@@ -20,8 +21,8 @@ import java.util.ArrayList;
 public class ActivityVip extends MyActivityAbstract {
 
     private ArrayList<SubscriptionModel> subscriptionModels;
-    private Boolean originalIsSubscribed;
     private LinearLayout layoutSubscribe;
+    private RelativeLayout layoutDummy;
     private TextView txtSubscriptionTitle, txtSubscriptionSubTitle;
 
     @Override
@@ -34,9 +35,11 @@ public class ActivityVip extends MyActivityAbstract {
         setActionBarTitle(R.string.vip_title);
 
 
+        layoutDummy = (RelativeLayout) findViewById(R.id.layoutDummy);
         layoutSubscribe = (LinearLayout) findViewById(R.id.layoutSubscribe);
         txtSubscriptionTitle = (TextView) findViewById(R.id.txtSubscriptionTitle);
         txtSubscriptionSubTitle = (TextView) findViewById(R.id.txtSubscriptionSubtitle);
+
 
 
         subscriptionModels = (ArrayList<SubscriptionModel>)
@@ -125,7 +128,7 @@ public class ActivityVip extends MyActivityAbstract {
                 if(subscribed){
                     OverlayBuilder.build(ActivityVip.this)
                             .setOverlayType(OverlayType.OkOnly)
-                            .setContent(getString(R.string.manage_subscriptions_introduction))
+                            .setContent(getString(R.string.manage_subscriptions_introduction_android))
                             .show();
                 }
                 else{
@@ -137,6 +140,18 @@ public class ActivityVip extends MyActivityAbstract {
                 }
             }
         });
+
+        layoutDummy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(subscriptionModels.size() > 0){
+                    SubscriptionModel subscriptionModel = subscriptionModels.get(0);
+                    ((MyApplication) getApplication()).getVipAndProductsHelpers().purchaseSubscription(ActivityVip.this, subscriptionModel);
+                    Analytics.logEvent(AnalyticEvent.Click_Subscribe, subscriptionModel.getSkuDetails().productId);
+                }
+            }
+        });
+
     }
 
 

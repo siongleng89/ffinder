@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent" android:background="@mipmap/map_bottom_bar_btn_bg"
+              android:gravity="center" android:id="@+id/layoutBtn" android:paddingTop="3dp">
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:id="@+id/imgViewIcon" android:src="@mipmap/gps_icon"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtView" android:layout_marginTop="3dp" android:textColor="@color/colorContrast"
+            android:textStyle="bold" android:textSize="12dp"/>
+</LinearLayout>
