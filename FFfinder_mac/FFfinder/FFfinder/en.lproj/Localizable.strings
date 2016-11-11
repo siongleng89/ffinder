@@ -86,10 +86,20 @@ Main Activity text start*/
 /*search_failed_dialog*/
 "btn_wait_autonotification_text" = "Wait for auto notification";
 "search_left" = "Search Left";
-"ran_out_free_search_msg" = "You have run out of free search, you can earn free searches by";
+
+/*noCreditsDialog*/
+"ran_out_free_search_msg" = "You have run out of free search, you can earn searches by";
+
+/*noCreditsDialog*/
 "btn_watch_ads_earn_credits_text" = "Watch Ads";
+
+/*noCreditsDialog*/
 "btn_input_promo_code_earn_credits_text" = "Promo Code";
+
+/*noCreditsDialog*/
 "btn_subscript_unlimited_searches_text" = "Subscribe";
+
+/*noCreditsDialog*/
 "btn_maybe_next_time_text" = "Maybe Next Time";
 "no_ads_available_toast_msg" = "No ads available, free searches will be rewarded.";
 "searching" = "Searching";
@@ -246,3 +256,6 @@ Everything about tutorials*/
 
 /*activityVip*/
 "vip_benefits" = "For Unlimited Searches";
+
+/*noCreditsDialog*/
+"earn_searches_by_msg" = "Earn searches by";
