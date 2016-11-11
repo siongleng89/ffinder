@@ -281,4 +281,7 @@ Everything about tutorials -->
 
 <!-- noCreditsDialog -->
 <string name="earn_searches_by_msg">"您可从以下选项获得搜寻次数"</string>
+
+<!-- noCreditsDialog -->
+<string name="confirm_watch_ads_on_3g">"观看广告将会使用数据流量。继续广告吗？"</string>
 </resources>
