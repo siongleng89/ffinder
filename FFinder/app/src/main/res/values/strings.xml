@@ -291,4 +291,7 @@ Everything about tutorials -->
 
 <!-- noCreditsDialog -->
 <string name="earn_searches_by_msg">"Earn searches by"</string>
+
+<!-- noCreditsDialog -->
+<string name="confirm_watch_ads_on_3g">"Are you su"</string>
 </resources>
