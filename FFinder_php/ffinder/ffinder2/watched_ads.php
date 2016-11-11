@@ -22,10 +22,19 @@
 	
 	$maxCount = json_decode($firebase->get('showAdsIn/'));
 	
-	$firebase->set('nextAds/'.$userId.'/count', $maxCount);
-	
-	echo $maxCount;
-	return;
+        $currentCount = json_decode($firebase->get('nextAds/'.$userId.'/count'));
+        
+        //user current count is higher than maxcount, no need set to max count 
+        if(!empty($currentCount) && (int)$currentCount > (int)$maxCount){
+            echo $currentCount;
+            return;
+        }
+        else{
+            $firebase->set('nextAds/'.$userId.'/count', $maxCount);
+            echo $maxCount;
+            return;
+        }
+        
 	
 	
 	

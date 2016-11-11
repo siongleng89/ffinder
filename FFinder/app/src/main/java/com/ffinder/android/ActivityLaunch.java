@@ -36,7 +36,6 @@ public class ActivityLaunch extends MyActivityAbstract {
     private Intent intent;
     private ImageView imgViewIcon, imgViewBg, imgViewNextIcon;
     private RelativeLayout layoutDefault, layoutWelcome, layoutIntroduction, layoutNext;
-    private boolean startChecking;
 
 
     @Override
@@ -61,9 +60,7 @@ public class ActivityLaunch extends MyActivityAbstract {
     protected void onResume() {
         super.onResume();
 
-        if(!startChecking){
-            restartPermissionChecking();
-        }
+        restartPermissionChecking();
     }
 
     private void restartPermissionChecking(){
@@ -253,7 +250,6 @@ public class ActivityLaunch extends MyActivityAbstract {
                         @Override
                         public void run() {
                             startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                            startChecking = false;
                         }
                     }, new Runnable() {
                         @Override

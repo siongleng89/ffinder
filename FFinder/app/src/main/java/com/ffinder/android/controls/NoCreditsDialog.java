@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.ffinder.android.ActivityPromo;
 import com.ffinder.android.ActivityVip;
 import com.ffinder.android.R;
@@ -22,13 +23,17 @@ public class NoCreditsDialog {
     private Activity activity;
     private MyModel myModel;
     private RelativeLayout layoutWatchAds, layoutPromoCode, layoutSubscribe, layoutQuit;
+    private TextView txtNoCreditsMsg;
     private AlertDialog dialog;
     private INoCreditsListener noCreditsListener;
+    private int currentCredits;
 
-    public NoCreditsDialog(Activity activity, MyModel myModel, INoCreditsListener noCreditsListener) {
+    public NoCreditsDialog(Activity activity, MyModel myModel, int currentCredits,
+                           INoCreditsListener noCreditsListener) {
         this.activity = activity;
         this.noCreditsListener = noCreditsListener;
         this.myModel = myModel;
+        this.currentCredits = currentCredits;
     }
 
     public void show(){
@@ -39,6 +44,11 @@ public class NoCreditsDialog {
         layoutPromoCode = (RelativeLayout) viewInflated.findViewById(R.id.layoutPromoCode);
         layoutSubscribe = (RelativeLayout) viewInflated.findViewById(R.id.layoutSubscribe);
         layoutQuit = (RelativeLayout) viewInflated.findViewById(R.id.layoutQuit);
+        txtNoCreditsMsg = (TextView) viewInflated.findViewById(R.id.txtNoCreditsMsg);
+
+        if(currentCredits > 0){
+            txtNoCreditsMsg.setText(activity.getString(R.string.earn_searches_by_msg));
+        }
 
         dialog = OverlayBuilder.build(activity)
                         .setOverlayType(OverlayType.CustomView)

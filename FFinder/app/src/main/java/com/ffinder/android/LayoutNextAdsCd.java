@@ -142,7 +142,8 @@ public class LayoutNextAdsCd {
             boolean noCredits = "1".equals(PreferenceUtils.get(getMyActivity(), PreferenceType.NoMoreCredits));
             canRun.run(!noCredits);
             if(noCredits){
-                new NoCreditsDialog(getMyActivity(), myModel, new INoCreditsListener() {
+                new NoCreditsDialog(getMyActivity(), myModel,
+                        getCurrentNextAdsCount(), new INoCreditsListener() {
                     @Override
                     public void requestWatchAds() {
                         showAds();
@@ -158,7 +159,8 @@ public class LayoutNextAdsCd {
                 if(!this.getFirstArg()){
                     if(getCurrentNextAdsCount() <= 0){
                         canRun.run(false);
-                        new NoCreditsDialog(getMyActivity(), myModel, new INoCreditsListener() {
+                        new NoCreditsDialog(getMyActivity(), myModel,
+                                getCurrentNextAdsCount(), new INoCreditsListener() {
                             @Override
                             public void requestWatchAds() {
                                 showAds();
@@ -297,9 +299,27 @@ public class LayoutNextAdsCd {
         layoutControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getMyActivity(), ActivityVip.class);
-                intent.putExtra("userId", myModel.getUserId());
-                getMyActivity().startActivity(intent);
+
+                checkIsVip(new RunnableArgs<Boolean>() {
+                    @Override
+                    public void run() {
+                        boolean isVip = this.getFirstArg();
+                        if(isVip){
+                            Intent intent = new Intent(getMyActivity(), ActivityVip.class);
+                            intent.putExtra("userId", myModel.getUserId());
+                            getMyActivity().startActivity(intent);
+                        }
+                        else{
+                            new NoCreditsDialog(getMyActivity(), myModel,
+                                    getCurrentNextAdsCount(), new INoCreditsListener() {
+                                @Override
+                                public void requestWatchAds() {
+                                    showAds();
+                                }
+                            }).show();
+                        }
+                    }
+                });
             }
         });
     }
