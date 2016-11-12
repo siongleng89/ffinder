@@ -2,13 +2,13 @@ package com.ffinder.android.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.util.Pair;
-import com.anjlab.android.iab.v3.BillingProcessor;
-import com.anjlab.android.iab.v3.SkuDetails;
-import com.anjlab.android.iab.v3.TransactionDetails;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.databases.FirebaseListener;
+import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.enums.Status;
+import com.ffinder.android.helpers.Iab.*;
 import com.ffinder.android.models.SubscriptionModel;
 import com.ffinder.android.statics.Constants;
 
@@ -18,13 +18,19 @@ import java.util.List;
 /**
  * Created by SiongLeng on 15/9/2016.
  */
-public class VipAndProductsHelpers implements BillingProcessor.IBillingHandler  {
+public class VipAndProductsHelpers {
 
     private static VipAndProductsHelpers instance;
-    private BillingProcessor bp;
+    private IabHelper iabHelper;
     private ArrayList<SubscriptionModel> subscriptionModels;
     private Context context;
-    private Boolean subscribed;
+    private String subscribeSku;
+    private boolean subscribed;
+    private boolean ready;
+    private ArrayList<RunnableArgs<Boolean>> toRunRunnables;
+    private static final int RC_REQUEST = 10001;
+    private final String specialPromoSku = "promo_one_month";
+    private Runnable onPurchaseComplete;
 
     public static VipAndProductsHelpers getInstance(Context context){
         if(instance == null){
@@ -36,100 +42,167 @@ public class VipAndProductsHelpers implements BillingProcessor.IBillingHandler  
     public VipAndProductsHelpers(Context context) {
         this.context = context;
         subscriptionModels = new ArrayList();
-        bp = new BillingProcessor(context, Constants.IABKey, this);
+        toRunRunnables = new ArrayList();
+
+        iabHelper = new IabHelper(context, Constants.IABKey);
+        iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                if(result.isSuccess()){
+                    FirebaseDB.getAllProducts(new FirebaseListener<ArrayList<Pair<String, Object>>>() {
+                        @Override
+                        public void onResult(ArrayList<Pair<String, Object>> result, Status status) {
+                            if(status == Status.Success && result != null && result.size() > 0){
+                                for(Pair<String, Object> pair : result){
+                                    //will only have one subscribe product
+                                    subscribeSku = pair.first;
+                                    break;
+                                }
+                            }
+
+                            List<String> moreSkus = new ArrayList<String>();
+                            moreSkus.add(subscribeSku);
+                            moreSkus.add(specialPromoSku);  //special handling for promo
+
+                            try {
+                                iabHelper.queryInventoryAsync(true, moreSkus, moreSkus,
+                                    mGotInventoryListener);
+
+                            } catch (IabHelper.IabAsyncInProgressException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
-    public void isInVipPeriod(final RunnableArgs<Boolean> onResult){
-        //onResult.run(true);
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new
+            IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result, final Inventory inventory) {
+            // Have we been disposed of in the meantime? If so, quit.
+            if (iabHelper == null) return;
 
-        if(subscribed == null){
-            refreshIsSubscribed(new Runnable() {
-                @Override
-                public void run() {
-                    onResult.run(subscribed);
+            // Is it a failure?
+            if (result.isFailure()) {
+                return;
+            }
+
+
+            SkuDetails skuDetails = inventory.getSkuDetails(subscribeSku);
+            if(skuDetails != null){
+                subscriptionModels.add(new SubscriptionModel(skuDetails.getTitle(),
+                        skuDetails.getPrice(), skuDetails));
+            }
+
+            if(!Strings.isEmpty(subscribeSku)){
+                Purchase subscribedYearly = inventory.getPurchase(subscribeSku);
+                if(subscribedYearly != null &&
+                        subscribedYearly.getDeveloperPayload() != null &&
+                        subscribedYearly.getDeveloperPayload().equals(
+                                Constants.IABDeveloperPayload)){
+                    subscribed = true;
+                    PreferenceUtils.put(context, PreferenceType.ISVip, "1");
                 }
-            });
+                else{
+
+                    //special handling for special promo
+                    Purchase subscribeSpecial = inventory.getPurchase(specialPromoSku);
+                    if(subscribeSpecial != null){
+                        subscribed = true;
+                        PreferenceUtils.put(context, PreferenceType.ISVip, "1");
+                    }
+                    else{
+                        PreferenceUtils.delete(context, PreferenceType.ISVip);
+                    }
+
+                }
+            }
+
+            onIabReady();
+
+        }
+    };
+
+
+    private void onIabReady(){
+        ready = true;
+
+        Threadings.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                for(RunnableArgs<Boolean> toRun: toRunRunnables){
+                    toRun.run(subscribed);
+                }
+
+                toRunRunnables.clear();
+            }
+        });
+    }
+
+
+    public void isInVipPeriod(final RunnableArgs<Boolean> onResult){
+        if(!ready){
+            toRunRunnables.add(onResult);
         }
         else{
             onResult.run(subscribed);
         }
     }
 
-    public Boolean getSubscribed() {
-        return subscribed;
+
+    public void purchaseSubscription(Activity activity, SubscriptionModel subscriptionModel,
+                                     Runnable onFinish){
+
+        this.onPurchaseComplete = onFinish;
+        try {
+            iabHelper.launchSubscriptionPurchaseFlow(activity,
+                    subscriptionModel.getSkuDetails().getSku(),
+                    RC_REQUEST, mPurchaseFinishedListener,
+                    Constants.IABDeveloperPayload);
+        } catch (IabHelper.IabAsyncInProgressException e) {
+
+        }
+
     }
 
-    public void purchaseSubscription(Activity activity, SubscriptionModel subscriptionModel){
-        bp.subscribe(activity, subscriptionModel.getSkuDetails().productId);
-    }
+    // Callback for when a purchase is finished
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            // if we were disposed of in the meantime, quit.
+            if (iabHelper == null) return;
 
-    public void refreshIsSubscribed(final Runnable onDone){
-        Threadings.runInBackground(new Runnable() {
-            @Override
-            public void run() {
-                int count = 0;
-
-                while (!bp.loadOwnedPurchasesFromGoogle()){
-                    Threadings.sleep(500);
-                    count++;
-                    if(count > 10) break;
-                }
-
-                List<String> list = bp.listOwnedSubscriptions();
-                if(list.size() > 0){
-                    subscribed = true;
-                }
-                else{
-                    subscribed = false;
-                }
-
-                if(onDone != null) onDone.run();
-
+            if (result.isFailure()) {
+                return;
             }
-        });
-    }
 
-
-    @Override
-    public void onProductPurchased(String productId, TransactionDetails details) {
-    }
-
-    @Override
-    public void onPurchaseHistoryRestored() {
-    }
-
-    @Override
-    public void onBillingError(int errorCode, Throwable error) {
-    }
-
-    @Override
-    public void onBillingInitialized() {
-        FirebaseDB.getAllProducts(new FirebaseListener<ArrayList<Pair<String, Object>>>() {
-            @Override
-            public void onResult(ArrayList<Pair<String, Object>> result, Status status) {
-                ArrayList<String> subscriptionIds = new ArrayList();
-                if(status == Status.Success && result != null && result.size() > 0){
-                    for(Pair<String, Object> pair : result){
-                        subscriptionIds.add(pair.first);
-                    }
-                }
-
-                List<SkuDetails> skuDetails = bp.getSubscriptionListingDetails(subscriptionIds);
-                if(skuDetails != null) {
-                    for (SkuDetails skuDetail : skuDetails) {
-                        if (skuDetail != null && !Strings.isEmpty(skuDetail.description) &&
-                                !Strings.isEmpty(skuDetail.priceText)) {
-                            subscriptionModels.add(new SubscriptionModel(
-                                    skuDetail.description, skuDetail.priceText, skuDetail));
-                        }
-                    }
-                }
-
+            if (purchase.getDeveloperPayload() == null ||
+                    !purchase.getDeveloperPayload().equals(Constants.IABDeveloperPayload)) {
+                return;
             }
-        });
 
-        refreshIsSubscribed(null);
+            PreferenceUtils.put(context, PreferenceType.ISVip, "1");
+            subscribed = true;
+            if(onPurchaseComplete != null) onPurchaseComplete.run();
+        }
+    };
+
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (iabHelper == null) return false;
+
+        // Pass on the activity result to the helper for handling
+        if (!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            return false;
+        }
+        else{
+            return true;
+        }
     }
+
 
     public ArrayList<SubscriptionModel> getSubscriptionModels() {
         return subscriptionModels;
@@ -137,8 +210,10 @@ public class VipAndProductsHelpers implements BillingProcessor.IBillingHandler  
 
 
     public void dispose(){
-        if (bp != null)
-            bp.release();
+        if (iabHelper != null) {
+            iabHelper.disposeWhenFinished();
+            iabHelper = null;
+        }
     }
 
 }

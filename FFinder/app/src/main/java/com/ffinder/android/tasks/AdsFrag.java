@@ -20,14 +20,19 @@ public class AdsFrag extends Fragment {
 
     private AdsMediation adsMediation;
     private Activity activity;
+    private boolean preloaded;
 
-    public static AdsFrag newInstance() {
+    public static AdsFrag newInstance(Activity activity) {
         AdsFrag f = new AdsFrag();
+        f.init(activity);
         return f;
     }
 
-    public AdsFrag() {
-        adsMediation = new AdsMediation(getActivity());
+
+
+    public void init(Activity activity){
+        this.activity = activity;
+        adsMediation = new AdsMediation(activity);
     }
 
     @Override
@@ -36,11 +41,13 @@ public class AdsFrag extends Fragment {
         setRetainInstance(true);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.activity = (Activity) context;
-        adsMediation.preload(this.activity);
+    public void preload(){
+        if(preloaded){
+            return;
+        }
+
+        preloaded = true;
+        adsMediation.preload();
     }
 
     public void showAds(final Runnable onFinishAds){
@@ -59,9 +66,12 @@ public class AdsFrag extends Fragment {
                 onFinishAds.run();
             }
         });
-        adsMediation.showRewardedVideo(activity, true, null);
+        adsMediation.showRewardedVideo(activity);
     }
 
 
-
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+        adsMediation.setActivity(activity);
+    }
 }

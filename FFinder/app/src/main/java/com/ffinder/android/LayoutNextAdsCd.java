@@ -1,6 +1,5 @@
 package com.ffinder.android;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.controls.INoCreditsListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
@@ -62,6 +60,7 @@ public class LayoutNextAdsCd {
         txtNextAdsCount.setVisibility(View.GONE);
 
         setListeners();
+        quickBoot();
         return nextAdsFragmentView;
     }
 
@@ -72,7 +71,31 @@ public class LayoutNextAdsCd {
 
     public void onResume() {
         afterSavedInstanceState = false;
+        recreateAdsFrag();
         initiate();
+    }
+
+    private void quickBoot(){
+        fastCheckIsVip(new RunnableArgs<Boolean>() {
+            @Override
+            public void run() {
+                if(this.getFirstArg()){
+                    txtSearchLeft.setText(R.string.vip_title);
+                    txtSearchLeft.setVisibility(View.VISIBLE);
+                    imgViewTick.setVisibility(View.VISIBLE);
+                    txtNextAdsCount.setVisibility(View.GONE);
+                }
+                else{
+                    String storedCredits = PreferenceUtils.get(getMyActivity(), PreferenceType.NextAdsCount);
+                    if(Strings.isNumeric(storedCredits)){
+                        changeNextAdsCount(Integer.valueOf(storedCredits), false);
+                        txtSearchLeft.setText(R.string.search_left);
+                        txtSearchLeft.setVisibility(View.VISIBLE);
+                        txtNextAdsCount.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
     }
 
 
@@ -91,10 +114,9 @@ public class LayoutNextAdsCd {
                             txtNextAdsCount.setVisibility(View.GONE);
                         }
                     });
-                    PreferenceUtils.delete(getMyActivity(), PreferenceType.NoMoreCredits);
                 }
                 else{
-                    recreateAdsFrag();
+                    adsFrag.preload();
                     FirebaseDB.getNextAdsCount(myModel.getUserId(), new FirebaseListener<Integer>(Integer.class) {
                         @Override
                         public void onResult(Integer result, Status status) {
@@ -135,11 +157,31 @@ public class LayoutNextAdsCd {
         ((MyApplication) getMyActivity().getApplication()).getVipAndProductsHelpers().isInVipPeriod(onResult);
     }
 
+    private void fastCheckIsVip(RunnableArgs<Boolean> onResult){
+        String isVip = PreferenceUtils.get(activity, PreferenceType.ISVip);
+        if(!Strings.isEmpty(isVip) && isVip.equals("1")){
+            onResult.run(true);
+        }
+        else{
+            onResult.run(false);
+        }
+    }
+
     public void friendSearched(final RunnableArgs<Boolean> canRun){
         if(!completeProcessing){
             addingCount++;
 
-            boolean noCredits = "1".equals(PreferenceUtils.get(getMyActivity(), PreferenceType.NoMoreCredits));
+            boolean noCredits = false;
+            String storedCredits = PreferenceUtils.get(getMyActivity(), PreferenceType.NextAdsCount);
+            if(Strings.isNumeric(storedCredits)){
+
+                changeNextAdsCount(Math.max(0, Integer.valueOf(storedCredits) - 1), false);
+
+                if(Integer.valueOf(storedCredits) <= 0){
+                    noCredits = true;
+                }
+            }
+
             canRun.run(!noCredits);
             if(noCredits){
                 new NoCreditsDialog(getMyActivity(), myModel,
@@ -195,10 +237,13 @@ public class LayoutNextAdsCd {
 
         FragmentManager fm = getMyActivity().getSupportFragmentManager();
         adsFrag = (AdsFrag) fm.findFragmentByTag("adsFrag");
-        //not in search
+        //not created
         if (adsFrag == null) {
-            adsFrag = AdsFrag.newInstance();
+            adsFrag = AdsFrag.newInstance(activity);
             fm.beginTransaction().add(adsFrag, "adsFrag").commit();
+        }
+        else{
+            adsFrag.setActivity(activity);
         }
     }
 
@@ -210,12 +255,7 @@ public class LayoutNextAdsCd {
 
                 String finalString = "";
 
-                if(!completeProcessing){
-                    finalString = "?";
-                }
-                else{
-                    finalString = String.valueOf(Math.max(newAdsCount, 0));
-                }
+                finalString = String.valueOf(Math.max(newAdsCount, 0));
 
                 if (animate){
                     final String finalString1 = finalString;
@@ -240,28 +280,75 @@ public class LayoutNextAdsCd {
     }
 
     private void showAds(){
+        if(DeviceInfo.isNetworkAvailable(activity)){
 
+            final Runnable toRun = new Runnable() {
+                @Override
+                public void run() {
+                    final AlertDialog dialog = OverlayBuilder.build(getMyActivity())
+                            .setOverlayType(OverlayType.Loading)
+                            .setContent(getMyActivity().getString(R.string.loading))
+                            .show();
 
-        final AlertDialog dialog = OverlayBuilder.build(getMyActivity())
-                .setOverlayType(OverlayType.Loading)
-                .setContent(getMyActivity().getString(R.string.loading))
-                .show();
-
-        adsFrag.showAds(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-                RestfulService.adsWatched(myModel.getUserId(), new RestfulListener<String>() {
-                    @Override
-                    public void onResult(String result, Status status) {
-                        if(status == Status.Success && !Strings.isEmpty(result) && Strings.isNumeric(result)){
-                            changeNextAdsCount(Integer.valueOf(result), true);
+                    adsFrag.showAds(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.dismiss();
+                            RestfulService.adsWatched(myModel.getUserId(), new RestfulListener<String>() {
+                                @Override
+                                public void onResult(String result, Status status) {
+                                    if(status == Status.Success && !Strings.isEmpty(result) && Strings.isNumeric(result)){
+                                        changeNextAdsCount(Integer.valueOf(result), true);
+                                    }
+                                }
+                            });
                         }
-                    }
-                });
+                    });
+                    Analytics.logEvent(AnalyticEvent.Watch_Ads);
+                }
+            };
+
+
+            if(DeviceInfo.isUsingDataNetwork(activity)){
+                String dontRemind = PreferenceUtils.get(activity,
+                                    PreferenceType.DontRemindWatchAdsWarning);
+                if(Strings.isEmpty(dontRemind) || !dontRemind.equals("1")){
+                    final OverlayBuilder builder = OverlayBuilder.build(activity);
+                    builder.setOverlayType(OverlayType.OkCancel)
+                            .setContent(activity.getString(R.string.confirm_watch_ads_on_3g))
+                            .setCheckboxTitle(activity.getString(R.string.don_remind_me_again))
+                            .setRunnables(new Runnable() {
+                                @Override
+                                public void run() {
+                                    toRun.run();
+                                }
+                            })
+                            .setOnDismissRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(builder.isChecked()){
+                                        PreferenceUtils.put(activity,
+                                                PreferenceType.DontRemindWatchAdsWarning, "1");
+                                    }
+                                }
+                            });
+                    builder.show();
+
+                }
+                else{
+                    toRun.run();
+                }
             }
-        });
-        Analytics.logEvent(AnalyticEvent.Watch_Ads);
+            else{
+                toRun.run();
+            }
+
+        }
+        else{
+            OverlayBuilder.build(activity).setOverlayType(OverlayType.OkOnly)
+                    .setContent(activity.getString(R.string.no_connection_msg))
+                    .show();
+        }
     }
 
     private void changeNextAdsCount(int newCount, boolean animate){
@@ -285,22 +372,13 @@ public class LayoutNextAdsCd {
     public void setCurrentNextAdsCount(Integer value){
         PreferenceUtils.put(getMyActivity(), PreferenceType.NextAdsCount, value.toString());
         currentNextAdsCount = value;
-
-        if(currentNextAdsCount <= 0){
-            PreferenceUtils.put(getMyActivity(), PreferenceType.NoMoreCredits, "1");
-        }
-        else{
-            PreferenceUtils.delete(getMyActivity(), PreferenceType.NoMoreCredits);
-        }
-
     }
 
     private void setListeners(){
         layoutControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                checkIsVip(new RunnableArgs<Boolean>() {
+                fastCheckIsVip(new RunnableArgs<Boolean>() {
                     @Override
                     public void run() {
                         boolean isVip = this.getFirstArg();

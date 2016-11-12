@@ -13,8 +13,8 @@ android {
 
         minSdkVersion 10
         targetSdkVersion 25
-        versionCode 48
-        versionName "3.1.3"
+        versionCode 51
+        versionName "3.1.5"
         multiDexEnabled true
     }
     buildTypes {
@@ -52,7 +52,6 @@ dependencies {
     compile 'com.firebase:firebase-client-android:2.3.1'
     compile 'com.google.firebase:firebase-messaging:9.6.0'
     compile 'com.google.firebase:firebase-database:9.6.0'
-    compile 'com.anjlab.android.iab.v3:library:1.0+'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'com.github.jd-alexander:library:1.1.0'

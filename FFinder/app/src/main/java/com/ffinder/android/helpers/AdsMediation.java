@@ -14,9 +14,9 @@ public class AdsMediation {
 
     private AdsMediation _this;
     private Activity activity;
-    private boolean hasAds;
     private AerServInterstitial interstitial;
     private IAdsMediationListener adsMediationListener;
+    private boolean preloaded;
 
     public AdsMediation(Activity activity) {
         this.activity = activity;
@@ -25,34 +25,36 @@ public class AdsMediation {
         AerServSdk.init(activity, "1001717");
     }
 
-    public boolean onBackPressed() {
-        // If ad is on the screen - close it
-        return false;
-    }
+    public void showRewardedVideo(final Activity activity) {
+        final boolean[] adsIsLoaded = new boolean[1];
 
-    public boolean hasRewardVideo(){
-        return hasAds;
-    }
-
-    public void showRewardedVideo(final Activity activity, final boolean showAds, final RunnableArgs<Boolean> runnable) {
         AerServEventListener listener = new AerServEventListener() {
             @Override
             public void onAerServEvent(AerServEvent event, List<Object> args) {
                 Logs.show(event.name());
                 switch (event) {
                     case PRELOAD_READY:
-                        hasAds = true;
-                        if(showAds) interstitial.show();
+                        interstitial.show();
+                        break;
+
+                    case AD_LOADED:
+                        Logs.show("Ads loaded");
+                        adsIsLoaded[0] = true;
                         break;
 
                     case AD_IMPRESSION:
-                        if(runnable != null) runnable.run(true);
                         break;
 
                     case AD_FAILED:
-                        hasAds = false;
-                        if(runnable != null) runnable.run(false);
-                        if(adsMediationListener != null) adsMediationListener.onResult(false);
+                        Threadings.delay(1000, new Runnable() {
+                            @Override
+                            public void run() {
+                                if(adsIsLoaded[0]) return;
+                                Logs.show("Ads failed");
+                                if(adsMediationListener != null) adsMediationListener.onResult(false);
+                            }
+                        });
+
                         break;
 
                     case VC_REWARDED:
@@ -60,7 +62,6 @@ public class AdsMediation {
                         break;
 
                     case AD_DISMISSED:
-                        LocaleHelper.onCreate(activity);
                         break;
 
                 }
@@ -68,21 +69,35 @@ public class AdsMediation {
         };
 
         AerServConfig config = new AerServConfig(activity, "1016571")
-                .setPreload(true)
                 .setEventListener(listener);
 
-        interstitial = new AerServInterstitial(config);
+        if(!preloaded){
+            config.setPreload(true);
+            preloaded = true;
+            interstitial = new AerServInterstitial(config);
+        }
+        else{
+            interstitial = new AerServInterstitial(config);
+            interstitial.show();
+        }
+
+
     }
 
-    public void preload(Activity activity){
+    public void preload(){
+        if(preloaded) return;
+
+        preloaded = true;
         AerServConfig config = new AerServConfig(activity, "1016571")
                 .setPreload(true);
-
         interstitial = new AerServInterstitial(config);
     }
-
 
     public void setAdsMediationListener(IAdsMediationListener adsMediationListener) {
         this.adsMediationListener = adsMediationListener;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 }

@@ -10,10 +10,7 @@ import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.ActionBarActionType;
 import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.enums.OverlayType;
-import com.ffinder.android.helpers.Analytics;
-import com.ffinder.android.helpers.AnimateBuilder;
-import com.ffinder.android.helpers.OverlayBuilder;
-import com.ffinder.android.helpers.Threadings;
+import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.SubscriptionModel;
 
 import java.util.ArrayList;
@@ -47,50 +44,24 @@ public class ActivityVip extends MyActivityAbstract {
                         .getSubscriptionModels();
 
         refreshSubscribe();
-        monitorSubscriptionModels();
     }
 
+    //must hanle activity result for iabhelper to work
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        refreshSubscribe();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    private void monitorSubscriptionModels(){
-        Threadings.runInBackground(new Runnable() {
-            @Override
-            public void run() {
-                while (subscriptionModels.size() == 0){
-                    if(disposed) return;
-                    else{
-                        Threadings.sleep(1000);
-                    }
-                }
-
-                Threadings.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshSubscribe();
-                    }
-                });
-
-            }
-        });
+        if(!((MyApplication) getApplication()).getVipAndProductsHelpers()
+                .onActivityResult(requestCode, resultCode, data)){
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void refreshSubscribe(){
         layoutSubscribe.setVisibility(View.GONE);
 
-        ((MyApplication) getApplication()).getVipAndProductsHelpers().refreshIsSubscribed(new Runnable() {
+        ((MyApplication) getApplication()).getVipAndProductsHelpers().isInVipPeriod(new RunnableArgs<Boolean>() {
             @Override
             public void run() {
-                subscriptionChanged(((MyApplication) getApplication())
-                        .getVipAndProductsHelpers().getSubscribed());
+                subscriptionChanged(this.getFirstArg());
             }
         });
     }
@@ -134,8 +105,16 @@ public class ActivityVip extends MyActivityAbstract {
                 else{
                     if(subscriptionModels.size() > 0){
                         SubscriptionModel subscriptionModel = subscriptionModels.get(0);
-                        ((MyApplication) getApplication()).getVipAndProductsHelpers().purchaseSubscription(ActivityVip.this, subscriptionModel);
-                        Analytics.logEvent(AnalyticEvent.Click_Subscribe, subscriptionModel.getSkuDetails().productId);
+                        ((MyApplication) getApplication())
+                                .getVipAndProductsHelpers()
+                                .purchaseSubscription(ActivityVip.this, subscriptionModel, new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        refreshSubscribe();
+                                    }
+                                });
+                        Analytics.logEvent(AnalyticEvent.Click_Subscribe,
+                                subscriptionModel.getSkuDetails().getSku());
                     }
                 }
             }
@@ -146,8 +125,15 @@ public class ActivityVip extends MyActivityAbstract {
             public void onClick(View view) {
                 if(subscriptionModels.size() > 0){
                     SubscriptionModel subscriptionModel = subscriptionModels.get(0);
-                    ((MyApplication) getApplication()).getVipAndProductsHelpers().purchaseSubscription(ActivityVip.this, subscriptionModel);
-                    Analytics.logEvent(AnalyticEvent.Click_Subscribe, subscriptionModel.getSkuDetails().productId);
+                    ((MyApplication) getApplication()).getVipAndProductsHelpers()
+                            .purchaseSubscription(ActivityVip.this, subscriptionModel, new Runnable() {
+                                @Override
+                                public void run() {
+                                    refreshSubscribe();
+                                }
+                            });
+                    Analytics.logEvent(AnalyticEvent.Click_Subscribe,
+                            subscriptionModel.getSkuDetails().getSku());
                 }
             }
         });

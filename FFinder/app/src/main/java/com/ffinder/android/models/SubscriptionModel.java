@@ -1,6 +1,7 @@
 package com.ffinder.android.models;
 
-import com.anjlab.android.iab.v3.SkuDetails;
+
+import com.ffinder.android.helpers.Iab.SkuDetails;
 
 /**
  * Created by SiongLeng on 15/9/2016.
