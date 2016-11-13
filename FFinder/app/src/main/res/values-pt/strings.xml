@@ -183,14 +183,14 @@ ________________________________________________________________________________
 Add member Activity text start -->
 <string name="add_new_member_title">"Adicionar Amigo/Familiar"</string>
 <string name="add_new_member_manually_title">"Adicionar Amigo/Familiar Manualmente"</string>
-<string name="user_key_title">"Senha do seu amigo"</string>
+<string name="user_key_title">"Código do seu amigo"</string>
 <string name="member_name_title">"Como você aborda ele/ela?"</string>
-<string name="no_user_key_msg">"Introduza por favor a senha do membro"</string>
+<string name="no_user_key_msg">"Introduza por favor o código do membro"</string>
 <string name="no_member_name_msg">"Insira o nome do membro"</string>
 <string name="no_your_name_msg">"Por favor insira seu nome"</string>
 <string name="adding_friend_msg">"Acrescentando registro…"</string>
 <string name="user_already_added_error_msg">"Usuário já existe na sua lista como %s"</string>
-<string name="key_expired_or_not_exist_msg">"Senha não existe ou expirou."</string>
+<string name="key_expired_or_not_exist_msg">"O código não existe ou expirou."</string>
 
 <!-- Add member Activity text end
 _________________________________________________________________________________
@@ -201,24 +201,24 @@ Edit member name popup dialog text start -->
 <!-- Edit member name popup dialog text end
 _________________________________________________________________________________
 Share key activity text start -->
-<string name="share_key_activity_title">"Senha"</string>
-<string name="share_key_title">"Adicionar Amigo/Família Ao Partilhar Sua Senha"</string>
+<string name="share_key_activity_title">"Código"</string>
+<string name="share_key_title">"Adicionar Amigo/Família Ao Partilhar Seu Código"</string>
 <string name="btn_share_via_other_apps_text">"Partilhar"</string>
-<string name="your_key_title">"Partilhe essa senha com seus amigos e familiares e você pode começar a rastrear sua localização assim que o tenham adicionado
-(não é necessária nenhuma ação após o compartilhamento da Senha)"</string>
+<string name="your_key_title">"Partilhe esse código com seus amigos e familiares e você pode começar a rastrear sua localização assim que o tenham adicionado
+(não é necessária nenhuma ação após o compartilhamento do Código)"</string>
 <string name="expired_at_title">"(Expira em %s)"</string>
 <string name="minutes_left">"(%s mins restantes)"</string>
 <string name="copied_to_clipboard_toast_msg">"Copiado"</string>
-<string name="regenerating_key_msg">"Atualizar Senha"</string>
-<string name="regen_key_confirm_msg">"Tem certeza de que deseja regenerar sua senha? O Usuário não será mais capaz de adicionar você usando a sua Senha anterior."</string>
-<string name="share_title">"Partilhar Senha"</string>
-<string name="share_subject">"Senha FFfinder"</string>
+<string name="regenerating_key_msg">"Atualizar Código"</string>
+<string name="regen_key_confirm_msg">"Tem certeza de que deseja regenerar o seu código? O Usuário não será mais capaz de adicionar você usando o seu Código anterior."</string>
+<string name="share_title">"Partilhar Código"</string>
+<string name="share_subject">"Código FFfinder"</string>
 <string name="share_msg">"Olá, por favor descarregue o Simple Friend e o Family Finder para encontrar seus amigos e familiares com um clique de forma GRATUITA em
 Https://play.google.com/store/apps/details?id=com.ffinder.android
 
 Depois me adicione clicando nesse link (Abra com FFfinder
 http://ff-finder.com/addnew/%s)"</string>
-<string name="after_share_passcode_reminder">"Obrigado por partilhar sua senha, apenas aguarde até qu seu amigo ou familiar adicione você e poderão começar a se rastrear mutuamente."</string>
+<string name="after_share_passcode_reminder">"Obrigado por partilhar o seu código, apenas aguarde até qu seu amigo ou familiar adicione você e poderão começar a se rastrear mutuamente."</string>
 
 <!-- Share key activity text end
 _________________________________________________________________________________
@@ -238,18 +238,18 @@ Notifications start -->
 <string name="notification_x_has_been_located_msg">"%s foi localizado."</string>
 <string name="notification_x_users_located_msg">"%s de amigos localizados."</string>
 <string name="notification_x_added_you">"%s adicionou você! Agora vocês podem se localizar mutuamente."</string>
-<string name="notification_remember_to_add_friend_msg">"Vamos! Partilhe sua Senha para adicionar seus amigos e família :)"</string>
+<string name="notification_remember_to_add_friend_msg">"Vamos! Partilhe o seu Código para adicionar seus amigos e família :)"</string>
 
 <!-- Notifications end 
 Everything about tutorials -->
 <string name="first_time_see_passcode">"Olá, é a primeira vez que você adiciona um amigo/familiar, quer ver um breve tutorial?"</string>
-<string name="share_passcode_s1">"Cada usuário tem uma senha temporária única, você deve partilhar sua senha pessoal com seu amigo/familiar para estabelecer conexão."</string>
-<string name="share_passcode_s2">"Clique no botão Partilhar Senha e escolha uma forma de partilhar sua senha."</string>
+<string name="share_passcode_s1">"Cada usuário tem um código temporário único, você deve partilhar o seu código pessoal com seu amigo/familiar para estabelecer conexão."</string>
+<string name="share_passcode_s2">"Clique no botão Partilhar Código e escolha uma forma de partilhar o seu código."</string>
 <string name="share_passcode_s3">"Após isso, nenhuma ação é necessária."</string>
 <string name="share_passcode_s4">"Após seu amigo/familiar ter adicionado você, ambos podem iniciar o rastreamento mútuo."</string>
-<string name="add_manually_a1">"Cada usuário tem uma senha temporária única, obtenha a senha deles pedindo que cliquem no ícone de adição."</string>
-<string name="add_manually_a2">"Após receber a mensagem, anote a senha aqui."</string>
-<string name="add_manually_a3">"Chave no código na Senha do Seu amigo"</string>
+<string name="add_manually_a1">"Cada usuário tem um código temporário único, obtenha o código deles pedindo que cliquem no ícone de adição."</string>
+<string name="add_manually_a2">"Após receber a mensagem, anote o código aqui."</string>
+<string name="add_manually_a3">"Chave na cifra no Código do Seu amigo"</string>
 <string name="add_manually_a4">"Pronto! Vocês podem se rastrear mutuamente."</string>
 <string name="huawei">"Huawei"</string>
 <string name="xiaomi">"Xiaomi"</string>
