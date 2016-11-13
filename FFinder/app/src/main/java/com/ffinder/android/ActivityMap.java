@@ -483,7 +483,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
         public void onStreetViewPanoramaReady(final StreetViewPanorama streetViewPanorama) {
             streetViewPanorama.setPosition(new LatLng(Double.valueOf(latitude),
                     Double.valueOf(longitude)));
-            Threadings.delay(5 * 1000, new Runnable() {
+            Threadings.delay(10 * 1000, new Runnable() {
                 @Override
                 public void run() {
                     if(disposed) return;

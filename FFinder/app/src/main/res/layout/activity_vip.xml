@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context="com.ffinder.android.ActivityVip" android:background="@mipmap/subscribe_bg"
->
+        android:clipChildren="false" android:clipToPadding="false">
 
     <include layout="@layout/default_toolbar" android:id="@+id/my_toolbar"/>
     <RelativeLayout
@@ -19,7 +19,8 @@
             android:layout_width="250dp"
             android:layout_height="150dp" android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" android:layout_marginBottom="70dp"
-            android:background="@drawable/subscribe_button_bg" android:gravity="center" android:id="@+id/layoutSubscribe">
+            android:background="@drawable/subscribe_button_bg" android:gravity="center" android:id="@+id/layoutSubscribe"
+            android:clipChildren="false" android:clipToPadding="false">
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -29,8 +30,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/vip_benefits"
-                android:id="@+id/txtSubscriptionSubtitle" android:padding="10dp" android:textSize="12dp"
-                android:textAlignment="center" android:textColor="@color/colorPrimaryDark"/>
+                android:id="@+id/txtSubscriptionSubtitle" android:textSize="12dp"
+                android:textAlignment="center" android:textColor="@color/colorPrimaryDark" android:paddingLeft="10dp"
+                android:paddingRight="10dp" android:paddingTop="10dp"/>
     </LinearLayout>
 
 </RelativeLayout>

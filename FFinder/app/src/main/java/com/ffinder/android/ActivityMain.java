@@ -159,8 +159,6 @@ public class ActivityMain extends MyActivityAbstract implements
     @Override
     protected void onPause() {
         super.onPause();
-
-        layoutNextAdsCd.onPause();
     }
 
     @Override
@@ -390,7 +388,9 @@ public class ActivityMain extends MyActivityAbstract implements
                     // then update the address design
                     if (taskFragment != null && friendModel.getSearchStatus() == SearchStatus.End) {
                         taskFragment.terminate();
-                        fm.beginTransaction().remove(taskFragment).commit();
+                        if(!isPaused()){
+                            fm.beginTransaction().remove(taskFragment).commit();
+                        }
                         friendModel.setRecentlyFinishSearch(true);
                         friendModel.setTimeoutPhase(0);
                     }

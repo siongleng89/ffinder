@@ -16,4 +16,6 @@
     <integrityControl mode="all">
         <checkCertificate>on</checkCertificate>
     </integrityControl>
+
+
 </dexprotector>

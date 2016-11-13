@@ -26,7 +26,6 @@ public enum AnalyticEvent {
     Change_Block_User,
 
     Share_Key_Button_Clicked,
-    Close_Share_Key_Dialog,
 
     Change_Language,
 

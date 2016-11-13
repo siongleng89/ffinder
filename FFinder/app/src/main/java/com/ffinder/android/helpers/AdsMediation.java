@@ -2,8 +2,16 @@ package com.ffinder.android.helpers;
 
 
 import android.app.Activity;
-import com.aerserv.sdk.*;
+import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
+import com.appodeal.ads.Appodeal;
+import com.appodeal.ads.InterstitialCallbacks;
+import com.appodeal.ads.utils.Log;
+import com.ffinder.android.R;
 import com.ffinder.android.absint.helpers.IAdsMediationListener;
+import com.ffinder.android.enums.OverlayType;
+import com.ffinder.android.statics.Constants;
+import com.google.android.gms.ads.AdRequest;
 
 import java.util.List;
 
@@ -12,92 +20,114 @@ import java.util.List;
  */
 public class AdsMediation {
 
-    private AdsMediation _this;
-    private Activity activity;
-    private AerServInterstitial interstitial;
-    private IAdsMediationListener adsMediationListener;
-    private boolean preloaded;
+    private static Activity myActivity;
 
-    public AdsMediation(Activity activity) {
-        this.activity = activity;
-        _this = this;
+    public static void init(Activity activity){
+        myActivity = activity;
 
-        AerServSdk.init(activity, "1001717");
+        Appodeal.disableNetwork(myActivity, "flurry");
+        Appodeal.disableNetwork(myActivity, "chartboost");
+        Appodeal.disableNetwork(myActivity, "yandex");
+        Appodeal.disableNetwork(myActivity, "cheetah");
+
+        Appodeal.initialize(myActivity, Constants.AppoDealKey,
+                Appodeal.INTERSTITIAL);
+
+        Appodeal.setLogLevel(Log.LogLevel.debug);
     }
 
-    public void showRewardedVideo(final Activity activity) {
-        final boolean[] adsIsLoaded = new boolean[1];
+    public static void preload(){
+        if(Appodeal.isLoaded(Appodeal.INTERSTITIAL)) {
+            return;
+        }
 
-        AerServEventListener listener = new AerServEventListener() {
+        Appodeal.cache(myActivity, Appodeal.INTERSTITIAL);
+    }
+
+    public static void showAds(final IAdsMediationListener adsMediationListener){
+        Appodeal.setInterstitialCallbacks(new InterstitialCallbacks() {
             @Override
-            public void onAerServEvent(AerServEvent event, List<Object> args) {
-                Logs.show(event.name());
-                switch (event) {
-                    case PRELOAD_READY:
-                        interstitial.show();
-                        break;
+            public void onInterstitialLoaded(boolean isPrecache) {
+                Logs.show("Ads loaded successfully!");
+            }
 
-                    case AD_LOADED:
-                        Logs.show("Ads loaded");
-                        adsIsLoaded[0] = true;
-                        break;
+            @Override
+            public void onInterstitialFailedToLoad() {
+                if(adsMediationListener != null) adsMediationListener.onResult(false);
+            }
 
-                    case AD_IMPRESSION:
-                        break;
+            @Override
+            public void onInterstitialShown() {
+                if(adsMediationListener != null) adsMediationListener.onResult(true);
+            }
 
-                    case AD_FAILED:
-                        Threadings.delay(1000, new Runnable() {
-                            @Override
-                            public void run() {
-                                if(adsIsLoaded[0]) return;
-                                Logs.show("Ads failed");
-                                if(adsMediationListener != null) adsMediationListener.onResult(false);
+            @Override
+            public void onInterstitialClicked() {
+            }
+
+            @Override
+            public void onInterstitialClosed() {
+
+            }
+        });
+
+
+        if(!Appodeal.isLoaded(Appodeal.INTERSTITIAL)){
+            final boolean[] cancel = {false};
+
+            final AlertDialog dialog = OverlayBuilder.build(myActivity)
+                    .setOverlayType(OverlayType.Loading)
+                    .setContent(myActivity.getString(R.string.loading))
+                    .setOnDismissRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            cancel[0] = true;
+                        }
+                    })
+                    .show();
+
+
+            Threadings.runInBackground(new Runnable() {
+                @Override
+                public void run() {
+                    int i = 0;
+                    while (!Appodeal.isLoaded(Appodeal.INTERSTITIAL)){
+                        preload();
+                        Threadings.sleep(3000);
+                        i++;
+                        if(cancel[0]){
+                            return;
+                        }
+                        if(i == 10){
+                            break;
+                        }
+                    }
+
+                    Threadings.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!cancel[0]){
+                                if(Appodeal.isLoaded(Appodeal.INTERSTITIAL)){
+                                    Appodeal.show(myActivity, Appodeal.INTERSTITIAL);
+                                }
+                                else{
+                                    if(adsMediationListener != null)
+                                        adsMediationListener.onResult(false);
+                                }
+
                             }
-                        });
-
-                        break;
-
-                    case VC_REWARDED:
-                        if(adsMediationListener != null) adsMediationListener.onResult(true);
-                        break;
-
-                    case AD_DISMISSED:
-                        break;
+                            dialog.dismiss();
+                        }
+                    });
 
                 }
-            }
-        };
-
-        AerServConfig config = new AerServConfig(activity, "1016571")
-                .setEventListener(listener);
-
-        if(!preloaded){
-            config.setPreload(true);
-            preloaded = true;
-            interstitial = new AerServInterstitial(config);
+            });
         }
         else{
-            interstitial = new AerServInterstitial(config);
-            interstitial.show();
+            Appodeal.show(myActivity, Appodeal.INTERSTITIAL);
         }
 
-
     }
 
-    public void preload(){
-        if(preloaded) return;
 
-        preloaded = true;
-        AerServConfig config = new AerServConfig(activity, "1016571")
-                .setPreload(true);
-        interstitial = new AerServInterstitial(config);
-    }
-
-    public void setAdsMediationListener(IAdsMediationListener adsMediationListener) {
-        this.adsMediationListener = adsMediationListener;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
 }

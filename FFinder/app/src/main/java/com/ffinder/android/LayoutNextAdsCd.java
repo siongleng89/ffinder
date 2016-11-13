@@ -1,22 +1,17 @@
 package com.ffinder.android;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.ffinder.android.absint.controls.INoCreditsListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
+import com.ffinder.android.absint.helpers.IAdsMediationListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.controls.NoCreditsDialog;
 import com.ffinder.android.enums.*;
 import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.MyModel;
-import com.ffinder.android.tasks.AdsFrag;
 
 /**
  * Created by sionglengho on 10/11/16.
@@ -28,16 +23,16 @@ public class LayoutNextAdsCd {
     private RelativeLayout layoutCount, layoutControl;
     private ImageView imgViewTick;
     private MyModel myModel;
-    private AdsFrag adsFrag;
     private Integer currentNextAdsCount;
     private boolean completeProcessing;
     private int addingCount;
-    private boolean afterSavedInstanceState;
 
 
     public LayoutNextAdsCd(AppCompatActivity activity, MyModel myModel){
         this.activity = activity;
         this.myModel = myModel;
+
+        AdsMediation.init(activity);
     }
 
     public View getView(){
@@ -64,14 +59,7 @@ public class LayoutNextAdsCd {
         return nextAdsFragmentView;
     }
 
-
-    public void onPause() {
-        afterSavedInstanceState = true;
-    }
-
     public void onResume() {
-        afterSavedInstanceState = false;
-        recreateAdsFrag();
         initiate();
     }
 
@@ -92,6 +80,7 @@ public class LayoutNextAdsCd {
                         txtSearchLeft.setText(R.string.search_left);
                         txtSearchLeft.setVisibility(View.VISIBLE);
                         txtNextAdsCount.setVisibility(View.VISIBLE);
+                        imgViewTick.setVisibility(View.GONE);
                     }
                 }
             }
@@ -116,7 +105,7 @@ public class LayoutNextAdsCd {
                     });
                 }
                 else{
-                    adsFrag.preload();
+                    AdsMediation.preload();
                     FirebaseDB.getNextAdsCount(myModel.getUserId(), new FirebaseListener<Integer>(Integer.class) {
                         @Override
                         public void onResult(Integer result, Status status) {
@@ -134,6 +123,7 @@ public class LayoutNextAdsCd {
                                     txtSearchLeft.setText(R.string.search_left);
                                     AnimateBuilder.fadeIn(getMyActivity(), txtSearchLeft);
                                     AnimateBuilder.fadeIn(getMyActivity(), txtNextAdsCount);
+                                    imgViewTick.setVisibility(View.GONE);
                                 }
                             });
 
@@ -232,21 +222,6 @@ public class LayoutNextAdsCd {
         });
     }
 
-    private void recreateAdsFrag(){
-        if(afterSavedInstanceState) return;
-
-        FragmentManager fm = getMyActivity().getSupportFragmentManager();
-        adsFrag = (AdsFrag) fm.findFragmentByTag("adsFrag");
-        //not created
-        if (adsFrag == null) {
-            adsFrag = AdsFrag.newInstance(activity);
-            fm.beginTransaction().add(adsFrag, "adsFrag").commit();
-        }
-        else{
-            adsFrag.setActivity(activity);
-        }
-    }
-
     private void refreshNextAdsCount(final int newAdsCount, final boolean animate){
         Threadings.postRunnable(new Runnable() {
             @Override
@@ -282,67 +257,27 @@ public class LayoutNextAdsCd {
     private void showAds(){
         if(DeviceInfo.isNetworkAvailable(activity)){
 
-            final Runnable toRun = new Runnable() {
+            AdsMediation.showAds(new IAdsMediationListener() {
                 @Override
-                public void run() {
-                    final AlertDialog dialog = OverlayBuilder.build(getMyActivity())
-                            .setOverlayType(OverlayType.Loading)
-                            .setContent(getMyActivity().getString(R.string.loading))
-                            .show();
-
-                    adsFrag.showAds(new Runnable() {
+                public void onResult(boolean success) {
+                    RestfulService.adsWatched(myModel.getUserId(), new RestfulListener<String>() {
                         @Override
-                        public void run() {
-                            dialog.dismiss();
-                            RestfulService.adsWatched(myModel.getUserId(), new RestfulListener<String>() {
-                                @Override
-                                public void onResult(String result, Status status) {
-                                    if(status == Status.Success && !Strings.isEmpty(result) && Strings.isNumeric(result)){
-                                        changeNextAdsCount(Integer.valueOf(result), true);
-                                    }
-                                }
-                            });
+                        public void onResult(String result, Status status) {
+                            if(status == Status.Success && !Strings.isEmpty(result) && Strings.isNumeric(result)){
+                                changeNextAdsCount(Integer.valueOf(result), true);
+                            }
                         }
                     });
-                    Analytics.logEvent(AnalyticEvent.Watch_Ads);
+                    if(success){
+                        Analytics.logEvent(AnalyticEvent.Watch_Ads);
+                    }
+                    else{
+                        Toast.makeText(activity,
+                                R.string.no_ads_available_toast_msg, Toast.LENGTH_LONG).show();
+                        Analytics.logEvent(AnalyticEvent.No_Ads_Available);
+                    }
                 }
-            };
-
-
-            if(DeviceInfo.isUsingDataNetwork(activity)){
-                String dontRemind = PreferenceUtils.get(activity,
-                                    PreferenceType.DontRemindWatchAdsWarning);
-                if(Strings.isEmpty(dontRemind) || !dontRemind.equals("1")){
-                    final OverlayBuilder builder = OverlayBuilder.build(activity);
-                    builder.setOverlayType(OverlayType.OkCancel)
-                            .setContent(activity.getString(R.string.confirm_watch_ads_on_3g))
-                            .setCheckboxTitle(activity.getString(R.string.don_remind_me_again))
-                            .setRunnables(new Runnable() {
-                                @Override
-                                public void run() {
-                                    toRun.run();
-                                }
-                            })
-                            .setOnDismissRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(builder.isChecked()){
-                                        PreferenceUtils.put(activity,
-                                                PreferenceType.DontRemindWatchAdsWarning, "1");
-                                    }
-                                }
-                            });
-                    builder.show();
-
-                }
-                else{
-                    toRun.run();
-                }
-            }
-            else{
-                toRun.run();
-            }
-
+            });
         }
         else{
             OverlayBuilder.build(activity).setOverlayType(OverlayType.OkOnly)

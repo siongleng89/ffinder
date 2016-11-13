@@ -13,8 +13,8 @@ android {
 
         minSdkVersion 10
         targetSdkVersion 25
-        versionCode 51
-        versionName "3.1.5"
+        versionCode 56
+        versionName "3.1.6"
         multiDexEnabled true
     }
     buildTypes {
@@ -23,7 +23,7 @@ android {
         }
         release {
             buildConfigField "Boolean", "DEBUG_MODE", "false"
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -36,6 +36,9 @@ android {
         disable 'MissingTranslation'
         checkReleaseBuilds false
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {
@@ -44,6 +47,7 @@ dependencies {
     compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.google.android.gms:play-services-gcm:9.6.1'
+    compile 'com.google.android.gms:play-services-ads:9.6.1'
     compile 'com.google.android.gms:play-services-location:9.6.1'
     compile 'com.google.android.gms:play-services-maps:9.6.1'
     compile 'com.google.android.gms:play-services-analytics:9.6.1'
