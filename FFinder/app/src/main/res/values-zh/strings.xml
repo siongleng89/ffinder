@@ -78,13 +78,13 @@ Main Activity text start -->
 
 <!-- search_failed_dialog -->
 <string name="error_timeout_unknown_reason_possible_reasons2">"3) 某些手机型号用户未按照指示进行设置更动"</string>
-<string name="error_user_blocked_msg">"用户禁止您的搜寻"</string>
+<string name="error_user_blocked_msg">"用户不允许您搜寻"</string>
 
 <!-- search_failed_dialog -->
-<string name="failed_search_msg_text1">"无法定位此用户。"</string>
+<string name="failed_search_msg_text1">"无法搜寻到此用户。"</string>
 
 <!-- search_failed_dialog -->
-<string name="failed_search_msg_text2">"我们将持续尝试搜索此用户，定位成功后我们将发送免费信息提醒您，又或者您可以现在就尝试手动重新搜索此用户。"</string>
+<string name="failed_search_msg_text2">"我们将继续尝试搜索此用户，定位成功后我们将发送免费信息提醒您，又或者您可以现在就尝试手动重新搜索此用户。"</string>
 
 <!-- search_failed_dialog -->
 <string name="btn_search_again_text">"重新搜寻"</string>
@@ -187,7 +187,7 @@ Add member Activity text start -->
 <string name="no_member_name_msg">"请输入用户名字"</string>
 <string name="no_your_name_msg">"请输入您的名字"</string>
 <string name="adding_friend_msg">"加入档案…"</string>
-<string name="user_already_added_error_msg">"用户已经在你的名单上为%s"</string>
+<string name="user_already_added_error_msg">"用户已经在你的名单上称为%s"</string>
 <string name="key_expired_or_not_exist_msg">"用号过期或错误用号"</string>
 
 <!-- Add member Activity text end
@@ -202,8 +202,8 @@ Share key activity text start -->
 <string name="share_key_activity_title">"用号"</string>
 <string name="share_key_title">"分享我的用号"</string>
 <string name="btn_share_via_other_apps_text">"分享"</string>
-<string name="your_key_title">"按下分享以分享您的用号，给予您的朋友或家人权限定位您
- (分享过后，您不需要再做任何行动)"</string>
+<string name="your_key_title">"按下分享用号，给予您的朋友或家人许可以让他们搜寻您的所在
+ (分享过后，您不需要再做任何事)"</string>
 <string name="expired_at_title">"( %s 后过期)"</string>
 <string name="minutes_left">"(%s 分钟后过期)"</string>
 <string name="copied_to_clipboard_toast_msg">"已拷贝"</string>
@@ -236,7 +236,7 @@ Notifications start -->
 <string name="notification_user_located_title">"简易家人朋友搜寻器更新"</string>
 <string name="notification_x_has_been_located_msg">"已搜索到%s的位置"</string>
 <string name="notification_x_users_located_msg">"已搜索到%s位朋友的位置"</string>
-<string name="notification_x_added_you">"%s已添加您。您与他可互相定位了。"</string>
+<string name="notification_x_added_you">"%s已添加您。您与他可互相搜寻对方所在。"</string>
 <string name="notification_remember_to_add_friend_msg">"分享您的用号以开始搜寻您朋友或家人的所在位置！"</string>
 
 <!-- Notifications end 
@@ -245,11 +245,11 @@ Everything about tutorials -->
 <string name="share_passcode_s1">"每个用户都有一个独有的用号，您必须把您的用号分享给您的朋友或家人来给予他们搜索您的权限。"</string>
 <string name="share_passcode_s2">"按下分享用号按键，选择其中一个分享方式。"</string>
 <string name="share_passcode_s3">"分享后，请等待您的朋友或家人添加您"</string>
-<string name="share_passcode_s4">"添加后，你们就能互相定位对方了"</string>
+<string name="share_passcode_s4">"添加后，你们就能互相搜寻对方所在"</string>
 <string name="add_manually_a1">"每个用户都有一个独有的用号，如您想添加新的家人或朋友，您必须要求他与您分享他的用号，他可在按下这个“加”按键后看到他的用号"</string>
 <string name="add_manually_a2">"在收到对方用户的分享信息后，如图所示，这是对方的用号"</string>
 <string name="add_manually_a3">"在此输入对方的用号"</string>
-<string name="add_manually_a4">"好了！你们从现在开始就能互相定位对方了"</string>
+<string name="add_manually_a4">"好了！你们从现在开始就能互相搜寻对方所在"</string>
 <string name="huawei">"华为"</string>
 <string name="xiaomi">"小米"</string>
 <string name="sony">"索尼"</string>
