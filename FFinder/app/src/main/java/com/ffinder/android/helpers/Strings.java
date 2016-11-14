@@ -88,6 +88,7 @@ public class Strings {
     public static boolean isEmpty(String input){
         if(input == null) return true;
         if(input.trim().equals("")) return true;
+        if(input.length() == 0) return true;
         return false;
     }
 
