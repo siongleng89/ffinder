@@ -326,7 +326,12 @@ public class MyActivityAbstract extends AppCompatActivity {
         }
         else{
             super.onBackPressed();
+            backPressed();
         }
+    }
+
+    public void backPressed(){
+
     }
 
     public MyModel getMyModel(){

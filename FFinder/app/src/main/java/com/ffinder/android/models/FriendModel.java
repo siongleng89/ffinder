@@ -32,6 +32,7 @@ public class FriendModel {
     private int timeoutPhase;   //0,1,2 three phase before timeout
     private Bitmap friendProfileImage;
     private Boolean hasProfileImage;
+    private boolean closedError;
 
     public FriendModel() {
         searchResult = SearchResult.Normal;
@@ -73,6 +74,7 @@ public class FriendModel {
         this.setSearchResult(friendModel.getSearchResult());
         this.setSearchStatus(friendModel.getSearchStatus());
         this.setBlockSearch(friendModel.isBlockSearch());
+        this.setClosedError(friendModel.isClosedError());
     }
 
 
@@ -132,6 +134,14 @@ public class FriendModel {
 
     public void setBlockSearch(boolean blockSearch) {
         this.blockSearch = blockSearch;
+    }
+
+    public boolean isClosedError() {
+        return closedError;
+    }
+
+    public void setClosedError(boolean closedError) {
+        this.closedError = closedError;
     }
 
     public LocationModel getLastLocationModel() {

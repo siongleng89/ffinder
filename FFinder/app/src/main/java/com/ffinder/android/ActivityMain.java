@@ -157,8 +157,20 @@ public class ActivityMain extends MyActivityAbstract implements
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void backPressed() {
+        super.backPressed();
+        FragmentManager fm = getSupportFragmentManager();
+        for(FriendModel friendModel : getMyModel().getFriendModels()){
+            if(!Strings.isEmpty(friendModel.getUserId())){
+                RequestLocationTaskFrag taskFragment = (RequestLocationTaskFrag)
+                        fm.findFragmentByTag(friendModel.getUserId());
+                // terminate all tasks, as user is quitting already
+                if (taskFragment != null) {
+                    taskFragment.terminate();
+                    getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
+                }
+            }
+        }
     }
 
     @Override
@@ -277,6 +289,8 @@ public class ActivityMain extends MyActivityAbstract implements
                         if(this.getFirstArg()){
                             friendModel.setSearchResult(SearchResult.Normal);
                             friendModel.setSearchStatus(SearchStatus.Starting);
+                            friendModel.setClosedError(false);
+                            friendModel.setTimeoutPhase(0);
                             final FragmentManager fm = getSupportFragmentManager();
                             RequestLocationTaskFrag frag = RequestLocationTaskFrag.newInstance(
                                     myModel.getUserId(), FirebaseInstanceId.getInstance().getToken(),

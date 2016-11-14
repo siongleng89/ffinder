@@ -29,6 +29,8 @@ public class AdsMediation {
         Appodeal.disableNetwork(myActivity, "chartboost");
         Appodeal.disableNetwork(myActivity, "yandex");
         Appodeal.disableNetwork(myActivity, "cheetah");
+        Appodeal.disableNetwork(myActivity, "startapp");
+        Appodeal.disableNetwork(myActivity, "liverail");
 
         Appodeal.initialize(myActivity, Constants.AppoDealKey,
                 Appodeal.INTERSTITIAL);

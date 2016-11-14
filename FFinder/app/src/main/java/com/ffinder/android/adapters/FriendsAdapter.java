@@ -165,7 +165,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class FriendErrorViewHolder extends RecyclerView.ViewHolder{
 
         private View itemView;
-        private RelativeLayout layoutMain;
+        private RelativeLayout layoutMain, layoutClose;
         private TextView txtMessage;
         private Context context;
 
@@ -179,21 +179,36 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         public void updateDesign(FriendModel friendModel, int position){
-            if(friendModel.getSearchResult().isError()){
+            if(friendModel.getSearchResult().isError() && !friendModel.isClosedError()){
                 //animate show if necessary
                 layoutMain.removeAllViews();
 
                 View view = LayoutInflater.from(context)
                         .inflate(R.layout.lvitem_friend_error, layoutMain, true);
 
+                layoutClose = (RelativeLayout) view.findViewById(R.id.layoutClose);
                 txtMessage = (TextView) view.findViewById(R.id.txtMessage);
                 txtMessage.setText(friendModel.getSearchResult().getMessage(context));
+
+                setListener(friendModel);
             }
             else{
                 layoutMain.removeAllViews();
             }
 
         }
+
+        public void setListener(final FriendModel friendModel){
+            layoutClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    friendModel.setClosedError(true);
+                    friendModel.save(context);
+                    friendsAdapterHolder.updateFriendsListAdapter(friendModel.getUserId());
+                }
+            });
+        }
+
     }
 
 

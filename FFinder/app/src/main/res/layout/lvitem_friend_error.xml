@@ -3,19 +3,29 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content" android:background="@color/colorErrorLight" android:paddingLeft="10dp"
-              android:paddingRight="10dp" android:paddingTop="5dp" android:paddingBottom="5dp">
+              android:paddingRight="10dp" android:paddingTop="5dp" android:paddingBottom="5dp"
+              android:gravity="center_vertical">
 
     <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/imageView4" android:src="@drawable/friend_error_icon" android:layout_marginRight="10dp"/>
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:text="Lorem ipsum ehheheh and is simplet eje and gogo"
             android:id="@+id/txtMessage"
             android:visibility="visible"
             android:layout_below="@+id/txtLocation" android:singleLine="false" android:textSize="12sp"
             android:textColor="@color/colorError"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical" android:layout_weight="1" android:layout_marginRight="10dp"/>
+    <RelativeLayout
+            android:layout_width="30dp"
+            android:layout_height="match_parent" android:gravity="center" android:id="@+id/layoutClose"
+            android:clickable="true">
+        <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/cross_icon" android:clickable="false"/>
+    </RelativeLayout>
 </LinearLayout>
