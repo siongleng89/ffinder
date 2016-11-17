@@ -16,3 +16,7 @@ handlers:
 - url: /use_promo
   script: use_promo.php
   secure: always
+
+- url: /subscription_check
+  script: subscription_check.php
+  secure: always

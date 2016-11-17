@@ -11,11 +11,12 @@ android {
                                 onesignal_app_id: "d5a08298-fe8a-41b8-b227-00cbf1d8fe1a",
                                 onesignal_google_project_number: "704705208393"]
 
-        minSdkVersion 10
+        minSdkVersion 11
         targetSdkVersion 25
-        versionCode 58
-        versionName "3.1.7"
+        versionCode 61
+        versionName "3.2.0"
         multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -41,9 +42,17 @@ android {
     }
 }
 
+repositories {
+    flatDir()
+            {
+                dirs 'libs'
+            }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile ':cheetah-mobile-3.4.7@aar'
     compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.google.android.gms:play-services-gcm:9.6.1'
@@ -62,6 +71,12 @@ dependencies {
     compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
     compile 'com.android.support:multidex:1.0.1'
 
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    androidTestCompile "com.android.support:support-annotations:25.0.0"
+
+    androidTestCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'

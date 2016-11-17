@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PopupDialog
 
 class MainPageViewController: MyViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -17,18 +18,24 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         FirebaseDB.saveToIdentifier(self.myModel!.userId!, nil)
         
         // Do any additional setup after loading the view.
         self.navigationItem.title = "app_name".localized
         
-        let shareButton:UIBarButtonItem = UIBarButtonItem(title: "Share", style: UIBarButtonItemStyle.plain, target: self, action: #selector(shareButtonTapped))
-        self.navigationItem.leftBarButtonItem = shareButton
+        self.addActionToNav(true, NavItemActionType.Settings)
         
+        self.navigationItem.leftBarButtonItem = nil;
+        self.navigationItem.hidesBackButton = true;
         
-        let addManuallyButton:UIBarButtonItem = UIBarButtonItem(title: "Add Manually", style: UIBarButtonItemStyle.plain, target: self, action: #selector(addManuallyButtonTapped))
-        self.navigationItem.rightBarButtonItem = addManuallyButton
-        
+//        let shareButton:UIBarButtonItem = UIBarButtonItem(title: "Share", style: UIBarButtonItemStyle.plain, target: self, action: #selector(shareButtonTapped))
+//        self.navigationItem.leftBarButtonItem = shareButton
+//        
+//        
+//        let addManuallyButton:UIBarButtonItem = UIBarButtonItem(title: "Add Manually", style: UIBarButtonItemStyle.plain, target: self, action: #selector(addManuallyButtonTapped))
+//        self.navigationItem.rightBarButtonItem = addManuallyButton
+//        
         
         let yourNibName = UINib(nibName: friendTableCellIdentifier, bundle: nil)
         friendsTableView.register(yourNibName, forCellReuseIdentifier: friendTableCellIdentifier)
@@ -43,7 +50,7 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
     }
 
     func shareButtonTapped(){
-        self.performSegue(withIdentifier: "MainToShareKeySegue", sender: nil)
+        
     }
     
     func addManuallyButtonTapped(){
@@ -105,5 +112,59 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
 
     }
     
+    @IBAction func onAddButtonTapped(_ sender: AnyObject) {
+        self.performSegue(withIdentifier: "MainToShareKeySegue", sender: nil)
+    }
     
+    @IBAction func onSettingsButtonTapped(_ sender: AnyObject) {
+//        // Create a custom view controller
+//        let ratingVC = DialogLayoutViewController(nibName: "DialogLayout", bundle: nil)
+//        
+//        // Create the dialog
+//        let popup = PopupDialog(viewController: ratingVC, buttonAlignment: .horizontal, transitionStyle: .bounceDown, gestureDismissal: true)
+//        
+//        // Create first button
+//        let buttonOne = CancelButton(title: "CANCEL") {
+//        }
+//        
+//        // Create second button
+//        let buttonTwo = DefaultButton(title: "RATE") {
+//        }
+//        
+//        // Add buttons to dialog
+//        popup.addButtons([buttonOne, buttonTwo])
+//        
+//        // Present dialog
+//        present(popup, animated: true, completion: nil)
+        
+        
+//        let title = "THIS IS THE DIALOG TITLE"
+//        let message = "This is the message section of the popup dialog default view"
+//        let image = UIImage(named: "pexels-photo-103290")
+//        
+//        // Create the dialog
+//        let popup = PopupDialog(title: title, message: message, image: image)
+//        
+//        // Create buttons
+//        let buttonOne = CancelButton(title: "CANCEL") {
+//            print("You canceled the car dialog.")
+//        }
+//        
+//        let buttonTwo = DefaultButton(title: "ADMIRE CAR") {
+//            print("What a beauty!")
+//        }
+//        
+//        let buttonThree = DefaultButton(title: "BUY CAR") {
+//            print("Ah, maybe next time :)")
+//        }
+//        
+//        // Add buttons to dialog
+//        // Alternatively, you can use popup.addButton(buttonOne)
+//        // to add a single button
+//        popup.addButtons([buttonOne, buttonTwo, buttonThree])
+//        
+//        // Present dialog
+//        self.present(popup, animated: true, completion: nil)
+        
+    }
 }

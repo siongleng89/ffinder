@@ -20,7 +20,7 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_image.png" translatesAutoresizingMaskIntoConstraints="NO" id="Qhf-Te-t9j"/>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NTF-oo-WD7">
-                                <color key="backgroundColor" red="0.34509803921568627" green="0.55686274509803924" blue="0.49411764705882355" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.40000000000000002" green="0.55686274509803924" blue="0.3411764705882353" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="EgC-Zc-vZD"/>
                                 </constraints>

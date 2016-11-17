@@ -7,12 +7,16 @@
     <alias>ffinder</alias>
     <storepass>ab984025!</storepass>
     <keypass>ab984025!</keypass>
-    <stringEncryption mode="all">
+    <stringEncryption>
         <filters>
             <filter><![CDATA[glob:com/ffinder/android/statics/**]]></filter>
         </filters>
     </stringEncryption>
-    <classEncryption mode="all"/>
+    <classEncryption>
+        <filters>
+            <filter><![CDATA[glob:com/ffinder/android/**]]></filter>
+        </filters>
+    </classEncryption>
     <integrityControl mode="all">
         <checkCertificate>on</checkCertificate>
     </integrityControl>

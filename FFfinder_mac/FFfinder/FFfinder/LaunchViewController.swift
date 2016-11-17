@@ -21,6 +21,11 @@ class LaunchViewController: MyViewController, CLLocationManagerDelegate {
     @IBOutlet weak var constraintHeightLayoutIntro: NSLayoutConstraint!
     private var locationManager: CLLocationManager?
     
+    
+    override func viewDidLoad() {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
     //must check at viewDidAppear since we cannot go to another view controller in viewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         locationManager = CLLocationManager()
@@ -81,10 +86,10 @@ class LaunchViewController: MyViewController, CLLocationManagerDelegate {
     func goToNextScreen(){
         //userId is not empty, can straight go to main page
         if self.myModel.userId != nil{
+            
             let vc = self.storyboard?.instantiateViewController(withIdentifier: MainPageViewController.getMyClassName()) as! MainPageViewController
-            let navController = UINavigationController(rootViewController: vc)
-            self.present(navController, animated: false, completion: nil)
-
+            self.navigationController!.pushViewController(vc, animated: false)
+        
         }
         //userId is empty, go to setup page
         else{

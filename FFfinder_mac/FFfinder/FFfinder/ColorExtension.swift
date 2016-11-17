@@ -14,6 +14,22 @@ extension UIColor{
         return UIColor(netHex:0x588e7e)
     }
     
+    static func colorStatusBar() -> UIColor{
+        return UIColor(netHex: 0x668e57)
+    }
+    
+    static func colorGreenTextButtonNormal() -> UIColor{
+        return UIColor(netHex: 0xabd489)
+    }
+    
+    static func colorGreenTextButtonTapped() -> UIColor{
+        return UIColor(netHex: 0x497462)
+    }
+    
+    static func colorContrast() -> UIColor{
+        
+        return UIColor(netHex:0xffffff)
+    }
 
     convenience init(netHex:Int) {
         self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)

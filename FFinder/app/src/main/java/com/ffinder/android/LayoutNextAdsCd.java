@@ -64,27 +64,22 @@ public class LayoutNextAdsCd {
     }
 
     private void quickBoot(){
-        fastCheckIsVip(new RunnableArgs<Boolean>() {
-            @Override
-            public void run() {
-                if(this.getFirstArg()){
-                    txtSearchLeft.setText(R.string.vip_title);
-                    txtSearchLeft.setVisibility(View.VISIBLE);
-                    imgViewTick.setVisibility(View.VISIBLE);
-                    txtNextAdsCount.setVisibility(View.GONE);
-                }
-                else{
-                    String storedCredits = PreferenceUtils.get(getMyActivity(), PreferenceType.NextAdsCount);
-                    if(Strings.isNumeric(storedCredits)){
-                        changeNextAdsCount(Integer.valueOf(storedCredits), false);
-                        txtSearchLeft.setText(R.string.search_left);
-                        txtSearchLeft.setVisibility(View.VISIBLE);
-                        txtNextAdsCount.setVisibility(View.VISIBLE);
-                        imgViewTick.setVisibility(View.GONE);
-                    }
-                }
+        if(fastCheckIsVip()){
+            txtSearchLeft.setText(R.string.vip_title);
+            txtSearchLeft.setVisibility(View.VISIBLE);
+            imgViewTick.setVisibility(View.VISIBLE);
+            txtNextAdsCount.setVisibility(View.GONE);
+        }
+        else{
+            String storedCredits = PreferenceUtils.get(getMyActivity(), PreferenceType.NextAdsCount);
+            if(Strings.isNumeric(storedCredits)){
+                changeNextAdsCount(Integer.valueOf(storedCredits), false);
+                txtSearchLeft.setText(R.string.search_left);
+                txtSearchLeft.setVisibility(View.VISIBLE);
+                txtNextAdsCount.setVisibility(View.VISIBLE);
+                imgViewTick.setVisibility(View.GONE);
             }
-        });
+        }
     }
 
 
@@ -147,14 +142,9 @@ public class LayoutNextAdsCd {
         ((MyApplication) getMyActivity().getApplication()).getVipAndProductsHelpers().isInVipPeriod(onResult);
     }
 
-    private void fastCheckIsVip(RunnableArgs<Boolean> onResult){
+    private boolean fastCheckIsVip(){
         String isVip = PreferenceUtils.get(activity, PreferenceType.ISVip);
-        if(!Strings.isEmpty(isVip) && isVip.equals("1")){
-            onResult.run(true);
-        }
-        else{
-            onResult.run(false);
-        }
+        return (!Strings.isEmpty(isVip) && isVip.equals("1"));
     }
 
     public void friendSearched(final RunnableArgs<Boolean> canRun){
@@ -313,26 +303,20 @@ public class LayoutNextAdsCd {
         layoutControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fastCheckIsVip(new RunnableArgs<Boolean>() {
-                    @Override
-                    public void run() {
-                        boolean isVip = this.getFirstArg();
-                        if(isVip){
-                            Intent intent = new Intent(getMyActivity(), ActivityVip.class);
-                            intent.putExtra("userId", myModel.getUserId());
-                            getMyActivity().startActivity(intent);
+                if(fastCheckIsVip()){
+                    Intent intent = new Intent(getMyActivity(), ActivityVip.class);
+                    intent.putExtra("userId", myModel.getUserId());
+                    getMyActivity().startActivity(intent);
+                }
+                else{
+                    new NoCreditsDialog(getMyActivity(), myModel,
+                            getCurrentNextAdsCount(), new INoCreditsListener() {
+                        @Override
+                        public void requestWatchAds() {
+                            showAds();
                         }
-                        else{
-                            new NoCreditsDialog(getMyActivity(), myModel,
-                                    getCurrentNextAdsCount(), new INoCreditsListener() {
-                                @Override
-                                public void requestWatchAds() {
-                                    showAds();
-                                }
-                            }).show();
-                        }
-                    }
-                });
+                    }).show();
+                }
             }
         });
     }

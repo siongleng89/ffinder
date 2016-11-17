@@ -37,6 +37,15 @@ public class RestfulService {
         callApi("use_promo", nameValuePairs, listener);
     }
 
+    public static void checkSubscriptionRemainingMs(String productId,
+                                                   String token, RestfulListener<String> listener){
+
+        ArrayList<Pair<String, String>> nameValuePairs = new ArrayList<Pair<String, String>>();
+        nameValuePairs.add(new Pair<String, String>("productId", productId));
+        nameValuePairs.add(new Pair<String, String>("token", token));
+        callApi("subscription_check", nameValuePairs, listener);
+    }
+
     private static void callApi(final String name,  final ArrayList<Pair<String, String>> nameValuePairs, final RestfulListener listener) {
         nameValuePairs.add(new Pair<String, String>("restSecret", Constants.RestfulKey));
 

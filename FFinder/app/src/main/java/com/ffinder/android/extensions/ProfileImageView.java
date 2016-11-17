@@ -84,7 +84,7 @@ public class ProfileImageView extends RelativeLayout {
         }
 
         if(friendModel.getHasProfileImage()){
-            AnimateBuilder.fadeIn(context, profileImage);
+            profileImage.setVisibility(VISIBLE);
             profileImage.setImageBitmap(friendModel.getFriendProfileImage());
         }
         else{

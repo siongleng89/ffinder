@@ -13,6 +13,7 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
     
     var myModel:MyModel!
     var alertController:UIAlertController?
+    
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -24,6 +25,7 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
         return NSStringFromClass(self).components(separatedBy: ".").last!
     }
     
+    
     override func viewDidLoad() {
         let app = UIApplication.shared
         let statusBarHeight: CGFloat = app.statusBarFrame.size.height
@@ -31,18 +33,41 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
         if let nav = self.navigationController{
             let view = UIView(frame: CGRect(x: 0, y: -statusBarHeight,
                                             width: UIScreen.main.bounds.size.width, height: 20))
-            view.backgroundColor = UIColor.colorPrimaryDark()
+            view.backgroundColor = UIColor.colorStatusBar()
             nav.navigationBar.addSubview(view)
+            
+            nav.navigationBar.tintColor = UIColor.colorContrast()
+            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         }
         else{
             let view = UIView(frame: CGRect(x: 0, y: 0,
                                             width: UIScreen.main.bounds.size.width, height: 20))
-            view.backgroundColor = UIColor.colorPrimaryDark()
+            view.backgroundColor = UIColor.colorStatusBar()
             self.view.addSubview(view)
-
         }
         
+        
+        
     }
+    
+    func addActionToNav(_ leftSide:Bool, _ type:NavItemActionType){
+//        let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(backButtonTapped))
+//        let play = UIBarButtonItem(title: "Play", style: .plain, target: self, action: #selector(backButtonTapped))
+//        
+//        self.navigationItem.rightBarButtonItems = [add, play]
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     func setLeftTabButtonAsBack(){
         let backButton:UIBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonTapped))

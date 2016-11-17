@@ -41,6 +41,16 @@
 -dontwarn org.ietf.jgss.**
 
 
+# Keep filenames and line numbers for stack traces
+-keepattributes SourceFile,LineNumberTable
+
+# Keep JavascriptInterface for WebView bridge
+-keepattributes JavascriptInterface
+
+-dontwarn com.cmcm.adsdk.**
+
+# Keep all classes in Cheetah Mobile Ads package
+-keep class com.cmcm.adsdk.** { *;}
 
 
 

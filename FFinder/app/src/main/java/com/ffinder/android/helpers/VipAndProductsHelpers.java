@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.util.Pair;
+import android.widget.Toast;
 import com.ffinder.android.R;
 import com.ffinder.android.absint.databases.FirebaseListener;
+import com.ffinder.android.absint.helpers.RestfulListener;
 import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.enums.Status;
 import com.ffinder.android.helpers.Iab.*;
@@ -70,6 +72,7 @@ public class VipAndProductsHelpers {
 
                             } catch (IabHelper.IabAsyncInProgressException e) {
                                 e.printStackTrace();
+                                cannotDetermineUserSubscribed();
                             }
                         }
                     });
@@ -82,10 +85,14 @@ public class VipAndProductsHelpers {
             IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, final Inventory inventory) {
             // Have we been disposed of in the meantime? If so, quit.
-            if (iabHelper == null) return;
+            if (iabHelper == null){
+                cannotDetermineUserSubscribed();
+                return;
+            }
 
             // Is it a failure?
             if (result.isFailure()) {
+                cannotDetermineUserSubscribed();
                 return;
             }
 
@@ -96,34 +103,75 @@ public class VipAndProductsHelpers {
                         skuDetails.getPrice(), skuDetails));
             }
 
+
+            Purchase subscribedModel = null;
+
             if(!Strings.isEmpty(subscribeSku)){
-                Purchase subscribedYearly = inventory.getPurchase(subscribeSku);
-                if(subscribedYearly != null &&
-                        subscribedYearly.getDeveloperPayload() != null &&
-                        subscribedYearly.getDeveloperPayload().equals(
-                                Constants.IABDeveloperPayload)){
-                    subscribed = true;
-                    PreferenceUtils.put(context, PreferenceType.ISVip, "1");
-                }
-                else{
+                subscribedModel = inventory.getPurchase(subscribeSku);
 
-                    //special handling for special promo
-                    Purchase subscribeSpecial = inventory.getPurchase(specialPromoSku);
-                    if(subscribeSpecial != null){
-                        subscribed = true;
-                        PreferenceUtils.put(context, PreferenceType.ISVip, "1");
-                    }
-                    else{
-                        PreferenceUtils.delete(context, PreferenceType.ISVip);
-                    }
-
+                if(subscribedModel == null){
+                    subscribedModel = inventory.getPurchase(specialPromoSku);
                 }
             }
 
-            onIabReady();
+            if(subscribedModel != null){
+                final Purchase finalSubscribedModel = subscribedModel;
+                RestfulService.checkSubscriptionRemainingMs(subscribedModel.getSku(),
+                        subscribedModel.getToken(), new RestfulListener<String>() {
+                            @Override
+                            public void onResult(String result, Status status) {
+                                if(Strings.isNumeric(result)){
+                                    //subscribe not yet expired
+                                    if(Long.valueOf(result) > 0){
+                                        userIsSubscriber();
+                                    }
+                                    //subscribe expired
+                                    else{
+                                        //is auto renewing, can count as vip even is expired
+                                        if(finalSubscribedModel.isAutoRenewing()){
+                                            userIsSubscriber();
+                                        }
+                                        else{
+                                            userNotSubscriber();
+                                        }
+                                    }
+                                }
+                                else{
+                                    userNotSubscriber();
+                                }
+                            }
+                        });
+
+            }
+            else{
+                userNotSubscriber();
+            }
 
         }
     };
+
+    private void userIsSubscriber(){
+        subscribed = true;
+        PreferenceUtils.put(context, PreferenceType.ISVip, "1");
+        onIabReady();
+    }
+
+    private void userNotSubscriber(){
+        PreferenceUtils.delete(context, PreferenceType.ISVip);
+        onIabReady();
+    }
+
+
+    //cannot determine as Iab error occurred, temporarily use cache vip value until next reboot
+    private void cannotDetermineUserSubscribed(){
+        String isVip = PreferenceUtils.get(context, PreferenceType.ISVip);
+        if(!Strings.isEmpty(isVip) && isVip.equals("1")){
+            userIsSubscriber();
+        }
+        else{
+            userNotSubscriber();
+        }
+    }
 
 
     private void onIabReady(){

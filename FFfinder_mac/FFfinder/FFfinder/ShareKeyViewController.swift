@@ -19,13 +19,15 @@ class ShareKeyViewController: MyViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        self.title = "share_key_activity_title".localized
         
-        labelMessage.text = "your_key_title".localized
-        btnShare.setTitle("Share", for: .normal)
-        btnRefresh.setTitle("Refresh", for: .normal)
-
-        checkKey()
+        // Do any additional setup after loading the view.
+//        
+//        labelMessage.text = "your_key_title".localized
+//        btnShare.setTitle("Share", for: .normal)
+//        btnRefresh.setTitle("Refresh", for: .normal)
+//
+//        checkKey()
     }
     
     private func checkKey(){

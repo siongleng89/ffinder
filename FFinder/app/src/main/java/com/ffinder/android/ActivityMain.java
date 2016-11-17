@@ -238,7 +238,8 @@ public class ActivityMain extends MyActivityAbstract implements
                         if (taskFragment != null) {
                             if(friendModel.getSearchStatus() == SearchStatus.End){
                                 taskFragment.terminate();
-                                getSupportFragmentManager().beginTransaction().remove(taskFragment).commit();
+                                getSupportFragmentManager().beginTransaction()
+                                        .remove(taskFragment).commitAllowingStateLoss();
                             }
                             else{
                                 //reset listener
@@ -295,7 +296,8 @@ public class ActivityMain extends MyActivityAbstract implements
                             RequestLocationTaskFrag frag = RequestLocationTaskFrag.newInstance(
                                     myModel.getUserId(), FirebaseInstanceId.getInstance().getToken(),
                                     friendModel.getUserId());
-                            fm.beginTransaction().add(frag, friendModel.getUserId()).commit();
+                            fm.beginTransaction().add(frag, friendModel.getUserId())
+                                    .commitAllowingStateLoss();
                             setRequestLocationTaskFragListener(frag);
                         }
                     }
@@ -403,7 +405,7 @@ public class ActivityMain extends MyActivityAbstract implements
                     if (taskFragment != null && friendModel.getSearchStatus() == SearchStatus.End) {
                         taskFragment.terminate();
                         if(!isPaused()){
-                            fm.beginTransaction().remove(taskFragment).commit();
+                            fm.beginTransaction().remove(taskFragment).commitAllowingStateLoss();
                         }
                         friendModel.setRecentlyFinishSearch(true);
                         friendModel.setTimeoutPhase(0);
@@ -519,7 +521,8 @@ public class ActivityMain extends MyActivityAbstract implements
                 if(!isPaused()){
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(userId);
                     if(fragment != null)
-                        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                        getSupportFragmentManager().beginTransaction()
+                                .remove(fragment).commitAllowingStateLoss();
                 }
 
                 Analytics.logEvent(AnalyticEvent.Search_Result, result.name());

@@ -77,6 +77,26 @@ public class LocationUpdater implements
                     .addApi(LocationServices.API)
                     .build();
             googleApiClient.connect();
+
+
+            try{
+
+                locationManager = (LocationManager)
+                        context.getSystemService(Context.LOCATION_SERVICE);
+
+                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                            0, 0, LocationUpdater.this, Looper.getMainLooper());
+                }
+
+
+            }
+            catch (SecurityException ex){
+
+            }
+
+
+
         }
 
     }
@@ -103,32 +123,24 @@ public class LocationUpdater implements
     }
 
     //monitor for some time, if still cannot get location,
-    //resort to old location manager
+    //resort to gps location manager
     private void startMonitoring(){
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
-                int i = 0;
-                double timeout = Constants.RequestLocationTimeoutSecs * 0.20;
-                while (i < timeout){
-                    if(finish) return;
-                    else{
-                        Threadings.sleep(1000);
-                    }
-                    i++;
-                }
 
-                // use last known location with lower accuracy
-                if(!finish){
-                    try{
-                        locationManager = (LocationManager)
-                                context.getSystemService(Context.LOCATION_SERVICE);
-                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                Threadings.sleep(2000);
+                if(finish) return;
+
+                //use gps location manager
+                try{
+                    if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                                 0, 0, LocationUpdater.this, Looper.getMainLooper());
                     }
-                    catch (SecurityException ex){
+                }
+                catch (SecurityException ex){
 
-                    }
                 }
             }
         });
