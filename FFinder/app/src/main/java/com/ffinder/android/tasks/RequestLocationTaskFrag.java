@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.tasks.RequestLocationTaskFragListener;
+import com.ffinder.android.enums.AnalyticEvent;
 import com.ffinder.android.enums.FCMMessageType;
 import com.ffinder.android.enums.SearchResult;
 import com.ffinder.android.enums.SearchStatus;
@@ -359,10 +360,14 @@ public class RequestLocationTaskFrag extends Fragment {
 
             if(searchStatus == SearchStatus.WaitingUserLocation){
                 setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
+                Analytics.logEvent(AnalyticEvent.Search_Timeout,
+                                SearchStatus.WaitingUserLocation.name());
                 shouldAutoNotify = true;
             }
             else if(searchStatus == SearchStatus.WaitingUserRespond){
                 setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
+                Analytics.logEvent(AnalyticEvent.Search_Timeout,
+                                SearchStatus.WaitingUserRespond.name());
                 shouldAutoNotify = true;
             }
             else if(searchStatus == SearchStatus.CheckingData){

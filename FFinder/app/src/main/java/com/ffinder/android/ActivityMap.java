@@ -1,5 +1,6 @@
 package com.ffinder.android;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.*;
@@ -16,6 +17,7 @@ import com.directions.route.*;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.enums.ActionBarActionType;
 import com.ffinder.android.enums.AnalyticEvent;
+import com.ffinder.android.enums.OverlayType;
 import com.ffinder.android.extensions.ButtonTab;
 import com.ffinder.android.extensions.ButtonWhite;
 import com.ffinder.android.helpers.*;
@@ -505,8 +507,17 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
                 String uri = "geo:" + latitude + ","
                         + longitude + "?q=" + latitude
                         + "," + longitude;
-                startActivity(new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse(uri)));
+                try {
+                    startActivity(new Intent(android.content.Intent.ACTION_VIEW,
+                            Uri.parse(uri)));
+
+                } catch (ActivityNotFoundException e) {
+                    OverlayBuilder.build(ActivityMap.this)
+                            .setOverlayType(OverlayType.OkOnly)
+                            .setContent(getString(R.string.no_gps_nav_apps_found_error))
+                            .show();
+                }
+
             }
         });
 

@@ -47,11 +47,11 @@ public class ActivityMain extends MyActivityAbstract implements
 
     private LinearLayout layoutBottom;
     private LayoutNextAdsCd layoutNextAdsCd;
-    private MyModel myModel;
     private RecyclerView listFriends;
     private FriendsAdapter friendsAdapter;
     private final int pickImageCode = 100;
-    private String pickingProfileImageForFriendId;
+    private static String pickingProfileImageForFriendId;
+    private boolean firstRunNeeded;
 
     public ActivityMain() {
     }
@@ -69,14 +69,12 @@ public class ActivityMain extends MyActivityAbstract implements
         addActionToOverflow(getString(R.string.add_new_member_manually_title));
         addActionToOverflow(getString(R.string.settings_activity_title));
 
-        myModel = getMyModel();
-
         layoutBottom = (LinearLayout) findViewById(R.id.layoutBottom);
-        layoutNextAdsCd = new LayoutNextAdsCd(this, myModel);
+        layoutNextAdsCd = new LayoutNextAdsCd(this);
         layoutBottom.addView(layoutNextAdsCd.getView());
 
         listFriends = (RecyclerView) findViewById(R.id.listFriends);
-        friendsAdapter = new FriendsAdapter(this, myModel.getFriendModels(), this, this, this);
+        friendsAdapter = new FriendsAdapter(this, getMyModel().getFriendModels(), this, this, this);
         listFriends.setAdapter(friendsAdapter);
         listFriends.setItemAnimator(new DefaultItemAnimator());
         ((DefaultItemAnimator) listFriends.getItemAnimator()).setSupportsChangeAnimations(false);
@@ -84,13 +82,20 @@ public class ActivityMain extends MyActivityAbstract implements
         layoutManager.setAutoMeasureEnabled(false);
         listFriends.setLayoutManager(layoutManager);
 
+
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null && extras.containsKey("firstRun")) {
+            getIntent().removeExtra("firstRun");
+            firstRunNeeded = true;
+        }
+
         setListeners();
 
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
-                if(myModel.loadAllFriendModels()){
-                    myModel.sortFriendModels();
+                if(getMyModel().loadAllFriendModels()){
+                    getMyModel().sortFriendModels();
                 }
 
                 //reload(recreate/remove) task fragments for friend searching (mostly for rotating device)
@@ -100,13 +105,13 @@ public class ActivityMain extends MyActivityAbstract implements
                 refreshFriendList();
 
                 //save adsId to database to persist user even uninstalling apps
-                AdsIdTask adsIdTask = new AdsIdTask(ActivityMain.this, myModel.getUserId());
+                AdsIdTask adsIdTask = new AdsIdTask(ActivityMain.this, getMyModel().getUserId());
                 adsIdTask.execute();
 
                 //save refresh token provided token refresh called in service is called before user login
                 //which firebase will block it from saving
                 String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-                if(!Strings.isEmpty(refreshedToken)) FirebaseDB.updateMyToken(myModel.getUserId(), refreshedToken);
+                if(!Strings.isEmpty(refreshedToken)) FirebaseDB.updateMyToken(getMyModel().getUserId(), refreshedToken);
 
                 //some of the devices have known issues, notify the user to follow setup guides
                 checkKnownIssuePhones();
@@ -125,8 +130,8 @@ public class ActivityMain extends MyActivityAbstract implements
 
         layoutNextAdsCd.onResume();
 
-        if(myModel.loadAllFriendModels()){
-            myModel.sortFriendModels();
+        if(getMyModel().loadAllFriendModels()){
+            getMyModel().sortFriendModels();
         }
 
         reloadFriendsDesignByRequestLocationTaskFrags();
@@ -135,24 +140,20 @@ public class ActivityMain extends MyActivityAbstract implements
         //check if pending to add user, if yes, pop add user dialog automatically
         checkHasPendingToAddUser();
 
-
-        //auto run search myself the first time user run apps
-
-        Bundle extras = getIntent().getExtras();
-        if(extras !=null && extras.containsKey("firstRun")) {
-            getIntent().removeExtra("firstRun");
+        if(firstRunNeeded){
             Threadings.delay(1000, new Runnable() {
                 @Override
                 public void run() {
-
-                    if(getMyModel().getNonSelfFriendModelsCount() == 0){
-                        FriendModel myOwnModel = getMyModel().getFriendModelById(getMyModel().getUserId());
-                        searchNow(myOwnModel);
-                    }
-
+                if(!isPaused()){
+                    firstRunNeeded = false;
+                    FriendModel myOwnModel = getMyModel().getFriendModelById(getMyModel().getUserId());
+                    if(myOwnModel != null) searchNow(myOwnModel);
+                }
                 }
             });
+
         }
+
 
     }
 
@@ -212,10 +213,14 @@ public class ActivityMain extends MyActivityAbstract implements
     }
 
     //auto add user if there is pending add user key
-    private void checkHasPendingToAddUser(){
+    private boolean checkHasPendingToAddUser(){
         if(!Strings.isEmpty(Vars.pendingAddUserKey)){
             Intent intent = new Intent(ActivityMain.this, ActivityAddFriend.class);
             startActivity(intent);
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
@@ -294,7 +299,7 @@ public class ActivityMain extends MyActivityAbstract implements
                             friendModel.setTimeoutPhase(0);
                             final FragmentManager fm = getSupportFragmentManager();
                             RequestLocationTaskFrag frag = RequestLocationTaskFrag.newInstance(
-                                    myModel.getUserId(), FirebaseInstanceId.getInstance().getToken(),
+                                    getMyModel().getUserId(), FirebaseInstanceId.getInstance().getToken(),
                                     friendModel.getUserId());
                             fm.beginTransaction().add(frag, friendModel.getUserId())
                                     .commitAllowingStateLoss();
@@ -308,7 +313,7 @@ public class ActivityMain extends MyActivityAbstract implements
 
     //refresh friends list from firebase database
     private void refreshFriendList(){
-        FirebaseDB.getAllMyLinks(myModel.getUserId(), new FirebaseListener() {
+        FirebaseDB.getAllMyLinks(getMyModel().getUserId(), new FirebaseListener() {
             @Override
             public void onResult(Object result, Status status) {
                 if(status == Status.Success && result != null){
@@ -316,7 +321,7 @@ public class ActivityMain extends MyActivityAbstract implements
                     List<Pair<String, Object>> list = (List<Pair<String, Object>>) result;
                     boolean foundNew = false;
                     for(Pair<String, Object> pair : list){
-                        if(!myModel.checkFriendExist(pair.first)){
+                        if(!getMyModel().checkFriendExist(pair.first)){
                             String userId = (String) pair.first;
                             String name = (String) pair.second;
 
@@ -324,14 +329,14 @@ public class ActivityMain extends MyActivityAbstract implements
                             friendModel.setName(name);
                             friendModel.setUserId(userId);
                             friendModel.save(ActivityMain.this);
-                            myModel.addFriendModel(friendModel);
+                            getMyModel().addFriendModel(friendModel);
                             foundNew = true;
                         }
                     }
 
                     if(foundNew){;
-                        myModel.sortFriendModels();
-                        myModel.commitFriendUserIds();
+                        getMyModel().sortFriendModels();
+                        getMyModel().commitFriendUserIds();
                         ActivityMain.this.updateFriendsListAdapter();
                     }
 
@@ -432,8 +437,8 @@ public class ActivityMain extends MyActivityAbstract implements
         registerBroadcastReceiver(BroadcastEvent.RefreshNewlyAddedFriend, new RunnableArgs<Intent>() {
             @Override
             public void run() {
-                myModel.loadAllFriendModels();
-                myModel.sortFriendModels();
+                getMyModel().loadAllFriendModels();
+                getMyModel().sortFriendModels();
                 updateFriendsListAdapter();
             }
         });
@@ -468,7 +473,7 @@ public class ActivityMain extends MyActivityAbstract implements
         requestLocationTaskFrag.setRequestLocationTaskFragListener(new RequestLocationTaskFragListener() {
             @Override
             public void onTimeoutPhaseChanged(String userId, int newPhase) {
-                FriendModel friendModel = myModel.getFriendModelById(userId);
+                FriendModel friendModel = getMyModel().getFriendModelById(userId);
                 if(friendModel != null){
                     if(newPhase != friendModel.getTimeoutPhase()){
                         friendModel.setTimeoutPhase(newPhase);
@@ -479,7 +484,7 @@ public class ActivityMain extends MyActivityAbstract implements
 
             @Override
             public void onUpdateStatus(String userId, SearchStatus newStatus) {
-                FriendModel friendModel = myModel.getFriendModelById(userId);
+                FriendModel friendModel = getMyModel().getFriendModelById(userId);
                 if(friendModel != null){
                     if(newStatus != friendModel.getSearchStatus()){
                         friendModel.setSearchStatus(newStatus);
@@ -494,7 +499,7 @@ public class ActivityMain extends MyActivityAbstract implements
             public void onUpdateResult(final String userId, final LocationModel locationModel,
                                        final SearchStatus finalSearchStatus, final SearchResult result) {
 
-                final FriendModel friendModel = myModel.getFriendModelById(userId);
+                final FriendModel friendModel = getMyModel().getFriendModelById(userId);
                 if(friendModel != null){
                     friendModel.setSearchStatus(finalSearchStatus);
                     friendModel.setSearchResult(result);
@@ -572,7 +577,7 @@ public class ActivityMain extends MyActivityAbstract implements
     public void onDeleteFriend(FriendModel friendModel) {
         FirebaseDB.deleteLink(getMyModel().getUserId(), friendModel.getUserId(), null);
         //remove blocking user since already deleted
-        FirebaseDB.changeBlockUser(myModel.getUserId(), friendModel.getUserId(), false, null);
+        FirebaseDB.changeBlockUser(getMyModel().getUserId(), friendModel.getUserId(), false, null);
 
         getMyModel().deleteFriend(friendModel);
         friendModel.delete(this);
@@ -589,7 +594,7 @@ public class ActivityMain extends MyActivityAbstract implements
             getMyModel().sortFriendModels();
             getMyModel().commitFriendUserIds();
             updateFriendsListAdapter();
-            FirebaseDB.editLinkName(myModel.getUserId(), changingFriendModel.getUserId(), newName, null);
+            FirebaseDB.editLinkName(getMyModel().getUserId(), changingFriendModel.getUserId(), newName, null);
         }
     }
 
@@ -637,8 +642,12 @@ public class ActivityMain extends MyActivityAbstract implements
                             pickingProfileImageForFriendId);
 
                     //set to null to let it refresh image
-                    getMyModel().getFriendModelById(pickingProfileImageForFriendId).setHasProfileImage(null);
-                    updateFriendsListAdapter(pickingProfileImageForFriendId);
+                    FriendModel friendModel = getMyModel().getFriendModelById(pickingProfileImageForFriendId);
+                    if(friendModel != null){
+                        friendModel.setHasProfileImage(null);
+                        updateFriendsListAdapter(pickingProfileImageForFriendId);
+                    }
+
 
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Exception error = result.getError();

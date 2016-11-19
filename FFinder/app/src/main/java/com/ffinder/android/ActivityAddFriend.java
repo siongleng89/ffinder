@@ -76,6 +76,11 @@ public class ActivityAddFriend extends MyActivityAbstract {
         //use & not &&, to force evaluate all conditions
         if (userKeyWrapper.validateNotEmpty(getString(R.string.no_user_key_msg))){
 
+            String addingKey= userKeyWrapper.getText().trim();
+            if(addingKey.length() > 14){
+                addingKey = addingKey.substring(0, 14);
+            }
+
             loadingDialog = OverlayBuilder.build(this)
                                 .setOverlayType(OverlayType.Loading)
                                 .setContent(getString(R.string.adding_friend_msg))
@@ -86,13 +91,14 @@ public class ActivityAddFriend extends MyActivityAbstract {
                                     }
                                 }).show();
 
-            FirebaseDB.checkKeyExist(getMyModel().getUserId(), userKeyWrapper.getText(),
+            final String finalAddingKey = addingKey;
+            FirebaseDB.checkKeyExist(getMyModel().getUserId(), addingKey,
                     new FirebaseListener<KeyModel>(KeyModel.class) {
                 @Override
                 public void onResult(final KeyModel keyModel, Status status) {
                     if(processCanceled) return;
 
-                    String targetKey = userKeyWrapper.getText();
+                    String targetKey = finalAddingKey;
                     String targetName = memberNameWrapper.getText();
 
                     if(status == Status.Success && keyModel != null){

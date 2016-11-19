@@ -208,6 +208,11 @@ public class OverlayBuilder {
         dialog.show();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+        if(overlayType == OverlayType.Loading){
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+        }
+
         for(int i = 0; i < btnTexts.size(); i++){
             int resId = activity.getResources().getIdentifier("btn" + i, "id", activity.getPackageName());
             FFTextButton ffTextButton = (FFTextButton) viewInflated.findViewById(resId);

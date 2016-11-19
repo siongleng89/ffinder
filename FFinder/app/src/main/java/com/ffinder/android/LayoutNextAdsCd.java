@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
+import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.controls.INoCreditsListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.IAdsMediationListener;
@@ -18,19 +19,17 @@ import com.ffinder.android.models.MyModel;
  */
 public class LayoutNextAdsCd {
 
-    private AppCompatActivity activity;
+    private MyActivityAbstract activity;
     private TextView txtNextAdsCount, txtSearchLeft;
     private RelativeLayout layoutCount, layoutControl;
     private ImageView imgViewTick;
-    private MyModel myModel;
     private Integer currentNextAdsCount;
     private boolean completeProcessing;
     private int addingCount;
 
 
-    public LayoutNextAdsCd(AppCompatActivity activity, MyModel myModel){
+    public LayoutNextAdsCd(MyActivityAbstract activity){
         this.activity = activity;
-        this.myModel = myModel;
 
         AdsMediation.init(activity);
     }
@@ -101,7 +100,7 @@ public class LayoutNextAdsCd {
                 }
                 else{
                     AdsMediation.preload();
-                    FirebaseDB.getNextAdsCount(myModel.getUserId(), new FirebaseListener<Integer>(Integer.class) {
+                    FirebaseDB.getNextAdsCount(activity.getMyModel().getUserId(), new FirebaseListener<Integer>(Integer.class) {
                         @Override
                         public void onResult(Integer result, Status status) {
                             completeProcessing = true;
@@ -124,7 +123,7 @@ public class LayoutNextAdsCd {
 
 
                             if(needSaveToDb){
-                                FirebaseDB.setNextAdsCount(myModel.getUserId(), getCurrentNextAdsCount(), new FirebaseListener() {
+                                FirebaseDB.setNextAdsCount(activity.getMyModel().getUserId(), getCurrentNextAdsCount(), new FirebaseListener() {
                                     @Override
                                     public void onResult(Object result, Status status) {
                                     }
@@ -164,7 +163,7 @@ public class LayoutNextAdsCd {
 
             canRun.run(!noCredits);
             if(noCredits){
-                new NoCreditsDialog(getMyActivity(), myModel,
+                new NoCreditsDialog(getMyActivity(), activity.getMyModel(),
                         getCurrentNextAdsCount(), new INoCreditsListener() {
                     @Override
                     public void requestWatchAds() {
@@ -181,7 +180,7 @@ public class LayoutNextAdsCd {
                 if(!this.getFirstArg()){
                     if(getCurrentNextAdsCount() <= 0){
                         canRun.run(false);
-                        new NoCreditsDialog(getMyActivity(), myModel,
+                        new NoCreditsDialog(getMyActivity(), activity.getMyModel(),
                                 getCurrentNextAdsCount(), new INoCreditsListener() {
                             @Override
                             public void requestWatchAds() {
@@ -193,7 +192,8 @@ public class LayoutNextAdsCd {
                     else{
                         canRun.run(true);
                         changeNextAdsCount(getCurrentNextAdsCount() - 1, true);
-                        FirebaseDB.setNextAdsCount(myModel.getUserId(), getCurrentNextAdsCount(), new FirebaseListener() {
+                        FirebaseDB.setNextAdsCount(activity.getMyModel().getUserId(),
+                                getCurrentNextAdsCount(), new FirebaseListener() {
                             @Override
                             public void onResult(Object result, Status status) {
                                 if(status == Status.Failed){
@@ -250,7 +250,7 @@ public class LayoutNextAdsCd {
             AdsMediation.showAds(new IAdsMediationListener() {
                 @Override
                 public void onResult(boolean success) {
-                    RestfulService.adsWatched(myModel.getUserId(), new RestfulListener<String>() {
+                    RestfulService.adsWatched(activity.getMyModel().getUserId(), new RestfulListener<String>() {
                         @Override
                         public void onResult(String result, Status status) {
                             if(status == Status.Success && !Strings.isEmpty(result) && Strings.isNumeric(result)){
@@ -305,11 +305,11 @@ public class LayoutNextAdsCd {
             public void onClick(View v) {
                 if(fastCheckIsVip()){
                     Intent intent = new Intent(getMyActivity(), ActivityVip.class);
-                    intent.putExtra("userId", myModel.getUserId());
+                    intent.putExtra("userId", activity.getMyModel().getUserId());
                     getMyActivity().startActivity(intent);
                 }
                 else{
-                    new NoCreditsDialog(getMyActivity(), myModel,
+                    new NoCreditsDialog(getMyActivity(), activity.getMyModel(),
                             getCurrentNextAdsCount(), new INoCreditsListener() {
                         @Override
                         public void requestWatchAds() {

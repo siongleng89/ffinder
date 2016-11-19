@@ -216,8 +216,8 @@ Share key activity text start -->
 <string name="share_msg">"Olá, por favor descarregue o Simple Friend e o Family Finder para encontrar seus amigos e familiares com um clique de forma GRATUITA em
 Https://play.google.com/store/apps/details?id=com.ffinder.android
 
-Depois me adicione clicando nesse link (Abra com FFfinder
-http://ff-finder.com/addnew/%s)"</string>
+Depois me adicione clicando nesse link (Abra com FFfinder)
+http://ff-finder.com/addnew/%s"</string>
 <string name="after_share_passcode_reminder">"Obrigado por partilhar o seu código, apenas aguarde até qu seu amigo ou familiar adicione você e poderão começar a se rastrear mutuamente."</string>
 
 <!-- Share key activity text end
