@@ -294,4 +294,7 @@ Everything about tutorials -->
 
 <!-- noCreditsDialog -->
 <string name="confirm_watch_ads_on_3g">"Data charges may be incurred. Continue to advertisement?"</string>
+
+<!-- ActivityMap -->
+<string name="no_gps_nav_apps_found_error">"No gps navigation apps found in your device."</string>
 </resources>
