@@ -293,4 +293,7 @@ Everything about tutorials -->
 
 <!-- noCreditsDialog -->
 <string name="confirm_watch_ads_on_3g">"Cobranças de dados podem acontecer. Continuar para a publicidade?"</string>
+
+<!-- ActivityMap -->
+<string name="no_gps_nav_apps_found_error">"Nenhum aplicativo de navegação GPS encontrado em seu dispositivo"</string>
 </resources>
