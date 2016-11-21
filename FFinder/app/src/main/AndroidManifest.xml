@@ -55,7 +55,8 @@
 
         <receiver
                 android:name=".absint.receivers.StartServiceBroadcastReceiver"
-                android:process=":remote">
+                android:process=":remote"
+                android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
@@ -65,25 +66,55 @@
         <service
                 android:name=".services.GcmAliveHeartbeatService"
                 android:enabled="true"
-                android:exported="false">
+                android:exported="true">
         </service>
+
         <service android:name=".services.HandoffToNotificationConsumerIntentService">
         </service>
 
+        <service android:name=".services.AutoSearchIntentService">
+        </service>
 
+        <receiver
+                android:name=".absint.receivers.AutoSearchWakefulBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.ffinder.android.AUTO_SEARCH" />
+            </intent-filter>
+        </receiver>
 
+        <receiver
+                android:name=".absint.receivers.LocationUpdateRequestWakefulBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.ffinder.android.GET_LOCATION" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".services.LocationUpdateRequestIntentService">
+        </service>
+
+        <service android:name=".services.StartGeofencingService">
+        </service>
+
+        <receiver
+                android:name=".absint.receivers.GeofencingChangedBroadcastReceiver">
+        </receiver>
+
+        <receiver
+                android:name=".absint.receivers.StopGeofencingReceiver">
+        </receiver>
+
+        <receiver
+                android:name=".absint.receivers.LocationProviderChangedBroadcastReceiver"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyADQK5vtpa2ZcipurNx8g4CVNRXUZ_qIX0"/>
 
-        <receiver
-                android:name=".absint.receivers.LocationBroadcastReceiver"
-                android:exported="true">
-            <intent-filter>
-                <action android:name="android.location.PROVIDERS_CHANGED"/>
-            </intent-filter>
-        </receiver>
 
         <!-- start ads -->
         <meta-data android:name="com.appodeal.framework" android:value="android" />

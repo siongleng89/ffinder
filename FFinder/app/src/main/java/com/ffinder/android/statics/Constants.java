@@ -14,5 +14,6 @@ public class Constants {
     public static long KeyExpiredTotalSecs = 60 * 60 * 24;  //1 day
     public static String GoogleApiKey = "AIzaSyAGx4_MQ__XWSC1mR3rY9QwGniwjoWsNgE";
     public static int RequestLocationTimeoutSecs = 40;
+    public static int GeofenceExpiredMs = 20 * 60 * 60 * 1000;  //20 hours
     public static String AppoDealKey = "0a3997c231449673f17f7776069ce85b33d0c75f8493221c";
 }

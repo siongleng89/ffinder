@@ -13,8 +13,8 @@ android {
 
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 65
-        versionName "3.2.3"
+        versionCode 71
+        versionName "3.2.8"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

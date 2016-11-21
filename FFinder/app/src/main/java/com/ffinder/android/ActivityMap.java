@@ -22,6 +22,7 @@ import com.ffinder.android.extensions.ButtonTab;
 import com.ffinder.android.extensions.ButtonWhite;
 import com.ffinder.android.helpers.*;
 import com.ffinder.android.statics.Constants;
+import com.ffinder.android.tasks.LocationUpdateTask;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -52,6 +53,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
     private Route driveRoute, transitRoute, walkRoute;
     private AbstractRouting.TravelMode currentTravelMode;
     private Bitmap bitmapProfile;
+    private LocationUpdateTask locationUpdateTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +146,9 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
             @Override
             public void run() {
                 if (Strings.isEmpty(myLatitude)){
-                    new LocationUpdater(ActivityMap.this, new RunnableArgs<Pair<String, String>>() {
+
+                    locationUpdateTask = new LocationUpdateTask(ActivityMap.this,
+                            new RunnableArgs<Pair<String, String>>() {
                         @Override
                         public void run() {
                             myLatitude = this.getFirstArg().first;
@@ -152,6 +156,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
                             startGetDirections(travelMode);
                         }
                     });
+                    locationUpdateTask.execute();
                 }
                 else{
                     startGetDirections(travelMode);
@@ -577,6 +582,9 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
     }
 
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(locationUpdateTask != null) locationUpdateTask.terminate();
+    }
 }

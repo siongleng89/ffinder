@@ -212,7 +212,7 @@ public class ActivityAddFriend extends MyActivityAbstract {
 
         //notificate user added friend
         NotificationSender.sendWithUserId(getMyModel().getUserId(), addingUserId,
-                FCMMessageType.FriendsAdded, NotificationSender.TTL_LONG, null,
+                FCMMessageType.FriendsAdded, NotificationSender.TTL_LONG, null, false,
                 new Pair<String, String>("username", myName));
 
 

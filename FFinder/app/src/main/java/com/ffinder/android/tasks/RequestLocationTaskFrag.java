@@ -197,7 +197,7 @@ public class RequestLocationTaskFrag extends Fragment {
                                     NotificationSender.sendWithUserId(myUserId, targetUserId,
                                             FCMMessageType.UpdateLocation,
                                             Constants.RequestLocationTimeoutSecs / 2,
-                                            Strings.generateUniqueRandomKey(30),
+                                            Strings.generateUniqueRandomKey(30), false,
                                             new Pair<String, String>("senderToken", myToken));
 
 
@@ -221,7 +221,7 @@ public class RequestLocationTaskFrag extends Fragment {
                                                 NotificationSender.sendWithUserId(myUserId, targetUserId,
                                                         FCMMessageType.UpdateLocation,
                                                         Constants.RequestLocationTimeoutSecs,
-                                                        Strings.generateUniqueRandomKey(30),
+                                                        Strings.generateUniqueRandomKey(30), false,
                                                         new Pair<String, String>("senderToken", myToken));
                                             }
                                         }
@@ -382,7 +382,7 @@ public class RequestLocationTaskFrag extends Fragment {
                 // when it has connection
                 NotificationSender.sendWithUserId(userId, targetUserId,
                         FCMMessageType.UpdateLocation,
-                        NotificationSender.TTL_LONG, Strings.generateUniqueRandomKey(30),
+                        NotificationSender.TTL_LONG, Strings.generateUniqueRandomKey(30), false,
                         new Pair<String, String>("senderToken", myToken));
             }
         }
