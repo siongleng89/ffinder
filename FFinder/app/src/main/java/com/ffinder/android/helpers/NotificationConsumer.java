@@ -1,6 +1,7 @@
 package com.ffinder.android.helpers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.util.Pair;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -80,7 +81,12 @@ public class NotificationConsumer {
                 String senderToken = map.get("senderToken");
                 String fromPlatform = map.get("fromPlatform");
 
-                new LocationUpdater(context, senderId, fromPlatform, senderToken);
+                Intent intent = new Intent();
+                intent.setAction("com.ffinder.android.GET_LOCATION");
+                intent.putExtra("senderId", senderId);
+                intent.putExtra("senderToken", senderToken);
+                intent.putExtra("fromPlatform", fromPlatform);
+                context.sendBroadcast(intent);
             }
 
             //auto user located notification received,

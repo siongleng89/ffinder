@@ -7,11 +7,13 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.Preference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.util.Pair;
 import com.ffinder.android.enums.FCMMessageType;
+import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.models.LocationModel;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Constants;
@@ -96,7 +98,6 @@ public class LocationUpdater implements
             }
 
 
-
         }
 
     }
@@ -132,7 +133,7 @@ public class LocationUpdater implements
                 Threadings.sleep(2000);
                 if(finish) return;
 
-                //use gps location manager
+                //resort one, use gps location manager
                 try{
                     if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
@@ -142,6 +143,19 @@ public class LocationUpdater implements
                 catch (SecurityException ex){
 
                 }
+
+                Threadings.sleep(3000);
+                if(finish) return;
+
+                //resort two, use cache location
+                String coords = PreferenceUtils.get(context, PreferenceType.LastLocation);
+                if(!Strings.isEmpty(coords)){
+                    String[] coordsArr = coords.split(",");
+                    if(coordsArr.length >= 2){
+                        onLocationChanged(coordsArr[0], coordsArr[1]);
+                    }
+                }
+
             }
         });
     }
@@ -160,11 +174,19 @@ public class LocationUpdater implements
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
+            //accuracy is too bad, discard it now
+            if (location.hasAccuracy() && location.getAccuracy() > 1000){
+                return;
+            }
             String latitude = String.valueOf(location.getLatitude());
             String longitude = String.valueOf(location.getLongitude());
-            locationSuccessfullyRetrieved(latitude, longitude);
+            onLocationChanged(latitude, longitude);
+            PreferenceUtils.put(context, PreferenceType.LastLocation,
+                    latitude + "," + longitude);
         }
+    }
 
+    public void onLocationChanged(String latitude, String longitude){
         if(googleApiClient != null) {
             googleApiClient.disconnect();
         }
@@ -176,7 +198,10 @@ public class LocationUpdater implements
 
             }
         }
+
+        locationSuccessfullyRetrieved(latitude, longitude);
     }
+
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
@@ -197,7 +222,7 @@ public class LocationUpdater implements
     private void replyAliveMsg(String myUserId, String toUserToken){
         NotificationSender.sendWithToken(myUserId, toUserToken,
                 FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT, null,
-                fromPlatform, new Pair<String, String>("locationDisabled",
+                fromPlatform, false, new Pair<String, String>("locationDisabled",
                         locationSharingAllowed ? "0" : "1"));
     }
 
@@ -223,7 +248,7 @@ public class LocationUpdater implements
             if(!Strings.isEmpty(fromUserToken)){
                 NotificationSender.sendWithToken(myModel.getUserId(), fromUserToken,
                         FCMMessageType.UserLocated, NotificationSender.TTL_INSTANT,
-                        null, fromPlatform,
+                        null, fromPlatform, true,
                         new Pair<String, String>("latitude", latitude),
                         new Pair<String, String>("longitude", longitude),
                         //is auto notificaiton decide whether show push notification on user tray

@@ -282,6 +282,11 @@ public class AnimateBuilder {
                                     .setDuration(durationMs)
                                     .translationYBy(dpToPixel(value));
                             break;
+                        case moveToY:
+                            viewPropertyAnimator = ViewPropertyAnimator.animate(view)
+                                    .setDuration(durationMs)
+                                    .y(dpToPixel(value));
+                            break;
                         case rotate:
 
                             break;

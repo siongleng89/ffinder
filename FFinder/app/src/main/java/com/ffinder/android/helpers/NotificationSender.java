@@ -7,6 +7,7 @@ import com.ffinder.android.enums.Status;
 import com.ffinder.android.models.UserModel;
 import com.ffinder.android.statics.Constants;
 import com.ffinder.android.statics.Vars;
+import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -29,13 +30,15 @@ public class NotificationSender {
     //null msgId will be auto generated
     public static void sendWithUserId(final String myUserId, final String targetUserId,
                                       final FCMMessageType fcmMessageType,
-                                      final int ttl, final String msgId, final Pair<String, String>... appendsToMapPairs){
+                                      final int ttl, final String msgId,
+                                      final boolean retryIfError,
+                                      final Pair<String, String>... appendsToMapPairs){
         FirebaseDB.getUserData(targetUserId, new FirebaseListener<UserModel>(UserModel.class) {
             @Override
             public void onResult(UserModel userModel, Status status) {
                 if(status == Status.Success && userModel != null){
                     sendFcm(myUserId, userModel.getToken(), fcmMessageType, ttl, msgId,
-                            userModel.getPlatform(),
+                            userModel.getPlatform(), retryIfError, 0,
                             appendsToMapPairs);
                 }
             }
@@ -46,8 +49,10 @@ public class NotificationSender {
                                       final FCMMessageType fcmMessageType,
                                       final int ttl, String msgId,
                                      final String targetPlatform,
+                                     final boolean retryIfError,
                                      final Pair<String, String>... appendsToMapPairs){
-        sendFcm(myUserId, targetToken, fcmMessageType, ttl, msgId, targetPlatform, appendsToMapPairs);
+        sendFcm(myUserId, targetToken, fcmMessageType, ttl, msgId, targetPlatform,
+                retryIfError, 0, appendsToMapPairs);
     }
 
     public static void sendToTopic(final String myUserId, final String topicId,
@@ -58,7 +63,7 @@ public class NotificationSender {
         //we use configuration of android even sending to ios, since sendToTopic
         //normally is not urgent msg (eg. auto notification)
         sendFcm(myUserId, "/topics/" + topicId, fcmMessageType, ttl, msgId,
-                "android",
+                "android", false, 0,
                 appendsToMapPairs);
     }
 
@@ -66,10 +71,14 @@ public class NotificationSender {
                                 final FCMMessageType fcmMessageType, final int ttl,
                                 final String msgId,
                                 final String toPlatform,
+                                final boolean retryIfError,
+                                final int count,
                                 final Pair<String, String>... appendsToMapPairs){
         Threadings.runInBackground(new Runnable() {
             @Override
             public void run() {
+                boolean succeed = false;
+
                 try {
                     String url = "https://fcm.googleapis.com/fcm/send";
                     URL obj = null;
@@ -139,7 +148,16 @@ public class NotificationSender {
                     while ((inputLine = in.readLine()) != null) {
                         response.append(inputLine);
                     }
+
                     in.close();
+
+                    JSONObject jsonObject = new JSONObject(response.toString());
+                    if(jsonObject.has("success")){
+                        if(jsonObject.getInt("success") == 1){
+                            succeed = true;
+                        }
+                    }
+
 
                     Logs.show("FCM response :" + response);
 
@@ -154,6 +172,15 @@ public class NotificationSender {
                 catch (Exception e){
                     e.printStackTrace();
                 }
+
+                if(!succeed && retryIfError){
+                    if(count < 3){
+                        Threadings.sleep(1000 + count * 4000);
+                        sendFcm(myUserId, toToken, fcmMessageType, ttl, msgId,
+                                toPlatform, retryIfError, count + 1, appendsToMapPairs);
+                    }
+                }
+
             }
         });
     }

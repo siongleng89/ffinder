@@ -2,7 +2,6 @@ package com.ffinder.android;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -24,9 +23,6 @@ import com.ffinder.android.enums.PreferenceType;
 import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.MyModel;
 import com.ffinder.android.services.GcmAliveHeartbeatService;
-import com.ffinder.android.statics.Vars;
-
-import java.util.List;
 
 /**
  * Created by SiongLeng on 30/8/2016.
@@ -78,8 +74,11 @@ public class ActivityLaunch extends MyActivityAbstract {
         else{
             this.intent = new Intent(this, ActivityMain.class);
 
+
             //always update location when launch apps
-            new LocationUpdater(ActivityLaunch.this, null, null, null);
+            Intent intent2 = new Intent();
+            intent2.setAction("com.ffinder.android.GET_LOCATION");
+            sendBroadcast(intent2);
         }
 
         readyStartActivity();
@@ -100,54 +99,59 @@ public class ActivityLaunch extends MyActivityAbstract {
         imgViewBg.setVisibility(View.VISIBLE);
         imgViewIcon.setVisibility(View.VISIBLE);
 
+        AnimateBuilder.stopAllAnimation(imgViewIcon);
+        AnimateBuilder.stopAllAnimation(layoutIntroduction);
+        AnimateBuilder.stopAllAnimation(layoutNext);
+        AnimateBuilder.stopAllAnimation(layoutWelcome);
+        layoutWelcome.setVisibility(View.INVISIBLE);
+        layoutNext.setVisibility(View.INVISIBLE);
+        layoutIntroduction.setVisibility(View.INVISIBLE);
+
         final ViewTreeObserver vto = imgViewIcon.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
                 imgViewIcon.getViewTreeObserver().removeOnPreDrawListener(this);
+
+
                 float heightInDp = AndroidUtils.pxToDp(ActivityLaunch.this, imgViewIcon.getHeight());
 
                 float beforeDp = AndroidUtils.getScreenDpHeight(ActivityLaunch.this) / 2 - heightInDp / 2;
-                float finalDp = 110;
+                float finalDp = 125;
                 final float moveByDp = beforeDp - finalDp;
 
-                AnimateBuilder.build(ActivityLaunch.this, imgViewIcon).setAnimateType(AnimateType.moveByY)
-                        .setDurationMs(0).setValue(moveByDp).setFinishCallback(new Runnable() {
+                imgViewIcon.setY(AndroidUtils.dpToPx(ActivityLaunch.this, (int) beforeDp));
+                AnimateBuilder.build(ActivityLaunch.this, imgViewIcon).setAnimateType(AnimateType.moveToY)
+                        .setDurationMs(1000).setValue(finalDp).setFinishCallback(new Runnable() {
                     @Override
                     public void run() {
-                        AnimateBuilder.build(ActivityLaunch.this, imgViewIcon).setAnimateType(AnimateType.moveByY)
-                                .setDurationMs(1000).setValue(-moveByDp).setFinishCallback(new Runnable() {
+                        AnimateBuilder.build(ActivityLaunch.this, layoutWelcome)
+                                .setAnimateType(AnimateType.alpha).setDurationMs(700)
+                                .setValue(1).setFinishCallback(new Runnable() {
                             @Override
                             public void run() {
-                                AnimateBuilder.build(ActivityLaunch.this, layoutWelcome)
-                                        .setAnimateType(AnimateType.alpha).setDurationMs(700)
-                                        .setValue(1).setFinishCallback(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        AnimateBuilder.build(ActivityLaunch.this, layoutIntroduction)
-                                                .setAnimateType(AnimateType.alpha)
-                                                .setValue(1).setDurationMs(700)
-                                                .setFinishCallback(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        AnimateBuilder.build(ActivityLaunch.this, layoutNext)
-                                                                .setAnimateType(AnimateType.alpha)
-                                                                .setValue(1).setDurationMs(700)
-                                                                .setFinishCallback(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
+                                AnimateBuilder.build(ActivityLaunch.this, layoutIntroduction)
+                                        .setAnimateType(AnimateType.alpha)
+                                        .setValue(1).setDurationMs(700)
+                                        .setFinishCallback(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                AnimateBuilder.build(ActivityLaunch.this, layoutNext)
+                                                        .setAnimateType(AnimateType.alpha)
+                                                        .setValue(1).setDurationMs(700)
+                                                        .setFinishCallback(new Runnable() {
+                                                            @Override
+                                                            public void run() {
 
-                                                                    }
-                                                                }).start();
+                                                            }
+                                                        }).start();
 
-                                                        AnimateBuilder.build(ActivityLaunch.this, imgViewNextIcon)
-                                                                .setAnimateType(AnimateType.moveByX)
-                                                                .setValue(-3).setDurationMs(400)
-                                                                .setRepeat(true)
-                                                                .start();
-                                                    }
-                                                }).start();
-                                    }
-                                }).start();
+                                                AnimateBuilder.build(ActivityLaunch.this, imgViewNextIcon)
+                                                        .setAnimateType(AnimateType.moveByX)
+                                                        .setValue(-3).setDurationMs(400)
+                                                        .setRepeat(true)
+                                                        .start();
+                                            }
+                                        }).start();
                             }
                         }).start();
                     }

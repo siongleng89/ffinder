@@ -9,5 +9,6 @@ public enum PreferenceType {
     UserInfo, SeenAppsIntroduction, NextAdsCount,
     CheckedGoogleService, DontRemindMeAgainPhoneIssue, ProcessedMessageIds,
     DontShowAgainBlockUserWarning, DontRemindWatchAdsWarning,
-    SeenShareKeyTutorial, SeenAfterShareKeyReminder, ISVip
+    SeenShareKeyTutorial, SeenAfterShareKeyReminder, ISVip,
+    LastLocation, LastLocationUnixTime, LastSentAutoNotification
 }
