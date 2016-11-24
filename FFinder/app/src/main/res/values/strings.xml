@@ -183,14 +183,14 @@ ________________________________________________________________________________
 Add member Activity text start -->
 <string name="add_new_member_title">"Add Friend/Family"</string>
 <string name="add_new_member_manually_title">"Add Friend/Family Manually"</string>
-<string name="user_key_title">"Your friend's Passcode"</string>
+<string name="user_key_title">"Your friend/family invite code"</string>
 <string name="member_name_title">"How do you address him/her?"</string>
-<string name="no_user_key_msg">"Please input member's passcode"</string>
+<string name="no_user_key_msg">"Please input invite code from the user you wish to add."</string>
 <string name="no_member_name_msg">"Please input member's name"</string>
 <string name="no_your_name_msg">"Please input your name"</string>
 <string name="adding_friend_msg">"Adding record…"</string>
 <string name="user_already_added_error_msg">"User has already existed in your list as %s"</string>
-<string name="key_expired_or_not_exist_msg">"Passcode does not exist or has expired."</string>
+<string name="key_expired_or_not_exist_msg">"Invite code does not exist or has expired."</string>
 
 <!-- Add member Activity text end
 _________________________________________________________________________________
@@ -201,25 +201,25 @@ Edit member name popup dialog text start -->
 <!-- Edit member name popup dialog text end
 _________________________________________________________________________________
 Share key activity text start -->
-<string name="share_key_activity_title">"Passcode"</string>
-<string name="share_key_title">"Add Friend/Family By Sharing Your Passcode"</string>
+<string name="share_key_activity_title">"Invite code"</string>
+<string name="share_key_title">"Add Friend/Family By Sharing Your Invite code"</string>
 <string name="btn_share_via_other_apps_text">"Share"</string>
-<string name="your_key_title">"Share this Passcode with your friends and family, and you can start tracking their 
+<string name="your_key_title">"Share this Invite code with your friends and family, and you can start tracking their 
 location once they have added you
-(No action is required after sharing your Passcode)"</string>
+(No action is required after sharing your Invite code)"</string>
 <string name="expired_at_title">"(Expire at %s)"</string>
 <string name="minutes_left">"(%s mins left)"</string>
 <string name="copied_to_clipboard_toast_msg">"Copied"</string>
-<string name="regenerating_key_msg">"Updating Passcode…"</string>
-<string name="regen_key_confirm_msg">"Are you sure you want to regenerate your Passcode? User will not be able to add you anymore using your previous Passcode."</string>
-<string name="share_title">"Share Passcode"</string>
-<string name="share_subject">"FFfinder Passcode"</string>
+<string name="regenerating_key_msg">"Updating Invite code…"</string>
+<string name="regen_key_confirm_msg">"Are you sure you want to regenerate your Invite code? User will not be able to add you anymore using your previous Invite code."</string>
+<string name="share_title">"Share Invite code"</string>
+<string name="share_subject">"FFfinder Invite code"</string>
 <string name="share_msg">"Hi, please download Simple Friend and Family Finder to find your friends and family with a click for FREE at 
 https://play.google.com/store/apps/details?id=com.ffinder.android
 
 Then add me by clicking on this link (Open with FFfinder)
 http://ff-finder.com/addnew/%s"</string>
-<string name="after_share_passcode_reminder">"Thanks for sharing your passcode, just wait for your friend or family to add you and you can start tracking each other."</string>
+<string name="after_share_passcode_reminder">"Thanks for sharing your Invite code, just wait for your friend or family to add you and you can start tracking each other."</string>
 
 <!-- Share key activity text end
 _________________________________________________________________________________
@@ -239,18 +239,18 @@ Notifications start -->
 <string name="notification_x_has_been_located_msg">"%s has been located."</string>
 <string name="notification_x_users_located_msg">"%s of friends located."</string>
 <string name="notification_x_added_you">"%s has added you! You may now locate each other."</string>
-<string name="notification_remember_to_add_friend_msg">"Get started! Share your Passcode to add your friends and family :)"</string>
+<string name="notification_remember_to_add_friend_msg">"Get started! Share your Invite code to add your friends and family :)"</string>
 
 <!-- Notifications end 
 Everything about tutorials -->
 <string name="first_time_see_passcode">"Hi, it is your first time adding friend/family, do you want to see a short tutorial guide?"</string>
-<string name="share_passcode_s1">"Every user has a unique temporary passcode, you must share your personal passcode with your friend/family to connect."</string>
-<string name="share_passcode_s2">"Click on the Share Passcode button and pick a way to share your passcode."</string>
+<string name="share_passcode_s1">"Every user has a unique temporary Invite code, you must share your personal Invite code with your friend/family to connect."</string>
+<string name="share_passcode_s2">"Click on the Share Invite code button and pick a way to share your Invite code."</string>
 <string name="share_passcode_s3">"After this, no action is required."</string>
 <string name="share_passcode_s4">"After your friend/family has added you, both of you can start tracking each other."</string>
-<string name="add_manually_a1">"Every user has a unique temporary passcode, get the passcode from them by asking them to click on the PLUS icon."</string>
-<string name="add_manually_a2">"Upon receiving the message, note down their passcode here."</string>
-<string name="add_manually_a3">"Key in the code at Your friend's Passcode"</string>
+<string name="add_manually_a1">"Every user has a unique temporary Invite code, get the Invite code from them by asking them to click on the PLUS icon."</string>
+<string name="add_manually_a2">"Upon receiving the message, note down their Invite code here."</string>
+<string name="add_manually_a3">"Key in the code at Your friend's Invite code"</string>
 <string name="add_manually_a4">"Voila! You can start tracking each other."</string>
 <string name="huawei">"Huawei"</string>
 <string name="xiaomi">"Xiaomi"</string>
