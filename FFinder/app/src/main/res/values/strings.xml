@@ -214,11 +214,13 @@ location once they have added you
 <string name="regen_key_confirm_msg">"Are you sure you want to regenerate your Invite code? User will not be able to add you anymore using your previous Invite code."</string>
 <string name="share_title">"Share Invite code"</string>
 <string name="share_subject">"FFfinder Invite code"</string>
+
+<!-- Fuzzy -->
 <string name="share_msg">"Hi, please download Simple Friend and Family Finder to find your friends and family with a click for FREE at 
-https://play.google.com/store/apps/details?id=com.ffinder.android
+https://play.google.com/store/apps/details?id=com.ffinder.android&amp;referrer=%1$s
 
 Then add me by clicking on this link (Open with FFfinder)
-http://ff-finder.com/addnew/%s"</string>
+http://ff-finder.com/addnew/%2$s"</string>
 <string name="after_share_passcode_reminder">"Thanks for sharing your Invite code, just wait for your friend or family to add you and you can start tracking each other."</string>
 
 <!-- Share key activity text end
