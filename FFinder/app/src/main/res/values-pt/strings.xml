@@ -216,11 +216,13 @@ Share key activity text start -->
 <string name="regen_key_confirm_msg">"Tem certeza de que deseja gerar novamente o seu código de convite? O Usuário não será mais capaz de adicionar você usando o seu Código de convite anterior."</string>
 <string name="share_title">"Compartilhar Código de convite"</string>
 <string name="share_subject">"Código de convite FFfinder"</string>
+
+<!-- Fuzzy -->
 <string name="share_msg">"Olá, por favor, baixe o Simple Friend and Family Finder para encontrar seus amigos e familiares com um clique de forma GRATUITA na
-Https://play.google.com/store/apps/details?id=com.ffinder.android
+https://play.google.com/store/apps/details?id=com.ffinder.android&amp;referrer=%1$s
 
 Depois nos adicione clicando nesse link (Abra com FFfinder)
-http://ff-finder.com/addnew/%s"</string>
+http://ff-finder.com/addnew/%2$s"</string>
 <string name="after_share_passcode_reminder">"Obrigado por compartilhar o seu código de convite, apenas aguarde até que seu amigo ou familiar adicione você e vocês poderão começar a se rastrearem mutuamente."</string>
 
 <!-- Share key activity text end
