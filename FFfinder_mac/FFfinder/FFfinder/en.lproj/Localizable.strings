@@ -162,14 +162,14 @@ ________________________________________________________________________________
 Add member Activity text start*/
 "add_new_member_title" = "Add Friend/Family";
 "add_new_member_manually_title" = "Add Friend/Family Manually";
-"user_key_title" = "Your friend's Passcode";
+"user_key_title" = "Your friend/family invite code";
 "member_name_title" = "How do you address him/her?";
-"no_user_key_msg" = "Please input member's passcode";
+"no_user_key_msg" = "Please input invite code from the user you wish to add.";
 "no_member_name_msg" = "Please input member's name";
 "no_your_name_msg" = "Please input your name";
 "adding_friend_msg" = "Adding record…";
 "user_already_added_error_msg" = "User has already existed in your list as %s";
-"key_expired_or_not_exist_msg" = "Passcode does not exist or has expired.";
+"key_expired_or_not_exist_msg" = "Invite code does not exist or has expired.";
 
 /*Add member Activity text end
 _________________________________________________________________________________
@@ -180,19 +180,21 @@ Edit member name popup dialog text start*/
 /*Edit member name popup dialog text end
 _________________________________________________________________________________
 Share key activity text start*/
-"share_key_activity_title" = "Passcode";
-"share_key_title" = "Add Friend/Family By Sharing Your Passcode";
+"share_key_activity_title" = "Invite code";
+"share_key_title" = "Add Friend/Family By Sharing Your Invite code";
 "btn_share_via_other_apps_text" = "Share";
-"your_key_title" = "Share this Passcode with your friends and family, and you can start tracking their \nlocation once they have added you\n(No action is required after sharing your Passcode)";
+"your_key_title" = "Share this Invite code with your friends and family, and you can start tracking their \nlocation once they have added you\n(No action is required after sharing your Invite code)";
 "expired_at_title" = "(Expire at %s)";
 "minutes_left" = "(%s mins left)";
 "copied_to_clipboard_toast_msg" = "Copied";
-"regenerating_key_msg" = "Updating Passcode…";
-"regen_key_confirm_msg" = "Are you sure you want to regenerate your Passcode? User will not be able to add you anymore using your previous Passcode.";
-"share_title" = "Share Passcode";
-"share_subject" = "FFfinder Passcode";
-"share_msg" = "Hi, please download Simple Friend and Family Finder to find your friends and family with a click for FREE at \nhttps://play.google.com/store/apps/details?id=com.ffinder.android\n\nThen add me by clicking on this link (Open with FFfinder)\nhttp://ff-finder.com/addnew/%s";
-"after_share_passcode_reminder" = "Thanks for sharing your passcode, just wait for your friend or family to add you and you can start tracking each other.";
+"regenerating_key_msg" = "Updating Invite code…";
+"regen_key_confirm_msg" = "Are you sure you want to regenerate your Invite code? User will not be able to add you anymore using your previous Invite code.";
+"share_title" = "Share Invite code";
+"share_subject" = "FFfinder Invite code";
+
+/*Fuzzy*/
+"share_msg" = "Hi, please download Simple Friend and Family Finder to find your friends and family with a click for FREE at \nhttps://play.google.com/store/apps/details?id=com.ffinder.android&referrer=%1$s\n\nThen add me by clicking on this link (Open with FFfinder)\nhttp://ff-finder.com/addnew/%2$s";
+"after_share_passcode_reminder" = "Thanks for sharing your Invite code, just wait for your friend or family to add you and you can start tracking each other.";
 
 /*Share key activity text end
 _________________________________________________________________________________
@@ -212,18 +214,18 @@ Notifications start*/
 "notification_x_has_been_located_msg" = "%s has been located.";
 "notification_x_users_located_msg" = "%s of friends located.";
 "notification_x_added_you" = "%s has added you! You may now locate each other.";
-"notification_remember_to_add_friend_msg" = "Get started! Share your Passcode to add your friends and family :)";
+"notification_remember_to_add_friend_msg" = "Get started! Share your Invite code to add your friends and family :)";
 
 /*Notifications end 
 Everything about tutorials*/
 "first_time_see_passcode" = "Hi, it is your first time adding friend/family, do you want to see a short tutorial guide?";
-"share_passcode_s1" = "Every user has a unique temporary passcode, you must share your personal passcode with your friend/family to connect.";
-"share_passcode_s2" = "Click on the Share Passcode button and pick a way to share your passcode.";
+"share_passcode_s1" = "Every user has a unique temporary Invite code, you must share your personal Invite code with your friend/family to connect.";
+"share_passcode_s2" = "Click on the Share Invite code button and pick a way to share your Invite code.";
 "share_passcode_s3" = "After this, no action is required.";
 "share_passcode_s4" = "After your friend/family has added you, both of you can start tracking each other.";
-"add_manually_a1" = "Every user has a unique temporary passcode, get the passcode from them by asking them to click on the PLUS icon.";
-"add_manually_a2" = "Upon receiving the message, note down their passcode here.";
-"add_manually_a3" = "Key in the code at Your friend's Passcode";
+"add_manually_a1" = "Every user has a unique temporary Invite code, get the Invite code from them by asking them to click on the PLUS icon.";
+"add_manually_a2" = "Upon receiving the message, note down their Invite code here.";
+"add_manually_a3" = "Key in the code at Your friend's Invite code";
 "add_manually_a4" = "Voila! You can start tracking each other.";
 "huawei" = "Huawei";
 "xiaomi" = "Xiaomi";
@@ -259,3 +261,9 @@ Everything about tutorials*/
 
 /*noCreditsDialog*/
 "earn_searches_by_msg" = "Earn searches by";
+
+/*noCreditsDialog*/
+"confirm_watch_ads_on_3g" = "Data charges may be incurred. Continue to advertisement?";
+
+/*ActivityMap*/
+"no_gps_nav_apps_found_error" = "No gps navigation apps found in your device.";
