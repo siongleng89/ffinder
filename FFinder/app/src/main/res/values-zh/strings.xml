@@ -211,12 +211,14 @@ Share key activity text start -->
 <string name="regen_key_confirm_msg">"您确定要更新您的用号吗？其他用户将不能使用旧用号添加您"</string>
 <string name="share_title">"分享用号"</string>
 <string name="share_subject">"简易家人朋友搜寻器用号"</string>
+
+<!-- Fuzzy -->
 <string name="share_msg">"请下载免费的简易家人朋友搜寻器于
-https://play.google.com/store/apps/details?id=com.ffinder.android
+https://play.google.com/store/apps/details?id=com.ffinder.android&amp;referrer=%1$s
 让我可以知道您的所在。
 
 下载后，请使用家人朋友搜寻器打开以下网址添加我，
-http://ff-finder.com/addnew/%s"</string>
+http://ff-finder.com/addnew/%2$s"</string>
 <string name="after_share_passcode_reminder">"谢谢您分享您的用号，请等待您的家人或朋友的添加。过后你们就能互相定位。"</string>
 
 <!-- Share key activity text end
