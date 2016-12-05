@@ -227,7 +227,7 @@ http://ff-finder.com/addnew/%2$s"</string>
 _________________________________________________________________________________
 Delete member popup dialog text start -->
 <string name="delete_user_title">"Delete %s?"</string>
-<string name="confirm_delete_user_msg">"Are you sure you want to delete this user? The user will not be able to locate you after you have deleted him/her."</string>
+<string name="confirm_delete_user_msg">"Are you sure you want to delete this user? This user will not be able to locate you after you have deleted him/her."</string>
 
 <!-- Delete member popup dialog text end
 _________________________________________________________________________________
@@ -306,4 +306,5 @@ Everything about tutorials -->
 <string name="apps_intro4">"2) Ask them to follow instructions to install and click on a link"</string>
 <string name="apps_intro5">"3) Know where they are"</string>
 <string name="apps_intro6">"So who are the 5 most important people in you life?"</string>
+<string name="no_friend_popup_msg">"You are 5 people away from a quality life, add your friend/family now!"</string>
 </resources>
