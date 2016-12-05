@@ -34,6 +34,7 @@ class NotitificationConsumer{
                 }
                 let senderId = dict["senderId"] as! String
                 let senderToken = dict["senderToken"] as? String
+                let fromPlatform = dict["fromPlatform"] as? String
                 NSLog("handled msg size: \(NotitificationConsumer.handledMsgIds.count)")
                 
                 locationUpdater = LocationUpdater(senderId, senderToken){
@@ -52,7 +53,7 @@ class NotitificationConsumer{
                     friendModel.searchStatus = SearchStatus.WaitingUserLocation
                     friendModel.save()
                     
-                    self.notificateReloadFriend(senderId)
+                    self.broadcastReloadFriend(senderId)
                     if callback != nil{
                         callback!()
                     }
@@ -76,7 +77,7 @@ class NotitificationConsumer{
                     locationModel.geodecodeCoordinatesIfNeeded {
                         friendModel.locationModel = locationModel
                         friendModel.save()
-                        self.notificateReloadFriend(senderId)
+                        self.broadcastReloadFriend(senderId)
                     
                         //only show notification on user system tray if it is from auto notification
                         //todo
@@ -88,7 +89,7 @@ class NotitificationConsumer{
         }
     }
     
-    private func notificateReloadFriend(_ reloadId:String){
+    private func broadcastReloadFriend(_ reloadId:String){
         var dict = [String:String]()
         dict["reloadFriendId"] = reloadId
         

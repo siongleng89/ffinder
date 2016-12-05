@@ -20,3 +20,9 @@ handlers:
 - url: /subscription_check
   script: subscription_check.php
   secure: always
+
+- url: /get_name_by_invite_code
+  script: get_name_by_invite_code.php
+  secure: always
+
+

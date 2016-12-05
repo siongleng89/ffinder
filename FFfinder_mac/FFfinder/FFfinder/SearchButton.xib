@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11521.1" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11517.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchButton" customModule="FFfinder" customModuleProvider="target">
+            <connections>
+                <outlet property="buttonContainer" destination="dcE-Mx-RSk" id="SDe-iN-zU3"/>
+                <outlet property="imageViewFlower" destination="BSu-I8-v9d" id="rHQ-an-VWX"/>
+                <outlet property="labelStatus" destination="QO6-y1-XBg" id="4Uf-Iy-reG"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="153" height="197"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Never" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U03-pn-P9s">
+                    <constraints>
+                        <constraint firstAttribute="height" constant="17" id="pGm-DY-mvg"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.34509803919999998" green="0.5568627451" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dcE-Mx-RSk">
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flower_starting_000.png" translatesAutoresizingMaskIntoConstraints="NO" id="BSu-I8-v9d"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QO6-y1-XBg">
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="ex6-4h-qgL"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.34509803919999998" green="0.5568627451" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="QO6-y1-XBg" firstAttribute="top" secondItem="BSu-I8-v9d" secondAttribute="bottom" constant="5" id="72S-sy-nwY"/>
+                        <constraint firstAttribute="trailing" secondItem="BSu-I8-v9d" secondAttribute="trailing" constant="8" id="Mby-I5-B0A"/>
+                        <constraint firstAttribute="trailing" secondItem="QO6-y1-XBg" secondAttribute="trailing" id="TQX-n5-UU6"/>
+                        <constraint firstItem="BSu-I8-v9d" firstAttribute="leading" secondItem="dcE-Mx-RSk" secondAttribute="leading" constant="8" id="X6d-OU-nSH"/>
+                        <constraint firstItem="BSu-I8-v9d" firstAttribute="top" secondItem="dcE-Mx-RSk" secondAttribute="top" constant="8" id="YBs-9P-9e7"/>
+                        <constraint firstItem="QO6-y1-XBg" firstAttribute="leading" secondItem="dcE-Mx-RSk" secondAttribute="leading" id="pnL-m2-Qzm"/>
+                        <constraint firstAttribute="bottom" secondItem="QO6-y1-XBg" secondAttribute="bottom" constant="5" id="unl-R3-cUH"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="U03-pn-P9s" secondAttribute="trailing" id="02l-rT-3eN"/>
+                <constraint firstAttribute="trailing" secondItem="dcE-Mx-RSk" secondAttribute="trailing" id="9Gy-bs-HoQ"/>
+                <constraint firstItem="U03-pn-P9s" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="KsF-Wu-Om5"/>
+                <constraint firstItem="dcE-Mx-RSk" firstAttribute="top" secondItem="U03-pn-P9s" secondAttribute="bottom" constant="8" id="Vxg-bx-cLa"/>
+                <constraint firstAttribute="bottom" secondItem="dcE-Mx-RSk" secondAttribute="bottom" id="nD8-DS-EzD"/>
+                <constraint firstItem="U03-pn-P9s" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="pgd-YS-9qE"/>
+                <constraint firstItem="dcE-Mx-RSk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="udN-QQ-cQX"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-82.5" y="131.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="flower_starting_000.png" width="82" height="128"/>
+    </resources>
+</document>

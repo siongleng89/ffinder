@@ -41,7 +41,7 @@ class FFTextButton : UIButton {
         setBackgroundImage(UIImage(color: colorNormal!), for: .normal)
         
         if let title = self.title(for: .normal) {
-            self.setTitle(NSLocalizedString(title, tableName: nil, bundle: Bundle.main, value: "", comment: ""), for: .normal)
+            self.setTitle(title.localized, for: .normal)
         }
     }
     

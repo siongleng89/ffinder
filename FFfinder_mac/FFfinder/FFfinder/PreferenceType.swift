@@ -14,5 +14,6 @@ enum PreferenceType:String{
     case FireDbToken
     case FriendUserIds
     case LastLocation
+    case Language
     
 }

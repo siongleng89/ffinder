@@ -261,15 +261,20 @@ Everything about tutorials*/
 
 /*noCreditsDialog*/
 "earn_searches_by_msg" = "Earn searches by";
+<<<<<<< Updated upstream
 
 /*noCreditsDialog*/
 "confirm_watch_ads_on_3g" = "Data charges may be incurred. Continue to advertisement?";
 
 /*ActivityMap*/
 "no_gps_nav_apps_found_error" = "No gps navigation apps found in your device.";
+<<<<<<< Updated upstream
 "apps_intro1" = "Studies have shown that you need at least 5 people close to you to have a quality life.";
 "apps_intro2" = "These 5 people are the people you are willing to share location with, to allow them to find you easily and for you to know that they are safe, wherever they are.";
 "apps_intro3" = "Simplest locator to add your friend and family.\n1) Share your invite code";
 "apps_intro4" = "2) Ask them to follow instructions to install and click on a link";
 "apps_intro5" = "3) Know where they are";
 "apps_intro6" = "So who are the 5 most important people in you life?";
+=======
+
+>>>>>>> Stashed changes

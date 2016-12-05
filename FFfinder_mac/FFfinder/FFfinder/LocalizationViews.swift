@@ -10,7 +10,7 @@ import UIKit
 class LocalizedLabel : UILabel {
     override func awakeFromNib() {
         if let text = text {
-            self.text = NSLocalizedString(text, tableName: nil, bundle: Bundle.main, value: "", comment: "")
+            self.text = text.localized
         }
     }
 }

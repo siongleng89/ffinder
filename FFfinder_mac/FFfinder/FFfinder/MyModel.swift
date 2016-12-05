@@ -197,7 +197,9 @@ class MyModel:EVObject{
     }
     
     public func addFriendModel(_ friendModel:FriendModel){
-        self.friendModels.append(friendModel)
+        if (!checkFriendExist(friendModel.userId!)){
+            self.friendModels.append(friendModel)
+        }
     }
     
     public func deleteFriend(_ toDeleteModel:FriendModel){
@@ -223,7 +225,7 @@ class MyModel:EVObject{
     
     
     public func sortFriendModels(){
-        //todo
+        self.friendModels = self.friendModels.sorted { $0.username! < $1.username! }
     }
     
     

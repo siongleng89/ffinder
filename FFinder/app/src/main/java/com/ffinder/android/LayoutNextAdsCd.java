@@ -20,9 +20,9 @@ import com.ffinder.android.models.MyModel;
 public class LayoutNextAdsCd {
 
     private MyActivityAbstract activity;
-    private TextView txtNextAdsCount, txtSearchLeft;
-    private RelativeLayout layoutCount, layoutControl;
-    private ImageView imgViewTick;
+//    private TextView txtNextAdsCount, txtSearchLeft;
+//    private RelativeLayout layoutCount, layoutControl;
+//    private ImageView imgViewTick;
     private Integer currentNextAdsCount;
     private boolean completeProcessing;
     private int addingCount;
@@ -42,16 +42,16 @@ public class LayoutNextAdsCd {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));
 
-        txtNextAdsCount = (TextView) nextAdsFragmentView.findViewById(R.id.txtNextAdsCount);
-        txtSearchLeft = (TextView) nextAdsFragmentView.findViewById(R.id.txtSearchLeft);
-        imgViewTick = (ImageView) nextAdsFragmentView.findViewById(R.id.imgViewTick);
-
-        layoutCount = (RelativeLayout) nextAdsFragmentView.findViewById(R.id.layoutCount);
-        layoutControl = (RelativeLayout) nextAdsFragmentView.findViewById(R.id.layoutControl);
-
-        txtSearchLeft.setVisibility(View.INVISIBLE);
-        imgViewTick.setVisibility(View.GONE);
-        txtNextAdsCount.setVisibility(View.GONE);
+//        txtNextAdsCount = (TextView) nextAdsFragmentView.findViewById(R.id.txtNextAdsCount);
+//        txtSearchLeft = (TextView) nextAdsFragmentView.findViewById(R.id.txtSearchLeft);
+//        imgViewTick = (ImageView) nextAdsFragmentView.findViewById(R.id.imgViewTick);
+//
+//        layoutCount = (RelativeLayout) nextAdsFragmentView.findViewById(R.id.layoutCount);
+//        layoutControl = (RelativeLayout) nextAdsFragmentView.findViewById(R.id.layoutControl);
+//
+//        txtSearchLeft.setVisibility(View.INVISIBLE);
+//        imgViewTick.setVisibility(View.GONE);
+//        txtNextAdsCount.setVisibility(View.GONE);
 
         setListeners();
         quickBoot();
@@ -64,19 +64,19 @@ public class LayoutNextAdsCd {
 
     private void quickBoot(){
         if(fastCheckIsVip()){
-            txtSearchLeft.setText(R.string.vip_title);
-            txtSearchLeft.setVisibility(View.VISIBLE);
-            imgViewTick.setVisibility(View.VISIBLE);
-            txtNextAdsCount.setVisibility(View.GONE);
+//            txtSearchLeft.setText(R.string.vip_title);
+//            txtSearchLeft.setVisibility(View.VISIBLE);
+//            imgViewTick.setVisibility(View.VISIBLE);
+//            txtNextAdsCount.setVisibility(View.GONE);
         }
         else{
             String storedCredits = PreferenceUtils.get(getMyActivity(), PreferenceType.NextAdsCount);
             if(Strings.isNumeric(storedCredits)){
                 changeNextAdsCount(Integer.valueOf(storedCredits), false);
-                txtSearchLeft.setText(R.string.search_left);
-                txtSearchLeft.setVisibility(View.VISIBLE);
-                txtNextAdsCount.setVisibility(View.VISIBLE);
-                imgViewTick.setVisibility(View.GONE);
+//                txtSearchLeft.setText(R.string.search_left);
+//                txtSearchLeft.setVisibility(View.VISIBLE);
+//                txtNextAdsCount.setVisibility(View.VISIBLE);
+//                imgViewTick.setVisibility(View.GONE);
             }
         }
     }
@@ -91,10 +91,10 @@ public class LayoutNextAdsCd {
                         @Override
                         public void run() {
                             completeProcessing = true;
-                            txtSearchLeft.setText(R.string.vip_title);
-                            AnimateBuilder.fadeIn(getMyActivity(), txtSearchLeft);
-                            AnimateBuilder.fadeIn(getMyActivity(), imgViewTick);
-                            txtNextAdsCount.setVisibility(View.GONE);
+//                            txtSearchLeft.setText(R.string.vip_title);
+//                            AnimateBuilder.fadeIn(getMyActivity(), txtSearchLeft);
+//                            AnimateBuilder.fadeIn(getMyActivity(), imgViewTick);
+//                            txtNextAdsCount.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -114,10 +114,10 @@ public class LayoutNextAdsCd {
                             Threadings.postRunnable(new Runnable() {
                                 @Override
                                 public void run() {
-                                    txtSearchLeft.setText(R.string.search_left);
-                                    AnimateBuilder.fadeIn(getMyActivity(), txtSearchLeft);
-                                    AnimateBuilder.fadeIn(getMyActivity(), txtNextAdsCount);
-                                    imgViewTick.setVisibility(View.GONE);
+//                                    txtSearchLeft.setText(R.string.search_left);
+//                                    AnimateBuilder.fadeIn(getMyActivity(), txtSearchLeft);
+//                                    AnimateBuilder.fadeIn(getMyActivity(), txtNextAdsCount);
+//                                    imgViewTick.setVisibility(View.GONE);
                                 }
                             });
 
@@ -161,15 +161,16 @@ public class LayoutNextAdsCd {
                 }
             }
 
-            canRun.run(!noCredits);
+            canRun.run(true);
             if(noCredits){
-                new NoCreditsDialog(getMyActivity(), activity.getMyModel(),
-                        getCurrentNextAdsCount(), new INoCreditsListener() {
-                    @Override
-                    public void requestWatchAds() {
-                        showAds();
-                    }
-                }).show();
+//                new NoCreditsDialog(getMyActivity(), activity.getMyModel(),
+//                        getCurrentNextAdsCount(), new INoCreditsListener() {
+//                    @Override
+//                    public void requestWatchAds() {
+//                        showAds();
+//                    }
+//                }).show();
+                showAds();
             }
             return;
         }
@@ -179,15 +180,17 @@ public class LayoutNextAdsCd {
             public void run() {
                 if(!this.getFirstArg()){
                     if(getCurrentNextAdsCount() <= 0){
-                        canRun.run(false);
-                        new NoCreditsDialog(getMyActivity(), activity.getMyModel(),
-                                getCurrentNextAdsCount(), new INoCreditsListener() {
-                            @Override
-                            public void requestWatchAds() {
-                                showAds();
-                            }
-                        }).show();
-                        Analytics.logEvent(AnalyticEvent.Search_Failed_No_Credit);
+                        canRun.run(true);
+//                        new NoCreditsDialog(getMyActivity(), activity.getMyModel(),
+//                                getCurrentNextAdsCount(), new INoCreditsListener() {
+//                            @Override
+//                            public void requestWatchAds() {
+//                                showAds();
+//                            }
+//                        }).show();
+
+                        showAds();
+                        //Analytics.logEvent(AnalyticEvent.Search_Failed_No_Credit);
                     }
                     else{
                         canRun.run(true);
@@ -201,7 +204,7 @@ public class LayoutNextAdsCd {
                                 }
                             }
                         });
-                        Analytics.logEvent(AnalyticEvent.Search_Deduct_Credit);
+                        //Analytics.logEvent(AnalyticEvent.Search_Deduct_Credit);
                     }
                 }
                 else{
@@ -222,22 +225,22 @@ public class LayoutNextAdsCd {
 
                 finalString = String.valueOf(Math.max(newAdsCount, 0));
 
-                if (animate){
-                    final String finalString1 = finalString;
-                    AnimateBuilder.build(getMyActivity(), txtNextAdsCount)
-                            .setDurationMs(200).setValue(0).setAnimateType(AnimateType.alpha)
-                            .setFinishCallback(new Runnable() {
-                                @Override
-                                public void run() {
-                                    txtNextAdsCount.setText(finalString1);
-                                    AnimateBuilder.fadeIn(getMyActivity(), txtNextAdsCount);
-
-                                }
-                            }).start();
-                }
-                else{
-                    txtNextAdsCount.setText(finalString);
-                }
+//                if (animate){
+//                    final String finalString1 = finalString;
+//                    AnimateBuilder.build(getMyActivity(), txtNextAdsCount)
+//                            .setDurationMs(200).setValue(0).setAnimateType(AnimateType.alpha)
+//                            .setFinishCallback(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    txtNextAdsCount.setText(finalString1);
+//                                    AnimateBuilder.fadeIn(getMyActivity(), txtNextAdsCount);
+//
+//                                }
+//                            }).start();
+//                }
+//                else{
+//                    txtNextAdsCount.setText(finalString);
+//                }
 
 
             }
@@ -247,32 +250,33 @@ public class LayoutNextAdsCd {
     private void showAds(){
         if(DeviceInfo.isNetworkAvailable(activity)){
 
+            RestfulService.adsWatched(activity.getMyModel().getUserId(), new RestfulListener<String>() {
+                @Override
+                public void onResult(String result, Status status) {
+                    if(status == Status.Success && !Strings.isEmpty(result) && Strings.isNumeric(result)){
+                        changeNextAdsCount(Integer.valueOf(result), true);
+                    }
+                }
+            });
+
             AdsMediation.showAds(new IAdsMediationListener() {
                 @Override
                 public void onResult(boolean success) {
-                    RestfulService.adsWatched(activity.getMyModel().getUserId(), new RestfulListener<String>() {
-                        @Override
-                        public void onResult(String result, Status status) {
-                            if(status == Status.Success && !Strings.isEmpty(result) && Strings.isNumeric(result)){
-                                changeNextAdsCount(Integer.valueOf(result), true);
-                            }
-                        }
-                    });
                     if(success){
                         Analytics.logEvent(AnalyticEvent.Watch_Ads);
                     }
                     else{
-                        Toast.makeText(activity,
-                                R.string.no_ads_available_toast_msg, Toast.LENGTH_LONG).show();
-                        Analytics.logEvent(AnalyticEvent.No_Ads_Available);
+//                        Toast.makeText(activity,
+//                                R.string.no_ads_available_toast_msg, Toast.LENGTH_LONG).show();
+//                        Analytics.logEvent(AnalyticEvent.No_Ads_Available);
                     }
                 }
             });
         }
         else{
-            OverlayBuilder.build(activity).setOverlayType(OverlayType.OkOnly)
-                    .setContent(activity.getString(R.string.no_connection_msg))
-                    .show();
+//            OverlayBuilder.build(activity).setOverlayType(OverlayType.OkOnly)
+//                    .setContent(activity.getString(R.string.no_connection_msg))
+//                    .show();
         }
     }
 
@@ -300,25 +304,25 @@ public class LayoutNextAdsCd {
     }
 
     private void setListeners(){
-        layoutControl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(fastCheckIsVip()){
-                    Intent intent = new Intent(getMyActivity(), ActivityVip.class);
-                    intent.putExtra("userId", activity.getMyModel().getUserId());
-                    getMyActivity().startActivity(intent);
-                }
-                else{
-                    new NoCreditsDialog(getMyActivity(), activity.getMyModel(),
-                            getCurrentNextAdsCount(), new INoCreditsListener() {
-                        @Override
-                        public void requestWatchAds() {
-                            showAds();
-                        }
-                    }).show();
-                }
-            }
-        });
+//        layoutControl.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(fastCheckIsVip()){
+//                    Intent intent = new Intent(getMyActivity(), ActivityVip.class);
+//                    intent.putExtra("userId", activity.getMyModel().getUserId());
+//                    getMyActivity().startActivity(intent);
+//                }
+//                else{
+//                    new NoCreditsDialog(getMyActivity(), activity.getMyModel(),
+//                            getCurrentNextAdsCount(), new INoCreditsListener() {
+//                        @Override
+//                        public void requestWatchAds() {
+//                            showAds();
+//                        }
+//                    }).show();
+//                }
+//            }
+//        });
     }
 
 

@@ -157,7 +157,7 @@ public class ActivityShareKey extends MyActivityAbstract {
 
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = String.format(getString(R.string.share_msg), key);
+        String shareBody = String.format(getString(R.string.share_msg), key, key);
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivityForResult(Intent.createChooser(sharingIntent, getString(R.string.share_title)), SHARE_KEY_REQUEST);

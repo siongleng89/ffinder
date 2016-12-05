@@ -45,10 +45,14 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
             view.backgroundColor = UIColor.colorStatusBar()
             self.view.addSubview(view)
         }
-        
-        
-        
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+
+    }
+    
+    
     
     func addActionToNav(_ leftSide:Bool, _ type:NavItemActionType){
 //        let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(backButtonTapped))
@@ -59,24 +63,16 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    func setLeftTabButtonAsBack(){
-        let backButton:UIBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonTapped))
-        self.navigationItem.leftBarButtonItem = backButton
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(MyViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
     }
     
-    func backButtonTapped(){
-        dismiss(animated: true, completion: nil)
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
+    
+  
     
     func showPopover(_ popoverContent:UIViewController){
         popoverContent.modalPresentationStyle = .popover
@@ -115,8 +111,8 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
         self.present(alertController!, animated: true, completion: nil)
     }
     
-    func hideLoading(){
-        alertController?.dismiss(animated: true, completion: nil)
+    func hideLoading(onComplete complete:(()->Void)? = nil){
+        alertController?.dismiss(animated: true, completion: complete)
     }
     
     func showConfirmDialog(title:String? = "", message:String? = "",

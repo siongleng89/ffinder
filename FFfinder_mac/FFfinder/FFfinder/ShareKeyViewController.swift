@@ -13,8 +13,6 @@ class ShareKeyViewController: MyViewController {
     @IBOutlet weak var labelMessage: AutoHeightLabel!
     @IBOutlet weak var labelKey: UILabel!
     @IBOutlet weak var labelExpiredAt: UILabel!
-    @IBOutlet weak var btnShare: UIButton!
-    @IBOutlet weak var btnRefresh: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,12 +20,7 @@ class ShareKeyViewController: MyViewController {
         self.title = "share_key_activity_title".localized
         
         // Do any additional setup after loading the view.
-//        
-//        labelMessage.text = "your_key_title".localized
-//        btnShare.setTitle("Share", for: .normal)
-//        btnRefresh.setTitle("Refresh", for: .normal)
-//
-//        checkKey()
+        checkKey()
     }
     
     private func checkKey(){
@@ -39,8 +32,12 @@ class ShareKeyViewController: MyViewController {
                     - UInt64(myModel.userKeyGeneratedUnixTime!)!) < Constants.KeyExpiredTotalSecs{
                     
                     labelKey.text = myModel.userKey
-                    labelExpiredAt.text = DateTimeUtils.convertUnixTimeToDateTime(
-                        UInt64(myModel.userKeyGeneratedUnixTime!)! + Constants.KeyExpiredTotalSecs)
+                    labelExpiredAt.text =  "expired_at_title".localized.format(String(DateTimeUtils.convertUnixTimeToDateTime(
+                        UInt64(myModel.userKeyGeneratedUnixTime!)! + Constants.KeyExpiredTotalSecs)))
+                        
+                    
+                        
+                    
                     
                     //no need for regenerate key as it is still valid
                     return

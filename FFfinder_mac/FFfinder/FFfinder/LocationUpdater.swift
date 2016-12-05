@@ -45,10 +45,10 @@ class LocationUpdater : NSObject, CLLocationManagerDelegate{
             //is auto notificaiton decide whether show push notification on user tray
             dict["isAutoNotification"] = "0"
             
-            NotificationSender.sendWithToken(myModel.userId!, fromUserToken,
-                                             FCMMessageType.UserLocated,
-                                             NotificationSender.TTL_INSTANT,
-                                             dict: dict, callback: callback);
+//            NotificationSender.sendWithToken(myModel.userId!, fromUserToken,
+//                                             FCMMessageType.UserLocated,
+//                                             NotificationSender.TTL_INSTANT,
+//                                             dict: dict, callback: callback);
             
             NSLog("sent location updated fcm")
         }
@@ -97,8 +97,8 @@ class LocationUpdater : NSObject, CLLocationManagerDelegate{
     }
     
     func replyAliveMsg(_ myUserId:String, _ fromUserToken:String){
-        NotificationSender.sendWithToken(myUserId, fromUserToken,
-                                         FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT);
+//        NotificationSender.sendWithToken(myUserId, fromUserToken,
+//                                         FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT);
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -152,10 +152,10 @@ class LocationUpdater : NSObject, CLLocationManagerDelegate{
             //is auto notificaiton decide whether show push notification on user tray
             dict["isAutoNotification"] = "0"
             
-            NotificationSender.sendWithToken(myModel.userId!, fromUserToken,
-                                             FCMMessageType.UserLocated,
-                                             NotificationSender.TTL_INSTANT,
-                                             dict: dict, callback: callback);
+//            NotificationSender.sendWithToken(myModel.userId!, fromUserToken,
+//                                             FCMMessageType.UserLocated,
+//                                             NotificationSender.TTL_INSTANT,
+//                                             dict: dict, callback: callback);
             
              NSLog("sent location updated fcm")
         }

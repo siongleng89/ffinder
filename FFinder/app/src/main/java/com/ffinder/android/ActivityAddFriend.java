@@ -270,8 +270,6 @@ public class ActivityAddFriend extends MyActivityAbstract {
 
             }
         });
-
-
     }
 
     private void setListeners(){

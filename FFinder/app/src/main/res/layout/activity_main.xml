@@ -10,9 +10,8 @@
 
     <android.support.v7.widget.RecyclerView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/listFriends" android:layout_below="@+id/my_toolbar"
-            android:layout_above="@+id/layoutBottom"
             style="@style/FFListViewStyle"/>
 
 
@@ -23,6 +22,7 @@
             android:layout_height="wrap_content" android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true" android:layout_alignParentStart="false"
             android:id="@+id/layoutBottom"
+            android:visibility="gone"
             android:baselineAligned="false">
 
     </LinearLayout>

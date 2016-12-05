@@ -46,6 +46,23 @@ class FirebaseDB{
         });
     }
     
+    public static func getUserData(_ userId:String, _ callback: @escaping (UserDataModel?, Status) -> Void){
+        getSingleData(getTable(TableName.users).child(userId),
+                      {(snapshot:Any?, status) in
+                        if let snapshot = snapshot, status == Status.Success{
+                            let dataModel = UserDataModel()
+                            dataModel.fromAnyObject(snapshot)
+                            callback(dataModel, Status.Success)
+                        }
+                        else{
+                            callback(nil, Status.Failed)
+                        }
+        
+        })
+    
+    }
+    
+    
     //must use identifier table since it is public,
     //because usually at this step user havent login firebase
     public static func checkUserIdExist(_ userId:String,
@@ -191,8 +208,11 @@ class FirebaseDB{
             
         
         })
+    }
     
-    
+    public static func checkLinkExist(_ myUserId:String, _ targetUserId:String,
+                                           _ callback: @escaping (Bool, Status) -> Void){
+        checkExist(getTable(TableName.links).child(targetUserId).child(myUserId), callback)
     }
     
     public static func updateLocation(_ userId:String, _ locationModel:LocationModel,
@@ -200,6 +220,25 @@ class FirebaseDB{
         setValue(getTable(TableName.locations).child(userId), locationModel.toAnyObject(), callback)
     }
    
+    
+    public static func checkMeIsBlocked(_ myUserId:String, _ targetUserId:String,
+                                      _ callback: @escaping (Bool, Status) -> Void){
+        getSingleData(getTable(TableName.blockUsers).child(targetUserId).child(myUserId),
+                      {(result, status) in
+                        if let result = result, status == Status.Success {
+                             callback("\(result)" == "1", Status.Success)
+                        }
+                        else{
+                            callback(false, Status.Success)
+                        }
+        });
+    }
+    
+    
+    
+
+    
+    
     
     
     public static func getCurrentTimestamp(_ userId:String, _ callback:@escaping (String?, Status)-> Void){
@@ -310,6 +349,7 @@ class FirebaseDB{
         case timestamps
         case links
         case locations
+        case blockUsers
     }
     
 }

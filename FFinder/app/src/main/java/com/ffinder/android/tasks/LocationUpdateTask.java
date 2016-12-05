@@ -86,23 +86,6 @@ public class LocationUpdateTask extends AsyncTask<String, String, Pair<String, S
                     .build();
             googleApiClient.connect();
 
-
-            try{
-
-                locationManager = (LocationManager)
-                        context.getSystemService(Context.LOCATION_SERVICE);
-
-                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                            0, 0, LocationUpdateTask.this, Looper.getMainLooper());
-                }
-
-
-            }
-            catch (SecurityException ex){
-
-            }
-
         }
         else{
             finish = true;
@@ -141,6 +124,15 @@ public class LocationUpdateTask extends AsyncTask<String, String, Pair<String, S
 
                 //resort one, use gps location manager
                 try{
+                    locationManager = (LocationManager)
+                            context.getSystemService(Context.LOCATION_SERVICE);
+
+                    if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                                0, 0, LocationUpdateTask.this, Looper.getMainLooper());
+                    }
+
+
                     if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                                 0, 0, LocationUpdateTask.this, Looper.getMainLooper());
@@ -199,6 +191,7 @@ public class LocationUpdateTask extends AsyncTask<String, String, Pair<String, S
     @Override
     public void onLocationChanged(Location location) {
         if (location != null && !finish) {
+
             String latitude = String.valueOf(location.getLatitude());
             String longitude = String.valueOf(location.getLongitude());
 

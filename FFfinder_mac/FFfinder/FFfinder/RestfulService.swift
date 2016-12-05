@@ -16,6 +16,17 @@ class RestfulService{
         callApi("login_user", dict, callback);
     }
     
+    
+    public static func usePromoCode(_ userId:String, _ promoCode:String,
+                                _ callback: @escaping (String?, Status) -> Void){
+        var dict = [String:String]()
+        dict["userId"] = userId
+        dict["promoCode"] = promoCode
+        callApi("use_promo", dict, callback);
+    }
+    
+   
+    
     private static func callApi(_ name:String, _ dict:[String: String],
                                 _ callback: @escaping (String?, Status) -> Void){
         var dict = dict

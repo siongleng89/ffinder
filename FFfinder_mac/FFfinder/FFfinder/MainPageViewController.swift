@@ -18,6 +18,9 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        friendsTableView.rowHeight = UITableViewAutomaticDimension
+        friendsTableView.estimatedRowHeight = 150
+        
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         FirebaseDB.saveToIdentifier(self.myModel!.userId!, nil)
         
@@ -29,14 +32,6 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         self.navigationItem.leftBarButtonItem = nil;
         self.navigationItem.hidesBackButton = true;
         
-//        let shareButton:UIBarButtonItem = UIBarButtonItem(title: "Share", style: UIBarButtonItemStyle.plain, target: self, action: #selector(shareButtonTapped))
-//        self.navigationItem.leftBarButtonItem = shareButton
-//        
-//        
-//        let addManuallyButton:UIBarButtonItem = UIBarButtonItem(title: "Add Manually", style: UIBarButtonItemStyle.plain, target: self, action: #selector(addManuallyButtonTapped))
-//        self.navigationItem.rightBarButtonItem = addManuallyButton
-//        
-        
         let yourNibName = UINib(nibName: friendTableCellIdentifier, bundle: nil)
         friendsTableView.register(yourNibName, forCellReuseIdentifier: friendTableCellIdentifier)
         
@@ -45,20 +40,8 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         
         NotificationCenter.default.addObserver(self,
                                            selector: #selector(onNeedToReloadFriendModel),                                               name: .needToReloadFriendModel, object: nil)
-
         
-    }
-
-    func shareButtonTapped(){
         
-    }
-    
-    func addManuallyButtonTapped(){
-        self.performSegue(withIdentifier: "ShareToAddManuallySegue", sender: nil)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 161
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -69,7 +52,7 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         
         let cell:FriendTableViewCell! = tableView.dequeueReusableCell(withIdentifier: friendTableCellIdentifier, for:indexPath)as! FriendTableViewCell
         let friendModel:FriendModel = self.myModel.friendModels[indexPath.row]
-        cell.update(friendModel)
+        cell.update(friendModel, self.myModel)
         
         return cell
     }
@@ -106,7 +89,7 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         if finalIndex >= 0{
             let indexPath = IndexPath(row: finalIndex, section: 0)
             Threadings.postMainThread {
-                self.friendsTableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                self.friendsTableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
             }
         }
 
@@ -115,8 +98,13 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
     @IBAction func onAddButtonTapped(_ sender: AnyObject) {
         self.performSegue(withIdentifier: "MainToShareKeySegue", sender: nil)
     }
+
     
     @IBAction func onSettingsButtonTapped(_ sender: AnyObject) {
+        self.performSegue(withIdentifier: "MainToSettingsSegue", sender: nil)
+
+        
+        
 //        // Create a custom view controller
 //        let ratingVC = DialogLayoutViewController(nibName: "DialogLayout", bundle: nil)
 //        

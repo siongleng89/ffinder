@@ -32,7 +32,6 @@ public class LocationUpdateRequestIntentService extends IntentService {
     }
 
 
-
     @Override
     protected void onHandleIntent(final Intent intent) {
 

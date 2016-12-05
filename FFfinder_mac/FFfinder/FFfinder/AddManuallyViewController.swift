@@ -10,64 +10,129 @@ import UIKit
 
 class AddManuallyViewController: MyViewController {
 
-    @IBOutlet weak var txtFieldUserKey: UITextField!
-    @IBOutlet weak var txtFieldFriendName: UITextField!
-    @IBOutlet weak var txtFieldYourName: UITextField!
     @IBOutlet weak var labelError: UILabel!
+    
+    @IBOutlet weak var txtWrapperMemberName: TextFieldWrapper!
+    @IBOutlet weak var txtWrapperKey: TextFieldWrapper!
+    var myName:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         
-        txtFieldYourName.text = IOSUtils.getUsername()
+        self.title = "add".localized
+        self.hideKeyboardWhenTappedAround()
+        self.txtWrapperKey.enableNumericMode()
+        
+        myName = IOSUtils.getUsername()
+        
+        if let pendingKey = Vars.pendingUserKey{
+            txtWrapperKey.setText(pendingKey)
+            Vars.pendingUserKey = nil
+        }
+    
+        
     }
     
     
     
-    private func checkCanAdd(){
-        showLoading(Message: "adding_friend_msg".localized)
-        clearError()
+    private func validateAndSubmit(){
         
-        let targetKey:String = txtFieldUserKey.text!
-        let myName:String = txtFieldYourName.text!
+        AnimateBuilder.fadeOut(labelError)
         
-        FirebaseDB.checkKeyExist(self.myModel.userId!, targetKey,
-             {(keyModel, status) in
-                if status == Status.Success && keyModel != nil{
-                    
-                    if (self.txtFieldFriendName.text?.isEmpty)!{
-                        self.txtFieldFriendName.text = keyModel?.userName
-                    }
-                    
-                    guard self.myModel.checkFriendExist((keyModel?.userId)!) == false else{
-                        self.errorOccured(AddUserErrorType.UserAlreadyAdded)
-                        return
-                    }
-                    
-                    FirebaseDB.addNewLink(self.myModel.userId!, (keyModel?.userId)!, myName, self.txtFieldFriendName.text!, {(status) in
-                        
-                        guard status == Status.Success else{
-                            self.errorOccured(AddUserErrorType.UnknownError)
-                            return
-                        }
-                        
-                        self.successAddUser((keyModel?.userId)!, self.txtFieldFriendName.text!, myName);
-                        
-                    })
-                    
-                }
-                else{
-                    self.errorOccured(AddUserErrorType.KeyNotExistOrOutdated)
-                }
-                
-                
+        if(txtWrapperKey.validateNotEmpty("no_user_key_msg".localized)){
+        
+            var addingKey:String = txtWrapperKey.getText()
+                                .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            if addingKey.characters.count > 14{
+                let index = addingKey.index(addingKey.startIndex, offsetBy: 14)
+                addingKey = addingKey.substring(to: index)
+            }
+        
+             showLoading(Message: "adding_friend_msg".localized)
+            
+            
+            FirebaseDB.checkKeyExist(self.myModel.userId!, addingKey,
+                                                  {(keyModel, status) in
+                            if status == Status.Success && keyModel != nil{
+            
+                                if (self.txtWrapperMemberName.getText().isEmpty){
+                                    self.txtWrapperMemberName.setText(keyModel?.userName)
+                                }
+                                
+                                self.checkBothWayLinkExist(self.myModel.userId!, (keyModel?.userId)!, {(bothLinkExist) in
+                                
+                                    //already exist link and friend added
+                                    if bothLinkExist && self.myModel.checkFriendExist((keyModel?.userId)!){
+                                        self.errorOccured(AddUserErrorType.UserAlreadyAdded)
+                                        return
+                                    }
                                     
-        })
+                                    FirebaseDB.addNewLink(self.myModel.userId!, (keyModel?.userId)!, self.myName!, self.txtWrapperMemberName.getText(), {(status) in
+                                        
+                                        guard status == Status.Success else{
+                                            self.errorOccured(AddUserErrorType.UnknownError)
+                                            return
+                                        }
+                                        
+                                        self.successAddUser((keyModel?.userId)!, self.txtWrapperMemberName.getText(), self.myName!);
+                                        
+                                    })
+
+                                
+                                })
+            
+                                
+                            }
+                            else{
+                                self.errorOccured(AddUserErrorType.KeyNotExistOrOutdated)
+                            }
+                            
+                            
+                                                
+                    })
+        
+            
+            
+        }
     }
     
-    private func clearError(){
-        labelError.text = ""
+    
+    public func checkBothWayLinkExist(_ myUserId:String, _ targetUserId:String,
+                                             _ callback:@escaping (Bool) -> Void){
+        
+        Threadings.runInBackground {
+            
+            var counter:Int = 0
+            var linkExist:Int = 0
+            
+            FirebaseDB.checkLinkExist(myUserId, targetUserId,
+                                      {(result, status) in
+                                        if status == Status.Success && result{
+                                            linkExist += 1
+                                        }
+                                        counter += 1
+            })
+            
+            
+            FirebaseDB.checkLinkExist(targetUserId, myUserId,
+                                      {(result, status) in
+                                        if status == Status.Success && result{
+                                            linkExist += 1
+                                        }
+                                        counter += 1
+            })
+            
+            
+            while counter < 2{
+                Threadings.sleep(500)
+            }
+            
+            callback(linkExist >= 2)
+            
+        }
+        
     }
         
         
@@ -90,6 +155,7 @@ class AddManuallyViewController: MyViewController {
         
         hideLoading()
         labelError.text = msg
+        AnimateBuilder.fadeIn(labelError)
         
     }
     
@@ -101,9 +167,11 @@ class AddManuallyViewController: MyViewController {
         
         self.myModel.addFriendModel(friendModel)
         friendModel.save()
+        self.myModel.sortFriendModels()
         self.myModel.commitFriendUserIds()
         
         hideLoading()
+        _ = self.navigationController?.popViewController(animated: true)
         
         //todo: send notification
     }
@@ -111,7 +179,7 @@ class AddManuallyViewController: MyViewController {
     
     
     @IBAction func onConfirmBtnTapped(_ sender: AnyObject) {
-        checkCanAdd()
+        validateAndSubmit()
     }
     
     

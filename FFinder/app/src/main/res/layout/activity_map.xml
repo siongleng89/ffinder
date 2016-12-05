@@ -97,8 +97,8 @@
                                 android:layout_height="match_parent">
                             <RelativeLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent" android:paddingLeft="10dp"
-                                    android:paddingRight="10dp" android:paddingBottom="10dp"
+                                    android:layout_height="match_parent" android:paddingLeft="15dp"
+                                    android:paddingRight="15dp" android:paddingBottom="10dp"
                                     android:id="@+id/layoutDirectionContent" android:visibility="visible">
                                 <TextView
                                         android:layout_width="match_parent"
@@ -147,7 +147,9 @@
                                                   android:textStyle="bold"/>
                                         <TableLayout
                                                 android:layout_width="match_parent"
-                                                android:layout_height="wrap_content" android:id="@+id/tableDirections">
+                                                android:layout_height="wrap_content"
+                                                android:shrinkColumns="1"
+                                                android:id="@+id/tableDirections">
 
                                         </TableLayout>
                                     </LinearLayout>

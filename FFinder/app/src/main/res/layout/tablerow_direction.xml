@@ -7,7 +7,7 @@
             android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_column="1"
+            android:layout_column="0"
             android:textColor="@color/colorNormalText"/>
 
 
@@ -16,7 +16,7 @@
             android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_column="2"
+            android:layout_column="1"
             android:layout_marginLeft="10dp"
             android:textColor="@color/colorNormalText"/>
 

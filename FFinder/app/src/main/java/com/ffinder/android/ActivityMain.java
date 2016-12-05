@@ -12,14 +12,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.*;
-import android.view.ContextMenu;
-import android.view.View;
 import android.widget.LinearLayout;
 import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
 import com.ffinder.android.absint.activities.IProfileImagePickerListener;
 import com.ffinder.android.absint.activities.MyActivityAbstract;
 import com.ffinder.android.absint.adapters.IFriendItemListener;
-import com.ffinder.android.absint.controls.ISearchFailedListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.tasks.RequestLocationTaskFragListener;
 import com.ffinder.android.adapters.FriendsAdapter;
@@ -28,7 +25,6 @@ import com.ffinder.android.enums.*;
 import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.FriendModel;
 import com.ffinder.android.models.LocationModel;
-import com.ffinder.android.models.MyModel;
 import com.ffinder.android.statics.Vars;
 import com.ffinder.android.tasks.AdsIdTask;
 import com.ffinder.android.tasks.RequestLocationTaskFrag;
@@ -38,7 +34,6 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -114,10 +109,16 @@ public class ActivityMain extends MyActivityAbstract implements
                 if(!Strings.isEmpty(refreshedToken)) FirebaseDB.updateMyToken(getMyModel().getUserId(), refreshedToken);
 
                 //some of the devices have known issues, notify the user to follow setup guides
-                checkKnownIssuePhones();
+                checkKnownIssue();
 
                 //subscribe for push notifications
                 FirebaseMessaging.getInstance().subscribeToTopic("allDevices");
+
+                //fire push notification every period to remind user add friend
+                if(getMyModel().getNonSelfFriendModelsCount() == 0){
+                    AddFriendReminder.setup(ActivityMain.this);
+                }
+
             }
         });
 
@@ -214,6 +215,12 @@ public class ActivityMain extends MyActivityAbstract implements
 
     //auto add user if there is pending add user key
     private boolean checkHasPendingToAddUser(){
+        String pendingReferrerKey = PreferenceUtils.get(this, PreferenceType.ReferrerKey);
+        if(!Strings.isEmpty(pendingReferrerKey)){
+            Vars.pendingAddUserKey = pendingReferrerKey;
+            PreferenceUtils.delete(this, PreferenceType.ReferrerKey);
+        }
+
         if(!Strings.isEmpty(Vars.pendingAddUserKey)){
             Intent intent = new Intent(ActivityMain.this, ActivityAddFriend.class);
             startActivity(intent);
@@ -299,7 +306,8 @@ public class ActivityMain extends MyActivityAbstract implements
                             friendModel.setTimeoutPhase(0);
                             final FragmentManager fm = getSupportFragmentManager();
                             RequestLocationTaskFrag frag = RequestLocationTaskFrag.newInstance(
-                                    getMyModel().getUserId(), FirebaseInstanceId.getInstance().getToken(),
+                                    getMyModel().getUserId(),
+                                    FirebaseInstanceId.getInstance().getToken(),
                                     friendModel.getUserId());
                             fm.beginTransaction().add(frag, friendModel.getUserId())
                                     .commitAllowingStateLoss();
@@ -346,7 +354,7 @@ public class ActivityMain extends MyActivityAbstract implements
 
     }
 
-    private void checkKnownIssuePhones(){
+    private void checkKnownIssue(){
         boolean notify = Strings.isEmpty(PreferenceUtils.get(this, PreferenceType.DontRemindMeAgainPhoneIssue));
         if(notify){
             final String model = Build.BRAND;
@@ -357,14 +365,11 @@ public class ActivityMain extends MyActivityAbstract implements
                     final OverlayBuilder builder = OverlayBuilder.build(this);
                     builder.setContent(msg)
                         .setOverlayType(OverlayType.OkOnly)
-                        .setCheckboxTitle(getString(R.string.don_remind_me_again))
                         .setOnDismissRunnable(new Runnable() {
                             @Override
                             public void run() {
-                                if(builder.isChecked()){
-                                    PreferenceUtils.put(ActivityMain.this,
-                                            PreferenceType.DontRemindMeAgainPhoneIssue, "1");
-                                }
+                                PreferenceUtils.put(ActivityMain.this,
+                                        PreferenceType.DontRemindMeAgainPhoneIssue, "1");
                             }
                         });
                     Threadings.postRunnable(new Runnable() {
@@ -377,6 +382,11 @@ public class ActivityMain extends MyActivityAbstract implements
                 }
             }
         }
+        else{
+            
+
+        }
+
     }
 
     public void setListeners(){
@@ -672,5 +682,8 @@ public class ActivityMain extends MyActivityAbstract implements
 
         }
     }
+
+
+
 
 }

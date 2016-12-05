@@ -97,6 +97,7 @@ public class StartGeofencingService extends Service implements
                 )
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
                 .setExpirationDuration(Constants.GeofenceExpiredMs)
+                .setNotificationResponsiveness(60 * 60 * 1000)      //one hour
                 .build());
 
         builder.addGeofences(mGeofenceList);

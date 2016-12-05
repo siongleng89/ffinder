@@ -10,5 +10,6 @@ public enum PreferenceType {
     CheckedGoogleService, DontRemindMeAgainPhoneIssue, ProcessedMessageIds,
     DontShowAgainBlockUserWarning, DontRemindWatchAdsWarning,
     SeenShareKeyTutorial, SeenAfterShareKeyReminder, ISVip,
-    LastLocation, LastLocationUnixTime, LastSentAutoNotification
+    LastLocation, LastLocationUnixTime, LastSentAutoNotification,
+    ReferrerKey
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:id="@+id/imgViewMain" android:src="@mipmap/intro_1" android:scaleType="centerCrop"
+            android:layout_weight="1"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:background="#668e57">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lorem Ipsum text and blah wqo is super long msg hewqh sadnfd[ eqw"
+                android:id="@+id/txtViewMain" android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorContrast" android:layout_margin="10dp" android:gravity="center"
+                android:textStyle="bold" android:textSize="15dp"/>
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp" android:layout_marginBottom="10dp">
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:gravity="center">
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/indicator1" android:src="@drawable/white_cirlce"
+                        android:layout_marginRight="10dp" android:alpha="0.2"/>
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                               android:id="@+id/indicator2" android:src="@drawable/white_cirlce"
+                               android:layout_toRightOf="@+id/indicator1" android:layout_marginRight="10dp"
+                               android:alpha="0.2"/>
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                               android:id="@+id/indicator3" android:src="@drawable/white_cirlce"
+                               android:layout_toRightOf="@+id/indicator2" android:layout_marginRight="10dp"
+                               android:alpha="0.2"/>
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                           android:id="@+id/indicator4" android:src="@drawable/white_cirlce"
+                           android:layout_toRightOf="@+id/indicator3" android:alpha="0.2"
+                           android:layout_marginRight="10dp"/>
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                           android:id="@+id/indicator5" android:src="@drawable/white_cirlce"
+                           android:layout_toRightOf="@+id/indicator4" android:alpha="0.2"
+                           android:layout_marginRight="10dp"/>
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                           android:id="@+id/indicator6" android:src="@drawable/white_cirlce"
+                           android:layout_toRightOf="@+id/indicator5" android:alpha="0.2"/>
+            </RelativeLayout>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imgViewNext" android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" android:layout_marginRight="20dp"
+                    android:src="@drawable/next_icon2" android:scaleType="fitEnd" android:visibility="visible"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="START!"
+                    android:id="@+id/txtViewEnd" android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true" android:layout_marginRight="10dp"
+                    android:textColor="@color/colorContrast" android:textStyle="bold" android:textSize="16dp"
+                    android:visibility="gone"/>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

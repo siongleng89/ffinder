@@ -14,29 +14,41 @@ class FriendModel : EVObject{
     var userId:String?
     var username:String?
     var locationModel:LocationModel?
+    
+    var timeoutPhase:Int?{
+        didSet{
+            if timeoutPhase != oldValue && !copying {
+                notificateChanged()
+            }
+        }
+    }
     var searchStatus:SearchStatus?{
         didSet{
             if searchStatus != oldValue && !copying {
-                var dict = [String:FriendModel]();
-                dict["friendModel"] = self
-                
-                // Register to receive notification
-                NotificationCenter.default.post(name: .friendModelChanged, object: nil,
-                                                userInfo: dict)
+                notificateChanged()
             }
         }
     
     }
     
-    
-    var searchResult:SearchResult?
+    var searchResult:SearchResult?{
+        didSet{
+            if searchResult != oldValue && !copying {
+                notificateChanged()
+            }
+        }
+        
+    }
+
     
      //used to prevent double triggering of notificationCenter while loading
     var copying:Bool = false
     
     //selected properties will be excluded when converting to json
     override public func propertyMapping() -> [(String?, String?)] {
-        return [("copying",nil), (nil,"copying")]
+        return [("copying",nil), (nil,"copying"),
+                ("timeoutPhase",nil), (nil,"timeoutPhase"),
+                ("searchStatus",nil), (nil,"searchStatus")]
     }
     
     override func setValue(_ value: Any!, forUndefinedKey key: String) {
@@ -84,8 +96,18 @@ class FriendModel : EVObject{
         self.userId = loadedFriendModel.userId
         self.username = loadedFriendModel.username
         self.locationModel = loadedFriendModel.locationModel
-        self.searchStatus = loadedFriendModel.searchStatus
+       // self.searchStatus = loadedFriendModel.searchStatus
         self.searchResult = loadedFriendModel.searchResult
     }
-       
+    
+    private func notificateChanged(){
+        var dict = [String:FriendModel]();
+        dict["friendModel"] = self
+        
+        // Register to receive notification
+        NotificationCenter.default.post(name: .friendModelChanged, object: nil,
+                                        userInfo: dict)
+
+    }
+    
 }

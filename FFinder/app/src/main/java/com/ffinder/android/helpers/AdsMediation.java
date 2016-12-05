@@ -73,16 +73,16 @@ public class AdsMediation {
         if(!Appodeal.isLoaded(Appodeal.INTERSTITIAL)){
             final boolean[] cancel = {false};
 
-            final AlertDialog dialog = OverlayBuilder.build(myActivity)
-                    .setOverlayType(OverlayType.Loading)
-                    .setContent(myActivity.getString(R.string.loading))
-                    .setOnDismissRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            cancel[0] = true;
-                        }
-                    })
-                    .show();
+//            final AlertDialog dialog = OverlayBuilder.build(myActivity)
+//                    .setOverlayType(OverlayType.Loading)
+//                    .setContent(myActivity.getString(R.string.loading))
+//                    .setOnDismissRunnable(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            cancel[0] = true;
+//                        }
+//                    })
+//                    .show();
 
 
             Threadings.runInBackground(new Runnable() {
@@ -114,7 +114,7 @@ public class AdsMediation {
                                 }
 
                             }
-                            dialog.dismiss();
+                            //dialog.dismiss();
                         }
                     });
 

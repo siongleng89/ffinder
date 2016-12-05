@@ -357,17 +357,19 @@ public class RequestLocationTaskFrag extends Fragment {
             //only trigger auto notify when error is waiting user response
             boolean shouldAutoNotify = false;
 
+            String searchingTarget = targetUserId.equals(myModel.getUserId()) ? "Me" : "Others";
+
 
             if(searchStatus == SearchStatus.WaitingUserLocation){
                 setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
                 Analytics.logEvent(AnalyticEvent.Search_Timeout,
-                                SearchStatus.WaitingUserLocation.name());
+                                SearchStatus.WaitingUserLocation.name() + "_" + searchingTarget);
                 shouldAutoNotify = true;
             }
             else if(searchStatus == SearchStatus.WaitingUserRespond){
                 setSearchResult(SearchResult.ErrorTimeoutUnknownReason);
                 Analytics.logEvent(AnalyticEvent.Search_Timeout,
-                                SearchStatus.WaitingUserRespond.name());
+                                SearchStatus.WaitingUserRespond.name() + "_" + searchingTarget);
                 shouldAutoNotify = true;
             }
             else if(searchStatus == SearchStatus.CheckingData){

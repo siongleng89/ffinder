@@ -1,18 +1,19 @@
 PODS:
+  - DLRadioButton (1.4.9)
   - EVReflection (3.1.2)
-  - Firebase/Auth (3.9.0):
+  - Firebase/Auth (3.10.0):
     - Firebase/Core
     - FirebaseAuth (= 3.0.6)
-  - Firebase/Core (3.9.0):
-    - FirebaseAnalytics (= 3.5.1)
-    - FirebaseCore (= 3.4.4)
-  - Firebase/Database (3.9.0):
+  - Firebase/Core (3.10.0):
+    - FirebaseAnalytics (= 3.6.0)
+    - FirebaseCore (= 3.4.5)
+  - Firebase/Database (3.10.0):
     - Firebase/Core
-    - FirebaseDatabase (= 3.1.0)
-  - Firebase/Messaging (3.9.0):
+    - FirebaseDatabase (= 3.1.1)
+  - Firebase/Messaging (3.10.0):
     - Firebase/Core
     - FirebaseMessaging (= 1.2.1)
-  - FirebaseAnalytics (3.5.1):
+  - FirebaseAnalytics (3.6.0):
     - FirebaseCore (~> 3.4)
     - FirebaseInstanceID (~> 1.0)
     - GoogleInterchangeUtilities (~> 1.2)
@@ -22,11 +23,11 @@ PODS:
     - FirebaseAnalytics (~> 3.4)
     - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseCore (3.4.4):
+  - FirebaseCore (3.4.5):
     - GoogleInterchangeUtilities (~> 1.2)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseDatabase (3.1.0):
-    - FirebaseAnalytics (~> 3.4)
+  - FirebaseDatabase (3.1.1):
+    - FirebaseAnalytics (~> 3.5)
   - FirebaseInstanceID (1.0.8)
   - FirebaseMessaging (1.2.1):
     - FirebaseAnalytics (~> 3.4)
@@ -53,6 +54,7 @@ PODS:
   - PopupDialog (0.5.0)
 
 DEPENDENCIES:
+  - DLRadioButton (~> 1.4)
   - EVReflection (from `https://github.com/evermeer/EVReflection.git`, branch `Swift3`)
   - Firebase/Auth
   - Firebase/Core
@@ -71,12 +73,13 @@ CHECKOUT OPTIONS:
     :git: https://github.com/evermeer/EVReflection.git
 
 SPEC CHECKSUMS:
+  DLRadioButton: 7bb8a6e3768b572469ace553391ab4d2af6f9c19
   EVReflection: 102d8ca777db55200f48b80d9628c8d50fb4109d
-  Firebase: ff77ffb77b317c3720fef57a60e9335cebf962e6
-  FirebaseAnalytics: 6e58fc9b397664369ac7617fb0ba93fab6ba7b5b
+  Firebase: 387f37c7dca894a02708da9ff35ba147040eae9e
+  FirebaseAnalytics: 9c67af0ebeb8d2146c9b4ea2616439affa947b58
   FirebaseAuth: 96e9674ff31d6e1f826d53e26aa003a57cab0295
-  FirebaseCore: d0ed25f27b6f9158eccc439f1be6f92e81207e28
-  FirebaseDatabase: 3ebb2edb6007c3f0f87b248f3fa212bde56a1468
+  FirebaseCore: 1e383fdfe37b6b5d6ff88e84204bdee30276af0f
+  FirebaseDatabase: 6de92187481ff0e8e124064f21742e95ee883b02
   FirebaseInstanceID: ba1e640935235e5fac39dfa816fe7660e72e1a8a
   FirebaseMessaging: acf66347e43c5637c697060c3001d25c809a4131
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
@@ -85,6 +88,6 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
   PopupDialog: 9890441b81105b9076757af2afe2b037be682f3e
 
-PODFILE CHECKSUM: e9a093326172181a711b83d748c625c7a19ed6fe
+PODFILE CHECKSUM: bc1f03d1990779e714d5ce89586615ebcbd7c7f0
 
 COCOAPODS: 1.1.1

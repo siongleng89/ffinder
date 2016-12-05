@@ -13,7 +13,8 @@ class Constants{
     public static let RestfulUrl:String = "https://ffinder-74ebd.appspot.com/";
     public static let RestfulKey:String = "4Mm8XsOd7E3qwXNJ91r0B3VKYMvi7frZTllD6s9Uv233Jpy02XYjFnrjFLH1WY76";
     public static let EncryptKey:String = "W6hzg7AiKv0Ha5LJ"
-    public static let KeyExpiredTotalSecs:UInt64 = 60 * 60 * 24;  //1 day
+    public static let KeyExpiredTotalSecs:UInt64 = 7 * 60 * 60 * 24;  //7 day
+    public static let SearchTimeoutSecs:UInt64 = 40;
     public static let FcmKey:String = "AIzaSyB2DgF790wlLZ3fXzb9_ArVgxAit2Mouno";
 }
 

@@ -12,8 +12,6 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import com.ffinder.android.absint.receivers.AutoSearchWakefulBroadcastReceiver;
-import com.ffinder.android.absint.receivers.LocationUpdateRequestWakefulBroadcastReceiver;
-import com.ffinder.android.absint.receivers.StopGeofencingReceiver;
 import com.ffinder.android.helpers.Logs;
 import com.ffinder.android.helpers.Threadings;
 import com.ffinder.android.statics.Constants;

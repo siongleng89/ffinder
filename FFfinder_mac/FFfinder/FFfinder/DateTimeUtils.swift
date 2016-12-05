@@ -32,27 +32,38 @@ class DateTimeUtils{
         let date = Date(timeIntervalSince1970: Double(unixTime))
         let currentDate = Date()
         
-        let dayDiff = daysBetweenDates(date, currentDate)
-        
-        if dayDiff == 0{
-            let dayTimePeriodFormatter = DateFormatter()
-            dayTimePeriodFormatter.dateFormat = timeformat!
-            let dateString = dayTimePeriodFormatter.string(from: date as Date)
-            return dateString
-
-        }
-        else if dayDiff == 1{
-            return "yesterday".localized
-            
-        }
-        else{
+        if date.timeIntervalSince1970 > currentDate.timeIntervalSince1970{
             let dayTimePeriodFormatter = DateFormatter()
             dayTimePeriodFormatter.dateFormat = dateformat! + " " + timeformat!
             let dateString = dayTimePeriodFormatter.string(from: date as Date)
             return dateString
 
         }
+        else{
+            let dayDiff = daysBetweenDates(date, currentDate)
+            
+            if dayDiff == 0{
+                let dayTimePeriodFormatter = DateFormatter()
+                dayTimePeriodFormatter.dateFormat = timeformat!
+                let dateString = dayTimePeriodFormatter.string(from: date as Date)
+                return dateString
+                
+            }
+            else if dayDiff == 1{
+                return "yesterday".localized
+                
+            }
+            else{
+                let dayTimePeriodFormatter = DateFormatter()
+                dayTimePeriodFormatter.dateFormat = dateformat! + " " + timeformat!
+                let dateString = dayTimePeriodFormatter.string(from: date as Date)
+                return dateString
+                
+            }
+
+        }
     }
+
     
     private static func daysBetweenDates(_ startDate: Date, _ endDate: Date) -> Int
     {

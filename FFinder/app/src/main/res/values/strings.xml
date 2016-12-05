@@ -6,7 +6,7 @@
 <string name="app_title_long">"Simple Friend and Family Finder"</string>
 
 <!-- Apps info end
- _________________________________________________________________________________ 
+_________________________________________________________________________________
 Common texts start -->
 <string name="retry">"Retry"</string>
 <string name="unknown_error_msg">"Unknown error occurred"</string>
@@ -36,12 +36,15 @@ ________________________________________________________________________________
 Launch Activity text start -->
 <string name="welcome_msg_1">"Welcome To"</string>
 <string name="first_time_msg_content">"Thanks for choosing us, you now have a friend &amp; family finder that,
-- Does not drain battery as search is on demand
-- Offers some privacy as it allows you to block search and does not track every move
-- Is free with Ads"</string>
+    - Does not drain battery as search is on demand
+    - Offers some privacy as it allows you to block search and does not track every move
+    - Is free with Ads"
+</string>
 <string name="required_location_provider_msg">"FFfinder requests you to enable location service"</string>
 <string name="btn_go_to_location_settings_text">"Config Location"</string>
-<string name="some_permission_denied_toast_msg">"Please make sure all required permissions are given to start FFfinder"</string>
+<string name="some_permission_denied_toast_msg">"Please make sure all required permissions are given to start
+    FFfinder"
+</string>
 
 <!-- Launch Activity text end
 _________________________________________________________________________________
@@ -51,7 +54,8 @@ Setup Activity text start -->
 <string name="retrieving_token">"Retrieving Token…"</string>
 <string name="initializing_user">"Initializing user…"</string>
 <string name="initialization_done">"Initialization done."</string>
-<string name="no_google_service_error_msg">"Please make sure Google Play service is properly configured before running this app."</string>
+<string name="no_google_service_error_msg">"Please make sure Google Play service is properly configured before running this app."
+</string>
 <string name="no_connection_msg">"No connection found, please check your connection and try again."</string>
 <string name="db_failed_msg">"Unable to connect to server, please check your connection and try again."</string>
 <string name="location_service_change_denied">"Please configure location service before starting FFfinder."</string>
@@ -62,7 +66,9 @@ Main Activity text start -->
 <string name="never_locate_user_msg">"Click search to locate!"</string>
 <string name="unknown_address_msg">"Unknown address, please see the location with map"</string>
 <string name="block_dialog_title">"Block %s?"</string>
-<string name="block_dialog_content">"%1$s will not be able to locate you after this. You can however still locate %2$s"</string>
+<string name="block_dialog_content">"%1$s will not be able to locate you after this. You can however still locate
+    %2$s"
+</string>
 <string name="search_status_starting_msg">"Starting…"</string>
 <string name="search_status_checking_data_msg">"Connecting to location…"</string>
 <string name="search_status_waiting_user_respond_msg">"Request sent, waiting for user response…"</string>
@@ -70,21 +76,28 @@ Main Activity text start -->
 <string name="search_status_geodecoding_msg">"Getting user's address…"</string>
 <string name="error_no_link_msg">"Cannot retrieve address as user does not have you on the list."</string>
 <string name="error_timeout_msg">"Unable to get user's latest location."</string>
-<string name="error_timeout_no_connection_msg">"Unable to connect, please check your connection and try again."</string>
+<string name="error_timeout_no_connection_msg">"Unable to connect, please check your connection and try again."
+</string>
 
 <!-- search_failed_dialog -->
-<string name="error_timeout_unknown_reason_possible_reasons">"1) User's device does not have active internet connection
-2) User has forced close FFfinder"</string>
+<string name="error_timeout_unknown_reason_possible_reasons">"1) User's device does not have active internet
+    connection
+    2) User has forced close FFfinder"
+</string>
 
 <!-- search_failed_dialog -->
-<string name="error_timeout_unknown_reason_possible_reasons2">"3) Configurations not set up for some specific phone models"</string>
+<string name="error_timeout_unknown_reason_possible_reasons2">"3) Configurations not set up for some specific phone
+    models"
+</string>
 <string name="error_user_blocked_msg">"User has blocked you."</string>
 
 <!-- search_failed_dialog -->
 <string name="failed_search_msg_text1">"Unable to locate this user."</string>
 
 <!-- search_failed_dialog -->
-<string name="failed_search_msg_text2">"We will keep searching this user and send you a free notification later, or you can try to search again."</string>
+<string name="failed_search_msg_text2">"We will keep searching this user and send you a free notification later, or
+    you can try to search again."
+</string>
 
 <!-- search_failed_dialog -->
 <string name="btn_search_again_text">"Search again anyway"</string>
@@ -131,7 +144,8 @@ Vip Activity text start -->
 <string name="manage_subscriptions_item_title">"Manage Subscriptions"</string>
 
 <!-- activityVip -->
-<string name="manage_subscriptions_introduction_android">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"</string>
+<string name="manage_subscriptions_introduction_android">"To manage subscription, please open Google Play Store, tap Menu &gt; Account &gt; Subscriptions"
+</string>
 
 <!-- Vip Activity text end
 _________________________________________________________________________________
@@ -142,19 +156,24 @@ please enable our apps to able to run in background by following these steps:
 
 1) Go to Security Apps
 2) Go to permission then click on Auto Start Management
-3) Add/Enable auto start apps, allow FFfinder"</string>
+3) Add/Enable auto start apps, allow FFfinder"
+</string>
 <string name="issue_fix_huawei">"For Huawei, when using FFfinder, to ensure your loved one can always find you,
 please enable our apps to able to run in background by following these steps:
 
 1) Go to Settings
-2) Click on Protected Apps 
-3) Add FFfinder as protected apps"</string>
-<string name="issue_fix_sony">"For Sony, when using FFfinder, if you are using Stamina Mode in Power Management (You may ignore this instruction if you are not using Stamina Mode), please follow these steps to ensure that your loved one can always find you: 
+2) Click on Protected Apps
+3) Add FFfinder as protected apps"
+</string>
+<string name="issue_fix_sony">"For Sony, when using FFfinder, if you are using Stamina Mode in Power Management (You
+may ignore this instruction if you are not using Stamina Mode), please follow these steps to ensure that your
+loved one can always find you:
 
-1) Go to Power Management 
-2) Click on STAMINA mode 
-3) Apps active in standby 
-4) Add FFfinder"</string>
+1) Go to Power Management
+2) Click on STAMINA mode
+3) Apps active in standby
+4) Add FFfinder"
+</string>
 
 <!-- Known Issues Activity text end
 _________________________________________________________________________________
@@ -174,7 +193,9 @@ Promo Code Activity text start -->
 <string name="input_promo_code_title">"Input Promo Code"</string>
 <string name="promo_code_title">"Promo Code:"</string>
 <string name="empty_promo_code_error_msg">"Please input a promo code"</string>
-<string name="promo_code_failed_error_msg">"Invalid promo code or you have already used this promo code for this account."</string>
+<string name="promo_code_failed_error_msg">"Invalid promo code or you have already used this promo code for this
+    account."
+</string>
 <string name="checking_promo_code_msg">"Checking promo code…"</string>
 <string name="promo_code_success_msg">"Promo code activated, you are now granted %s free searches."</string>
 
@@ -198,7 +219,7 @@ Edit member name popup dialog text start -->
 <string name="edit_name_title">"Edit Name"</string>
 <string name="new_name_title">"New Name"</string>
 
-<!-- Edit member name popup dialog text end
+    <!-- Edit member name popup dialog text end
 _________________________________________________________________________________
 Share key activity text start -->
 <string name="share_key_activity_title">"Invite code"</string>
@@ -224,15 +245,17 @@ http://ff-finder.com/addnew/%2$s"</string>
 <string name="after_share_passcode_reminder">"Thanks for sharing your Invite code, just wait for your friend or family to add you and you can start tracking each other."</string>
 
 <!-- Share key activity text end
-_________________________________________________________________________________
+______________________________________________________________________________
 Delete member popup dialog text start -->
 <string name="delete_user_title">"Delete %s?"</string>
-<string name="confirm_delete_user_msg">"Are you sure you want to delete this user? The user will not be able to locate you after you have deleted him/her."</string>
+<string name="confirm_delete_user_msg">"Are you sure you want to delete this user? The user will not be able to locate you after you have deleted him/her."
+</string>
 
 <!-- Delete member popup dialog text end
 _________________________________________________________________________________
 Language chooser popup dialog text start -->
-<string name="language_take_effect_after_restart_toast">"Language settings will only take effect after restart"</string>
+<string name="language_take_effect_after_restart_toast">"Language settings will only take effect after restart"
+</string>
 
 <!-- Language chooser popup dialog text end
 _________________________________________________________________________________
@@ -241,9 +264,11 @@ Notifications start -->
 <string name="notification_x_has_been_located_msg">"%s has been located."</string>
 <string name="notification_x_users_located_msg">"%s of friends located."</string>
 <string name="notification_x_added_you">"%s has added you! You may now locate each other."</string>
-<string name="notification_remember_to_add_friend_msg">"Get started! Share your Invite code to add your friends and family :)"</string>
+<string name="notification_remember_to_add_friend_msg">"Get started! Share your Invite code to add your friends and
+    family :)"
+</string>
 
-<!-- Notifications end 
+    <!-- Notifications end
 Everything about tutorials -->
 <string name="first_time_see_passcode">"Hi, it is your first time adding friend/family, do you want to see a short tutorial guide?"</string>
 <string name="share_passcode_s1">"Every user has a unique temporary Invite code, you must share your personal Invite code with your friend/family to connect."</string>
@@ -306,4 +331,5 @@ Everything about tutorials -->
 <string name="apps_intro4">"2) Ask them to follow instructions to install and click on a link"</string>
 <string name="apps_intro5">"3) Know where they are"</string>
 <string name="apps_intro6">"So who are the 5 most important people in you life?"</string>
+
 </resources>

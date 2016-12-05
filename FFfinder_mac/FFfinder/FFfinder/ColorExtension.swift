@@ -8,6 +8,8 @@
 
 import UIKit
 extension UIColor{
+  
+
     
     static func colorPrimaryDark() -> UIColor{
         
@@ -30,6 +32,13 @@ extension UIColor{
         
         return UIColor(netHex:0xffffff)
     }
+    
+    static func colorNormalText() -> UIColor{
+        
+        return UIColor(netHex:0x7b7a7a)
+    }
+
+    
 
     convenience init(netHex:Int) {
         self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)

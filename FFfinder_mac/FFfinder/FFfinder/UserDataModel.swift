@@ -23,7 +23,10 @@ class UserDataModel : FirebaseModelProtocol{
     }
     
     func fromAnyObject(_ value: Any?) {
-        
+        if let result = value as? [String:Any]{
+            fcmToken = result["token"] as! String?
+            platform = result["platform"] as! String?
+        }
     }
     
     

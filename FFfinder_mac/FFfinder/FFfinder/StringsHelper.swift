@@ -9,6 +9,39 @@
 import Foundation
 class StringsHelper{
 
+    public static func isEmpty(_ input:String?) -> Bool{
+        
+        if let input = input{
+            if input.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) != ""{
+                return false
+            }
+        }
+        
+        return true;
+    
+    }
+    
+    public static func safeSubstring(_ input:String?, _ length:Int) -> String{
+        if let input = input{
+            if input.characters.count <= length{
+                return input
+            }
+            else{
+                return input[0...(length-1)]
+            }
+        }
+        return ""
+    }
+    
+    public static func isNumeric(_ input:String?) -> Bool{
+        let badCharacters = NSCharacterSet.decimalDigits.inverted
+        
+        if !(isEmpty(input)) && input?.rangeOfCharacter(from: badCharacters) == nil {
+            return true
+        } else {
+            return false
+        }
+    }
     
     
     public static func generateRandomKey(_ length:Int) -> String{

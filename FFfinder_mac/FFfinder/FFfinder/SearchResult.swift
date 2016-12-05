@@ -16,6 +16,7 @@ enum SearchResult:String, EVRawString{
     case ErrorTimeoutUnknownReason = "ErrorTimeoutUnknownReason"
     case ErrorTimeoutLocationDisabled = "ErrorTimeoutLocationDisabled"
     case ErrorTimeoutNoConnection = "ErrorTimeoutNoConnection"
+    case ErrorUserBlocked = "ErrorUserBlocked"
     
     public static func getMessage(_ result:SearchResult) -> String{
         switch result {
@@ -27,6 +28,8 @@ enum SearchResult:String, EVRawString{
             return "error_timeout_msg".localized
         case .ErrorTimeoutNoConnection:
             return "error_timeout_no_connection_msg".localized
+        case .ErrorUserBlocked:
+            return "error_user_blocked_msg".localized
         default:
             return ""
         }

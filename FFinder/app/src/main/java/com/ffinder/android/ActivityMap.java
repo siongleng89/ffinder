@@ -339,6 +339,7 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
             TextView txtIndex = (TextView) tableRow.findViewById(R.id.txtIndex);
             TextView txtDirection = (TextView) tableRow.findViewById(R.id.txtDirection);
 
+
             txtIndex.setText(i + ")");
             txtDirection.setText(segment.getInstruction());
             i++;
