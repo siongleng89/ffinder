@@ -35,10 +35,6 @@ Common texts start -->
 _________________________________________________________________________________
 Launch Activity text start -->
 <string name="welcome_msg_1">"欢迎来到"</string>
-<string name="first_time_msg_content">"谢谢您选择使用家人朋友搜寻器，这个软件让你能够寻找您家人或朋友的所在位置。
-- 它不耗电，因为它只有在或被搜寻时才启动
-- 您能够选择是否被搜索，让您拥有更多隐私权
-- 完全免费！"</string>
 <string name="required_location_provider_msg">"家人朋友搜寻器要求你启动定位服务"</string>
 <string name="btn_go_to_location_settings_text">"设置位置"</string>
 <string name="some_permission_denied_toast_msg">"请给予家人朋友搜索器所需的许可"</string>
@@ -165,17 +161,6 @@ Map Activity text start -->
 <string name="directions">"方向"</string>
 <string name="no_route_found_error_msg">"无旅程信息"</string>
 
-<!-- Map Activity text end
-_________________________________________________________________________________
-Promo Code Activity text start -->
-<string name="promo_code_activity_title">"推广号码"</string>
-<string name="input_promo_code_title">"输入推广号码"</string>
-<string name="promo_code_title">"推广号码："</string>
-<string name="empty_promo_code_error_msg">"请输入推广号码"</string>
-<string name="promo_code_failed_error_msg">"推广号码不正确或您已使用过了"</string>
-<string name="checking_promo_code_msg">"检查推广号码…"</string>
-<string name="promo_code_success_msg">"成功启动，您已获得%s次免费搜索"</string>
-
 <!-- Promo Code Activity text end
 _________________________________________________________________________________
 Add member Activity text start -->
@@ -184,8 +169,6 @@ Add member Activity text start -->
 <string name="user_key_title">"您的家人或朋友的用号"</string>
 <string name="member_name_title">"您的家人或朋友的称呼"</string>
 <string name="no_user_key_msg">"请输入您想添加的用户的用号"</string>
-<string name="no_member_name_msg">"请输入用户名字"</string>
-<string name="no_your_name_msg">"请输入您的名字"</string>
 <string name="adding_friend_msg">"加入档案…"</string>
 <string name="user_already_added_error_msg">"用户已经在你的名单上称为%s"</string>
 <string name="key_expired_or_not_exist_msg">"用号过期或错误用号"</string>
@@ -200,26 +183,26 @@ Edit member name popup dialog text start -->
 _________________________________________________________________________________
 Share key activity text start -->
 <string name="share_key_activity_title">"用号"</string>
-<string name="share_key_title">"分享我的用号"</string>
+<string name="share_key_title">"分享邀请号"</string>
 <string name="btn_share_via_other_apps_text">"分享"</string>
-<string name="your_key_title">"按下分享用号，给予您的朋友或家人许可以让他们搜寻您的所在
+<string name="your_key_title">"按下分享邀请号，给予您的朋友或家人许可以让他们搜寻您的所在
  (分享过后，您不需要再做任何事)"</string>
 <string name="expired_at_title">"( %s 后过期)"</string>
 <string name="minutes_left">"(%s 分钟后过期)"</string>
 <string name="copied_to_clipboard_toast_msg">"已拷贝"</string>
-<string name="regenerating_key_msg">"更新用号中…"</string>
-<string name="regen_key_confirm_msg">"您确定要更新您的用号吗？其他用户将不能使用旧用号添加您"</string>
-<string name="share_title">"分享用号"</string>
-<string name="share_subject">"简易家人朋友搜寻器用号"</string>
+<string name="regenerating_key_msg">"更新邀请号中…"</string>
+<string name="regen_key_confirm_msg">"您确定要更新您的邀请号吗？其他用户将不能使用旧邀请号添加您"</string>
+<string name="share_title">"分享邀请号"</string>
+<string name="share_subject">"简易家人朋友搜寻器邀请号"</string>
 
 <!-- Fuzzy -->
-<string name="share_msg">"请下载免费的简易家人朋友搜寻器于
+<string name="share_msg">"你是我重要的人！请下载免费的简易家人朋友搜寻器于
 https://play.google.com/store/apps/details?id=com.ffinder.android&amp;referrer=%1$s
-让我可以知道您的所在。
+让我们可以互相知道对方的所在。
 
 下载后，请使用家人朋友搜寻器打开以下网址添加我，
 http://ff-finder.com/addnew/%2$s"</string>
-<string name="after_share_passcode_reminder">"谢谢您分享您的用号，请等待您的家人或朋友的添加。过后你们就能互相定位。"</string>
+<string name="after_share_passcode_reminder">"谢谢您分享邀请号，请等待您的家人或朋友的添加。过后你们就能互相定位。"</string>
 
 <!-- Share key activity text end
 _________________________________________________________________________________
@@ -244,13 +227,13 @@ Notifications start -->
 <!-- Notifications end 
 Everything about tutorials -->
 <string name="first_time_see_passcode">"嗨，您是第一次添加朋友或家人，想看一下入门指示吗？"</string>
-<string name="share_passcode_s1">"每个用户都有一个独有的用号，您必须把您的用号分享给您的朋友或家人来给予他们搜索您的权限。"</string>
-<string name="share_passcode_s2">"按下分享用号按键，选择其中一个分享方式。"</string>
+<string name="share_passcode_s1">"每个用户都有一个独有的邀请号，您必须把您的邀请号分享给您的朋友或家人来给予他们搜索您的权限。"</string>
+<string name="share_passcode_s2">"按下分享邀请号按键，选择其中一个分享方式。"</string>
 <string name="share_passcode_s3">"分享后，请等待您的朋友或家人添加您"</string>
 <string name="share_passcode_s4">"添加后，你们就能互相搜寻对方所在"</string>
-<string name="add_manually_a1">"每个用户都有一个独有的用号，如您想添加新的家人或朋友，您必须要求他与您分享他的用号，他可在按下这个“加”按键后看到他的用号"</string>
-<string name="add_manually_a2">"在收到对方用户的分享信息后，如图所示，这是对方的用号"</string>
-<string name="add_manually_a3">"在此输入对方的用号"</string>
+<string name="add_manually_a1">"每个用户都有一个独有的邀请号，如您想添加新的家人或朋友，您必须要求他与您分享他的邀请号，他可在按下这个“加”按键后看到他的用号"</string>
+<string name="add_manually_a2">"在收到对方用户的分享信息后，如图所示，这是对方的邀请号"</string>
+<string name="add_manually_a3">"在此输入对方的邀请号"</string>
 <string name="add_manually_a4">"好了！你们从现在开始就能互相搜寻对方所在"</string>
 <string name="huawei">"华为"</string>
 <string name="xiaomi">"小米"</string>
@@ -286,4 +269,12 @@ Everything about tutorials -->
 
 <!-- noCreditsDialog -->
 <string name="confirm_watch_ads_on_3g">"观看广告将会使用数据流量。继续广告吗？"</string>
+<string name="apps_intro1">"调查显示每个人在拥有至少五个非常亲密的知己后，他们的社交生活品质得到了大幅度的提升。"</string>
+<string name="apps_intro2">"这五个人是您愿意与其在任何时候分享您的所在地点以让他们能轻易的找到您，您也能随时找到他们确定他们的安全。"</string>
+<string name="apps_intro3">"最简易的家人朋友寻找器
+1）分享您的邀请号给您想添加的人"</string>
+<string name="apps_intro4">"2）要求他们安装本软件然后按下下方网址"</string>
+<string name="apps_intro5">"3）随时查询对方的地点"</string>
+<string name="apps_intro6">"所以谁是你最重要的五个知己呢？"</string>
+<string name="no_friend_popup_msg">"您还差五个人就能提升您的社交生活品质。现在添加朋友或家人？"</string>
 </resources>
