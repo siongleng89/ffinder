@@ -88,22 +88,6 @@ Main Activity text start -->
 <!-- search_failed_dialog -->
 <string name="btn_wait_autonotification_text">"Wait for auto notification"</string>
 <string name="search_left">"Search Left"</string>
-
-<!-- noCreditsDialog -->
-<string name="ran_out_free_search_msg">"You have run out of free search, you can earn searches by"</string>
-
-<!-- noCreditsDialog -->
-<string name="btn_watch_ads_earn_credits_text">"Watch Ads"</string>
-
-<!-- noCreditsDialog -->
-<string name="btn_input_promo_code_earn_credits_text">"Promo Code"</string>
-
-<!-- noCreditsDialog -->
-<string name="btn_subscript_unlimited_searches_text">"Subscribe"</string>
-
-<!-- noCreditsDialog -->
-<string name="btn_maybe_next_time_text">"Maybe Next Time"</string>
-<string name="no_ads_available_toast_msg">"No ads available, free searches will be rewarded."</string>
 <string name="searching">"Searching"</string>
 <string name="auto_searching">"Auto"</string>
 <string name="tap_plus_to_add_friend_family">"+ Tap to add friend/family"</string>
@@ -273,12 +257,6 @@ Everything about tutorials -->
 
 <!-- activityVip -->
 <string name="vip_benefits">"For Unlimited Searches"</string>
-
-<!-- noCreditsDialog -->
-<string name="earn_searches_by_msg">"Earn searches by"</string>
-
-<!-- noCreditsDialog -->
-<string name="confirm_watch_ads_on_3g">"Data charges may be incurred. Continue to advertisement?"</string>
 
 <!-- ActivityMap -->
 <string name="no_gps_nav_apps_found_error">"No gps navigation apps found in your device."</string>
