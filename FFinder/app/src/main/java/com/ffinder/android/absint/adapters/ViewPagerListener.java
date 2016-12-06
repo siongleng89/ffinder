@@ -7,4 +7,5 @@ public abstract class ViewPagerListener {
 
     public abstract void onEnded();
 
+    public abstract void goToIndex(int index);
 }

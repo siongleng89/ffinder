@@ -360,8 +360,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 }
 
-                AnimateBuilder.fadeIn(context, layoutResult);
-                AnimateBuilder.fadeOut(context, layoutStatus);
+                layoutResult.setVisibility(View.VISIBLE);
+                layoutStatus.setVisibility(View.GONE);
+
+//                AnimateBuilder.fadeIn(context, layoutResult);
+//                AnimateBuilder.fadeOut(context, layoutStatus);
             }
             //in search state currently
             else{
@@ -379,8 +382,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 txtStatus.setText(friendModel.getSearchStatus().getMessage(context));
 
-                AnimateBuilder.fadeIn(context, layoutStatus);
-                AnimateBuilder.fadeOut(context, layoutResult);
+                layoutResult.setVisibility(View.GONE);
+                layoutStatus.setVisibility(View.VISIBLE);
+
+//                AnimateBuilder.fadeIn(context, layoutStatus);
+//                AnimateBuilder.fadeOut(context, layoutResult);
             }
 
 

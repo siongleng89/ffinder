@@ -77,11 +77,22 @@ public class FragmentIntroItem extends Fragment {
         else{
             txtViewEnd.setVisibility(View.GONE);
             imgViewNext.setVisibility(View.VISIBLE);
+            setNextListener(index);
         }
 
         return rootView;
     }
 
+    private void setNextListener(final int currentIndex){
+        imgViewNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewPagerListener != null){
+                    viewPagerListener.goToIndex(currentIndex + 1);
+                }
+            }
+        });
+    }
 
     private void setOnEndListener(){
         imgViewMain.setOnClickListener(new View.OnClickListener() {

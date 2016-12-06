@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.*;
 import android.widget.LinearLayout;
 import com.ffinder.android.absint.activities.IFriendsAdapterHolder;
@@ -47,6 +48,8 @@ public class ActivityMain extends MyActivityAbstract implements
     private final int pickImageCode = 100;
     private static String pickingProfileImageForFriendId;
     private boolean firstRunNeeded;
+    private AlertDialog dialogPhoneIssues;
+    private boolean shownAddFriendReminder;
 
     public ActivityMain() {
     }
@@ -139,7 +142,10 @@ public class ActivityMain extends MyActivityAbstract implements
         PreferenceUtils.delete(this, PreferenceType.AutoNotifiedReceivedIds);
 
         //check if pending to add user, if yes, pop add user dialog automatically
-        checkHasPendingToAddUser();
+        if(!checkHasPendingToAddUser()){
+            popAddUserIfNeeded();
+        }
+        shownAddFriendReminder = true;
 
         if(firstRunNeeded){
             Threadings.delay(1000, new Runnable() {
@@ -355,6 +361,7 @@ public class ActivityMain extends MyActivityAbstract implements
     }
 
     private void checkKnownIssue(){
+        boolean shownMessage = false;
         boolean notify = Strings.isEmpty(PreferenceUtils.get(this, PreferenceType.DontRemindMeAgainPhoneIssue));
         if(notify){
             final String model = Build.BRAND;
@@ -362,6 +369,7 @@ public class ActivityMain extends MyActivityAbstract implements
             if(phoneBrand != PhoneBrand.UnknownPhoneBrand){
                 String msg = AndroidUtils.getPhoneBrandKnownIssue(this, phoneBrand);
                 if(!Strings.isEmpty(msg)){
+                    shownMessage = true;
                     final OverlayBuilder builder = OverlayBuilder.build(this);
                     builder.setContent(msg)
                         .setOverlayType(OverlayType.OkOnly)
@@ -375,18 +383,38 @@ public class ActivityMain extends MyActivityAbstract implements
                     Threadings.postRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            builder.show();
+                            dialogPhoneIssues = builder.show();
                         }
                     });
 
                 }
             }
         }
-        else{
-            
+    }
 
+    private void popAddUserIfNeeded(){
+        if(!firstRunNeeded && !shownAddFriendReminder && getMyModel().getNonSelfFriendModelsCount() == 0){
+            Threadings.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    if(dialogPhoneIssues != null && dialogPhoneIssues.isShowing()){
+                        return;
+                    }
+
+                    OverlayBuilder.build(ActivityMain.this)
+                            .setOverlayType(OverlayType.OkCancel)
+                            .setContent(getString(R.string.no_friend_popup_msg))
+                            .setRunnables(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(ActivityMain.this, ActivityShareKey.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .show();
+                }
+            });
         }
-
     }
 
     public void setListeners(){

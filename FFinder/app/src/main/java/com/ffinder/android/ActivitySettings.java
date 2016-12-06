@@ -51,7 +51,6 @@ public class ActivitySettings extends MyActivityAbstract {
         settingsModels = new ArrayList();
         settingsModels.add(new SettingsModel(getString(R.string.known_issues_title)));
         settingsModels.add(new SettingsModel(getString(R.string.vip_title)));
-        //settingsModels.add(new SettingsModel(getString(R.string.input_promo_code_title)));
         settingsModels.add(new SettingsModel(getString(R.string.settings_item_language_title)));
 
 
@@ -75,11 +74,7 @@ public class ActivitySettings extends MyActivityAbstract {
                     Intent intent = new Intent(ActivitySettings.this, ActivityKnownIssues.class);
                     startActivity(intent);
                 }
-                else if(settingsModel.getTitle().equals(getString(R.string.input_promo_code_title))){
-                    Intent intent = new Intent(ActivitySettings.this, ActivityPromo.class);
-                    intent.putExtra("userId", myModel.getUserId());
-                    startActivity(intent);
-                }
+
             }
         });
     }

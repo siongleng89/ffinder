@@ -9,7 +9,6 @@ import com.ffinder.android.absint.controls.INoCreditsListener;
 import com.ffinder.android.absint.databases.FirebaseListener;
 import com.ffinder.android.absint.helpers.IAdsMediationListener;
 import com.ffinder.android.absint.helpers.RestfulListener;
-import com.ffinder.android.controls.NoCreditsDialog;
 import com.ffinder.android.enums.*;
 import com.ffinder.android.helpers.*;
 import com.ffinder.android.models.MyModel;

@@ -205,9 +205,6 @@ public class ButtonSearch extends RelativeLayout {
                         });
                 imgViewFlower.setImageDrawable(searchSuccessAnimation);
                 searchSuccessAnimation.start();
-
-
-
                 break;
 
             case Ending:
@@ -256,18 +253,21 @@ public class ButtonSearch extends RelativeLayout {
     public void animateOutLastUpdated(){
         locked = true;
 
-        if(ViewHelper.getX(txtLastUpdated) == 100) return;
 
-        AnimateBuilder.build(context, txtLastUpdated)
-                .setAnimateType(AnimateType.moveByX)
-                .setDurationMs(200)
-                .setValue(100)
-                .start();
+       // if(ViewHelper.getX(txtLastUpdated) == 100) return;
+
+
+//
+//        AnimateBuilder.build(context, txtLastUpdated)
+//                .setAnimateType(AnimateType.moveByX)
+//                .setDurationMs(200)
+//                .setValue(100)
+//                .start();
 
         AnimateBuilder.build(context, imgViewButtonHolder)
                 .setAnimateType(AnimateType.scaleY)
                 .setDurationMs(200)
-                .setValue(1.2f)
+                .setValue(1.22f)
                 .start();
 
         colorDown();
@@ -277,14 +277,13 @@ public class ButtonSearch extends RelativeLayout {
 
     public void animateInLastUpdated(){
         locked = false;
-
-        if(ViewHelper.getX(txtLastUpdated) == 0) return;
-
-        AnimateBuilder.build(context, txtLastUpdated)
-                .setAnimateType(AnimateType.moveByX)
-                .setDurationMs(200)
-                .setValue(-100)
-                .start();
+//        if(ViewHelper.getX(txtLastUpdated) == 0) return;
+//
+//        AnimateBuilder.build(context, txtLastUpdated)
+//                .setAnimateType(AnimateType.moveByX)
+//                .setDurationMs(200)
+//                .setValue(-100)
+//                .start();
 
         AnimateBuilder.build(context, imgViewButtonHolder)
                 .setAnimateType(AnimateType.scaleY)

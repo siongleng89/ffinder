@@ -39,8 +39,6 @@
         </activity>
         <activity android:name=".ActivityMap">
         </activity>
-        <activity android:name=".ActivityPromo">
-        </activity>
 
         <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>

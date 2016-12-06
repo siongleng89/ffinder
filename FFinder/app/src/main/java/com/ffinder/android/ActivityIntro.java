@@ -34,5 +34,10 @@ public class ActivityIntro extends MyActivityAbstract {
             startActivity(intent);
             finish();
         }
+
+        @Override
+        public void goToIndex(int index) {
+            viewPager.setCurrentItem(index, true);
+        }
     };
 }
