@@ -260,12 +260,12 @@ Everything about tutorials -->
 
 <!-- ActivityMap -->
 <string name="no_gps_nav_apps_found_error">"No gps navigation apps found in your device."</string>
-<string name="apps_intro1">"Studies have shown that you need at least 5 people, friends or family, to be close to you to have a quality social life. "</string>
+<string name="apps_intro1">"Studies have shown that you need at least 5 people, friends or family, to be close to you to have a quality social life."</string>
 <string name="apps_intro2">"These 5 people are the people you are willing to share location with, to allow them to find you easily and for you to know that they are safe, wherever they are."</string>
 <string name="apps_intro3">"Now, a simple way to know where they are and to keep them close. 
-First, you share your invite code. "</string>
-<string name="apps_intro4">"Send them a message, and remind them to install the this! "</string>
-<string name="apps_intro5">"Now, you can know where your loved ones are! "</string>
+First, you share your invite code."</string>
+<string name="apps_intro4">"Send them the invite code message, and remind them to install the apps by following the instructions."</string>
+<string name="apps_intro5">"Now, you can know where your loved ones are!"</string>
 <string name="apps_intro6">"So who are the 5 most important people in you life?"</string>
 <string name="no_friend_popup_msg">"You are 5 people away from a quality social life. Add your friends or family now?"</string>
 </resources>
