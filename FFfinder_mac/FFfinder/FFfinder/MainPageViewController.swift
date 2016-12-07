@@ -42,6 +42,11 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
                                            selector: #selector(onNeedToReloadFriendModel),                                               name: .needToReloadFriendModel, object: nil)
         
         
+     
+    }
+    
+    func test(){
+        Logs.show("testing")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -53,14 +58,9 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         let cell:FriendTableViewCell! = tableView.dequeueReusableCell(withIdentifier: friendTableCellIdentifier, for:indexPath)as! FriendTableViewCell
         let friendModel:FriendModel = self.myModel.friendModels[indexPath.row]
         cell.update(friendModel, self.myModel)
+        cell.contentView.isUserInteractionEnabled = false
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell:FriendTableViewCell! = tableView.cellForRow(at: indexPath) as! FriendTableViewCell!
-        cell.tapped(self.myModel.userId!)
-        
     }
     
     func friendModelChanged(notification:NSNotification){

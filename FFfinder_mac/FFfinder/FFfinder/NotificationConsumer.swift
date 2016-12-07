@@ -9,10 +9,10 @@
 import Foundation
 class NotitificationConsumer{
     
-    private var locationUpdater:LocationUpdater?
+    private var locationUpdateTask:LocationUpdateTask?
     private static var handledMsgIds = [String]()
     
-    public func consume(_ dict:[AnyHashable:Any], _ callback:(()->Void)? = nil){
+    public func consume(_ dict:[AnyHashable:Any]){
         
         if let actionString = dict["action"] {
             let action = FCMMessageType.convertStringToFCMMessageType(actionString as! String)
@@ -22,9 +22,6 @@ class NotitificationConsumer{
                 //make sure msg id is not duplicated
                 if let msgId = dict["messageId"] as? String{
                     if NotitificationConsumer.handledMsgIds.contains(msgId){
-                        if let callback = callback{
-                            callback()
-                        }
                         return
                     }
                     else{
@@ -35,15 +32,8 @@ class NotitificationConsumer{
                 let senderId = dict["senderId"] as! String
                 let senderToken = dict["senderToken"] as? String
                 let fromPlatform = dict["fromPlatform"] as? String
-                NSLog("handled msg size: \(NotitificationConsumer.handledMsgIds.count)")
                 
-                locationUpdater = LocationUpdater(senderId, senderToken){
-                    self.locationUpdater?.dispose()
-                    self.locationUpdater = nil
-                    if let callback = callback{
-                        callback()
-                    }
-                }
+                locationUpdateTask = LocationUpdateTask(senderId, senderToken!, fromPlatform!)
             }
             else if action == FCMMessageType.IsAliveMsg{
                 let senderId = dict["senderId"] as! String
@@ -59,9 +49,6 @@ class NotitificationConsumer{
                     friendModel.save()
                     
                     self.broadcastReloadFriend(senderId)
-                    if callback != nil{
-                        callback!()
-                    }
                 }
             }
             else if action == FCMMessageType.UserLocated{

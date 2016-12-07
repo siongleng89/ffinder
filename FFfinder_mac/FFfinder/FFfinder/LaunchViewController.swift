@@ -19,7 +19,7 @@ class LaunchViewController: MyViewController, CLLocationManagerDelegate {
     @IBOutlet weak var imageViewSplash: UIImageView!
     @IBOutlet weak var labelIntro: LocalizedLabel!
     @IBOutlet weak var constraintHeightLayoutIntro: NSLayoutConstraint!
-    private var locationManager: CLLocationManager?
+    private var locationTask: LocationUpdateTask!
     
     
     override func viewDidLoad() {
@@ -28,19 +28,21 @@ class LaunchViewController: MyViewController, CLLocationManagerDelegate {
     
     //must check at viewDidAppear since we cannot go to another view controller in viewDidLoad
     override func viewDidAppear(_ animated: Bool) {
-        locationManager = CLLocationManager()
-        if !IOSUtils.checkLocationServiceEnabledAndRequestIfNeeded(locationManager){
-            showConfirmDialog(title: "", message: "some_permission_denied_toast_msg".localized, positiveText: "ok", positiveToRun: {
-                    UIApplication.shared.openURL(NSURL(string: UIApplicationOpenSettingsURLString)! as URL)
-                    self.checkNeedToShowIntroduction();
-                }, negativeToRun: {
-                    self.checkNeedToShowIntroduction();
-            })
-            
-        }
-        else{
-            checkNeedToShowIntroduction();
-        }
+//        locationManager = CLLocationManager()
+//        if !IOSUtils.checkLocationServiceEnabledAndRequestIfNeeded(locationManager){
+//            showConfirmDialog(title: "", message: "some_permission_denied_toast_msg".localized, positiveText: "ok", positiveToRun: {
+//                    UIApplication.shared.openURL(NSURL(string: UIApplicationOpenSettingsURLString)! as URL)
+//                    self.checkNeedToShowIntroduction();
+//                }, negativeToRun: {
+//                    self.checkNeedToShowIntroduction();
+//            })
+//            
+//        }
+//        else{
+//            checkNeedToShowIntroduction();
+//        }
+        
+         checkNeedToShowIntroduction()
     }
    
     func checkNeedToShowIntroduction(){
@@ -89,12 +91,17 @@ class LaunchViewController: MyViewController, CLLocationManagerDelegate {
             
             let vc = self.storyboard?.instantiateViewController(withIdentifier: MainPageViewController.getMyClassName()) as! MainPageViewController
             self.navigationController!.pushViewController(vc, animated: false)
+            
+            locationTask = LocationUpdateTask(nil, nil, nil)
+            Logs.show("token is \(FIRInstanceID.instanceID().token())")
         
         }
         //userId is empty, go to setup page
         else{
             let vc = self.storyboard?.instantiateViewController(withIdentifier: SetupViewController.getMyClassName()) as! SetupViewController
             self.present(vc, animated: false, completion: nil)
+            
+           
         }
         
     }

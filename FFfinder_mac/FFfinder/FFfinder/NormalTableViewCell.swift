@@ -20,6 +20,11 @@ class NormalTableViewCell: UITableViewCell {
         bgColorView.backgroundColor = UIColor.colorPrimaryDark()
         self.selectedBackgroundView = bgColorView
     }
+    
+    override var layoutMargins: UIEdgeInsets {
+        get { return UIEdgeInsets.zero }
+        set(newVal) {}
+    }
 
     
     func setItemText(_ text:String){

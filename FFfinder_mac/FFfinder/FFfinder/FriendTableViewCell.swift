@@ -34,6 +34,7 @@ class FriendTableViewCell: UITableViewCell {
         self.imageViewProfile.layer.borderWidth = 1.0
         self.imageViewProfile.layer.borderColor = UIColor.colorPrimaryDark().cgColor
         
+        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -42,10 +43,22 @@ class FriendTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    override var layoutMargins: UIEdgeInsets {
+        get { return UIEdgeInsets.zero }
+        set(newVal) {}
+    }
+    
     public func update(_ friendModel:FriendModel, _ myModel:MyModel){
         Logs.show("Updating friend...")
         
         self.searchButton = SearchButtonPools.getSearchButton(friendModel.userId!)
+        
+        if let recognizers = self.searchButton?.gestureRecognizers{
+            for recognizer: UIGestureRecognizer in recognizers {
+                self.searchButton?.removeGestureRecognizer(recognizer)
+            }
+        }
+        
         self.searchButton?.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                                  action: #selector(startSearch)))
         self.searchButtonContainer.addSubview(self.searchButton!)

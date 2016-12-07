@@ -35,7 +35,7 @@
                         <action selector="onTextFieldLostFocus:" destination="-1" eventType="editingDidEnd" id="U52-0i-kw6"/>
                     </connections>
                 </textField>
-                <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem ipsum is a important text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VcO-5p-KQy">
+                <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem ipsum is a important text" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VcO-5p-KQy">
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <color key="textColor" red="1" green="0.35686274509803922" blue="0.27058823529411763" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -50,6 +50,7 @@
                 <constraint firstItem="G90-m4-kjE" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="fAc-rM-scj"/>
                 <constraint firstAttribute="trailing" secondItem="jEg-3u-pAu" secondAttribute="trailing" id="iBh-ub-ubx"/>
                 <constraint firstItem="jEg-3u-pAu" firstAttribute="top" secondItem="G90-m4-kjE" secondAttribute="bottom" constant="8" id="kel-oU-RkI"/>
+                <constraint firstItem="VcO-5p-KQy" firstAttribute="trailing" secondItem="jEg-3u-pAu" secondAttribute="trailing" id="udc-En-Ud5"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>

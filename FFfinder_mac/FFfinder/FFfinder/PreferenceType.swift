@@ -15,5 +15,5 @@ enum PreferenceType:String{
     case FriendUserIds
     case LastLocation
     case Language
-    
+    case LastSentAutoNotification
 }

@@ -55,7 +55,7 @@ class DateTimeUtils{
             }
             else{
                 let dayTimePeriodFormatter = DateFormatter()
-                dayTimePeriodFormatter.dateFormat = dateformat! + " " + timeformat!
+                dayTimePeriodFormatter.dateFormat = dateformat!
                 let dateString = dayTimePeriodFormatter.string(from: date as Date)
                 return dateString
                 

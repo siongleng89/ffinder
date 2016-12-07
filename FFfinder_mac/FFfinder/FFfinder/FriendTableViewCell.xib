@@ -8,75 +8,93 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="FriendTableViewCell" customModule="FFfinder" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="485" height="150"/>
+            <rect key="frame" x="0.0" y="0.0" width="485" height="126"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OJl-6F-bsR">
-                    <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="23"/>
                     <color key="textColor" red="0.28627450980000002" green="0.4549019608" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Drn-JG-4EN">
                     <constraints>
-                        <constraint firstAttribute="height" constant="80" id="Oqt-RT-Spu"/>
-                        <constraint firstAttribute="width" constant="80" id="lfI-fZ-VLK"/>
+                        <constraint firstAttribute="height" constant="70" id="Oqt-RT-Spu"/>
+                        <constraint firstAttribute="width" constant="70" id="lfI-fZ-VLK"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Johnny" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rpi-SK-DHz">
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <color key="textColor" red="0.28627450980000002" green="0.4549019608" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wJv-Jq-iGM">
                     <constraints>
-                        <constraint firstAttribute="height" constant="120" id="7fq-03-9E1"/>
-                        <constraint firstAttribute="width" constant="80" id="lyB-rO-pxR"/>
+                        <constraint firstAttribute="height" constant="100" id="7fq-03-9E1"/>
+                        <constraint firstAttribute="width" constant="70" id="lyB-rO-pxR"/>
                     </constraints>
                 </view>
-                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rjg-IP-2rE">
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="rjg-IP-2rE">
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hQG-jg-6MA" customClass="FFIconButton" customModule="FFfinder" customModuleProvider="target">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="imageName" value="FriendBtnMap"/>
+                            </userDefinedRuntimeAttributes>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="53L-Ea-Ggr" customClass="FFIconButton" customModule="FFfinder" customModuleProvider="target">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="imageName" value="FriendBtnAllowSearch"/>
+                                <userDefinedRuntimeAttribute type="string" keyPath="selectedImageName" value="FriendBtnDisallowSearch"/>
+                            </userDefinedRuntimeAttributes>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="itG-oK-BuH" customClass="FFIconButton" customModule="FFfinder" customModuleProvider="target">
+                            <color key="tintColor" red="0.7843137255" green="0.8980392157" blue="0.74117647060000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="imageName" value="FriendBtnDelete"/>
+                            </userDefinedRuntimeAttributes>
+                        </button>
+                    </subviews>
                     <color key="backgroundColor" red="0.34509803919999998" green="0.5568627451" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="26" id="KEv-hD-nJO"/>
                     </constraints>
                 </stackView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="748" text="Sample Address" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qK4-LG-g99">
-                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="this is a super long msg and hehe iwin your heart" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jyE-zV-TYn">
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                     <color key="textColor" red="0.28627450980392155" green="0.45490196078431372" blue="0.38431372549019605" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="wJv-Jq-iGM" secondAttribute="bottom" constant="15" id="4pX-3C-g8G"/>
                 <constraint firstItem="jyE-zV-TYn" firstAttribute="top" secondItem="qK4-LG-g99" secondAttribute="top" id="8qa-8P-EnT"/>
+                <constraint firstAttribute="bottom" secondItem="Rpi-SK-DHz" secondAttribute="bottom" constant="10" id="ACj-fc-24j"/>
                 <constraint firstItem="OJl-6F-bsR" firstAttribute="height" secondItem="Drn-JG-4EN" secondAttribute="height" id="AnL-VK-w3t"/>
                 <constraint firstItem="Rpi-SK-DHz" firstAttribute="leading" secondItem="Drn-JG-4EN" secondAttribute="leading" id="CGl-1f-4Qt"/>
                 <constraint firstItem="jyE-zV-TYn" firstAttribute="leading" secondItem="qK4-LG-g99" secondAttribute="leading" id="D6Y-u4-d28"/>
                 <constraint firstItem="Rpi-SK-DHz" firstAttribute="top" secondItem="Drn-JG-4EN" secondAttribute="bottom" constant="8" id="G32-RF-9t8"/>
-                <constraint firstItem="rjg-IP-2rE" firstAttribute="leading" secondItem="Rpi-SK-DHz" secondAttribute="trailing" constant="15" id="MN2-Cx-RWB"/>
+                <constraint firstItem="rjg-IP-2rE" firstAttribute="leading" secondItem="Rpi-SK-DHz" secondAttribute="trailing" constant="8" id="MN2-Cx-RWB"/>
                 <constraint firstItem="Drn-JG-4EN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="MYW-K3-4D2"/>
-                <constraint firstItem="qK4-LG-g99" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="NN7-x2-Fgb"/>
+                <constraint firstItem="qK4-LG-g99" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="NN7-x2-Fgb"/>
                 <constraint firstItem="jyE-zV-TYn" firstAttribute="trailing" secondItem="qK4-LG-g99" secondAttribute="trailing" id="NfQ-Ef-ixv"/>
-                <constraint firstItem="jyE-zV-TYn" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="PMg-QV-vJ6"/>
+                <constraint firstItem="jyE-zV-TYn" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="PMg-QV-vJ6"/>
                 <constraint firstItem="Rpi-SK-DHz" firstAttribute="width" secondItem="Drn-JG-4EN" secondAttribute="width" id="RLa-0b-6BW"/>
-                <constraint firstItem="wJv-Jq-iGM" firstAttribute="leading" secondItem="rjg-IP-2rE" secondAttribute="trailing" constant="15" id="Ubi-Sc-T4B"/>
-                <constraint firstItem="wJv-Jq-iGM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="aBK-ri-0v5"/>
+                <constraint firstItem="wJv-Jq-iGM" firstAttribute="leading" secondItem="rjg-IP-2rE" secondAttribute="trailing" constant="8" id="Ubi-Sc-T4B"/>
+                <constraint firstItem="wJv-Jq-iGM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="aBK-ri-0v5"/>
                 <constraint firstItem="OJl-6F-bsR" firstAttribute="top" secondItem="Drn-JG-4EN" secondAttribute="top" id="bAZ-Cy-PAC"/>
                 <constraint firstItem="qK4-LG-g99" firstAttribute="leading" secondItem="Drn-JG-4EN" secondAttribute="trailing" constant="8" id="d2g-Vv-kSw"/>
-                <constraint firstAttribute="bottom" secondItem="Rpi-SK-DHz" secondAttribute="bottom" constant="15" id="dPt-4y-MMl"/>
                 <constraint firstItem="wJv-Jq-iGM" firstAttribute="leading" secondItem="jyE-zV-TYn" secondAttribute="trailing" constant="8" id="e6N-AY-xMP"/>
                 <constraint firstAttribute="bottom" secondItem="rjg-IP-2rE" secondAttribute="bottom" constant="10" id="eq7-wD-7ky"/>
                 <constraint firstItem="rjg-IP-2rE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="qK4-LG-g99" secondAttribute="bottom" constant="10" id="g5G-t0-ksq"/>
                 <constraint firstItem="OJl-6F-bsR" firstAttribute="leading" secondItem="Drn-JG-4EN" secondAttribute="leading" id="gSZ-N5-EPk"/>
-                <constraint firstItem="Drn-JG-4EN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="hZe-hi-AsF"/>
+                <constraint firstItem="Drn-JG-4EN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="5" id="hZe-hi-AsF"/>
                 <constraint firstItem="jyE-zV-TYn" firstAttribute="leading" secondItem="Drn-JG-4EN" secondAttribute="trailing" constant="8" id="qBl-Mq-Q0g"/>
                 <constraint firstItem="wJv-Jq-iGM" firstAttribute="leading" secondItem="qK4-LG-g99" secondAttribute="trailing" priority="749" constant="8" id="qVi-vK-fHI"/>
-                <constraint firstAttribute="trailing" secondItem="wJv-Jq-iGM" secondAttribute="trailing" constant="15" id="yv9-7c-LWr"/>
+                <constraint firstAttribute="trailing" secondItem="wJv-Jq-iGM" secondAttribute="trailing" constant="5" id="yv9-7c-LWr"/>
                 <constraint firstItem="OJl-6F-bsR" firstAttribute="width" secondItem="Drn-JG-4EN" secondAttribute="width" id="zYy-Tr-kGs"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
@@ -91,7 +109,7 @@
                 <outlet property="labelStatus" destination="jyE-zV-TYn" id="BBB-Oz-Z0v"/>
                 <outlet property="searchButtonContainer" destination="wJv-Jq-iGM" id="7FG-Cw-05y"/>
             </connections>
-            <point key="canvasLocation" x="-147.5" y="420.5"/>
+            <point key="canvasLocation" x="-147.5" y="408"/>
         </view>
     </objects>
 </document>

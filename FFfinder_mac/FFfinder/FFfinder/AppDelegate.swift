@@ -61,12 +61,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If you are receiving a notification message while your app is in the background,
         // this callback will not be fired till the user taps on the notification launching the application.
         // TODO: Handle data of notification
-        NSLog("receive FCM.")
+        Logs.show("receive FCM.")
         
-        NotitificationConsumer().consume(userInfo){
-            completionHandler(.newData)
-            NSLog("complete handled fcm")
-        }
+        NotitificationConsumer().consume(userInfo)
+        completionHandler(.newData)
         
 
     }
@@ -75,7 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // [START refresh_token]
     func tokenRefreshNotification(_ notification: Notification) {
         if let refreshedToken = FIRInstanceID.instanceID().token() {
-            print("InstanceID token: \(refreshedToken)")
+            Logs.show("InstanceID token: \(refreshedToken)")
             
             let myModel:MyModel = MyModel();
             myModel.load()
@@ -98,9 +96,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func connectToFcm() {
         FIRMessaging.messaging().connect { (error) in
             if (error != nil) {
-                print("Unable to connect with FCM. \(error)")
+                Logs.show("Unable to connect with FCM. \(error)")
             } else {
-                print("Connected to FCM.")
+                Logs.show("Connected to FCM.")
             }
         }
     }
@@ -113,7 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // [START disconnect_from_fcm]
     func applicationDidEnterBackground(_ application: UIApplication) {
         FIRMessaging.messaging().disconnect()
-        print("Disconnected from FCM.")
+        Logs.show("Disconnected from FCM.")
     }
     // [END disconnect_from_fcm]
     
@@ -127,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             token += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
         }
         
-        print("device token:\(token)")
+        Logs.show("device token:\(token)")
         
     }
     
@@ -143,12 +141,14 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
       //ignore notifications type fcm
+        Logs.show("receive FCM.")
     }
 }
 
 extension AppDelegate : FIRMessagingDelegate {
     // Receive data message on iOS 10 devices.
     func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+        Logs.show("receive FCM.")
         NotitificationConsumer().consume(remoteMessage.appData)
     }
 }

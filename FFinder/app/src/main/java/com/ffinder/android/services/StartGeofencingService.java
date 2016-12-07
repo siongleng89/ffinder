@@ -93,11 +93,11 @@ public class StartGeofencingService extends Service implements
                 .setCircularRegion(
                         Double.valueOf(latitude),
                         Double.valueOf(longitude),
-                        300
+                        500
                 )
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
                 .setExpirationDuration(Constants.GeofenceExpiredMs)
-                .setNotificationResponsiveness(60 * 60 * 1000)      //one hour
+                .setNotificationResponsiveness(3* 60 * 60 * 1000)      //three hour
                 .build());
 
         builder.addGeofences(mGeofenceList);

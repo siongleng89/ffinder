@@ -13,20 +13,22 @@ class LocationUpdater : NSObject, CLLocationManagerDelegate{
 
     var fromUserId:String?
     var fromUserToken:String?
-    var locationManager:CLLocationManager?
+    var fromPlatform:String?
+    var locationManager:CLLocationManager!
     var myModel:MyModel
     var callback:(()->Void)?
-    var locationRetrieved:Bool
+    var finish:Bool
+    var locationSharingEnabled:Bool?
     
-    init(_ fromUserId:String? = nil, _ fromUserToken:String? = nil, _ callback:(()->Void)?){
-        self.myModel = MyModel()
-        self.myModel.load()
-        
-        self.locationRetrieved = false
+    init(_ fromUserId:String? = nil, _ fromUserToken:String? = nil, _ fromPlatform:String? = nil,
+         _ callback:(()->Void)? = nil){
+        self.myModel = MyModel.shared
+        self.finish = false
         
         self.callback = callback
         self.fromUserId = fromUserId
         self.fromUserToken = fromUserToken
+        self.fromPlatform = fromPlatform
         
         super.init()
         
@@ -36,108 +38,97 @@ class LocationUpdater : NSObject, CLLocationManagerDelegate{
     
     
     private func runProcess(){
-//        
-        if let fromUserToken = self.fromUserToken{
+        
+        
+        locationSharingEnabled = LocationUpdater.isLocationServiceEnabled()
+   
+        if self.fromUserToken != nil{
+            replyAliveMsg(myModel.userId!)
+        }
+
+        
+        
+
+        if locationSharingEnabled!{
             
-            var dict = [String:String]()
-            dict["latitude"] = "1.5611390552076"
-            dict["longitude"] = "103.802937559952"
-            //is auto notificaiton decide whether show push notification on user tray
-            dict["isAutoNotification"] = "0"
             
-//            NotificationSender.sendWithToken(myModel.userId!, fromUserToken,
-//                                             FCMMessageType.UserLocated,
-//                                             NotificationSender.TTL_INSTANT,
-//                                             dict: dict, callback: callback);
+            Threadings.postMainThread {
+                self.locationManager = CLLocationManager()
+                self.locationManager.delegate = self
+
+                self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                self.locationManager.requestAlwaysAuthorization()
+                
+                if #available(iOS 9.0, *) {
+                    self.locationManager.allowsBackgroundLocationUpdates = true
+                    self.locationManager.pausesLocationUpdatesAutomatically = false;
+                } else {
+                    // Fallback on earlier versions
+                }
+                
+                Logs.show("Start location manager update location")
+                self.locationManager.startUpdatingLocation()
+            }
             
-            NSLog("sent location updated fcm")
+          
         }
         else{
-            NSLog("no token to send leh")
-            if let callback = self.callback{
+            if let callback = callback{
                 callback()
             }
         }
-//
-//        
-//        
-        
-        //if from usertoken not empty, means it is through normal search, reply alive msg
-//        if let fromUserToken = self.fromUserToken{
-//            replyAliveMsg(myModel.userId!, fromUserToken);
-//        }
-//        
-//        self.locationManager = CLLocationManager()
-//        
-//        if let locationManager = self.locationManager{
-//            locationManager.delegate = self
-//            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//            locationManager.requestAlwaysAuthorization()
-//            
-//            if #available(iOS 9.0, *) {
-//                locationManager.allowsBackgroundLocationUpdates = true
-//                locationManager.pausesLocationUpdatesAutomatically = false;
-//            } else {
-//                // Fallback on earlier versions
-//            }
-//            
-//            if LocationUpdater.isLocationServiceEnabled() {
-//                NSLog("starting update location")
-//                locationManager.startUpdatingLocation()
-//            }
-//            else{
-//                if let callback = callback{
-//                    callback()
-//                }
-//            }
-//
-//        }
-        
-       
     }
     
-    func replyAliveMsg(_ myUserId:String, _ fromUserToken:String){
-//        NotificationSender.sendWithToken(myUserId, fromUserToken,
-//                                         FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT);
+    
+    func replyAliveMsg(_ myUserId:String){
+        var locationDisabled = "0"
+        if !locationSharingEnabled!{
+            locationDisabled = "1"
+        }
+        
+        NotificationSender.sendWithToken(myUserId, self.fromUserToken!,
+                                         FCMMessageType.IsAliveMsg, NotificationSender.TTL_INSTANT, "", self.fromPlatform!,
+                                         dict: ["locationDisabled": locationDisabled])
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
+        Logs.show(error.localizedDescription)
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        NSLog("locationManager didUpdateLocations fired")
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
+    {
+        Logs.show("locationManager didUpdateLocations fired")
         
-        if locationRetrieved == false{
-            //last location is the most recent one
-            if let location = locations.last{
-                let howRecent = location.timestamp.timeIntervalSinceNow
+        //last location is the most recent one
+        if let location = locations.last{
+            let howRecent = location.timestamp.timeIntervalSinceNow
+            
+            //less than 30 secs, still quite recent and useable
+            if abs(howRecent) < 30 {
+                locationManager.stopUpdatingLocation()
                 
-                //less than 30 secs, still quite recent and useable
-                if abs(howRecent) < 30 {
-                    locationRetrieved = true
-                    locationManager?.stopUpdatingLocation()
-                    
-                    let latitude:String = "\(location.coordinate.latitude)"
-                    let longitude:String = "\(location.coordinate.longitude)"
-                    locationSuccessfullyRetrieved(latitude, longitude)
-                    NSLog("locationManager successfully retrieved location")
-                }
-                else{
-                    NSLog("locationManager last location is too old...")
-                }
+                let latitude:String = "\(location.coordinate.latitude)"
+                let longitude:String = "\(location.coordinate.longitude)"
+                locationSuccessfullyRetrieved(latitude, longitude)
             }
             else{
-                NSLog("locationManager no last location")
             }
         }
         else{
-            NSLog("locationManager location already retrieved successfully")
+            Logs.show("locationManager no last location")
         }
+
         
     }
 
     func locationSuccessfullyRetrieved(_ latitude:String, _ longitude:String){
+        if finish{
+            return
+        }
+        
+        finish = true
+        Logs.show("Updating my location to \(latitude) \(longitude)")
+        
         let locationModel:LocationModel = LocationModel()
         locationModel.latitude = latitude
         locationModel.longitude = longitude
@@ -152,39 +143,53 @@ class LocationUpdater : NSObject, CLLocationManagerDelegate{
             //is auto notificaiton decide whether show push notification on user tray
             dict["isAutoNotification"] = "0"
             
-//            NotificationSender.sendWithToken(myModel.userId!, fromUserToken,
-//                                             FCMMessageType.UserLocated,
-//                                             NotificationSender.TTL_INSTANT,
-//                                             dict: dict, callback: callback);
+            NotificationSender.sendWithToken(myModel.userId!, fromUserToken,
+                                             FCMMessageType.UserLocated,
+                                             NotificationSender.TTL_INSTANT, "",
+                                             self.fromPlatform!, retryIfError: true,
+                                             dict: dict, callback: callback)
             
-             NSLog("sent location updated fcm")
         }
-        else{
-            NSLog("no token to send leh")
-            if let callback = self.callback{
-                callback()
+        
+        
+        //send to auto notification subscriber
+        let current = NSDate().timeIntervalSince1970
+
+        //five seconds window, make sure dont keep sending
+        if let lastLastUpdatedSecs = Preferences.get(PreferenceType.LastSentAutoNotification){
+            if(StringsHelper.isNumeric(lastLastUpdatedSecs)){
+                if(current - Double(lastLastUpdatedSecs)! <  5){
+                    return;
+                }
             }
+
         }
         
-//        myModel.loginFirebase(0,
-//            {(success) in
-//                FirebaseDB.updateLocation(self.myModel.userId!, locationModel,
-//                    {(status) in
-//                        if status == Status.Success{
-//                            //to do, auto notification part
-//                        }
-//                })
-//        })
+        var dict = [String:String]()
+        dict["latitude"] = latitude
+        dict["longitude"] = longitude
+        //is auto notificaiton decide whether show push notification on user tray
+        dict["isAutoNotification"] = "1"
+        //send to those waiting auto notificaiton my userid topic subscribers
+        NotificationSender.sendToTopic(myModel.userId!, myModel.userId!,
+                                       FCMMessageType.UserLocated,
+                                       NotificationSender.TTL_LONG, "", dict: dict)
         
+        Logs.show("Send to topic")
+        Preferences.put(PreferenceType.LastSentAutoNotification, String(current))
         
+        if let callback = self.callback{
+            callback()
+        }
         
     }
     
     public func dispose(){
+        finish = true
+        
         if let locationManager = locationManager{
             locationManager.stopUpdatingLocation()
         }
-        NSLog("disposing locationUpdater")
     }
     
 

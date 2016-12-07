@@ -196,6 +196,8 @@
 		6CE8E57C1DD22F7300538F82 /* retry_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CE8E57A1DD22F7300538F82 /* retry_icon.png */; };
 		6CE958561DDB4F9A0033B0A7 /* FFTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE958551DDB4F9A0033B0A7 /* FFTextButton.swift */; };
 		6CE958581DDB50FF0033B0A7 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE958571DDB50FF0033B0A7 /* UIImageExtension.swift */; };
+		6CEAFAA51DF7E9A500312289 /* LocationUpdateTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEAFAA41DF7E9A500312289 /* LocationUpdateTask.swift */; };
+		6CEAFAA71DF842B900312289 /* FFIconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEAFAA61DF842B900312289 /* FFIconButton.swift */; };
 		D08351F2821526DA2544C5DF /* Pods_FFfinderUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F74F86AD394D14CB113269E /* Pods_FFfinderUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -418,6 +420,8 @@
 		6CE8E57A1DD22F7300538F82 /* retry_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = retry_icon.png; path = Images/retry_icon.png; sourceTree = "<group>"; };
 		6CE958551DDB4F9A0033B0A7 /* FFTextButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFTextButton.swift; sourceTree = "<group>"; };
 		6CE958571DDB50FF0033B0A7 /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		6CEAFAA41DF7E9A500312289 /* LocationUpdateTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationUpdateTask.swift; sourceTree = "<group>"; };
+		6CEAFAA61DF842B900312289 /* FFIconButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFIconButton.swift; sourceTree = "<group>"; };
 		712953160234FDE23380567C /* Pods-FFfinderUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FFfinderUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FFfinderUITests/Pods-FFfinderUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8F74F86AD394D14CB113269E /* Pods_FFfinderUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FFfinderUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		93654CADEF0E755CF0D7419D /* Pods_FFfinderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FFfinderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -582,6 +586,7 @@
 			isa = PBXGroup;
 			children = (
 				6C24AEBF1DEF019F00F87625 /* SearchTask.swift */,
+				6CEAFAA41DF7E9A500312289 /* LocationUpdateTask.swift */,
 			);
 			name = tasks;
 			sourceTree = "<group>";
@@ -593,6 +598,7 @@
 				6C25EA531DB1D52C007441A6 /* AutoHeightLabel.swift */,
 				6CE8E5681DD1F8D000538F82 /* LocalizationViews.swift */,
 				6CE958551DDB4F9A0033B0A7 /* FFTextButton.swift */,
+				6CEAFAA61DF842B900312289 /* FFIconButton.swift */,
 				6CE310F21DDC8FC000F7BF8D /* DialogLayoutViewController.swift */,
 				6C491E4F1DDC94DC000F62A8 /* DialogLayout.xib */,
 				6CC6B86B1DDCAD5800D54AD6 /* DialogNoCredits.xib */,
@@ -1236,6 +1242,7 @@
 				6C8C8FBF1DEC61BF002E25DD /* EmptyTableViewCell.swift in Sources */,
 				6C72DDEF1DAE268B0065EF02 /* KeyChainType.swift in Sources */,
 				6C24672F1DB3B36300290569 /* NotificationExtension.swift in Sources */,
+				6CEAFAA51DF7E9A500312289 /* LocationUpdateTask.swift in Sources */,
 				6C3DE2F41DB3664300CF8BDF /* AddManuallyViewController.swift in Sources */,
 				6C25EA561DB1DE2A007441A6 /* Threadings.swift in Sources */,
 				6CE8E5691DD1F8D000538F82 /* LocalizationViews.swift in Sources */,
@@ -1268,6 +1275,7 @@
 				6C8C95A71DEDB78100771556 /* PromoViewController.swift in Sources */,
 				6C8C8FAB1DEC1727002E25DD /* SettingsViewController.swift in Sources */,
 				6C25EA521DB1C854007441A6 /* AutoHeightTextView.swift in Sources */,
+				6CEAFAA71DF842B900312289 /* FFIconButton.swift in Sources */,
 				6CCABA431DACCFB6009831B8 /* PreferenceType.swift in Sources */,
 				6C8C8FB91DEC487F002E25DD /* UIViewExtension.swift in Sources */,
 				6CE7E0F51DB27B2B000C6863 /* IOSUtils.swift in Sources */,

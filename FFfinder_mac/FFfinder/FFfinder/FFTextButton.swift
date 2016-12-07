@@ -37,7 +37,6 @@ class FFTextButton : UIButton {
         
         self.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         
-        
         setBackgroundImage(UIImage(color: colorNormal!), for: .normal)
         
         if let title = self.title(for: .normal) {

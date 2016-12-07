@@ -20,7 +20,7 @@ class SearchButtonPools{
             return value
         }
         else{
-            let newView = SearchButton(frame: CGRect(x: 0, y: 0, width: 80, height: 120))
+            let newView = SearchButton(frame: CGRect(x: 0, y: 0, width: 70, height: 100))
             pool[id] = newView
             Logs.show("Creating new button search view")
             return newView
