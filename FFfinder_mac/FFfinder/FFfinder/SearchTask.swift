@@ -21,11 +21,16 @@ class SearchTask{
         self.myModel = myModel
         self.myToken = myToken
         self.finish = false
+        
+        self.run()
     }
     
     
     private func run(){
         Threadings.runInBackground {
+            
+            FIRMessaging.messaging().unsubscribe(fromTopic: "/topics/\(self.friendModel.userId!)")
+            self.reset()
             self.setStatus(SearchStatus.CheckingData)
             
             self.monitorTimeoutPhase()
@@ -95,6 +100,21 @@ class SearchTask{
                 }
             
             })
+            
+            
+            var totalSleepPeriod:UInt32 = 0
+            let sleepDuration:UInt32 = 500
+            while !self.finish{
+                Threadings.sleep(sleepDuration)
+                totalSleepPeriod += sleepDuration
+                
+                if totalSleepPeriod > (UInt32(Constants.SearchTimeoutSecs) * 1000){
+                    self.taskTimeout()
+                    self.finish = true
+                }
+            }
+            
+            
         }
     }
     
@@ -123,12 +143,12 @@ class SearchTask{
                 if totalSleepDuration >
                             Double(Constants.SearchTimeoutSecs) * 1000 * 0.33 && phase == 0{
                     phase = 1
-                    self.friendModel.timeoutPhase = 1
+                    self.setTimeoutPhase(1)
                 }
                 else if totalSleepDuration >
                     Double(Constants.SearchTimeoutSecs) * 1000 * 0.66 && phase == 1{
                     phase = 2
-                    self.friendModel.timeoutPhase = 2
+                    self.setTimeoutPhase(2)
                 }
                 
                 Threadings.sleep(UInt32(sleepDuration))
@@ -138,7 +158,11 @@ class SearchTask{
     
     }
     
+ 
+    
     private func taskTimeout(){
+        Logs.show("Search timeout")
+        
         self.myModel.loadFriend(self.friendModel.userId!)
         
         //update task search status with friend model one, as friend model always hold latest status
@@ -171,16 +195,43 @@ class SearchTask{
         
     
     }
+
+    
+    private func reset(){
+        self.friendModel.timeoutPhase = 0
+        self.friendModel.searchResult = SearchResult.Normal
+        self.friendModel.save()
+    }
+    
+    private func setTimeoutPhase(_ phase:Int){
+        self.friendModel.timeoutPhase = phase
+        self.friendModel.notificateChanged()
+    }
     
     private func setStatus(_ searchStatus:SearchStatus){
+        Logs.show("New search status \(searchStatus)")
         self.friendModel.searchStatus = searchStatus
+        self.friendModel.save()
+        self.friendModel.notificateChanged()
     }
     
     private func setResult(_ searchResult:SearchResult){
+        Logs.show("New search result \(searchResult)")
+        self.friendModel.searchStatus = SearchStatus.End
         self.friendModel.searchResult = searchResult
+        self.friendModel.recentlyFinished = true
+        self.friendModel.save()
+        self.friendModel.notificateChanged()
     }
     
-    
+    public func searchCompleted(){
+        self.myModel.loadFriend(self.friendModel.userId!)
+        if let friendModel:FriendModel = myModel.getFriendModelById(self.friendModel.userId!){
+            friendModel.recentlyFinished = true
+            friendModel.notificateChanged()
+        }
+        self.finish = true
+    }
     
     public func dispose(){
         finish = true

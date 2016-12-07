@@ -158,6 +158,11 @@
 		6C9095611DAB768A00FA114B /* FirebaseDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9095601DAB768A00FA114B /* FirebaseDB.swift */; };
 		6C9095651DAB856200FA114B /* FirebaseListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9095641DAB856200FA114B /* FirebaseListener.swift */; };
 		6C90956A1DAB869000FA114B /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9095691DAB869000FA114B /* Status.swift */; };
+		6C941C2A1DF6A7720050EC82 /* Logs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C941C291DF6A7720050EC82 /* Logs.swift */; };
+		6C941C2C1DF6BB2C0050EC82 /* SearchButtonPools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C941C2B1DF6BB2C0050EC82 /* SearchButtonPools.swift */; };
+		6C941C2E1DF6C12C0050EC82 /* FlowerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C941C2D1DF6C12C0050EC82 /* FlowerType.swift */; };
+		6C941C311DF6C3E00050EC82 /* UIImageView+AnimationCompletion.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C941C301DF6C3E00050EC82 /* UIImageView+AnimationCompletion.m */; };
+		6C941C331DF6CCB40050EC82 /* flower_satisfied_000.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C941C321DF6CCB40050EC82 /* flower_satisfied_000.png */; };
 		6CC6B86C1DDCAD5800D54AD6 /* DialogNoCredits.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6CC6B86B1DDCAD5800D54AD6 /* DialogNoCredits.xib */; };
 		6CC6B86E1DDCAD6C00D54AD6 /* DialogNoCreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC6B86D1DDCAD6C00D54AD6 /* DialogNoCreditsViewController.swift */; };
 		6CCABA3C1DACA471009831B8 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCABA3B1DACA471009831B8 /* LaunchViewController.swift */; };
@@ -364,6 +369,12 @@
 		6C9095601DAB768A00FA114B /* FirebaseDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDB.swift; sourceTree = "<group>"; };
 		6C9095641DAB856200FA114B /* FirebaseListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseListener.swift; sourceTree = "<group>"; };
 		6C9095691DAB869000FA114B /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
+		6C941C291DF6A7720050EC82 /* Logs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logs.swift; sourceTree = "<group>"; };
+		6C941C2B1DF6BB2C0050EC82 /* SearchButtonPools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchButtonPools.swift; sourceTree = "<group>"; };
+		6C941C2D1DF6C12C0050EC82 /* FlowerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowerType.swift; sourceTree = "<group>"; };
+		6C941C2F1DF6C3E00050EC82 /* UIImageView+AnimationCompletion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AnimationCompletion.h"; sourceTree = "<group>"; };
+		6C941C301DF6C3E00050EC82 /* UIImageView+AnimationCompletion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AnimationCompletion.m"; sourceTree = "<group>"; };
+		6C941C321DF6CCB40050EC82 /* flower_satisfied_000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = flower_satisfied_000.png; path = Images/flower_satisfied_000.png; sourceTree = "<group>"; };
 		6CC6B86B1DDCAD5800D54AD6 /* DialogNoCredits.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DialogNoCredits.xib; sourceTree = "<group>"; };
 		6CC6B86D1DDCAD6C00D54AD6 /* DialogNoCreditsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogNoCreditsViewController.swift; sourceTree = "<group>"; };
 		6CCABA3B1DACA471009831B8 /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
@@ -459,6 +470,7 @@
 		6C1560141DCF5322001C65E3 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				6C941C321DF6CCB40050EC82 /* flower_satisfied_000.png */,
 				6C03E7911DEFC88900F5AF18 /* flower_auto_searching_000.png */,
 				6C03E7921DEFC88900F5AF18 /* flower_auto_searching_001.png */,
 				6C03E7931DEFC88900F5AF18 /* flower_auto_searching_002.png */,
@@ -609,6 +621,8 @@
 		6C72DDE81DAE20AD0065EF02 /* thirdParties */ = {
 			isa = PBXGroup;
 			children = (
+				6C941C2F1DF6C3E00050EC82 /* UIImageView+AnimationCompletion.h */,
+				6C941C301DF6C3E00050EC82 /* UIImageView+AnimationCompletion.m */,
 				6CE8E5711DD21C4600538F82 /* SWNinePatchImageFactory.h */,
 				6CE8E5721DD21C4600538F82 /* SWNinePatchImageFactory.m */,
 				6CE8E5731DD21C4600538F82 /* SWNinePatchImageView.h */,
@@ -651,6 +665,8 @@
 				6C2467341DB3C55F00290569 /* NotificationConsumer.swift */,
 				6C2467361DB3C75200290569 /* LocationUpdater.swift */,
 				6C24AEC11DEF02A100F87625 /* SearchPools.swift */,
+				6C941C291DF6A7720050EC82 /* Logs.swift */,
+				6C941C2B1DF6BB2C0050EC82 /* SearchButtonPools.swift */,
 			);
 			name = helpers;
 			sourceTree = "<group>";
@@ -685,6 +701,7 @@
 				6CE8E56C1DD2084F00538F82 /* AnimateType.swift */,
 				6C082AC51DDB091A0098DE7E /* NavItemActionType.swift */,
 				6C8C95AA1DEDBF4100771556 /* OverlayType.swift */,
+				6C941C2D1DF6C12C0050EC82 /* FlowerType.swift */,
 			);
 			name = enums;
 			sourceTree = "<group>";
@@ -964,6 +981,7 @@
 				6C03E7821DEFBC0B00F5AF18 /* flower_starting_001.png in Resources */,
 				6C03E78A1DEFBC0B00F5AF18 /* flower_starting_009.png in Resources */,
 				6C03E80E1DEFC88900F5AF18 /* flower_happy_swing_000.png in Resources */,
+				6C941C331DF6CCB40050EC82 /* flower_satisfied_000.png in Resources */,
 				6C03E8081DEFC88900F5AF18 /* flower_ending_006.png in Resources */,
 				6C03E82A1DEFC88900F5AF18 /* flower_sleeping_000.png in Resources */,
 				6C03E8101DEFC88900F5AF18 /* flower_happy_swing_002.png in Resources */,
@@ -1228,6 +1246,7 @@
 				6C2467331DB3B64D00290569 /* FCMMessageType.swift in Sources */,
 				6C8C8FB51DEC3869002E25DD /* TextFieldWrapper.swift in Sources */,
 				6C8F37E21DAE799500D7291F /* UserDataModel.swift in Sources */,
+				6C941C311DF6C3E00050EC82 /* UIImageView+AnimationCompletion.m in Sources */,
 				6C90956A1DAB869000FA114B /* Status.swift in Sources */,
 				6C72DDF11DAE37580065EF02 /* RestfulService.swift in Sources */,
 				6CC6B86E1DDCAD6C00D54AD6 /* DialogNoCreditsViewController.swift in Sources */,
@@ -1262,9 +1281,11 @@
 				6CE8E5761DD21C4600538F82 /* SWNinePatchImageView.m in Sources */,
 				6C8C95AB1DEDBF4100771556 /* OverlayType.swift in Sources */,
 				6CCABA3C1DACA471009831B8 /* LaunchViewController.swift in Sources */,
+				6C941C2C1DF6BB2C0050EC82 /* SearchButtonPools.swift in Sources */,
 				6C082AC61DDB091A0098DE7E /* NavItemActionType.swift in Sources */,
 				6C8F37E01DAE785B00D7291F /* FirebaseModelProtocol.swift in Sources */,
 				6C72DDE61DADF7560065EF02 /* MyViewController.swift in Sources */,
+				6C941C2A1DF6A7720050EC82 /* Logs.swift in Sources */,
 				6CCABA4E1DACE5E3009831B8 /* StringExtension.swift in Sources */,
 				6CE2BA001DB23E4700137BE2 /* KeyModel.swift in Sources */,
 				6CCABA411DACCF41009831B8 /* Preferences.swift in Sources */,
@@ -1273,6 +1294,7 @@
 				6CE958561DDB4F9A0033B0A7 /* FFTextButton.swift in Sources */,
 				6CE958581DDB50FF0033B0A7 /* UIImageExtension.swift in Sources */,
 				6C03E78E1DEFBC2700F5AF18 /* SearchButton.swift in Sources */,
+				6C941C2E1DF6C12C0050EC82 /* FlowerType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

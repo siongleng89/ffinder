@@ -7,20 +7,22 @@
 //
 
 import Foundation
+
 class SearchButton:UIView{
 
+    @IBOutlet weak var labelLastUpdated: UILabel!
     @IBOutlet weak var buttonContainer: UIView!
     @IBOutlet weak var imageViewFlower: UIImageView!
     var view: UIView!
     private var animationDict: [FlowerType: FlowerModel]!
-    
+    private var currentFlowerType: FlowerType?
+    private var flowerColor:UIColor? = UIColor.colorPrimaryDark()
+    @IBOutlet weak var buttonTopMargin: NSLayoutConstraint!
     @IBOutlet weak var labelStatus: UILabel!
     
     override func awakeFromNib() {
         
-        buttonContainer.layer.cornerRadius = 6.0
-        buttonContainer.layer.borderWidth = 1.0
-        buttonContainer.layer.borderColor = UIColor.colorPrimaryDark().cgColor
+        
         
     }
     
@@ -39,6 +41,15 @@ class SearchButton:UIView{
         for type in FlowerType.allValues{
             animationDict[type] = FlowerModel(type)
         }
+        
+        buttonContainer.layer.cornerRadius = 6.0
+        buttonContainer.layer.borderWidth = 1.0
+        buttonContainer.layer.borderColor = UIColor.colorPrimaryDark().cgColor
+        
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(onResume),                                               name: .UIApplicationDidBecomeActive, object: nil)
+       
 
     }
     
@@ -50,6 +61,7 @@ class SearchButton:UIView{
         
         return view
     }
+    
     
     override init(frame: CGRect) {
         // 1. setup any properties here
@@ -71,9 +83,69 @@ class SearchButton:UIView{
         xibSetup()
     }
     
+    public func onResume(){
+        imageViewFlower.startAnimating()
+    }
     
-    private func setFlowerAnimation(_ flowerType:FlowerType){
+    
+   
+    
+    public func setFlower(_ flowerType:FlowerType, extra:String? = nil, animate:Bool = true){
+        if flowerType == FlowerType.Starting{
+            setStatus("searching".localized)
+            self.colorDown()
+            setFlowerAnimation(FlowerType.Starting, repeating: false, callback:{
+                self.setFlowerAnimation(FlowerType.HappySwinging)
+            })
+        }
+        else if flowerType == FlowerType.Ending{
+            
+            if extra == "autoSearching"{
+                setFlowerAnimation(FlowerType.Ending, repeating: false, callback:{
+                    self.colorUp()
+                    self.setFlower(FlowerType.AutoSearching)
+                })
+            }
+            else{
+                setFlowerAnimation(FlowerType.SearchSuccess, repeating: false,
+                                   animateRepeatCount: 2, callback:{
+                    self.setFlowerAnimation(FlowerType.Ending, repeating: false, callback:{
+                        self.colorUp()
+                        self.setStatus("search".localized)
+                        self.setFlowerAnimation(FlowerType.Satisfied)
+                    })
+                })
+            
+            }
+        }
+        else if flowerType == FlowerType.AutoSearching{
+            setStatus("auto_searching".localized)
+            self.setFlowerAnimation(FlowerType.AutoSearching, animate: animate, repeating: false)
+        }
+        else{
+            self.setFlowerAnimation(flowerType)
+        }
+    
+    }
+    
+    
+    private func setFlowerAnimation(_ flowerType:FlowerType,
+                                    animate:Bool = true,
+                                    frameRateMs:Double = 50,
+                                   repeating:Bool = true,
+                                   animateRepeatCount:Int = 1,
+                                   callback:(()->Void)? = nil){
         
+        //no need reanimate
+        if flowerType == currentFlowerType{
+            return
+        }
+        
+        if currentFlowerType == FlowerType.HappySwinging && flowerType == FlowerType.Starting{
+            return
+        }
+        
+        currentFlowerType = flowerType
         var animationImages: [UIImage] = []
         
         let flowerModel = animationDict[flowerType]
@@ -82,18 +154,71 @@ class SearchButton:UIView{
         while i < (flowerModel?.totalFrame)!{
             let imageName = "\((flowerModel?.fileName)!)\(String(format: "%02d", i)).png"
             animationImages += [(UIImage(named: imageName)!)
-                                    .tintImage(color: UIColor.colorPrimaryDark())]
+                                    .tintImage(color: flowerColor!)]
             i+=1
         }
         
-        let totalDurationMs:Double = Double((flowerModel?.totalFrame)!) * 50
+        let totalDurationMs:Double = Double((flowerModel?.totalFrame)!) * frameRateMs
         
-        imageViewFlower.animationImages = animationImages
-        imageViewFlower.animationDuration = TimeInterval(totalDurationMs / 1000)
-        imageViewFlower.startAnimating()
-    
+        imageViewFlower.stopAnimating()
+        
+        
+        if animationImages.count > 1 && animate{
+            imageViewFlower.animationImages = animationImages
+            imageViewFlower.animationDuration = TimeInterval(totalDurationMs / 1000)
+            if !repeating{
+                imageViewFlower.animationRepeatCount = animateRepeatCount
+                imageViewFlower.image = animationImages.last
+            }
+            else{
+                imageViewFlower.animationRepeatCount = 1000
+                imageViewFlower.image = nil
+            }
+            
+            
+            if let callback = callback{
+                let completion: Block = {_ in
+                    callback()
+                }
+                imageViewFlower.startAnimating(completionBlock: completion)
+            }
+            else{
+                imageViewFlower.startAnimating()
+            }
+        }
+        else{
+            imageViewFlower.image = animationImages.first
+        }
+     
     }
     
+    private func colorUp(){
+        flowerColor = UIColor.colorPrimaryDark()
+        labelStatus.textColor = flowerColor
+        buttonContainer.backgroundColor = UIColor.colorContrast()
+        UIView.animate(withDuration: 0.3, animations: {
+            self.buttonTopMargin.constant = 8
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    private func colorDown(){
+        flowerColor = UIColor.colorContrast()
+        labelStatus.textColor = flowerColor
+        buttonContainer.backgroundColor = UIColor.colorPrimaryDark()
+        UIView.animate(withDuration: 0.3, animations: {
+            self.buttonTopMargin.constant = -15
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    public func setStatus(_ text:String){
+        labelStatus.text = text
+    }
+    
+    public func setLastUpdated(_ text:String){
+        labelLastUpdated.text = text
+    }
     
     private class FlowerModel{
         var fileName:String
@@ -133,6 +258,10 @@ class SearchButton:UIView{
                 fileName = "flower_troubling_0"
                 totalFrame = 14
             }
+            else if type == FlowerType.Satisfied{
+                fileName = "flower_satisfied_0"
+                totalFrame = 1
+            }
             else{
                 fileName = ""
                 totalFrame = 0
@@ -141,20 +270,7 @@ class SearchButton:UIView{
         }
     }
     
-    private enum FlowerType{
-        case Starting
-        case AutoSearching
-        case Confusing
-        case Ending
-        case HappySwinging
-        case SearchSuccess
-        case Sleeping
-        case Troubling
-        
-        static let allValues = [Starting, AutoSearching, Confusing,
-                                Ending, HappySwinging, SearchSuccess,
-                                Sleeping, Troubling]
-    }
+   
     
 
 }

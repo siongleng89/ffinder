@@ -29,5 +29,14 @@ class SearchPools{
         
     
     }
+    
+    
+    public static func taskFinish(_ friendModel:FriendModel){
+        if let value:SearchTask = pool[friendModel.userId!]{
+            value.searchCompleted()
+            pool[friendModel.userId!] = nil
+        }
+    }
+    
 
 }

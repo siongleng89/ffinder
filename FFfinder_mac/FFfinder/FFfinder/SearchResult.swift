@@ -35,4 +35,16 @@ enum SearchResult:String, EVRawString{
         }
     }
     
+    public func isError() -> Bool{
+        return self.rawValue.contains("Error")
+    }
+    
+    
+    public func errorTriggeredAutoNotification() -> Bool{
+        return self == SearchResult.ErrorTimeoutUnknownReason
+    }
+   
+    
+    
+    
 }

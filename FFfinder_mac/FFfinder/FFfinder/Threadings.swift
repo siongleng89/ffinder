@@ -28,7 +28,7 @@ class Threadings{
     }
     
     public static func sleep(_ sleepMiliSecs:UInt32){
-        usleep(sleepMiliSecs)
+        usleep(sleepMiliSecs * 1000)
     }
     
     

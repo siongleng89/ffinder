@@ -170,6 +170,12 @@ public class ActivityMap extends MyActivityAbstract implements RoutingListener {
     }
 
     private void startGetDirections(AbstractRouting.TravelMode travelMode){
+
+        if (!Strings.isNumeric(myLatitude)){
+            onRoutingFailure(null);
+            return;
+        }
+
         start = new LatLng(Double.valueOf(myLatitude), Double.valueOf(myLongitude));
         end = new LatLng(Double.valueOf(latitude), Double.valueOf(longitude));
 

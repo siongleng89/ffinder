@@ -15,30 +15,10 @@ class FriendModel : EVObject{
     var username:String?
     var locationModel:LocationModel?
     
-    var timeoutPhase:Int?{
-        didSet{
-            if timeoutPhase != oldValue && !copying {
-                notificateChanged()
-            }
-        }
-    }
-    var searchStatus:SearchStatus?{
-        didSet{
-            if searchStatus != oldValue && !copying {
-                notificateChanged()
-            }
-        }
-    
-    }
-    
-    var searchResult:SearchResult?{
-        didSet{
-            if searchResult != oldValue && !copying {
-                notificateChanged()
-            }
-        }
-        
-    }
+    var timeoutPhase:Int?
+    var searchStatus:SearchStatus?
+    var searchResult:SearchResult?
+    var recentlyFinished:Bool?
 
     
      //used to prevent double triggering of notificationCenter while loading
@@ -48,7 +28,7 @@ class FriendModel : EVObject{
     override public func propertyMapping() -> [(String?, String?)] {
         return [("copying",nil), (nil,"copying"),
                 ("timeoutPhase",nil), (nil,"timeoutPhase"),
-                ("searchStatus",nil), (nil,"searchStatus")]
+                ("recentlyFinished",nil), (nil,"recentlyFinished")]
     }
     
     override func setValue(_ value: Any!, forUndefinedKey key: String) {
@@ -96,11 +76,11 @@ class FriendModel : EVObject{
         self.userId = loadedFriendModel.userId
         self.username = loadedFriendModel.username
         self.locationModel = loadedFriendModel.locationModel
-       // self.searchStatus = loadedFriendModel.searchStatus
+        self.searchStatus = loadedFriendModel.searchStatus
         self.searchResult = loadedFriendModel.searchResult
     }
     
-    private func notificateChanged(){
+    public func notificateChanged(){
         var dict = [String:FriendModel]();
         dict["friendModel"] = self
         

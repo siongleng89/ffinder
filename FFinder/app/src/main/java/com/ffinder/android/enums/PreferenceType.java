@@ -11,5 +11,5 @@ public enum PreferenceType {
     DontShowAgainBlockUserWarning, DontRemindWatchAdsWarning,
     SeenShareKeyTutorial, SeenAfterShareKeyReminder, ISVip,
     LastLocation, LastLocationUnixTime, LastSentAutoNotification,
-    ReferrerKey
+    ReferrerKey, AddFriendReminderAlarm
 }

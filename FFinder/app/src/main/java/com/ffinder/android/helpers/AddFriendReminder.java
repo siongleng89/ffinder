@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import com.ffinder.android.absint.receivers.AddFriendReminderBroadcastReceiver;
+import com.ffinder.android.enums.PreferenceType;
 
 import java.util.Calendar;
 
@@ -15,7 +16,7 @@ public class AddFriendReminder {
 
     public static void setup(Context context){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 19); // For 7 PM or 8 PM
+        calendar.set(Calendar.HOUR_OF_DAY, 19); // For 7 PM
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);

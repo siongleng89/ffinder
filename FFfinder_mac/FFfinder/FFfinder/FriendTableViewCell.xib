@@ -13,7 +13,7 @@
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OJl-6F-bsR">
                     <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                    <color key="textColor" red="0.34509803919999998" green="0.5568627451" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" red="0.28627450980000002" green="0.4549019608" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Drn-JG-4EN">
@@ -24,10 +24,10 @@
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Johnny" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rpi-SK-DHz">
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <color key="textColor" red="0.34509803919999998" green="0.5568627451" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" red="0.28627450980000002" green="0.4549019608" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wJv-Jq-iGM" customClass="SearchButton" customModule="FFfinder" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wJv-Jq-iGM">
                     <constraints>
                         <constraint firstAttribute="height" constant="120" id="7fq-03-9E1"/>
                         <constraint firstAttribute="width" constant="80" id="lyB-rO-pxR"/>
@@ -44,9 +44,9 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jyE-zV-TYn">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="this is a super long msg and hehe iwin your heart" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jyE-zV-TYn">
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                    <color key="textColor" red="0.34509803919999998" green="0.5568627451" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" red="0.28627450980392155" green="0.45490196078431372" blue="0.38431372549019605" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
@@ -62,16 +62,19 @@
                 <constraint firstItem="Drn-JG-4EN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="MYW-K3-4D2"/>
                 <constraint firstItem="qK4-LG-g99" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="NN7-x2-Fgb"/>
                 <constraint firstItem="jyE-zV-TYn" firstAttribute="trailing" secondItem="qK4-LG-g99" secondAttribute="trailing" id="NfQ-Ef-ixv"/>
+                <constraint firstItem="jyE-zV-TYn" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="PMg-QV-vJ6"/>
                 <constraint firstItem="Rpi-SK-DHz" firstAttribute="width" secondItem="Drn-JG-4EN" secondAttribute="width" id="RLa-0b-6BW"/>
                 <constraint firstItem="wJv-Jq-iGM" firstAttribute="leading" secondItem="rjg-IP-2rE" secondAttribute="trailing" constant="15" id="Ubi-Sc-T4B"/>
                 <constraint firstItem="wJv-Jq-iGM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="aBK-ri-0v5"/>
                 <constraint firstItem="OJl-6F-bsR" firstAttribute="top" secondItem="Drn-JG-4EN" secondAttribute="top" id="bAZ-Cy-PAC"/>
                 <constraint firstItem="qK4-LG-g99" firstAttribute="leading" secondItem="Drn-JG-4EN" secondAttribute="trailing" constant="8" id="d2g-Vv-kSw"/>
                 <constraint firstAttribute="bottom" secondItem="Rpi-SK-DHz" secondAttribute="bottom" constant="15" id="dPt-4y-MMl"/>
+                <constraint firstItem="wJv-Jq-iGM" firstAttribute="leading" secondItem="jyE-zV-TYn" secondAttribute="trailing" constant="8" id="e6N-AY-xMP"/>
                 <constraint firstAttribute="bottom" secondItem="rjg-IP-2rE" secondAttribute="bottom" constant="10" id="eq7-wD-7ky"/>
                 <constraint firstItem="rjg-IP-2rE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="qK4-LG-g99" secondAttribute="bottom" constant="10" id="g5G-t0-ksq"/>
                 <constraint firstItem="OJl-6F-bsR" firstAttribute="leading" secondItem="Drn-JG-4EN" secondAttribute="leading" id="gSZ-N5-EPk"/>
                 <constraint firstItem="Drn-JG-4EN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="hZe-hi-AsF"/>
+                <constraint firstItem="jyE-zV-TYn" firstAttribute="leading" secondItem="Drn-JG-4EN" secondAttribute="trailing" constant="8" id="qBl-Mq-Q0g"/>
                 <constraint firstItem="wJv-Jq-iGM" firstAttribute="leading" secondItem="qK4-LG-g99" secondAttribute="trailing" priority="749" constant="8" id="qVi-vK-fHI"/>
                 <constraint firstAttribute="trailing" secondItem="wJv-Jq-iGM" secondAttribute="trailing" constant="15" id="yv9-7c-LWr"/>
                 <constraint firstItem="OJl-6F-bsR" firstAttribute="width" secondItem="Drn-JG-4EN" secondAttribute="width" id="zYy-Tr-kGs"/>
@@ -86,6 +89,7 @@
                 <outlet property="labelName" destination="Rpi-SK-DHz" id="hqU-kn-Yv4"/>
                 <outlet property="labelShortName" destination="OJl-6F-bsR" id="lMI-jc-2ss"/>
                 <outlet property="labelStatus" destination="jyE-zV-TYn" id="BBB-Oz-Z0v"/>
+                <outlet property="searchButtonContainer" destination="wJv-Jq-iGM" id="7FG-Cw-05y"/>
             </connections>
             <point key="canvasLocation" x="-147.5" y="420.5"/>
         </view>

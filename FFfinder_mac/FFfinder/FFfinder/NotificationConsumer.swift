@@ -50,6 +50,11 @@ class NotitificationConsumer{
                 let myModel:MyModel = MyModel()
                 myModel.loadFriend(senderId)
                 if let friendModel = myModel.getFriendModelById(senderId){
+                    
+                    if friendModel.searchStatus != SearchStatus.WaitingUserRespond{
+                        return
+                    }
+                    
                     friendModel.searchStatus = SearchStatus.WaitingUserLocation
                     friendModel.save()
                     
@@ -67,6 +72,8 @@ class NotitificationConsumer{
                 let myModel:MyModel = MyModel()
                 myModel.loadFriend(senderId)
                 if let friendModel = myModel.getFriendModelById(senderId){
+                    
+                    
                     let locationModel:LocationModel = LocationModel()
                     locationModel.latitude = latitude
                     locationModel.longitude = longitude

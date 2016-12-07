@@ -3,3 +3,4 @@
 //
 
 #import "SWNinePatchImageFactory.h"
+#import "UIImageView+AnimationCompletion.h"

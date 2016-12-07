@@ -64,15 +64,25 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
     }
     
     func friendModelChanged(notification:NSNotification){
+        Logs.show("Reloading row: friendModelChanged" )
         let friendModel:FriendModel = notification.userInfo!["friendModel"] as! FriendModel
         onUpdateRowRequired(friendModel)
     }
     
     func onNeedToReloadFriendModel(notification:NSNotification){
+        Logs.show("Reloading row: onNeedToReloadFriendModel")
         let reloadFriendId = notification.userInfo!["reloadFriendId"] as! String
         if let reloadFriendModel = self.myModel.getFriendModelById(reloadFriendId) {
             reloadFriendModel.load()
-            onUpdateRowRequired(reloadFriendModel)
+            
+            //search success
+            if reloadFriendModel.searchStatus == SearchStatus.End{
+                SearchPools.taskFinish(reloadFriendModel)
+            }
+            //alive msg
+            else{
+                onUpdateRowRequired(reloadFriendModel)
+            }
         }
     }
     

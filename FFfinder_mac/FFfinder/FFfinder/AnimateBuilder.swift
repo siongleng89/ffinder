@@ -79,8 +79,9 @@ class AnimateBuilder{
                    self.view?.transform = (self.view?.transform.rotated(by: self.value!))!
                 }
                 break
-            }
-            
+                
+        }
+        
             var options:UIViewAnimationOptions = [];
             if let repeatable = self.repeatable{
                 if repeatable{

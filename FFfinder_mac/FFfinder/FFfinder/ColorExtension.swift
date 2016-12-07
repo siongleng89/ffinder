@@ -13,7 +13,7 @@ extension UIColor{
     
     static func colorPrimaryDark() -> UIColor{
         
-        return UIColor(netHex:0x588e7e)
+        return UIColor(netHex:0x497462)
     }
     
     static func colorStatusBar() -> UIColor{

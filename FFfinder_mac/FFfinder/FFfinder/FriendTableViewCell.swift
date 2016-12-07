@@ -13,6 +13,7 @@ class FriendTableViewCell: UITableViewCell {
     private var friendModel:FriendModel?
     private var myModel:MyModel?
 
+    @IBOutlet weak var searchButtonContainer: UIView!
     @IBOutlet weak var imageViewProfile: UIImageView!
     
     @IBOutlet weak var labelShortName: UILabel!
@@ -20,9 +21,8 @@ class FriendTableViewCell: UITableViewCell {
     @IBOutlet weak var labelAddress: UILabel!
     
     @IBOutlet weak var labelStatus: UILabel!
-    @IBOutlet weak var labelUpdated: UILabel!
 
-    @IBOutlet weak var labelError: UILabel!
+    private var searchButton:SearchButton?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,6 +33,7 @@ class FriendTableViewCell: UITableViewCell {
         self.imageViewProfile.clipsToBounds = true
         self.imageViewProfile.layer.borderWidth = 1.0
         self.imageViewProfile.layer.borderColor = UIColor.colorPrimaryDark().cgColor
+        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -42,66 +43,116 @@ class FriendTableViewCell: UITableViewCell {
     }
     
     public func update(_ friendModel:FriendModel, _ myModel:MyModel){
+        Logs.show("Updating friend...")
+        
+        self.searchButton = SearchButtonPools.getSearchButton(friendModel.userId!)
+        self.searchButton?.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                 action: #selector(startSearch)))
+        self.searchButtonContainer.addSubview(self.searchButton!)
+        
         self.friendModel = friendModel
         self.myModel = myModel
         
         labelName.text = friendModel.username
         labelShortName.text = StringsHelper.safeSubstring(friendModel.username, 2).uppercased()
         
-//        
-//        if let address = friendModel.locationModel?.address{
-//            labelAddress.text = address
-//        }
-//        else{
-//            labelAddress.text = "never_locate_user_msg".localized
-//        }
-//        
-//        if let timestamp:String = friendModel.locationModel?.timestampLastUpdated,
-//            !timestamp.isEmpty{
-//            labelUpdated.text = DateTimeUtils.convertUnixTimeToDateTime(UInt64(timestamp)!)
-//        }
-//        else{
-//            labelUpdated.text = ""
-//        }
-//        
-//        if let searchResult = friendModel.searchResult, searchResult != SearchResult.Normal{
-//            labelError.text = SearchResult.getMessage(searchResult)
-//        }
-//        else{
-//            labelError.text = ""
-//        }
-//        
-//        if let searchStatus = friendModel.searchStatus, searchStatus != SearchStatus.End{
-//            labelAddress.text = SearchStatus.getMessage(searchStatus)
-//        }
+        
+        //still searching
+        if let searchStatus = friendModel.searchStatus, searchStatus != SearchStatus.End{
+            labelAddress.isHidden = true
+            labelStatus.isHidden = false
+            labelStatus.text = SearchStatus.getMessage(searchStatus)
+            
+            if friendModel.timeoutPhase == 0{
+                self.searchButton?.setFlower(FlowerType.Starting)
+            }
+            else if friendModel.timeoutPhase == 1{
+                self.searchButton?.setFlower(FlowerType.Troubling)
+            }
+            else if friendModel.timeoutPhase == 2{
+                self.searchButton?.setFlower(FlowerType.Confusing)
+            }
+            
+        }
+        //search ended
+        else{
+            labelAddress.isHidden = false
+            labelStatus.isHidden = true
+            
+            //set address
+            if let address = friendModel.locationModel?.address{
+                labelAddress.text = address
+            }
+            else{
+                labelAddress.text = "never_locate_user_msg".localized
+            }
+            
+            //set last updated
+            if let timestamp:String = friendModel.locationModel?.timestampLastUpdated,
+                !timestamp.isEmpty{
+                searchButton?.setLastUpdated(DateTimeUtils
+                    .convertUnixTimeToDateTime(UInt64(timestamp)!))
+            }
+            else{
+                searchButton?.setLastUpdated("never".localized)
+            }
+            
+            if self.friendModel?.recentlyFinished == true{
+                self.friendModel?.recentlyFinished = false
+                
+                if (self.friendModel?.searchResult?.errorTriggeredAutoNotification())!{
+                    self.searchButton?.setFlower(FlowerType.Ending, extra: "autoSearching")
+                }
+                else{
+                    self.searchButton?.setFlower(FlowerType.Ending, extra: "searchSuccess")
+                }
+                
+                
+            }
+            else{
+                
+                if let searchResult = self.friendModel?.searchResult{
+                    if (searchResult.errorTriggeredAutoNotification()){
+                        self.searchButton?.setFlower(FlowerType.AutoSearching, animate: false)
+                    }
+                    else{
+                        self.searchButton?.setFlower(FlowerType.Satisfied)
+                    }
+                }
+                else{
+                    self.searchButton?.setFlower(FlowerType.Sleeping)
+                }
+               
+            }
+            
+            
+            
+            
+            //set error if exist
+            //        if let searchResult = friendModel.searchResult, searchResult != SearchResult.Normal{
+            //            labelError.text = SearchResult.getMessage(searchResult)
+            //        }
+            //        else{
+            //            labelError.text = ""
+            //        }
+        }
+        
+       
+       
     }
     
     public func tapped(_ myUserId:String){
-        if let friendModel:FriendModel = self.friendModel,
-                (friendModel.searchStatus == SearchStatus.End || friendModel.searchStatus == nil){
-            startSearch()
-        }
         
-        print(friendModel?.searchStatus)
     }
     
-    private func startSearch(){
+    @objc private func startSearch(){
         SearchPools.newTask(friendModel!, myModel!)
     }
     
+    private func setListeners(){
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    }
+   
     
     
     

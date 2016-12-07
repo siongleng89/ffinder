@@ -14,9 +14,18 @@ class NotificationSender{
     
     public static func sendWithUserId(_ myUserId:String, _ targetUserId:String, _ fcmMessageType:FCMMessageType, _ ttl:Int, _ msgId:String, retryIfError:Bool? = false,
                                       dict: [String:String]? = nil, callback:(()->Void)? = nil){
+        
+        
         FirebaseDB.getUserData(targetUserId,
                                 {(userDataModel, status) in
                                     if status == Status.Success && userDataModel != nil{
+                                        
+                                        //set to android by default if is nil
+                                        if (userDataModel?.platform) == nil{
+                                            userDataModel?.platform = "android"
+                                        }
+                                        
+                                        
                                         sendFcm(myUserId, (userDataModel?.fcmToken)!, fcmMessageType, ttl, msgId, (userDataModel?.platform)!,
                                                 retryIfError: retryIfError, dict: dict,
                                                 callback: callback)
@@ -89,8 +98,9 @@ class NotificationSender{
             
             let task = URLSession.shared.dataTask(with: request) {
                 data, response, error in
+                
+                Logs.show("done sending fcm \(response)")
                 if let callback = callback{
-                    NSLog("done sending fcm")
                     callback()
                 }
             }
@@ -98,7 +108,7 @@ class NotificationSender{
             task.resume()
         }
         catch{
-            print("Failed to post to fcm")
+            Logs.show("Failed to post to fcm")
         }
         
     }

@@ -8,7 +8,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchButton" customModule="FFfinder" customModuleProvider="target">
             <connections>
                 <outlet property="buttonContainer" destination="dcE-Mx-RSk" id="SDe-iN-zU3"/>
+                <outlet property="buttonTopMargin" destination="Vxg-bx-cLa" id="FI9-nN-iKy"/>
                 <outlet property="imageViewFlower" destination="BSu-I8-v9d" id="rHQ-an-VWX"/>
+                <outlet property="labelLastUpdated" destination="U03-pn-P9s" id="cEU-GI-cbY"/>
                 <outlet property="labelStatus" destination="QO6-y1-XBg" id="4Uf-Iy-reG"/>
             </connections>
         </placeholder>
@@ -17,39 +19,41 @@
             <rect key="frame" x="0.0" y="0.0" width="153" height="197"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Never" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U03-pn-P9s">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U03-pn-P9s">
                     <constraints>
                         <constraint firstAttribute="height" constant="17" id="pGm-DY-mvg"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" red="0.34509803919999998" green="0.5568627451" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" red="0.28627450980000002" green="0.4549019608" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dcE-Mx-RSk">
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flower_starting_000.png" translatesAutoresizingMaskIntoConstraints="NO" id="BSu-I8-v9d"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flower_starting_000.png" translatesAutoresizingMaskIntoConstraints="NO" id="BSu-I8-v9d">
+                            <constraints>
+                                <constraint firstAttribute="height" constant="60" id="DWf-w7-fUS"/>
+                                <constraint firstAttribute="width" constant="50" id="XQJ-dA-EtT"/>
+                            </constraints>
+                        </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QO6-y1-XBg">
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="ex6-4h-qgL"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <color key="textColor" red="0.34509803919999998" green="0.5568627451" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="textColor" red="0.28627450980000002" green="0.4549019608" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="QO6-y1-XBg" firstAttribute="top" secondItem="BSu-I8-v9d" secondAttribute="bottom" constant="5" id="72S-sy-nwY"/>
-                        <constraint firstAttribute="trailing" secondItem="BSu-I8-v9d" secondAttribute="trailing" constant="8" id="Mby-I5-B0A"/>
                         <constraint firstAttribute="trailing" secondItem="QO6-y1-XBg" secondAttribute="trailing" id="TQX-n5-UU6"/>
-                        <constraint firstItem="BSu-I8-v9d" firstAttribute="leading" secondItem="dcE-Mx-RSk" secondAttribute="leading" constant="8" id="X6d-OU-nSH"/>
-                        <constraint firstItem="BSu-I8-v9d" firstAttribute="top" secondItem="dcE-Mx-RSk" secondAttribute="top" constant="8" id="YBs-9P-9e7"/>
+                        <constraint firstItem="BSu-I8-v9d" firstAttribute="centerX" secondItem="dcE-Mx-RSk" secondAttribute="centerX" id="XEB-FU-FUU"/>
                         <constraint firstItem="QO6-y1-XBg" firstAttribute="leading" secondItem="dcE-Mx-RSk" secondAttribute="leading" id="pnL-m2-Qzm"/>
                         <constraint firstAttribute="bottom" secondItem="QO6-y1-XBg" secondAttribute="bottom" constant="5" id="unl-R3-cUH"/>
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="U03-pn-P9s" secondAttribute="trailing" id="02l-rT-3eN"/>
                 <constraint firstAttribute="trailing" secondItem="dcE-Mx-RSk" secondAttribute="trailing" id="9Gy-bs-HoQ"/>
