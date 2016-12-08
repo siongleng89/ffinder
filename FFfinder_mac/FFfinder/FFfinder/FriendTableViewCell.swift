@@ -21,10 +21,19 @@ class FriendTableViewCell: UITableViewCell {
     @IBOutlet weak var labelAddress: UILabel!
     
     @IBOutlet weak var labelStatus: UILabel!
+    @IBOutlet weak var labelError: UILabel!
+    @IBOutlet weak var errorViewHeight: NSLayoutConstraint!
 
+    @IBOutlet weak var errorView: UIView!
+    
+    @IBOutlet weak var buttonDelete: FFIconButton!
     private var searchButton:SearchButton?
+    private var friendTableViewProtocol:FriendTableViewProtocol?
+    
+    
     
     override func awakeFromNib() {
+       
         super.awakeFromNib()
         // Initialization code
         
@@ -34,7 +43,7 @@ class FriendTableViewCell: UITableViewCell {
         self.imageViewProfile.layer.borderWidth = 1.0
         self.imageViewProfile.layer.borderColor = UIColor.colorPrimaryDark().cgColor
         
-        
+        setListeners()
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -72,6 +81,8 @@ class FriendTableViewCell: UITableViewCell {
         
         //still searching
         if let searchStatus = friendModel.searchStatus, searchStatus != SearchStatus.End{
+    
+            setErrorViewVisibility(false)
             labelAddress.isHidden = true
             labelStatus.isHidden = false
             labelStatus.text = SearchStatus.getMessage(searchStatus)
@@ -119,11 +130,8 @@ class FriendTableViewCell: UITableViewCell {
                 else{
                     self.searchButton?.setFlower(FlowerType.Ending, extra: "searchSuccess")
                 }
-                
-                
             }
             else{
-                
                 if let searchResult = self.friendModel?.searchResult{
                     if (searchResult.errorTriggeredAutoNotification()){
                         self.searchButton?.setFlower(FlowerType.AutoSearching, animate: false)
@@ -138,24 +146,73 @@ class FriendTableViewCell: UITableViewCell {
                
             }
             
-            
-            
-            
             //set error if exist
-            //        if let searchResult = friendModel.searchResult, searchResult != SearchResult.Normal{
-            //            labelError.text = SearchResult.getMessage(searchResult)
-            //        }
-            //        else{
-            //            labelError.text = ""
-            //        }
+            if let searchResult = self.friendModel?.searchResult{
+                if (searchResult.isError() && self.friendModel?.hideErrorMsg == false){
+                    setErrorViewVisibility(true)
+                    labelError.text = SearchResult.getMessage(searchResult)
+                }
+                else{
+                    setErrorViewVisibility(false)                }
+            }
+            else{
+                setErrorViewVisibility(false)
+            }
+            
         }
         
        
        
     }
     
+    private func setErrorViewVisibility(_ show:Bool){
+        if show{
+            for view in self.errorView.subviews{
+                view.isHidden = false
+            }
+            errorView.isHidden = false
+            errorViewHeight.constant = 40
+        }
+        else{
+            for view in self.errorView.subviews{
+                view.isHidden = true
+            }
+            errorView.isHidden = true
+            errorViewHeight.constant = 0
+        }
+    }
+    
     public func tapped(_ myUserId:String){
         
+    }
+    
+    func onDeleteTapped() {
+        
+       OverlayBuilder.build().setOverlayType(OverlayType.OkOrCancel)
+        .setTitle("delete_user_title".localized.format((self.friendModel?.username!)!))
+        .setMessage("confirm_delete_user_msg".localized)
+        .setOnChoices ({
+                FirebaseDB.deleteLink((self.myModel?.userId)!, (self.friendModel?.userId!)!)
+                
+                //remove blocking user since already deleted
+                FirebaseDB.changeBlockUser((self.myModel?.userId)!, (self.friendModel?.userId!)!,
+                                           false, nil);
+                
+                self.myModel?.deleteFriend((self.friendModel)!)
+                self.friendModel?.delete()
+                self.myModel?.commitFriendUserIds()
+                
+                NotificationCenter.default.post(name: .needToReloadWholeFriendsList, object: nil)
+        })
+        .show()
+        
+       
+    }
+    
+    @IBAction func onCloseErrorTapped(_ sender: AnyObject) {
+        self.friendModel?.hideErrorMsg = true
+        self.friendModel?.save()
+        self.friendModel?.notificateChanged()
     }
     
     @objc private func startSearch(){
@@ -163,7 +220,14 @@ class FriendTableViewCell: UITableViewCell {
     }
     
     private func setListeners(){
-    
+        if let recognizers = self.buttonDelete?.gestureRecognizers{
+            for recognizer: UIGestureRecognizer in recognizers {
+                self.buttonDelete?.removeGestureRecognizer(recognizer)
+            }
+        }
+        
+        self.buttonDelete?.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                       action: #selector(onDeleteTapped)))
     }
    
     

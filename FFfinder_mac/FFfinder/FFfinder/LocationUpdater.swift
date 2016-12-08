@@ -22,7 +22,7 @@ class LocationUpdater : NSObject, CLLocationManagerDelegate{
     
     init(_ fromUserId:String? = nil, _ fromUserToken:String? = nil, _ fromPlatform:String? = nil,
          _ callback:(()->Void)? = nil){
-        self.myModel = MyModel.shared
+        self.myModel = MyModel(dontLoadFriends:true)
         self.finish = false
         
         self.callback = callback

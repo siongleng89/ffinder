@@ -31,7 +31,6 @@ class AddManuallyViewController: MyViewController {
             txtWrapperKey.setText(pendingKey)
             Vars.pendingUserKey = nil
         }
-    
         
     }
     
@@ -50,7 +49,11 @@ class AddManuallyViewController: MyViewController {
                 addingKey = addingKey.substring(to: index)
             }
         
-             showLoading(Message: "adding_friend_msg".localized)
+            OverlayBuilder.build().setMessage("adding_friend_msg".localized)
+                .setOverlayType(OverlayType.Loading)
+                .setVc(self)
+                .show()
+            
             
             
             FirebaseDB.checkKeyExist(self.myModel.userId!, addingKey,
@@ -65,7 +68,8 @@ class AddManuallyViewController: MyViewController {
                                 
                                     //already exist link and friend added
                                     if bothLinkExist && self.myModel.checkFriendExist((keyModel?.userId)!){
-                                        self.errorOccured(AddUserErrorType.UserAlreadyAdded)
+                                        self.errorOccured(AddUserErrorType.UserAlreadyAdded,
+                                                        extra: self.myModel.getFriendModelById((keyModel?.userId)!)?.username)
                                         return
                                     }
                                     
@@ -86,7 +90,8 @@ class AddManuallyViewController: MyViewController {
                                 
                             }
                             else{
-                                self.errorOccured(AddUserErrorType.KeyNotExistOrOutdated)
+                                self.errorOccured(AddUserErrorType.KeyNotExistOrOutdated,
+                                                  extra: addingKey)
                             }
                             
                             
@@ -136,47 +141,72 @@ class AddManuallyViewController: MyViewController {
     }
         
         
-    private func errorOccured(_ errorType:AddUserErrorType){
+    private func errorOccured(_ errorType:AddUserErrorType, extra:String? = nil){
         
-        var msg:String = ""
-        
-        switch errorType{
+        Threadings.postMainThread {
+            var msg:String = ""
+            
+            switch errorType{
             case AddUserErrorType.UserAlreadyAdded:
-                msg = "user_already_added_error_msg".localized
-            break
+                msg = "user_already_added_error_msg".localized.format(extra!)
+                break
             case AddUserErrorType.KeyNotExistOrOutdated:
                 msg = "key_expired_or_not_exist_msg".localized
-            break
+                break
             case AddUserErrorType.UnknownError:
                 msg = "unknown_error_msg".localized
-            break
+                break
+            }
+            
+            OverlayBuilder.forceCloseAllOverlays()
+            
+            if errorType == AddUserErrorType.UserAlreadyAdded{
+                OverlayBuilder.build().setOverlayType(OverlayType.OkOnly)
+                    .setMessage(msg)
+                    .setVc(self)
+                    .setOnChoices {
+                        self.popToMainVc()
+                    }
+                    .show()
+            }
+            else{
+                self.labelError.text = msg
+                AnimateBuilder.fadeIn(self.labelError)
+            }
+
         }
-        
-        
-        hideLoading()
-        labelError.text = msg
-        AnimateBuilder.fadeIn(labelError)
         
     }
     
     
     private func successAddUser(_ addingUserId:String, _ addingUsername:String, _ myName:String){
-        let friendModel:FriendModel = FriendModel()
-        friendModel.userId = addingUserId
-        friendModel.username = addingUsername.isEmpty ? "No Name" : addingUsername
-        
-        self.myModel.addFriendModel(friendModel)
-        friendModel.save()
-        self.myModel.sortFriendModels()
-        self.myModel.commitFriendUserIds()
-        
-        hideLoading()
-        _ = self.navigationController?.popViewController(animated: true)
-        
-        //todo: send notification
+        Threadings.postMainThread {
+            let friendModel:FriendModel = FriendModel()
+            friendModel.userId = addingUserId
+            friendModel.username = addingUsername.isEmpty ? "No Name" : addingUsername
+            
+            self.myModel.addFriendModel(friendModel)
+            friendModel.save()
+            self.myModel.sortFriendModels()
+            self.myModel.commitFriendUserIds()
+            
+            self.hideLoading()
+            NotificationCenter.default.post(name: .needToReloadWholeFriendsList, object: nil)
+            
+            self.popToMainVc()
+            
+            NotificationSender.sendWithUserId(self.myModel.userId!, addingUserId,
+                                              FCMMessageType.FriendsAdded,
+                                              NotificationSender.TTL_LONG, "", retryIfError: false,
+                                              dict: ["username": myName])
+        }
     }
 
-    
+    private func popToMainVc(){
+        let mainVC = navigationController!.viewControllers.filter { $0 is MainPageViewController }.first!
+        navigationController!.popToViewController(mainVC, animated: true)
+
+    }
     
     @IBAction func onConfirmBtnTapped(_ sender: AnyObject) {
         validateAndSubmit()

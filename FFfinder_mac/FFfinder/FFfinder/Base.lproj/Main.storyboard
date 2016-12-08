@@ -226,7 +226,6 @@
                     <connections>
                         <outlet property="tableViewSettings" destination="Ski-Ts-HbN" id="vTJ-bb-ln6"/>
                         <segue destination="BKe-do-vqL" kind="show" identifier="SettingsToAddMemberSegue" id="G7I-rJ-iYx"/>
-                        <segue destination="zU8-gF-zqp" kind="show" identifier="SettingsToPromoSegue" id="CG3-l6-Lyb"/>
                         <segue destination="cb0-fz-uFz" kind="show" identifier="SettingsToLanguageSegue" id="oyi-dA-GKq"/>
                     </connections>
                 </viewController>
@@ -400,114 +399,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P1W-g9-PXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3993" y="1279"/>
-        </scene>
-        <!--Promo View Controller-->
-        <scene sceneID="YIZ-wb-P5F">
-            <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="zU8-gF-zqp" customClass="PromoViewController" customModule="FFfinder" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="WOE-Wu-wcb"/>
-                        <viewControllerLayoutGuide type="bottom" id="eit-zk-TWL"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Q9O-PF-XqR">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" delaysContentTouches="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JwR-wu-2Mi">
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6bm-FA-lHH">
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="R6o-sL-6uf">
-                                                <subviews>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PromoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="EvB-Ky-O1C">
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="42" id="aKK-NH-Olv"/>
-                                                            <constraint firstAttribute="height" constant="50" id="srI-Ou-NTd"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="input_promo_code_title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCk-bN-i9a" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
-                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <color key="textColor" red="0.34509803919999998" green="0.5568627451" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </stackView>
-                                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem Ipsum error text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SJB-gi-NB8">
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <color key="textColor" red="1" green="0.35686274509999999" blue="0.27058823529999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IbF-VF-G8w" customClass="TextFieldWrapper" customModule="FFfinder" customModuleProvider="target">
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="90" id="ZDO-9e-KL8"/>
-                                                </constraints>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="title" value="promo_code_title"/>
-                                                </userDefinedRuntimeAttributes>
-                                            </view>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="350" id="883-gt-Vtc"/>
-                                            <constraint firstItem="R6o-sL-6uf" firstAttribute="centerX" secondItem="6bm-FA-lHH" secondAttribute="centerX" id="HVN-qa-Zm5"/>
-                                            <constraint firstAttribute="trailing" secondItem="IbF-VF-G8w" secondAttribute="trailing" constant="15" id="Hj8-g2-RNs"/>
-                                            <constraint firstItem="IbF-VF-G8w" firstAttribute="leading" secondItem="6bm-FA-lHH" secondAttribute="leading" constant="15" id="ZdG-ra-X0T"/>
-                                            <constraint firstItem="SJB-gi-NB8" firstAttribute="leading" secondItem="6bm-FA-lHH" secondAttribute="leading" constant="15" id="bK5-hy-F0k"/>
-                                            <constraint firstItem="R6o-sL-6uf" firstAttribute="top" secondItem="6bm-FA-lHH" secondAttribute="top" constant="30" id="cbP-dc-TkH"/>
-                                            <constraint firstItem="SJB-gi-NB8" firstAttribute="top" secondItem="R6o-sL-6uf" secondAttribute="bottom" constant="30" id="ddb-NL-t94"/>
-                                            <constraint firstItem="IbF-VF-G8w" firstAttribute="top" secondItem="SJB-gi-NB8" secondAttribute="bottom" constant="20" id="rr2-ut-q9o"/>
-                                            <constraint firstAttribute="trailing" secondItem="SJB-gi-NB8" secondAttribute="trailing" constant="15" id="tIo-BC-neK"/>
-                                        </constraints>
-                                    </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g1R-Dj-Rk2" customClass="FFTextButton" customModule="FFfinder" customModuleProvider="target">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="90" id="KfW-7M-EIR"/>
-                                        </constraints>
-                                        <state key="normal" title="submit"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="colorStyle" value="green"/>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="onSubmit:" destination="zU8-gF-zqp" eventType="touchUpInside" id="nQz-Fx-2CM"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="g1R-Dj-Rk2" firstAttribute="centerX" secondItem="JwR-wu-2Mi" secondAttribute="centerX" id="1Hu-R9-PSo"/>
-                                    <constraint firstItem="6bm-FA-lHH" firstAttribute="top" secondItem="JwR-wu-2Mi" secondAttribute="top" id="71E-kE-tG3"/>
-                                    <constraint firstAttribute="bottom" secondItem="6bm-FA-lHH" secondAttribute="bottom" constant="475" id="Ntw-LO-avJ"/>
-                                    <constraint firstItem="6bm-FA-lHH" firstAttribute="leading" secondItem="JwR-wu-2Mi" secondAttribute="leading" id="PmC-eO-SOv"/>
-                                    <constraint firstItem="g1R-Dj-Rk2" firstAttribute="top" secondItem="IbF-VF-G8w" secondAttribute="bottom" constant="30" id="VsQ-Ob-HNW"/>
-                                    <constraint firstItem="6bm-FA-lHH" firstAttribute="centerX" secondItem="JwR-wu-2Mi" secondAttribute="centerX" id="oiE-wq-Rbd"/>
-                                    <constraint firstAttribute="trailing" secondItem="6bm-FA-lHH" secondAttribute="trailing" id="z0g-Ek-4Wd"/>
-                                </constraints>
-                            </scrollView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.7843137255" green="0.8980392157" blue="0.74117647060000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="JwR-wu-2Mi" secondAttribute="trailing" id="IUc-at-Jwx"/>
-                            <constraint firstItem="JwR-wu-2Mi" firstAttribute="leading" secondItem="Q9O-PF-XqR" secondAttribute="leading" id="JNB-5Z-f1z"/>
-                            <constraint firstItem="eit-zk-TWL" firstAttribute="top" secondItem="JwR-wu-2Mi" secondAttribute="bottom" id="jcX-xM-g0U"/>
-                            <constraint firstItem="JwR-wu-2Mi" firstAttribute="top" secondItem="WOE-Wu-wcb" secondAttribute="bottom" id="wf9-oD-XZA"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="dLR-uH-f1l">
-                        <barButtonItem key="rightBarButtonItem" image="SaveIcon" style="plain" id="sfq-E8-nuT">
-                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="onSubmit:" destination="zU8-gF-zqp" id="raJ-tU-BsN"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="labelError" destination="SJB-gi-NB8" id="AVL-Uu-hEU"/>
-                        <outlet property="txtWrapperPromoCode" destination="IbF-VF-G8w" id="mKB-ns-Y64"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5y1-JA-cFF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4764" y="1244.527736131934"/>
         </scene>
         <!--Share Key View Controller-->
         <scene sceneID="82Z-ig-O7d">
@@ -804,7 +695,6 @@
     <resources>
         <image name="AddFriendIcon2" width="17" height="25"/>
         <image name="AddFriendsIcon" width="25" height="25"/>
-        <image name="PromoIcon" width="21" height="18"/>
         <image name="QuestionIcon" width="29" height="29"/>
         <image name="SaveIcon" width="20" height="19"/>
         <image name="SettingsIcon" width="22" height="22"/>

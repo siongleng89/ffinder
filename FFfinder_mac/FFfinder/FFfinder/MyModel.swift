@@ -30,6 +30,14 @@ class MyModel:EVObject{
         super.init()
     }
     
+    init(dontLoadFriends:Bool){
+        super.init()
+        load()
+        if !dontLoadFriends{
+            loadAllFriendModels()
+        }
+    }
+    
     
     //selected properties will be excluded when converting to json
     override public func propertyMapping() -> [(String?, String?)] {
@@ -205,7 +213,6 @@ class MyModel:EVObject{
     public func deleteFriend(_ toDeleteModel:FriendModel){
         if let toDeleteModel = getFriendModelById(toDeleteModel.userId!){
             self.friendModels.remove(toDeleteModel)
-            toDeleteModel.delete()
         }
     }
     

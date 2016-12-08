@@ -19,7 +19,6 @@ class SettingsViewController:MyViewController, UITableViewDelegate, UITableViewD
         settingsList?.append(SettingItem("add_new_member_manually_title".localized, SettingType.AddNewMember))
          settingsList?.append(SettingItem("known_issues_title".localized, SettingType.KnownIssue))
          settingsList?.append(SettingItem("vip_title".localized, SettingType.Vip))
-         settingsList?.append(SettingItem("input_promo_code_title".localized, SettingType.PromoCode))
          settingsList?.append(SettingItem("settings_item_language_title".localized, SettingType.Language))
         
         let yourNibName = UINib(nibName: "NormalTableViewCell", bundle: nil)
@@ -47,9 +46,6 @@ class SettingsViewController:MyViewController, UITableViewDelegate, UITableViewD
         if selected.type == SettingType.AddNewMember{
             self.performSegue(withIdentifier: "SettingsToAddMemberSegue", sender: nil)
         }
-        else if selected.type == SettingType.PromoCode{
-            self.performSegue(withIdentifier: "SettingsToPromoSegue", sender: nil)
-        }
         else if selected.type == SettingType.Language{
             self.performSegue(withIdentifier: "SettingsToLanguageSegue", sender: nil)
         }
@@ -74,7 +70,6 @@ class SettingsViewController:MyViewController, UITableViewDelegate, UITableViewD
         case AddNewMember
         case KnownIssue
         case Vip
-        case PromoCode
         case Language
     }
     

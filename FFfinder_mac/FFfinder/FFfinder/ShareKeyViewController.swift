@@ -21,6 +21,7 @@ class ShareKeyViewController: MyViewController {
         
         // Do any additional setup after loading the view.
         checkKey()
+    
     }
     
     private func checkKey(){

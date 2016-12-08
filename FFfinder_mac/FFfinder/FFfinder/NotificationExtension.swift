@@ -10,4 +10,5 @@ import Foundation
 extension Notification.Name {
     static let friendModelChanged = Notification.Name("friendModelChanged")
     static let needToReloadFriendModel = Notification.Name("needToReloadFriendModel")
+    static let needToReloadWholeFriendsList = Notification.Name("needToReloadWholeFriendsList")
 }

@@ -11,18 +11,22 @@ import PopupDialog
 
 class OverlayBuilder{
 
-    private var vc:UIViewController?
     private var overlayType:OverlayType?
     private var title:String?
     private var message:String?
     private var onDismiss:(()->Void)?
+    private var onChoices:[(()->Void)]?
+    private var vc:UIViewController?
+    private static var alertController: UIAlertController?
+    private static var popupController: PopupDialog?
+
     
-    public static func build(_ vc:UIViewController) -> OverlayBuilder{
-        return OverlayBuilder(vc)
+    public static func build() -> OverlayBuilder{
+        return OverlayBuilder()
     }
     
-    private init(_ vc:UIViewController){
-        self.vc = vc
+    private init(){
+ 
     }
     
     public func setOverlayType(_ overlayType:OverlayType) -> OverlayBuilder{
@@ -40,8 +44,21 @@ class OverlayBuilder{
         return self
     }
     
+    public func setVc(_ vc:UIViewController) -> OverlayBuilder{
+        self.vc = vc
+        return self
+    }
+    
     public func setOnDismiss(_ onDismiss:@escaping (()->Void)) -> OverlayBuilder{
         self.onDismiss = onDismiss
+        return self
+    }
+    
+    public func setOnChoices(_ choices:@escaping (()->Void)...) -> OverlayBuilder{
+        self.onChoices = []
+        for choice:(()->Void) in choices{
+            self.onChoices?.append(choice)
+        }
         return self
     }
 
@@ -69,26 +86,104 @@ class OverlayBuilder{
 //        // Present dialog
 //        present(popup, animated: true, completion: nil)
 
-
-        // Create the dialog
-        let popup = PopupDialog(title: title, message: message, completion: {
-            if self.onDismiss != nil{
-                self.onDismiss!()
+        OverlayBuilder.forceCloseAllOverlays()
+        
+        if self.overlayType == OverlayType.Loading{
+            
+            var msg:String? = self.message
+            if msg == nil{
+                msg = "loading".localized
             }
-        })
-
-        if overlayType == OverlayType.OkOnly{
-            let buttonOk = DefaultButton(title: "ok".localized) {
-                
+            
+            OverlayBuilder.alertController = UIAlertController(title: nil, message: msg, preferredStyle: .alert)
+            
+            OverlayBuilder.alertController!.view.tintColor = UIColor.black
+            let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(
+                frame: CGRect(x:10, y:5, width:50, height:50)) as UIActivityIndicatorView
+            loadingIndicator.hidesWhenStopped = true
+            loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+            loadingIndicator.startAnimating();
+            
+            OverlayBuilder.alertController!.view.addSubview(loadingIndicator)
+            
+            if let vc = self.vc{
+                vc.present(OverlayBuilder.alertController!, animated: true, completion: nil)
             }
-            popup.addButtons([buttonOk])
+            else{
+                if let topController = UIApplication.topViewController() {
+                    topController.present(OverlayBuilder.alertController!, animated: true, completion: nil)
+                }
+            }
             
         }
+        else{
+            // Create the dialog
+            let popup = PopupDialog(title: self.title, message: self.message,
+                                    gestureDismissal: false, completion: {
+                if self.onDismiss != nil{
+                    self.onDismiss!()
+                }
+            })
+            
+            if self.overlayType == OverlayType.OkOnly{
+                let buttonOk = DefaultButton(title: "ok".localized) {
+                    self.getChoiceToRun(0)?()
+                }
+                popup.addButtons([buttonOk])
+                
+            }
+            else if self.overlayType == OverlayType.OkOrCancel{
+                let buttonOk = DefaultButton(title: "ok".localized) {
+                    self.getChoiceToRun(0)?()
+                }
+                let buttonCancel = DefaultButton(title: "cancel".localized) {
+                    self.getChoiceToRun(1)?()
+                }
+                popup.addButtons([buttonOk, buttonCancel])
+                
+            }
+            
+            
+            
+            // Present dialog
+            
+            if let vc = self.vc{
+                vc.present(popup, animated: true, completion: nil)
+            }
+            else{
+                if let topController = UIApplication.topViewController() {
+                    topController.present(popup, animated: true, completion: nil)
+                }
+            }
+            
+            
+           
+            
+            OverlayBuilder.popupController = popup
+            
+        }
+
         
-        // Present dialog
-        vc?.present(popup, animated: true, completion: nil)
-        
-    
     }
+    
+    public static func forceCloseAllOverlays(){
+        OverlayBuilder.popupController?.dismiss(animated: false, completion: nil)
+        OverlayBuilder.alertController?.dismiss(animated: false, completion: nil)
+        
+        OverlayBuilder.popupController = nil
+        OverlayBuilder.alertController = nil
+    }
+    
+    
+    
+    private func getChoiceToRun(_ index:Int) -> (()->Void)?{
+        if let choices = self.onChoices{
+            if choices.count - 1 >= index{
+                return choices[index]
+            }
+        }
+        return nil
+    }
+   
     
 }

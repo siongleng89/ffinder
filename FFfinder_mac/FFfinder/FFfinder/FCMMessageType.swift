@@ -12,6 +12,7 @@ enum FCMMessageType:String{
     case UpdateLocation
     case UserLocated
     case IsAliveMsg
+    case FriendsAdded
     case Nothing
     
     

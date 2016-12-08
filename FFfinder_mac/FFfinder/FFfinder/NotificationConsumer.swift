@@ -17,8 +17,34 @@ class NotitificationConsumer{
         if let actionString = dict["action"] {
             let action = FCMMessageType.convertStringToFCMMessageType(actionString as! String)
             
-            if action == FCMMessageType.UpdateLocation{
+            
+            //my friend has added me, refresh my friend list
+            if action == FCMMessageType.FriendsAdded{
+                let senderId = dict["senderId"] as! String
+                let username = dict["username"] as! String
                 
+                let myModel:MyModel = MyModel.shared
+                if !myModel.checkFriendExist(senderId){
+                    let friendModel:FriendModel = FriendModel()
+                    friendModel.username = username
+                    friendModel.userId = senderId
+                    friendModel.save()
+                    
+                    myModel.addFriendModel(friendModel)
+                    myModel.sortFriendModels()
+                    myModel.commitFriendUserIds()
+                    
+                    broadcastReloadWholeFriendsList()
+                    
+                    //todo show notification
+                    NotificationShower.show("app_name".localized,
+                                            "notification_x_added_you".localized.format(username))
+                }
+                
+            
+            }
+            //request me to update my location
+            else if action == FCMMessageType.UpdateLocation{
                 //make sure msg id is not duplicated
                 if let msgId = dict["messageId"] as? String{
                     if NotitificationConsumer.handledMsgIds.contains(msgId){
@@ -37,7 +63,7 @@ class NotitificationConsumer{
             }
             else if action == FCMMessageType.IsAliveMsg{
                 let senderId = dict["senderId"] as! String
-                let myModel:MyModel = MyModel()
+                let myModel:MyModel = MyModel(dontLoadFriends:true)
                 myModel.loadFriend(senderId)
                 if let friendModel = myModel.getFriendModelById(senderId){
                     
@@ -55,8 +81,8 @@ class NotitificationConsumer{
                 let senderId = dict["senderId"] as! String
                 let latitude = dict["latitude"] as! String
                 let longitude = dict["longitude"] as! String
-                //let isAutoNotification = dict["isAutoNotification"] as! String
-                let myModel:MyModel = MyModel()
+                let isAutoNotification = dict["isAutoNotification"] as! String
+                let myModel:MyModel = MyModel(dontLoadFriends:true)
                 myModel.loadFriend(senderId)
                 if let friendModel = myModel.getFriendModelById(senderId){
                     
@@ -74,7 +100,9 @@ class NotitificationConsumer{
                         self.broadcastReloadFriend(senderId)
                     
                         //only show notification on user system tray if it is from auto notification
-                        //todo
+                        if isAutoNotification == "1"{
+                            
+                        }
                     }
                     
                 }
@@ -89,6 +117,10 @@ class NotitificationConsumer{
         
         NotificationCenter.default.post(name: .needToReloadFriendModel, object: nil,
                                         userInfo: dict)
+    }
+    
+    private func broadcastReloadWholeFriendsList(){
+        NotificationCenter.default.post(name: .needToReloadWholeFriendsList, object: nil)
     }
     
 

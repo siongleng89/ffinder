@@ -59,7 +59,7 @@ class LanguageViewController:MyViewController, UITableViewDelegate, UITableViewD
     
     private func save(){
         Preferences.put(PreferenceType.Language, (selectedLanguageModel?.name)!)
-        OverlayBuilder.build(self)
+        OverlayBuilder.build()
             .setMessage("language_take_effect_after_restart_toast".localized)
             .setOverlayType(OverlayType.OkOnly)
             .setOnDismiss {

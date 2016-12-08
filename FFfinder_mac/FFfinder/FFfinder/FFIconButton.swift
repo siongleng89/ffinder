@@ -39,6 +39,7 @@ class FFIconButton : UIButton {
         colorUp()
     }
     
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !isBtnSelected!{
             colorDown()
@@ -46,6 +47,12 @@ class FFIconButton : UIButton {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !isBtnSelected!{
+            colorUp()
+        }
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !isBtnSelected!{
             colorUp()
         }

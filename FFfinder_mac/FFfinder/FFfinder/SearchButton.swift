@@ -48,9 +48,12 @@ class SearchButton:UIView{
         
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(onResume),                                               name: .UIApplicationDidBecomeActive, object: nil)
-       
+                                               selector: #selector(onAppearing),                                               name: .UIApplicationDidBecomeActive, object: nil)
 
+    }
+    
+    func onAppearing(){
+        imageViewFlower.startAnimating()
     }
     
     func loadViewFromNib() -> UIView {
@@ -83,11 +86,7 @@ class SearchButton:UIView{
         xibSetup()
     }
     
-    public func onResume(){
-        imageViewFlower.startAnimating()
-    }
-    
-    
+  
    
     
     public func setFlower(_ flowerType:FlowerType, extra:String? = nil, animate:Bool = true){

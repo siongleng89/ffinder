@@ -19,7 +19,7 @@ class FriendModel : EVObject{
     var searchStatus:SearchStatus?
     var searchResult:SearchResult?
     var recentlyFinished:Bool?
-
+    var hideErrorMsg:Bool = false
     
      //used to prevent double triggering of notificationCenter while loading
     var copying:Bool = false
@@ -68,8 +68,8 @@ class FriendModel : EVObject{
     }
     
     public func delete(){
-        self.userId = nil
         Preferences.delete(self.userId!)
+        self.userId = nil
     }
     
     private func copyToThis(_ loadedFriendModel:FriendModel){
@@ -78,6 +78,7 @@ class FriendModel : EVObject{
         self.locationModel = loadedFriendModel.locationModel
         self.searchStatus = loadedFriendModel.searchStatus
         self.searchResult = loadedFriendModel.searchResult
+        self.hideErrorMsg = loadedFriendModel.hideErrorMsg
     }
     
     public func notificateChanged(){

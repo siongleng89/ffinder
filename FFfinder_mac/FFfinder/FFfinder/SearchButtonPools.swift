@@ -28,5 +28,11 @@ class SearchButtonPools{
     }
     
     
+    public static func mainPageAppearing(){
+        for (_, button) in pool{
+            button.onAppearing()
+        }
+    }
+    
     
 }

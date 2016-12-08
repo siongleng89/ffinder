@@ -168,6 +168,14 @@ class FirebaseDB{
         checkExist(getTable(TableName.links).child(myUserId), callback)
     }
     
+    public static func deleteLink(_ myUserId:String, _ targetUserId:String){
+        getTable(TableName.links).child(myUserId).child(targetUserId).removeValue()
+    }
+    
+    
+    
+    
+    
     
     public static func checkKeyExist(_ userID:String, _ userKey:String,
                                      _ callback:@escaping (KeyModel?, Status) -> Void){
@@ -221,6 +229,24 @@ class FirebaseDB{
     }
    
     
+    
+    public static func changeBlockUser(_ myUserId:String, _ targetUserId:String, _ block:Bool,
+                                        _ callback: ((Status) -> Void)?){
+        var map1 = [String:String?]()
+        
+        if block{
+            map1[targetUserId] = "1"
+        }
+        else{
+            map1[targetUserId] = nil
+        }
+    
+        setValue(getTable(TableName.blockUsers).child(myUserId), map1, callback)
+    }
+  
+    
+    
+    
     public static func checkMeIsBlocked(_ myUserId:String, _ targetUserId:String,
                                       _ callback: @escaping (Bool, Status) -> Void){
         getSingleData(getTable(TableName.blockUsers).child(targetUserId).child(myUserId),
@@ -234,11 +260,10 @@ class FirebaseDB{
         });
     }
     
-    
-    
-
-    
-    
+    public static func getAllMyLinks(_ myUserId:String,
+                                     _ callback: @escaping ([FIRDataSnapshot]?, Status) -> Void){
+        getData(getTable(TableName.links).child(myUserId), callback)
+    }
     
     
     public static func getCurrentTimestamp(_ userId:String, _ callback:@escaping (String?, Status)-> Void){

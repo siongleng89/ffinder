@@ -21,8 +21,11 @@ extension String {
         
         var result:String = self
         
+        var i:Int = 1
         for str:String in args{
-            result = self.stringByReplacingFirstOccurrenceOfString("%s", str)
+            result = result.stringByReplacingFirstOccurrenceOfString("%s", str)
+            result = result.stringByReplacingFirstOccurrenceOfString("%\(i)$s", str)
+            i += 1
         }
         return result
     }

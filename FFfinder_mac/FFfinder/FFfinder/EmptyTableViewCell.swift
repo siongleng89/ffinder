@@ -8,12 +8,9 @@
 
 import Foundation
 class EmptyTableViewCell: UITableViewCell {
-    
-    
+
     func setView(_ view:UIView){
         self.addSubview(view)
     }
-   
-    
     
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import PopupDialog
+import Firebase
 
 class MainPageViewController: MyViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -15,6 +16,13 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
     let friendTableCellIdentifier:String = "FriendTableViewCell"
     var firstTimeRun:Bool?
 
+   
+    
+    override func viewWillAppear(_ animated: Bool) {
+        SearchButtonPools.mainPageAppearing()
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,12 +49,13 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         NotificationCenter.default.addObserver(self,
                                            selector: #selector(onNeedToReloadFriendModel),                                               name: .needToReloadFriendModel, object: nil)
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(onNeedToRefreshWholeFriendList),                                               name: .needToReloadWholeFriendsList, object: nil)
         
+        
+        
+        refreshFriendList()
      
-    }
-    
-    func test(){
-        Logs.show("testing")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -86,6 +95,16 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         }
     }
     
+    func onNeedToRefreshWholeFriendList(notification:NSNotification){
+        Logs.show("Reloading all rows: onNeedToRefreshWholeFriendList")
+        self.myModel.loadAllFriendModels()
+        self.myModel.sortFriendModels()
+        Threadings.postMainThread {
+            self.friendsTableView.reloadData()
+        }
+    }
+    
+    
     func onUpdateRowRequired(_ friendModel:FriendModel){
         var finalIndex = -1
         
@@ -103,6 +122,40 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
             }
         }
 
+    }
+    
+    //refresh friends list from firebase database
+    private func refreshFriendList(){
+        FirebaseDB.getAllMyLinks(self.myModel.userId!, {
+            (results, status) in
+            
+            if let results = results, status == Status.Success{
+                var foundNew:Bool = false
+                
+                for snapshot:FIRDataSnapshot in results{
+                    let userId:String = snapshot.key
+                    let name:String? = snapshot.value as! String?
+                    
+                    if !self.myModel.checkFriendExist(userId){
+                        let friendModel:FriendModel = FriendModel()
+                        friendModel.userId = userId
+                        friendModel.username = name
+                        friendModel.save()
+                        
+                        self.myModel.addFriendModel(friendModel)
+                        foundNew = true
+                    }
+                }
+            
+                if foundNew{
+                    self.myModel.sortFriendModels()
+                    self.myModel.commitFriendUserIds()
+                    Threadings.postMainThread {
+                        self.friendsTableView.reloadData()
+                    }
+                }
+            }
+        })
     }
     
     @IBAction func onAddButtonTapped(_ sender: AnyObject) {

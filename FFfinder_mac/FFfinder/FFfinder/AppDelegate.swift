@@ -55,6 +55,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    
+    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+        
+        if let title = notification.userInfo?["title"]{
+            if let body = notification.userInfo?["body"]{
+                NotificationShower.showNotificationAlert(title as! String, body as! String)
+            }
+        }
+        
+        Logs.show("receive local notification.")
+    }
+    
     // [START receive_message]
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
@@ -140,15 +152,23 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-      //ignore notifications type fcm
-        Logs.show("receive FCM.")
+        
+        if let title = notification.request.content.userInfo["title"]{
+            if let body = notification.request.content.userInfo["body"]{
+                NotificationShower.showNotificationAlert(title as! String, body as! String)
+            }
+        }
+        
+        
+        
+        Logs.show("receive notification FCM ios 10.")
     }
 }
 
 extension AppDelegate : FIRMessagingDelegate {
     // Receive data message on iOS 10 devices.
     func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
-        Logs.show("receive FCM.")
+        Logs.show("receive data FCM ios 10.")
         NotitificationConsumer().consume(remoteMessage.appData)
     }
 }

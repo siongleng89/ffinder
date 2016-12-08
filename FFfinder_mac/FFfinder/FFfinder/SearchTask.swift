@@ -200,6 +200,7 @@ class SearchTask{
     private func reset(){
         self.friendModel.timeoutPhase = 0
         self.friendModel.searchResult = SearchResult.Normal
+        self.friendModel.hideErrorMsg = false
         self.friendModel.save()
     }
     

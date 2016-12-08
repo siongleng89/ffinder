@@ -10,5 +10,7 @@ import Foundation
 enum OverlayType:String{
     
     case OkOnly
+    case OkOrCancel
+    case Loading
     
 }
