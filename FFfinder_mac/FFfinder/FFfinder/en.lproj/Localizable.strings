@@ -1,7 +1,7 @@
 
 /*Apps info start*/
 "app_name" = "FFfinder";
-"app_title_long" = "Simple Friend and Family Finder";
+"app_title_long" = "5 people - a locator";
 
 /*Apps info end
  _________________________________________________________________________________ 
@@ -33,7 +33,6 @@ Common texts start*/
 _________________________________________________________________________________
 Launch Activity text start*/
 "welcome_msg_1" = "Welcome To";
-"first_time_msg_content" = "Thanks for choosing us, you now have a friend & family finder that,\n- Does not drain battery as search is on demand\n- Offers some privacy as it allows you to block search and does not track every move\n- Is free with Ads";
 "required_location_provider_msg" = "FFfinder requests you to enable location service";
 "btn_go_to_location_settings_text" = "Config Location";
 "some_permission_denied_toast_msg" = "Please make sure all required permissions are given to start FFfinder";
@@ -86,22 +85,6 @@ Main Activity text start*/
 /*search_failed_dialog*/
 "btn_wait_autonotification_text" = "Wait for auto notification";
 "search_left" = "Search Left";
-
-/*noCreditsDialog*/
-"ran_out_free_search_msg" = "You have run out of free search, you can earn searches by";
-
-/*noCreditsDialog*/
-"btn_watch_ads_earn_credits_text" = "Watch Ads";
-
-/*noCreditsDialog*/
-"btn_input_promo_code_earn_credits_text" = "Promo Code";
-
-/*noCreditsDialog*/
-"btn_subscript_unlimited_searches_text" = "Subscribe";
-
-/*noCreditsDialog*/
-"btn_maybe_next_time_text" = "Maybe Next Time";
-"no_ads_available_toast_msg" = "No ads available, free searches will be rewarded.";
 "searching" = "Searching";
 "auto_searching" = "Auto";
 "tap_plus_to_add_friend_family" = "+ Tap to add friend/family";
@@ -146,17 +129,6 @@ Map Activity text start*/
 "directions" = "Directions";
 "no_route_found_error_msg" = "No route found";
 
-/*Map Activity text end
-_________________________________________________________________________________
-Promo Code Activity text start*/
-"promo_code_activity_title" = "Promo code";
-"input_promo_code_title" = "Input Promo Code";
-"promo_code_title" = "Promo Code:";
-"empty_promo_code_error_msg" = "Please input a promo code";
-"promo_code_failed_error_msg" = "Invalid promo code or you have already used this promo code for this account.";
-"checking_promo_code_msg" = "Checking promo code…";
-"promo_code_success_msg" = "Promo code activated, you are now granted %s free searches.";
-
 /*Promo Code Activity text end
 _________________________________________________________________________________
 Add member Activity text start*/
@@ -165,8 +137,6 @@ Add member Activity text start*/
 "user_key_title" = "Your friend/family invite code";
 "member_name_title" = "How do you address him/her?";
 "no_user_key_msg" = "Please input invite code from the user you wish to add.";
-"no_member_name_msg" = "Please input member's name";
-"no_your_name_msg" = "Please input your name";
 "adding_friend_msg" = "Adding record…";
 "user_already_added_error_msg" = "User has already existed in your list as %s";
 "key_expired_or_not_exist_msg" = "Invite code does not exist or has expired.";
@@ -193,14 +163,14 @@ Share key activity text start*/
 "share_subject" = "FFfinder Invite code";
 
 /*Fuzzy*/
-"share_msg" = "You are important to me! Please download Simple Friend and Family Finder so that we can locate each other with a click for FREE at \nhttps://play.google.com/store/apps/details?id=com.ffinder.android&referrer=%1$s\n\nThen add me by clicking on this link (Open with FFfinder)\nhttp://ff-finder.com/addnew/%2$s";
-"after_share_passcode_reminder" = "Thanks for sharing your Invite code, just wait for your friend or family to add you and you can start tracking each other.";
+"share_msg" = "You are important to me! Please download simple friend and family locator so that we can locate each other with a click for FREE at \nhttps://play.google.com/store/apps/details?id=com.ffinder.android&referrer=%1$s\n\nThen add me by clicking on this link (Open with FFfinder)\nhttp://ff-finder.com/addnew/%2$s";
+"after_share_passcode_reminder" = "All done for sharing! Remind your friends and family to download the app so you can know where they are! ";
 
 /*Share key activity text end
 _________________________________________________________________________________
 Delete member popup dialog text start*/
 "delete_user_title" = "Delete %s?";
-"confirm_delete_user_msg" = "Are you sure you want to delete this user? The user will not be able to locate you after you have deleted him/her.";
+"confirm_delete_user_msg" = "Are you sure you want to delete this user? This user will not be able to locate you after you have deleted him/her.";
 
 /*Delete member popup dialog text end
 _________________________________________________________________________________
@@ -259,22 +229,12 @@ Everything about tutorials*/
 /*activityVip*/
 "vip_benefits" = "For Unlimited Searches";
 
-/*noCreditsDialog*/
-"earn_searches_by_msg" = "Earn searches by";
-<<<<<<< Updated upstream
-
-/*noCreditsDialog*/
-"confirm_watch_ads_on_3g" = "Data charges may be incurred. Continue to advertisement?";
-
 /*ActivityMap*/
 "no_gps_nav_apps_found_error" = "No gps navigation apps found in your device.";
-<<<<<<< Updated upstream
-"apps_intro1" = "Studies have shown that you need at least 5 people close to you to have a quality life.";
+"apps_intro1" = "Studies have shown that you need at least 5 people, friends or family, to be close to you to have a quality social life.";
 "apps_intro2" = "These 5 people are the people you are willing to share location with, to allow them to find you easily and for you to know that they are safe, wherever they are.";
-"apps_intro3" = "Simplest locator to add your friend and family.\n1) Share your invite code";
-"apps_intro4" = "2) Ask them to follow instructions to install and click on a link";
-"apps_intro5" = "3) Know where they are";
+"apps_intro3" = "Now, a simple way to know where they are and to keep them close. \nFirst, you share your invite code.";
+"apps_intro4" = "Send them the invite code message, and remind them to install the apps by following the instructions.";
+"apps_intro5" = "Now, you can know where your loved ones are!";
 "apps_intro6" = "So who are the 5 most important people in you life?";
-=======
-
->>>>>>> Stashed changes
+"no_friend_popup_msg" = "You are 5 people away from a quality social life. Add your friends or family now?";
