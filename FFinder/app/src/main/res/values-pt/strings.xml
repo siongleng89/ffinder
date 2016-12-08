@@ -184,10 +184,10 @@ Share key activity text start -->
 <string name="share_subject">"Código de convite FFfinder"</string>
 
 <!-- Fuzzy -->
-<string name="share_msg">"Você é importante para mim! Olá, por favor, baixe o 5 pessoas - um localizador para encontrar seus amigos e familiares com um clique de forma GRATUITA na
+<string name="share_msg">"Você é importante para mim! Por favor, baixe DE GRAÇA o localizador Simple Friend and Family Finder para localizarmos um ao outro com um clique no link
 https://play.google.com/store/apps/details?id=com.ffinder.android&amp;referrer=%1$s
 
-Depois nos adicione clicando nesse link (Abra com FFfinder)
+Depois me adicione clicando nesse link (Abra com FFfinder)
 http://ff-finder.com/addnew/%2$s"</string>
 <string name="after_share_passcode_reminder">"Obrigado por compartilhar o seu código de convite, apenas aguarde até que seu amigo ou familiar adicione você e vocês poderão começar a se rastrearem mutuamente."</string>
 
@@ -246,7 +246,7 @@ Everything about tutorials -->
 <string name="error_location_disabled_msg">"O usuário desabilitou o compartilhamento de localização."</string>
 
 <!-- search_failed_dialog -->
-<string name="click_to_see_possible_reasons">"Clique para ver razões possíveis"</string>
+<string name="click_to_see_possible_reasons">"Clique para ver possíveis razões"</string>
 
 <!-- activityVip -->
 <string name="manage_subscriptions_introduction_ios">"Para gerenciar a inscrição,
@@ -261,12 +261,12 @@ Everything about tutorials -->
 
 <!-- ActivityMap -->
 <string name="no_gps_nav_apps_found_error">"Nenhum aplicativo de navegação GPS encontrado em seu dispositivo"</string>
-<string name="apps_intro1">"Estudos têm mostrado que você precisa de pelo menos 5 pessoas, amigos ou família, para estar perto de você para ter uma vida social de qualidade."</string>
-<string name="apps_intro2">"Essas 5 pessoas são as pessoas que estiverem dispostos a partilhar o local com, para lhes permitir encontrar você facilmente e para que você saiba que eles são seguros, onde quer que eles estejam."</string>
+<string name="apps_intro1">"Estudos têm mostrado que você precisa de pelo menos 5 pessoas, amigos ou família, para estarem perto de você e com isso você tenha uma vida social de qualidade."</string>
+<string name="apps_intro2">"Essas 5 pessoas estão dispostas a compartilhar o localização para permitir que você os encontre facilmente e para que você saiba que eles estão seguros, onde quer que eles estejam."</string>
 <string name="apps_intro3">"Agora, uma forma simples de saber onde eles estão e mantê-los próximo.
-Primeiro, você compartilhar seu código convidar"</string>
-<string name="apps_intro4">"Envie a eles o código de convidar mensagem e lembrá-los para instalar os aplicativos seguindo as instruções"</string>
-<string name="apps_intro5">"Agora você pode saber onde estão os vossos entes queridos!"</string>
-<string name="apps_intro6">"Quem são então os 5 pessoas mais importantes na vida você?"</string>
-<string name="no_friend_popup_msg">"Você são 5 pessoas de distância de uma vida social de qualidade. Adicionar os seus amigos ou família agora?"</string>
+Primeiro, você compartilha o seu código de convite."</string>
+<string name="apps_intro4">"Envie a eles a mensagem do código de convite e lembre-os de instalar os aplicativos seguindo as instruções."</string>
+<string name="apps_intro5">"Agora você pode saber onde estão os seus entes queridos!"</string>
+<string name="apps_intro6">"Então, quem são as 5 pessoas mais importantes na sua vida?"</string>
+<string name="no_friend_popup_msg">"Você está a 5 pessoas de distância de uma vida social de qualidade. Adicionar seus amigos ou família agora?"</string>
 </resources>

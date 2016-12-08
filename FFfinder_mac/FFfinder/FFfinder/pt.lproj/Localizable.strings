@@ -1,7 +1,7 @@
 
 /*Apps info start*/
 "app_name" = "FFfinder";
-"app_title_long" = "Localizador Simples de Amigos e Família";
+"app_title_long" = "5 pessoas - um localizador";
 
 /*Apps info end
  _________________________________________________________________________________ 
@@ -33,7 +33,6 @@ Common texts start*/
 _________________________________________________________________________________
 Launch Activity text start*/
 "welcome_msg_1" = "Bemvindo ao";
-"first_time_msg_content" = "Obrigado por nos escolher, você tem agora um localizador de amigos e família que:\n- Não consome a bateria no momento da pesquisa\n- Oferece certa privacidade, pois permite que você bloqueie a pesquisa e não rastreia todos os movimentos\n- Está livre de Publicidade\n";
 "required_location_provider_msg" = "FFfinder solicita que você habilite o serviço de localização";
 "btn_go_to_location_settings_text" = "Configuração de Localização";
 "some_permission_denied_toast_msg" = "Por favor, certifique-se de que todas as permissões necessárias foram fornecidas para iniciar o FFfinder\n";
@@ -86,22 +85,6 @@ Main Activity text start*/
 /*search_failed_dialog*/
 "btn_wait_autonotification_text" = "Aguardar a notificação automática";
 "search_left" = "Pesquisa Restante";
-
-/*noCreditsDialog*/
-"ran_out_free_search_msg" = "Você ficou sem pesquisas gratuitas, você pode ganhar pesquisas ao";
-
-/*noCreditsDialog*/
-"btn_watch_ads_earn_credits_text" = "Ver Anúncios";
-
-/*noCreditsDialog*/
-"btn_input_promo_code_earn_credits_text" = "Código Promocional";
-
-/*noCreditsDialog*/
-"btn_subscript_unlimited_searches_text" = "Se inscrever";
-
-/*noCreditsDialog*/
-"btn_maybe_next_time_text" = "Talvez da próxima vez";
-"no_ads_available_toast_msg" = "Sem anúncios disponíveis, as pesquisas gratuitas serão recompensadas.";
 "searching" = "Pesquisando";
 "auto_searching" = "Auto";
 "tap_plus_to_add_friend_family" = "+ Clique para adicionar amigo/família";
@@ -146,17 +129,6 @@ Map Activity text start*/
 "directions" = "Direções";
 "no_route_found_error_msg" = "Nenhuma rota encontrada";
 
-/*Map Activity text end
-_________________________________________________________________________________
-Promo Code Activity text start*/
-"promo_code_activity_title" = "Código promocional";
-"input_promo_code_title" = "Introduzir Código Promocional";
-"promo_code_title" = "Código Promocional:";
-"empty_promo_code_error_msg" = "Insira, por favor, um código promocional";
-"promo_code_failed_error_msg" = "Código promocional inválido ou você já utilizou esse código promocional nessa conta.";
-"checking_promo_code_msg" = "Verificando o código promocional…";
-"promo_code_success_msg" = "Código promocional ativado, você tem agora %s pesquisas gratuitas.";
-
 /*Promo Code Activity text end
 _________________________________________________________________________________
 Add member Activity text start*/
@@ -165,8 +137,6 @@ Add member Activity text start*/
 "user_key_title" = "Código de convite do seu amigo";
 "member_name_title" = "Como você aborda ele/ela?";
 "no_user_key_msg" = "Introduza, por favor, o código de convite do membro";
-"no_member_name_msg" = "Insira o nome do membro";
-"no_your_name_msg" = "Por favor, insira seu nome";
 "adding_friend_msg" = "Adicionando registro…";
 "user_already_added_error_msg" = "O usuário já existe na sua lista como %s";
 "key_expired_or_not_exist_msg" = "O código de convite não existe ou expirou.";
@@ -193,7 +163,7 @@ Share key activity text start*/
 "share_subject" = "Código de convite FFfinder";
 
 /*Fuzzy*/
-"share_msg" = "Olá, por favor, baixe o Simple Friend and Family Finder para encontrar seus amigos e familiares com um clique de forma GRATUITA na\nhttps://play.google.com/store/apps/details?id=com.ffinder.android&referrer=%1$s\n\nDepois nos adicione clicando nesse link (Abra com FFfinder)\nhttp://ff-finder.com/addnew/%2$s";
+"share_msg" = "Você é importante para mim! Por favor, baixe DE GRAÇA o localizador Simple Friend and Family Finder para localizarmos um ao outro com um clique no link\nhttps://play.google.com/store/apps/details?id=com.ffinder.android&referrer=%1$s\n\nDepois me adicione clicando nesse link (Abra com FFfinder)\nhttp://ff-finder.com/addnew/%2$s";
 "after_share_passcode_reminder" = "Obrigado por compartilhar o seu código de convite, apenas aguarde até que seu amigo ou familiar adicione você e vocês poderão começar a se rastrearem mutuamente.";
 
 /*Share key activity text end
@@ -251,7 +221,7 @@ Everything about tutorials*/
 "error_location_disabled_msg" = "O usuário desabilitou o compartilhamento de localização.";
 
 /*search_failed_dialog*/
-"click_to_see_possible_reasons" = "Clique para ver razões possíveis";
+"click_to_see_possible_reasons" = "Clique para ver possíveis razões";
 
 /*activityVip*/
 "manage_subscriptions_introduction_ios" = "Para gerenciar a inscrição,\n1) Executar o aplicativo Definições no seu iPhone ou iPad.\n2) Clique no iTunes & App Store.\n3) Clique no seu Apple ID no topo.\n4) Escolha Ver Apple ID no menu do popup.\n5) Clique em Gerenciamento abaixo de Inscrições.";
@@ -259,11 +229,12 @@ Everything about tutorials*/
 /*activityVip*/
 "vip_benefits" = "Para Pesquisas Ilimitadas";
 
-/*noCreditsDialog*/
-"earn_searches_by_msg" = "Ganhe pesquisas ao";
-
-/*noCreditsDialog*/
-"confirm_watch_ads_on_3g" = "Cobranças de dados podem acontecer. Continuar para a publicidade?";
-
 /*ActivityMap*/
 "no_gps_nav_apps_found_error" = "Nenhum aplicativo de navegação GPS encontrado em seu dispositivo";
+"apps_intro1" = "Estudos têm mostrado que você precisa de pelo menos 5 pessoas, amigos ou família, para estarem perto de você e com isso você tenha uma vida social de qualidade.";
+"apps_intro2" = "Essas 5 pessoas estão dispostas a compartilhar o localização para permitir que você os encontre facilmente e para que você saiba que eles estão seguros, onde quer que eles estejam.";
+"apps_intro3" = "Agora, uma forma simples de saber onde eles estão e mantê-los próximo.\nPrimeiro, você compartilha o seu código de convite.";
+"apps_intro4" = "Envie a eles a mensagem do código de convite e lembre-os de instalar os aplicativos seguindo as instruções.";
+"apps_intro5" = "Agora você pode saber onde estão os seus entes queridos!";
+"apps_intro6" = "Então, quem são as 5 pessoas mais importantes na sua vida?";
+"no_friend_popup_msg" = "Você está a 5 pessoas de distância de uma vida social de qualidade. Adicionar seus amigos ou família agora?";
