@@ -3,7 +3,7 @@
 
 <!-- Apps info start -->
 <string name="app_name">"FFfinder"</string>
-<string name="app_title_long">"Simple Friend and Family Finder"</string>
+<string name="app_title_long">"5 people - a locator"</string>
 
 <!-- Apps info end
  _________________________________________________________________________________ 
@@ -183,7 +183,7 @@ location once they have added you
 <string name="share_subject">"FFfinder Invite code"</string>
 
 <!-- Fuzzy -->
-<string name="share_msg">"You are important to me! Please download Simple Friend and Family Finder so that we can locate each other with a click for FREE at 
+<string name="share_msg">"You are important to me! Please download simple friend and family locator so that we can locate each other with a click for FREE at 
 https://play.google.com/store/apps/details?id=com.ffinder.android&amp;referrer=%1$s
 
 Then add me by clicking on this link (Open with FFfinder)
