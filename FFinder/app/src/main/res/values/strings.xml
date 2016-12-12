@@ -184,10 +184,10 @@ location once they have added you
 
 <!-- Fuzzy -->
 <string name="share_msg">"You are important to me! Please download simple friend and family locator so that we can locate each other with a click for FREE at 
-https://play.google.com/store/apps/details?id=com.ffinder.android&amp;referrer=%1$s
+https://ff-finder.com/download?referrer=%1$s
 
 Then add me by clicking on this link (Open with FFfinder)
-http://ff-finder.com/addnew/%2$s"</string>
+https://ff-finder.com/addnew/%2$s"</string>
 <string name="after_share_passcode_reminder">"All done for sharing! Remind your friends and family to download the app so you can know where they are! "</string>
 
 <!-- Share key activity text end
