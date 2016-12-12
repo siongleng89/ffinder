@@ -163,7 +163,7 @@ Share key activity text start*/
 "share_subject" = "Código de convite FFfinder";
 
 /*Fuzzy*/
-"share_msg" = "Você é importante para mim! Por favor, baixe DE GRAÇA o localizador Simple Friend and Family Finder para localizarmos um ao outro com um clique no link\nhttps://play.google.com/store/apps/details?id=com.ffinder.android&referrer=%1$s\n\nDepois me adicione clicando nesse link (Abra com FFfinder)\nhttp://ff-finder.com/addnew/%2$s";
+"share_msg" = "Você é importante para mim! Por favor, baixe DE GRAÇA o localizador Simple Friend and Family Finder para localizarmos um ao outro com um clique no link\nhttps://ff-finder.com/download?referrer=%1$s\n\nDepois me adicione clicando nesse link (Abra com FFfinder)\nhttps://ff-finder.com/addnew/%2$s";
 "after_share_passcode_reminder" = "Obrigado por compartilhar o seu código de convite, apenas aguarde até que seu amigo ou familiar adicione você e vocês poderão começar a se rastrearem mutuamente.";
 
 /*Share key activity text end
