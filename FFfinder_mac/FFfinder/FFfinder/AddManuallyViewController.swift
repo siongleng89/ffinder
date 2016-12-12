@@ -193,7 +193,7 @@ class AddManuallyViewController: MyViewController {
             self.myModel.sortFriendModels()
             self.myModel.commitFriendUserIds()
             
-            self.hideLoading()
+            OverlayBuilder.forceCloseAllOverlays()
             NotificationCenter.default.post(name: .needToReloadWholeFriendsList, object: nil)
             
             self.popToMainVc()

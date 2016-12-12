@@ -194,6 +194,7 @@ class OverlayBuilder{
                 popup.addButtons([buttonOk, buttonCancel])
                 
             }
+           
             
             
             
@@ -246,6 +247,11 @@ class OverlayBuilder{
         OverlayBuilder.textboxController = nil
     }
     
+    public static func forceCloseLoading(){
+        OverlayBuilder.alertController?.dismiss(animated: false, completion: nil)
+        
+        OverlayBuilder.alertController = nil
+    }
     
     
     private func getChoiceToRun(_ index:Int) -> (()->Void)?{

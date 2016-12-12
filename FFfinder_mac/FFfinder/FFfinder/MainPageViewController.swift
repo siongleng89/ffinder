@@ -64,6 +64,7 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         refreshFriendList()
         checkNeedToShowNoFriendReminder()
         setAddFriendReminderAlarm()
+        autoSearchIfFirstTime()
      
     }
     
@@ -78,7 +79,8 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) ->       UITableViewCell{
         
-        if indexPath.row <= self.myModel.friendModels.count - 1{
+        if indexPath.row <= self.myModel.friendModels.count - 1 &&
+            self.myModel.friendModels.count != 0{
             let cell:FriendTableViewCell! = tableView.dequeueReusableCell(withIdentifier: friendTableCellIdentifier, for:indexPath)as! FriendTableViewCell
             let friendModel:FriendModel = self.myModel.friendModels[indexPath.row]
             cell.update(friendModel, self.myModel, self)
@@ -180,6 +182,27 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
             }
         })
     }
+    
+    private func autoSearchIfFirstTime(){
+        if firstTimeRun!{
+            var finalIndex = -1
+            
+            for i in 0 ..< self.myModel.friendModels.count {
+                if self.myModel.friendModels[i].userId == self.myModel.userId{
+                    finalIndex = i
+                    break
+                }
+            }
+            
+            if finalIndex >= 0{
+                let indexPath = IndexPath(row: finalIndex, section: 0)
+                Threadings.postMainThread {
+                    (self.friendsTableView.cellForRow(at: indexPath) as? FriendTableViewCell)?.startSearch()
+                }
+            }
+        }
+    }
+    
     
     private func checkHasPendingAddUser(){
         if let _ = Vars.pendingUserKey{

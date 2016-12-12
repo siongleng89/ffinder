@@ -23,9 +23,7 @@ class SearchButton:UIView{
     private var animating:Bool = false
     
     override func awakeFromNib() {
-        
-        
-        
+         self.setStatus("search".localized)
     }
     
     func xibSetup() {

@@ -209,6 +209,7 @@
 		6CE958581DDB50FF0033B0A7 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE958571DDB50FF0033B0A7 /* UIImageExtension.swift */; };
 		6CEAFAA51DF7E9A500312289 /* LocationUpdateTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEAFAA41DF7E9A500312289 /* LocationUpdateTask.swift */; };
 		6CEAFAA71DF842B900312289 /* FFIconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEAFAA61DF842B900312289 /* FFIconButton.swift */; };
+		6CF90EAB1DFEA72D009B2BC0 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF90EAA1DFEA72D009B2BC0 /* TestViewController.swift */; };
 		6CF9502D1DFBAAE800724D67 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF9502C1DFBAAE800724D67 /* TabButton.swift */; };
 		6CF9502F1DFBAAF000724D67 /* TabButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6CF9502E1DFBAAF000724D67 /* TabButton.xib */; };
 		6CF950311DFBB6A400724D67 /* MapIcon.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6CF950301DFBB6A400724D67 /* MapIcon.xib */; };
@@ -454,6 +455,7 @@
 		6CEAFAA41DF7E9A500312289 /* LocationUpdateTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationUpdateTask.swift; sourceTree = "<group>"; };
 		6CEAFAA61DF842B900312289 /* FFIconButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFIconButton.swift; sourceTree = "<group>"; };
 		6CF90EA91DFE8B3C009B2BC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "FFfinder/zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		6CF90EAA1DFEA72D009B2BC0 /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		6CF9502C1DFBAAE800724D67 /* TabButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		6CF9502E1DFBAAF000724D67 /* TabButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TabButton.xib; sourceTree = "<group>"; };
 		6CF950301DFBB6A400724D67 /* MapIcon.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapIcon.xib; sourceTree = "<group>"; };
@@ -784,6 +786,7 @@
 				6C8FB30C1DFAC8B900BB75A5 /* MapViewController.swift */,
 				6CF9503A1DFBE5B500724D67 /* PagingViewController.swift */,
 				6CF9503C1DFBE5CA00724D67 /* SinglePageViewController.swift */,
+				6CF90EAA1DFEA72D009B2BC0 /* TestViewController.swift */,
 			);
 			name = viewControllers;
 			sourceTree = "<group>";
@@ -1375,6 +1378,7 @@
 				6CCABA3C1DACA471009831B8 /* LaunchViewController.swift in Sources */,
 				6C941C2C1DF6BB2C0050EC82 /* SearchButtonPools.swift in Sources */,
 				6C082AC61DDB091A0098DE7E /* NavItemActionType.swift in Sources */,
+				6CF90EAB1DFEA72D009B2BC0 /* TestViewController.swift in Sources */,
 				6C8F37E01DAE785B00D7291F /* FirebaseModelProtocol.swift in Sources */,
 				6CF950371DFBDF8500724D67 /* TapToAddTableViewCell.swift in Sources */,
 				6C72DDE61DADF7560065EF02 /* MyViewController.swift in Sources */,

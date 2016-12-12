@@ -17,4 +17,5 @@ enum PreferenceType:String{
     case Language
     case LastSentAutoNotification
     case DontRemindBlockSearch
+    case SeenShareKeyTutorial
 }

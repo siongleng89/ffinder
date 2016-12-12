@@ -14,6 +14,7 @@ class SinglePageViewController:UIViewController{
     var labelText:String?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         label.text = labelText
     }
     

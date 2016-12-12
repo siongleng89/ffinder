@@ -26,6 +26,8 @@ class ShareKeyViewController: MyViewController {
         self.imageViewHelp?.isUserInteractionEnabled = true
         self.imageViewHelp?.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                                     action: #selector(onHelpTapped)))
+        
+        
     }
     
     private func checkKey(){
@@ -39,9 +41,8 @@ class ShareKeyViewController: MyViewController {
                     labelKey.text = myModel.userKey
                     labelExpiredAt.text =  "expired_at_title".localized.format(String(DateTimeUtils.convertUnixTimeToDateTime(
                         UInt64(myModel.userKeyGeneratedUnixTime!)! + Constants.KeyExpiredTotalSecs)))
-                        
                     
-                        
+                    self.checkShouldShowTutorial()
                     
                     
                     //no need for regenerate key as it is still valid
@@ -57,7 +58,11 @@ class ShareKeyViewController: MyViewController {
     
     //generate new key
     private func startGenerateNewKey(){
-        showLoading(Message: "regenerating_key_msg".localized)
+        
+        OverlayBuilder.build().setOverlayType(OverlayType.Loading)
+                .setMessage("regenerating_key_msg".localized)
+                .show()
+        
         
         Threadings.runInBackground {
             var success:Bool = false
@@ -83,24 +88,48 @@ class ShareKeyViewController: MyViewController {
             }
             
             Threadings.postMainThread {
-                self.hideLoading()
+                OverlayBuilder.forceCloseLoading()
                 self.checkKey()
             }
         }
     }
     
+    private func checkShouldShowTutorial(){
+        let seen:String? = Preferences.get(PreferenceType.SeenShareKeyTutorial)
+        if seen == nil || (seen != nil && seen != "1"){
+            
+            OverlayBuilder.build().setOverlayType(OverlayType.OkOrCancel)
+                .setMessage("first_time_see_passcode".localized)
+                .setOnChoices ({
+                    Preferences.put(PreferenceType.SeenShareKeyTutorial, "1")
+                    self.performSegue(withIdentifier: "ShareKeyToPagingSegue", sender: nil)
+                    }, {
+                        Preferences.put(PreferenceType.SeenShareKeyTutorial, "1")
+                })
+                .setVc(self)
+                .show()
+        }
+    }
+    
     
     @IBAction func onBtnRefreshTapped(_ sender: AnyObject) {
-        showConfirmDialog(message: "regen_key_confirm_msg".localized, positiveToRun: {
-            self.startGenerateNewKey()
-        })
+        
+        OverlayBuilder.build().setMessage("regen_key_confirm_msg".localized)
+                .setOverlayType(OverlayType.OkOrCancel)
+            .setOnChoices({
+                OverlayBuilder.forceCloseAllOverlays()
+                self.startGenerateNewKey()
+            }).show()
     }
     
     @IBAction func onBtnShareTapped(_ sender: AnyObject) {
         
-        let shareContent = "share_msg".localized
+        var shareContent = "share_msg".localized.format(self.myModel.userKey!, self.myModel.userKey!)
+        shareContent = shareContent.replacingOccurrences(of: "\n", with: "<br/>")
         
         let activityViewController = UIActivityViewController(activityItems: [shareContent as NSString], applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view
+        
         present(activityViewController, animated: true, completion: nil)
         
     }

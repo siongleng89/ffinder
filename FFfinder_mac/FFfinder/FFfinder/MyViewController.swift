@@ -29,14 +29,18 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
     override func viewDidLoad() {
         let app = UIApplication.shared
         let statusBarHeight: CGFloat = app.statusBarFrame.size.height
-
+        
         if let nav = self.navigationController{
             let view = UIView(frame: CGRect(x: 0, y: -statusBarHeight,
                                             width: UIScreen.main.bounds.size.width, height: 20))
             view.backgroundColor = UIColor.colorStatusBar()
             nav.navigationBar.addSubview(view)
             
+            nav.navigationBar.barTintColor = UIColor.colorStatusBar()
             nav.navigationBar.tintColor = UIColor.colorContrast()
+            
+            nav.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.colorContrast()]
+            
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         }
         else{
@@ -49,7 +53,16 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
     
     override func viewWillDisappear(_ animated: Bool) {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-
+        
+    }
+    
+    func hideNavBar(){
+        if let nav = self.navigationController{
+            nav.navigationBar.barTintColor = UIColor.clear
+            nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            nav.navigationBar.shadowImage = UIImage()
+        }
+        
     }
     
     
@@ -97,23 +110,6 @@ class MyViewController : UIViewController, UIPopoverPresentationControllerDelega
         self.present(popoverContent, animated: true, completion: nil)
     }
     
-    func showLoading(Message msg:String = "loading".localized){
-        alertController = UIAlertController(title: nil, message: msg, preferredStyle: .alert)
-        
-        alertController!.view.tintColor = UIColor.black
-        let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(
-            frame: CGRect(x:10, y:5, width:50, height:50)) as UIActivityIndicatorView
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
-        loadingIndicator.startAnimating();
-        
-        alertController!.view.addSubview(loadingIndicator)
-        self.present(alertController!, animated: true, completion: nil)
-    }
-    
-    func hideLoading(onComplete complete:(()->Void)? = nil){
-        alertController?.dismiss(animated: true, completion: complete)
-    }
     
     func showConfirmDialog(title:String? = "", message:String? = "",
                            positiveText:String? = "ok".localized,

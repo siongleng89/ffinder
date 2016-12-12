@@ -16,10 +16,7 @@ class SetupViewController: MyViewController {
     @IBOutlet weak var loadingIcon: UIActivityIndicatorView!
     @IBOutlet weak var imageViewRetryIcon: UIImageView!
     var keychain:KeychainSwift?
-    
-    override func viewDidLoad() {
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
+
     
     override func viewDidAppear(_ animated: Bool) {
         AnimateBuilder.build(imageViewRetryIcon).setAnimateType(AnimateType.RotateBy)
@@ -67,7 +64,7 @@ class SetupViewController: MyViewController {
                 
                 
                 //save user token into database
-                self.saveUser(finalUserId,
+                self.saveUser(finalUserId, 0,
                               {(exception2:SetupException?) in
                                 
                                 guard exception2 == nil else{
@@ -133,20 +130,36 @@ class SetupViewController: MyViewController {
     }
     
     
-    private func saveUser(_ userId:String, _ callback: @escaping (SetupException?) -> Void){
+    private func saveUser(_ userId:String, _ count:Int, _ callback: @escaping (SetupException?) -> Void){
        
-        let token:String? = FIRInstanceID.instanceID().token()
-        guard token != nil else{
-            callback(SetupException.DBFailed)
-            return;
+        Threadings.runInBackground {
+            let token:String? = FIRInstanceID.instanceID().token()
+            guard token != nil else{
+                
+                if count > 3{
+                    Threadings.postMainThread {
+                        callback(SetupException.DBFailed)
+                    }
+                    
+                }
+                else{
+                    Threadings.sleep(3000)
+                    self.saveUser(userId, count + 1, callback)
+                }
+               
+                return;
+            }
+            
+            Threadings.postMainThread {
+                FirebaseDB.updateUserToken(userId, token!,
+                                           {(status) in
+                                            callback(status == Status.Success ? nil :
+                                                SetupException.DBFailed)
+                    }
+                )
+            }
+
         }
-        
-        FirebaseDB.updateUserToken(userId, token!,
-                                   {(status) in
-                                        callback(status == Status.Success ? nil :
-                                            SetupException.DBFailed)
-                                    }
-        )
     }
     
     private func finishProcessAndGoToNextScreen(){

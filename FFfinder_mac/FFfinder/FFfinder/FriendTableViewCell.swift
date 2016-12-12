@@ -331,7 +331,7 @@ class FriendTableViewCell: UITableViewCell {
         self.friendModel?.notificateChanged()
     }
     
-    @objc private func startSearch(){
+    @objc public func startSearch(){
         
         if let searchResult = self.friendModel?.searchResult{
             if searchResult.errorTriggeredAutoNotification(){

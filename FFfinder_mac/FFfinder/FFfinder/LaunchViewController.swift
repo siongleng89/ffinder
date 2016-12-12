@@ -16,20 +16,19 @@ class LaunchViewController: MyViewController, CLLocationManagerDelegate {
     private var locationManager: CLLocationManager?
     
     
-    override func viewDidLoad() {
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-    
     //must check at viewDidAppear since we cannot go to another view controller in viewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         locationManager = CLLocationManager()
         if !IOSUtils.checkLocationServiceEnabledAndRequestIfNeeded(locationManager){
-            showConfirmDialog(title: "", message: "some_permission_denied_toast_msg".localized, positiveText: "ok", positiveToRun: {
-                    UIApplication.shared.openURL(NSURL(string: UIApplicationOpenSettingsURLString)! as URL)
-                    self.checkNeedToShowIntroduction();
-                }, negativeToRun: {
-                    self.checkNeedToShowIntroduction();
-            })
+            
+            OverlayBuilder.build().setMessage("location_service_change_denied".localized)
+                    .setOverlayType(OverlayType.OkOrCancel)
+                .setOnChoices({
+                     UIApplication.shared.openURL(NSURL(string: UIApplicationOpenSettingsURLString)! as URL)
+                        self.checkNeedToShowIntroduction()
+                    }, {
+                        self.checkNeedToShowIntroduction()
+                }).show()
             
         }
         else{

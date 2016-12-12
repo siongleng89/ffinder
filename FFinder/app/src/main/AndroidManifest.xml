@@ -321,6 +321,14 @@
                         android:host="www.ff-finder.com"
                         android:pathPrefix="/addnew/"
                         android:scheme="http"/>
+                <data
+                        android:host="ff-finder.com"
+                        android:pathPrefix="/addnew/"
+                        android:scheme="https"/>
+                <data
+                        android:host="www.ff-finder.com"
+                        android:pathPrefix="/addnew/"
+                        android:scheme="https"/>
             </intent-filter>
         </activity>
         <activity android:name=".ActivityIntro">

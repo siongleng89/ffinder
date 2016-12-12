@@ -35,7 +35,7 @@
                                 <constraint firstAttribute="width" constant="40" id="XQJ-dA-EtT"/>
                             </constraints>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QO6-y1-XBg">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="search" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QO6-y1-XBg" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="ex6-4h-qgL"/>
                             </constraints>

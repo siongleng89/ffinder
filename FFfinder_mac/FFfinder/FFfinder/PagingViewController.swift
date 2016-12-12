@@ -23,6 +23,7 @@ class PagingViewController:UIPageViewController{
             initAppsIntro()
             self.navigationItem.hidesBackButton = true
             let button1 = UIBarButtonItem(image: UIImage(named: "SaveIcon"), style: .plain, target: self, action: #selector(closeTapped))
+            button1.tintColor = UIColor.colorContrast()
             self.navigationItem.rightBarButtonItem  = button1
         }
         else if type == PagingType.TutorialShareKey{

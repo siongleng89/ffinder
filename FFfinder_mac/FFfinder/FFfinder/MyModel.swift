@@ -177,15 +177,17 @@ class MyModel:EVObject{
             friendUserIds = friendUserIdsString.components(separatedBy: ",")
             
             for userId in friendUserIds{
-                let friendModel:FriendModel = FriendModel()
-                friendModel.userId = userId
-                friendModel.load()
-                
-                if friendModel.searchStatus != SearchStatus.End{
-                    friendModel.searchStatus = SearchStatus.End
-                    friendModel.save()
+                if !StringsHelper.isEmpty(userId){
+                    let friendModel:FriendModel = FriendModel()
+                    friendModel.userId = userId
+                    friendModel.load()
+                    
+                    if friendModel.searchStatus != SearchStatus.End{
+                        friendModel.searchStatus = SearchStatus.End
+                        friendModel.save()
+                    }
+                    addFriendModel(friendModel)
                 }
-                addFriendModel(friendModel)
             }
         }
     }
