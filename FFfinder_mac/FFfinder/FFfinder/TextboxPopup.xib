@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11521.1" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11517.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TextboxPopupViewController" customModule="FFfinder" customModuleProvider="target">
+            <connections>
+                <outlet property="labelTitle" destination="W9G-q2-dwZ" id="cih-jH-Vt0"/>
+                <outlet property="textField" destination="AGG-6t-Ez6" id="9Xt-uN-api"/>
+                <outlet property="view" destination="iN0-l3-epB" id="5rk-UX-ceS"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="120"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9G-q2-dwZ">
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AGG-6t-Ez6">
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="W9G-q2-dwZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="3kb-NK-285"/>
+                <constraint firstAttribute="trailing" secondItem="AGG-6t-Ez6" secondAttribute="trailing" constant="10" id="6n5-me-Dkh"/>
+                <constraint firstAttribute="bottom" secondItem="AGG-6t-Ez6" secondAttribute="bottom" constant="20" id="895-ah-BV1"/>
+                <constraint firstItem="AGG-6t-Ez6" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="F2A-LJ-szT"/>
+                <constraint firstAttribute="trailing" secondItem="W9G-q2-dwZ" secondAttribute="trailing" constant="20" id="aFW-3X-sot"/>
+                <constraint firstItem="AGG-6t-Ez6" firstAttribute="top" secondItem="W9G-q2-dwZ" secondAttribute="bottom" constant="10" id="pIW-Ot-jIK"/>
+                <constraint firstItem="W9G-q2-dwZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="qdG-2K-K4r"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="44.5" y="125"/>
+        </view>
+    </objects>
+</document>

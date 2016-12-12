@@ -218,6 +218,7 @@ class SearchTask{
     
     private func setResult(_ searchResult:SearchResult){
         Logs.show("New search result \(searchResult)")
+        self.finish = true
         self.friendModel.searchStatus = SearchStatus.End
         self.friendModel.searchResult = searchResult
         self.friendModel.recentlyFinished = true

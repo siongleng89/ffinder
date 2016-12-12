@@ -17,8 +17,8 @@ class SettingsViewController:MyViewController, UITableViewDelegate, UITableViewD
         
         settingsList = Array<SettingItem>()
         settingsList?.append(SettingItem("add_new_member_manually_title".localized, SettingType.AddNewMember))
-         settingsList?.append(SettingItem("known_issues_title".localized, SettingType.KnownIssue))
-         settingsList?.append(SettingItem("vip_title".localized, SettingType.Vip))
+//         settingsList?.append(SettingItem("known_issues_title".localized, SettingType.KnownIssue))
+//         settingsList?.append(SettingItem("vip_title".localized, SettingType.Vip))
          settingsList?.append(SettingItem("settings_item_language_title".localized, SettingType.Language))
         
         let yourNibName = UINib(nibName: "NormalTableViewCell", bundle: nil)

@@ -30,7 +30,10 @@ class AddManuallyViewController: MyViewController {
         if let pendingKey = Vars.pendingUserKey{
             txtWrapperKey.setText(pendingKey)
             Vars.pendingUserKey = nil
+            validateAndSubmit()
         }
+        
+        setListeners()
         
     }
     
@@ -212,6 +215,17 @@ class AddManuallyViewController: MyViewController {
         validateAndSubmit()
     }
     
+    private func setListeners(){
+        self.txtWrapperKey.setHelpTapped {
+            self.performSegue(withIdentifier: "AddToPagingSegue", sender: nil)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AddToPagingSegue"{
+            (segue.destination as! PagingViewController).type = PagingType.TutorialKey
+        }
+    }
     
     enum AddUserErrorType{
         case KeyNotExistOrOutdated

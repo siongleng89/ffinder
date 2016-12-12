@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseInstanceID
+import Kingfisher
 
 class FriendTableViewCell: UITableViewCell {
     private var friendModel:FriendModel?
@@ -27,13 +28,15 @@ class FriendTableViewCell: UITableViewCell {
     @IBOutlet weak var errorView: UIView!
     
     @IBOutlet weak var buttonDelete: FFIconButton!
+    @IBOutlet weak var buttonMap: FFIconButton!
+    @IBOutlet weak var buttonBlock: FFIconButton!
+    
     private var searchButton:SearchButton?
     private var friendTableViewProtocol:FriendTableViewProtocol?
-    
+    private var friendTableProtocol:FriendTableViewProtocol?
     
     
     override func awakeFromNib() {
-       
         super.awakeFromNib()
         // Initialization code
         
@@ -42,6 +45,9 @@ class FriendTableViewCell: UITableViewCell {
         self.imageViewProfile.clipsToBounds = true
         self.imageViewProfile.layer.borderWidth = 1.0
         self.imageViewProfile.layer.borderColor = UIColor.colorPrimaryDark().cgColor
+        self.imageViewProfile.isUserInteractionEnabled = true
+        
+        self.labelName.isUserInteractionEnabled = true
         
         setListeners()
     }
@@ -57,10 +63,13 @@ class FriendTableViewCell: UITableViewCell {
         set(newVal) {}
     }
     
-    public func update(_ friendModel:FriendModel, _ myModel:MyModel){
+    public func update(_ friendModel:FriendModel, _ myModel:MyModel,
+                       _ friendProtocol:FriendTableViewProtocol){
         Logs.show("Updating friend...")
+        self.friendTableProtocol = friendProtocol
         
         self.searchButton = SearchButtonPools.getSearchButton(friendModel.userId!)
+        self.searchButton?.onAppearing()
         
         if let recognizers = self.searchButton?.gestureRecognizers{
             for recognizer: UIGestureRecognizer in recognizers {
@@ -74,6 +83,12 @@ class FriendTableViewCell: UITableViewCell {
         
         self.friendModel = friendModel
         self.myModel = myModel
+        
+        let filename = IOSUtils.getDocumentsDirectory()
+            .appendingPathComponent("\(friendModel.userId!).png")
+        
+        
+        self.imageViewProfile.kf.setImage(with: filename)
         
         labelName.text = friendModel.username
         labelShortName.text = StringsHelper.safeSubstring(friendModel.username, 2).uppercased()
@@ -128,7 +143,15 @@ class FriendTableViewCell: UITableViewCell {
                     self.searchButton?.setFlower(FlowerType.Ending, extra: "autoSearching")
                 }
                 else{
-                    self.searchButton?.setFlower(FlowerType.Ending, extra: "searchSuccess")
+                    
+                    if (self.friendModel?.searchResult?.isError())!{
+                        self.searchButton?.setFlower(FlowerType.Ending, extra: "error")
+                    }
+                    else{
+                        self.searchButton?.setFlower(FlowerType.Ending, extra: "searchSuccess")
+                    }
+                    
+                    
                 }
             }
             else{
@@ -137,7 +160,13 @@ class FriendTableViewCell: UITableViewCell {
                         self.searchButton?.setFlower(FlowerType.AutoSearching, animate: false)
                     }
                     else{
-                        self.searchButton?.setFlower(FlowerType.Satisfied)
+                        if (searchResult.isError()){
+                            self.searchButton?.setFlower(FlowerType.Sleeping)
+                        }
+                        else{
+                            //todo: if more than one day put flower sleep
+                            self.searchButton?.setFlower(FlowerType.Satisfied)
+                        }
                     }
                 }
                 else{
@@ -160,6 +189,32 @@ class FriendTableViewCell: UITableViewCell {
             }
             
         }
+        
+        
+        if (self.friendModel?.blocked)!{
+            self.buttonBlock.setIsBtnSelected(true)
+        }
+        else{
+            self.buttonBlock.setIsBtnSelected(false)
+        }
+        
+        if let locationModel = self.friendModel?.locationModel{
+            if let latitude = locationModel.latitude{
+                if !StringsHelper.isEmpty(latitude){
+                    self.buttonMap.isEnabled = true
+                }
+                else{
+                    self.buttonMap.isEnabled = false
+                }
+            }
+            else{
+                self.buttonMap.isEnabled = false
+            }
+        }
+        else{
+            self.buttonMap.isEnabled = false
+        }
+        
         
        
        
@@ -209,6 +264,67 @@ class FriendTableViewCell: UITableViewCell {
        
     }
     
+    func onBlockTapped(){
+        
+        if (self.friendModel?.blocked)!{
+            self.friendModel?.blocked = false
+            self.friendModel?.save()
+            self.updateBlockUserDatabase()
+            self.friendModel?.notificateChanged()
+        }
+        else{
+            
+            if let _ = Preferences.get(PreferenceType.DontRemindBlockSearch){
+                self.friendModel?.blocked = true
+                self.friendModel?.save()
+                self.updateBlockUserDatabase()
+                self.friendModel?.notificateChanged()
+            }
+            else{
+                OverlayBuilder.build().setOverlayType(OverlayType.OkOrCancel)
+                    .setTitle("block_dialog_title".localized.format((self.friendModel?.username)!))
+                    .setMessage("block_dialog_content".localized.format((self.friendModel?.username)! , (self.friendModel?.username)!))
+                    .setCheckboxTitle("dont_show_this_again".localized)
+                    .setOnChoices ({
+                        self.checkUserTickDontShowBlockMessageAgain()
+                        self.friendModel?.blocked = true
+                        self.friendModel?.save()
+                        self.updateBlockUserDatabase()
+                        self.friendModel?.notificateChanged()
+                        }, {
+                            self.checkUserTickDontShowBlockMessageAgain()
+                            
+                    })
+                    .show()
+
+            }
+            
+        }
+    
+    }
+    
+    func updateBlockUserDatabase(){
+     FirebaseDB.changeBlockUser((self.myModel?.userId)!, (self.friendModel?.userId)!, (self.friendModel?.blocked)!, nil)
+    }
+    
+    func checkUserTickDontShowBlockMessageAgain(){
+        if OverlayBuilder.isChecked(){
+            Preferences.put(PreferenceType.DontRemindBlockSearch, "1")
+        }
+    }
+    
+    func onProfileImageTapped(){
+        friendTableProtocol?.onRequestPickImage(self.friendModel!)
+    }
+    
+    func onNameTapped(){
+        friendTableProtocol?.onRequestChangeName(self.friendModel!)
+    }
+    
+    func onMapTapped(){
+        friendTableProtocol?.onRequestShowMap(self.friendModel!)
+    }
+    
     @IBAction func onCloseErrorTapped(_ sender: AnyObject) {
         self.friendModel?.hideErrorMsg = true
         self.friendModel?.save()
@@ -216,10 +332,45 @@ class FriendTableViewCell: UITableViewCell {
     }
     
     @objc private func startSearch(){
-        SearchPools.newTask(friendModel!, myModel!)
+        
+        if let searchResult = self.friendModel?.searchResult{
+            if searchResult.errorTriggeredAutoNotification(){
+                
+                let autoSearchVc = WaitAutoNotificationPopupViewController(nibName: "WaitAutoNotificationPopupView", bundle: nil)
+                
+                OverlayBuilder.build().setCustomVc(autoSearchVc)
+                .setOverlayType(OverlayType.Nothing).show()
+                
+                autoSearchVc.onSearchAgainChosen = {
+                    OverlayBuilder.forceCloseAllOverlays()
+                    SearchPools.newTask(self.friendModel!, self.myModel!)
+                }
+                
+                autoSearchVc.onWaitAutoNotificationChosen = {
+                    OverlayBuilder.forceCloseAllOverlays()
+                }
+                
+                return
+            }
+        }
+        
+       SearchPools.newTask(friendModel!, myModel!)
+        
+        
     }
     
     private func setListeners(){
+        
+        if let recognizers = self.buttonMap?.gestureRecognizers{
+            for recognizer: UIGestureRecognizer in recognizers {
+                self.buttonMap?.removeGestureRecognizer(recognizer)
+            }
+        }
+        
+        self.buttonMap?.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                       action: #selector(onMapTapped)))
+        
+        
         if let recognizers = self.buttonDelete?.gestureRecognizers{
             for recognizer: UIGestureRecognizer in recognizers {
                 self.buttonDelete?.removeGestureRecognizer(recognizer)
@@ -228,6 +379,35 @@ class FriendTableViewCell: UITableViewCell {
         
         self.buttonDelete?.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                                        action: #selector(onDeleteTapped)))
+        
+        
+        
+        if let recognizers = self.buttonDelete?.gestureRecognizers{
+            for recognizer: UIGestureRecognizer in recognizers {
+                self.buttonBlock?.removeGestureRecognizer(recognizer)
+            }
+        }
+        
+        self.buttonBlock?.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                       action: #selector(onBlockTapped)))
+        
+        if let recognizers = self.imageViewProfile?.gestureRecognizers{
+            for recognizer: UIGestureRecognizer in recognizers {
+                self.imageViewProfile?.removeGestureRecognizer(recognizer)
+            }
+        }
+        
+        self.imageViewProfile?.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                      action: #selector(onProfileImageTapped)))
+        
+        if let recognizers = self.labelName?.gestureRecognizers{
+            for recognizer: UIGestureRecognizer in recognizers {
+                self.labelName?.removeGestureRecognizer(recognizer)
+            }
+        }
+        
+        self.labelName?.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                           action: #selector(onNameTapped)))
     }
    
     

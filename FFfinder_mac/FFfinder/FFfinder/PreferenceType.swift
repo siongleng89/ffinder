@@ -16,4 +16,5 @@ enum PreferenceType:String{
     case LastLocation
     case Language
     case LastSentAutoNotification
+    case DontRemindBlockSearch
 }

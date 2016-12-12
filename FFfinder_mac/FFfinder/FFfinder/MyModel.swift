@@ -226,13 +226,23 @@ class MyModel:EVObject{
         return nil
     }
  
+    public func getNonSelfFriendModelsCount() -> Int{
+        if(self.friendModels.count == 1 && getFriendModelById(self.userId!) != nil){
+            return 0
+        }
+        else{
+            return self.friendModels.count
+        }
+    }
+
+    
     public func checkFriendExist(_ userId:String) -> Bool{
         return getFriendModelById(userId) != nil
     }
     
     
     public func sortFriendModels(){
-        self.friendModels = self.friendModels.sorted { $0.username! < $1.username! }
+        self.friendModels = self.friendModels.sorted { ($0.username?.lowercased())! < ($1.username?.lowercased())! }
     }
     
     

@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TextFieldWrapper" customModule="FFfinder" customModuleProvider="target">
             <connections>
+                <outlet property="imageViewHelp" destination="xUo-YA-SIb" id="gS5-be-aVo"/>
                 <outlet property="labelError" destination="VcO-5p-KQy" id="7I7-mx-uFt"/>
                 <outlet property="labelTitle" destination="G90-m4-kjE" id="BEI-gb-BQ3"/>
                 <outlet property="textField" destination="jEg-3u-pAu" id="VrI-1W-xHI"/>
@@ -40,14 +41,22 @@
                     <color key="textColor" red="1" green="0.35686274509803922" blue="0.27058823529411763" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="QuestionIcon" translatesAutoresizingMaskIntoConstraints="NO" id="xUo-YA-SIb">
+                    <constraints>
+                        <constraint firstAttribute="width" constant="22" id="VSB-S7-kbu"/>
+                        <constraint firstAttribute="height" constant="22" id="vEq-Sr-Tah"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="VcO-5p-KQy" firstAttribute="top" secondItem="jEg-3u-pAu" secondAttribute="bottom" constant="8" id="3vU-oq-p8e"/>
+                <constraint firstItem="xUo-YA-SIb" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="9ma-xN-na0"/>
                 <constraint firstItem="G90-m4-kjE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="JAL-Tv-Fx0"/>
                 <constraint firstItem="jEg-3u-pAu" firstAttribute="leading" secondItem="VcO-5p-KQy" secondAttribute="leading" id="Vhx-nT-Bwf"/>
                 <constraint firstItem="VcO-5p-KQy" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="VtT-UB-YQt"/>
                 <constraint firstItem="G90-m4-kjE" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="fAc-rM-scj"/>
+                <constraint firstItem="xUo-YA-SIb" firstAttribute="leading" secondItem="G90-m4-kjE" secondAttribute="trailing" constant="15" id="gy6-Z5-WJX"/>
                 <constraint firstAttribute="trailing" secondItem="jEg-3u-pAu" secondAttribute="trailing" id="iBh-ub-ubx"/>
                 <constraint firstItem="jEg-3u-pAu" firstAttribute="top" secondItem="G90-m4-kjE" secondAttribute="bottom" constant="8" id="kel-oU-RkI"/>
                 <constraint firstItem="VcO-5p-KQy" firstAttribute="trailing" secondItem="jEg-3u-pAu" secondAttribute="trailing" id="udc-En-Ud5"/>
@@ -58,4 +67,7 @@
             <point key="canvasLocation" x="28.5" y="36"/>
         </view>
     </objects>
+    <resources>
+        <image name="QuestionIcon" width="29" height="29"/>
+    </resources>
 </document>

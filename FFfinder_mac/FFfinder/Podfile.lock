@@ -37,6 +37,13 @@ PODS:
     - GoogleToolboxForMac/Logger (~> 2.1)
   - GoogleInterchangeUtilities (1.2.2):
     - GoogleSymbolUtilities (~> 1.1)
+  - GoogleMaps (2.1.1):
+    - GoogleMaps/Maps (= 2.1.1)
+  - GoogleMaps/Base (2.1.1)
+  - GoogleMaps/Maps (2.1.1):
+    - GoogleMaps/Base
+  - GooglePlaces (2.1.1):
+    - GoogleMaps/Base (= 2.1.1)
   - GoogleSymbolUtilities (1.1.2)
   - GoogleToolboxForMac/DebugUtils (2.1.0):
     - GoogleToolboxForMac/Defines (= 2.1.0)
@@ -51,7 +58,9 @@ PODS:
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.0)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.0)
   - GTMSessionFetcher/Core (1.1.7)
+  - Kingfisher (3.2.1)
   - PopupDialog (0.5.0)
+  - TOCropViewController (2.0.11)
 
 DEPENDENCIES:
   - DLRadioButton (~> 1.4)
@@ -60,7 +69,11 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Messaging
+  - GoogleMaps
+  - GooglePlaces
+  - Kingfisher (~> 3.0)
   - PopupDialog (~> 0.5)
+  - TOCropViewController
 
 EXTERNAL SOURCES:
   EVReflection:
@@ -83,11 +96,15 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: ba1e640935235e5fac39dfa816fe7660e72e1a8a
   FirebaseMessaging: acf66347e43c5637c697060c3001d25c809a4131
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
+  GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
+  GooglePlaces: 35636d86e5020cba3856eb988c09a5491de0a65a
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
+  Kingfisher: 64ef28c6d3d6f344e3ae2d7f5c9da80439505d99
   PopupDialog: 9890441b81105b9076757af2afe2b037be682f3e
+  TOCropViewController: fe91aaab9e95d72ac38654d1174c8c8339585ee5
 
-PODFILE CHECKSUM: bc1f03d1990779e714d5ce89586615ebcbd7c7f0
+PODFILE CHECKSUM: bffe963556c2fb0aa13f6f08921d8ac55c80b1fc
 
 COCOAPODS: 1.1.1

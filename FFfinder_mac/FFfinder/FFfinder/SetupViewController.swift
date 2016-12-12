@@ -17,6 +17,10 @@ class SetupViewController: MyViewController {
     @IBOutlet weak var imageViewRetryIcon: UIImageView!
     var keychain:KeychainSwift?
     
+    override func viewDidLoad() {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         AnimateBuilder.build(imageViewRetryIcon).setAnimateType(AnimateType.RotateBy)
             .setValue(3.14).setDurationMs(2000).setRepeat(true).start();

@@ -12,5 +12,6 @@ enum OverlayType:String{
     case OkOnly
     case OkOrCancel
     case Loading
+    case Nothing
     
 }

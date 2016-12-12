@@ -14,6 +14,10 @@ target 'FFfinder' do
   pod "EVReflection", :git => 'https://github.com/evermeer/EVReflection.git', :branch => 'Swift3'
   pod 'PopupDialog', '~> 0.5'
   pod 'DLRadioButton', '~> 1.4'
+  pod 'TOCropViewController'  
+  pod 'Kingfisher', '~> 3.0'
+  pod 'GoogleMaps'
+  pod 'GooglePlaces'
 
   target 'FFfinderTests' do
     inherit! :search_paths

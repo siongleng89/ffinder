@@ -38,6 +38,11 @@ extension UIColor{
         return UIColor(netHex:0x7b7a7a)
     }
 
+    static func colorLightGray() -> UIColor{
+        
+        return UIColor(netHex:0xCCCCCC)
+    }
+    
     
 
     convenience init(netHex:Int) {

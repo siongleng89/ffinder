@@ -141,7 +141,9 @@
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="buttonBlock" destination="53L-Ea-Ggr" id="nnV-9d-8GV"/>
                 <outlet property="buttonDelete" destination="itG-oK-BuH" id="Mad-rB-5qq"/>
+                <outlet property="buttonMap" destination="hQG-jg-6MA" id="ahN-YO-kkE"/>
                 <outlet property="errorView" destination="4Mx-1h-0VK" id="U1M-4m-05b"/>
                 <outlet property="errorViewHeight" destination="iMr-zS-v3C" id="es0-Io-vr5"/>
                 <outlet property="imageViewProfile" destination="Drn-JG-4EN" id="RG5-Be-gxt"/>

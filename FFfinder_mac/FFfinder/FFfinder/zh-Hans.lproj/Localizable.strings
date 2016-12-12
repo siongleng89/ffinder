@@ -1,0 +1,240 @@
+
+/*Apps info start*/
+"app_name" = "FFfinder";
+"app_title_long" = "5 people - a locator";
+
+/*Apps info end
+ _________________________________________________________________________________ 
+Common texts start*/
+"retry" = "Retry";
+"unknown_error_msg" = "Unknown error occurred";
+"close" = "Close";
+"confirm" = "Confirm";
+"submit" = "Submit";
+"quit" = "Quit";
+"error" = "Error";
+"yesterday" = "Yesterday";
+"ok" = "OK";
+"cancel" = "Cancel";
+"yes" = "Yes";
+"no" = "No";
+"never" = "Never";
+"loading" = "Loading…";
+"add" = "Add";
+"address_myself" = "Me";
+"next" = "Next";
+"don_remind_me_again" = "Don't remind me again";
+"dont_show_this_again" = "Don't show this again";
+"search" = "Search";
+"unknown" = "Unknown";
+"tutorial" = "Tutorial";
+
+/*Common texts end
+_________________________________________________________________________________
+Launch Activity text start*/
+"welcome_msg_1" = "Welcome To";
+"required_location_provider_msg" = "FFfinder requests you to enable location service";
+"btn_go_to_location_settings_text" = "Config Location";
+"some_permission_denied_toast_msg" = "Please make sure all required permissions are given to start FFfinder";
+
+/*Launch Activity text end
+_________________________________________________________________________________
+Setup Activity text start*/
+"initializing" = "Initializing…";
+"checking_google_service_availability" = "Checking google service availability";
+"retrieving_token" = "Retrieving Token…";
+"initializing_user" = "Initializing user…";
+"initialization_done" = "Initialization done.";
+"no_google_service_error_msg" = "Please make sure Google Play service is properly configured before running this app.";
+"no_connection_msg" = "No connection found, please check your connection and try again.";
+"db_failed_msg" = "Unable to connect to server, please check your connection and try again.";
+"location_service_change_denied" = "Please configure location service before starting FFfinder.";
+
+/*Setup Activity text end
+_________________________________________________________________________________
+Main Activity text start*/
+"never_locate_user_msg" = "Click search to locate!";
+"unknown_address_msg" = "Unknown address, please see the location with map";
+"block_dialog_title" = "Block %s?";
+"block_dialog_content" = "%1$s will not be able to locate you after this. You can however still locate %2$s";
+"search_status_starting_msg" = "Starting…";
+"search_status_checking_data_msg" = "Connecting to location…";
+"search_status_waiting_user_respond_msg" = "Request sent, waiting for user response…";
+"search_status_waiting_user_location_msg" = "User has responded, waiting for location …";
+"search_status_geodecoding_msg" = "Getting user's address…";
+"error_no_link_msg" = "Cannot retrieve address as user does not have you on the list.";
+"error_timeout_msg" = "Unable to get user's latest location.";
+"error_timeout_no_connection_msg" = "Unable to connect, please check your connection and try again.";
+
+/*search_failed_dialog*/
+"error_timeout_unknown_reason_possible_reasons" = "1) User's device does not have active internet connection\n2) User has forced close FFfinder";
+
+/*search_failed_dialog*/
+"error_timeout_unknown_reason_possible_reasons2" = "3) Configurations not set up for some specific phone models";
+"error_user_blocked_msg" = "User has blocked you.";
+
+/*search_failed_dialog*/
+"failed_search_msg_text1" = "Unable to locate this user.";
+
+/*search_failed_dialog*/
+"failed_search_msg_text2" = "We will keep searching this user and send you a free notification later, or you can try to search again.";
+
+/*search_failed_dialog*/
+"btn_search_again_text" = "Search again anyway";
+
+/*search_failed_dialog*/
+"btn_wait_autonotification_text" = "Wait for auto notification";
+"search_left" = "Search Left";
+"searching" = "Searching";
+"auto_searching" = "Auto";
+"tap_plus_to_add_friend_family" = "+ Tap to add friend/family";
+
+/*Main Activity text end
+_________________________________________________________________________________
+Settings Activity text start*/
+"settings_activity_title" = "Settings";
+"settings_item_language_title" = "Language";
+
+/*Settings Activity text end
+_________________________________________________________________________________
+Vip Activity text start*/
+/*activityVip*/
+"vip_member" = "VIP (%s/year)";
+
+/*activityVip*/
+"vip_title" = "VIP";
+
+/*activityVip*/
+"manage_subscriptions_item_title" = "Manage Subscriptions";
+
+/*activityVip*/
+"manage_subscriptions_introduction_android" = "To manage subscription, please open Google Play Store, tap Menu > Account > Subscriptions";
+
+/*Vip Activity text end
+_________________________________________________________________________________
+Known Issues Activity text start*/
+"known_issues_title" = "Known Issues";
+"issue_fix_xiaomi" = "For Xiao Mi, when using FFfinder, to ensure your loved ones can always find you,\nplease enable our apps to able to run in background by following these steps:\n\n1) Go to Security Apps\n2) Go to permission then click on Auto Start Management\n3) Add/Enable auto start apps, allow FFfinder";
+"issue_fix_huawei" = "For Huawei, when using FFfinder, to ensure your loved one can always find you,\nplease enable our apps to able to run in background by following these steps:\n\n1) Go to Settings\n2) Click on Protected Apps \n3) Add FFfinder as protected apps";
+"issue_fix_sony" = "For Sony, when using FFfinder, if you are using Stamina Mode in Power Management (You may ignore this instruction if you are not using Stamina Mode), please follow these steps to ensure that your loved one can always find you: \n\n1) Go to Power Management \n2) Click on STAMINA mode \n3) Apps active in standby \n4) Add FFfinder";
+
+/*Known Issues Activity text end
+_________________________________________________________________________________
+Map Activity text start*/
+"map_activity_title" = "Map";
+"street_view_not_available_msg" = "Street view is not available in this area";
+"pick_your_travel_mode" = "Pick your travel mode";
+"duration" = "Duration";
+"distance" = "Distance";
+"directions" = "Directions";
+"no_route_found_error_msg" = "No route found";
+
+/*Promo Code Activity text end
+_________________________________________________________________________________
+Add member Activity text start*/
+"add_new_member_title" = "Add Friend/Family";
+"add_new_member_manually_title" = "Add Friend/Family Manually";
+"user_key_title" = "Your friend/family invite code";
+"member_name_title" = "How do you address him/her?";
+"no_user_key_msg" = "Please input invite code from the user you wish to add.";
+"adding_friend_msg" = "Adding record…";
+"user_already_added_error_msg" = "User has already existed in your list as %s";
+"key_expired_or_not_exist_msg" = "Invite code does not exist or has expired.";
+
+/*Add member Activity text end
+_________________________________________________________________________________
+Edit member name popup dialog text start*/
+"edit_name_title" = "Edit Name";
+"new_name_title" = "New Name";
+
+/*Edit member name popup dialog text end
+_________________________________________________________________________________
+Share key activity text start*/
+"share_key_activity_title" = "Invite code";
+"share_key_title" = "Add Friend/Family By Sharing Your Invite code";
+"btn_share_via_other_apps_text" = "Share";
+"your_key_title" = "Share this Invite code with your friends and family, and you can start tracking their \nlocation once they have added you\n(No action is required after sharing your Invite code)";
+"expired_at_title" = "(Expire at %s)";
+"minutes_left" = "(%s mins left)";
+"copied_to_clipboard_toast_msg" = "Copied";
+"regenerating_key_msg" = "Updating Invite code…";
+"regen_key_confirm_msg" = "Are you sure you want to regenerate your Invite code? User will not be able to add you anymore using your previous Invite code.";
+"share_title" = "Share Invite code";
+"share_subject" = "FFfinder Invite code";
+
+/*Fuzzy*/
+"share_msg" = "You are important to me! Please download simple friend and family locator so that we can locate each other with a click for FREE at \nhttps://play.google.com/store/apps/details?id=com.ffinder.android&referrer=%1$s\n\nThen add me by clicking on this link (Open with FFfinder)\nhttp://ff-finder.com/addnew/%2$s";
+"after_share_passcode_reminder" = "All done for sharing! Remind your friends and family to download the app so you can know where they are! ";
+
+/*Share key activity text end
+_________________________________________________________________________________
+Delete member popup dialog text start*/
+"delete_user_title" = "Delete %s?";
+"confirm_delete_user_msg" = "Are you sure you want to delete this user? This user will not be able to locate you after you have deleted him/her.";
+
+/*Delete member popup dialog text end
+_________________________________________________________________________________
+Language chooser popup dialog text start*/
+"language_take_effect_after_restart_toast" = "Language settings will only take effect after restart";
+
+/*Language chooser popup dialog text end
+_________________________________________________________________________________
+Notifications start*/
+"notification_user_located_title" = "FFfinder Update";
+"notification_x_has_been_located_msg" = "%s has been located.";
+"notification_x_users_located_msg" = "%s of friends located.";
+"notification_x_added_you" = "%s has added you! You may now locate each other.";
+"notification_remember_to_add_friend_msg" = "Get started! Share your Invite code to add your friends and family :)";
+
+/*Notifications end 
+Everything about tutorials*/
+"first_time_see_passcode" = "Hi, it is your first time adding friend/family, do you want to see a short tutorial guide?";
+"share_passcode_s1" = "Every user has a unique temporary Invite code, you must share your personal Invite code with your friend/family to connect.";
+"share_passcode_s2" = "Click on the Share Invite code button and pick a way to share your Invite code.";
+"share_passcode_s3" = "After this, no action is required.";
+"share_passcode_s4" = "After your friend/family has added you, both of you can start tracking each other.";
+"add_manually_a1" = "Every user has a unique temporary Invite code, get the Invite code from them by asking them to click on the PLUS icon.";
+"add_manually_a2" = "Upon receiving the message, note down their Invite code here.";
+"add_manually_a3" = "Key in the code at Your friend's Invite code";
+"add_manually_a4" = "Voila! You can start tracking each other.";
+"huawei" = "Huawei";
+"xiaomi" = "Xiaomi";
+"sony" = "Sony";
+
+/*activityMap*/
+"driving" = "Driving";
+
+/*activityMap*/
+"transit" = "Transit";
+
+/*activityMap*/
+"walking" = "Walking";
+
+/*activityMap*/
+"street_view_btn_text" = "Street View";
+
+/*activityMap*/
+"directions_btn_text" = "Directions";
+
+/*activityMap*/
+"gps_nav_btn_text" = "Open GPS Nav.";
+"error_location_disabled_msg" = "User has disabled location sharing.";
+
+/*search_failed_dialog*/
+"click_to_see_possible_reasons" = "Click to see possible reasons";
+
+/*activityVip*/
+"manage_subscriptions_introduction_ios" = "To manage subscription,\n1) Launch the Settings app on your iPhone or iPad.\n2) Tap on iTunes & App Store.\n3) Tap on your Apple ID at the top.\n4) Choose View Apple ID from the popup menu.\n5) Tap on Manage under Subscriptions.";
+
+/*activityVip*/
+"vip_benefits" = "For Unlimited Searches";
+
+/*ActivityMap*/
+"no_gps_nav_apps_found_error" = "No gps navigation apps found in your device.";
+"apps_intro1" = "Studies have shown that you need at least 5 people, friends or family, to be close to you to have a quality social life.";
+"apps_intro2" = "These 5 people are the people you are willing to share location with, to allow them to find you easily and for you to know that they are safe, wherever they are.";
+"apps_intro3" = "Now, a simple way to know where they are and to keep them close. \nFirst, you share your invite code.";
+"apps_intro4" = "Send them the invite code message, and remind them to install the apps by following the instructions.";
+"apps_intro5" = "Now, you can know where your loved ones are!";
+"apps_intro6" = "So who are the 5 most important people in you life?";
+"no_friend_popup_msg" = "You are 5 people away from a quality social life. Add your friends or family now?";

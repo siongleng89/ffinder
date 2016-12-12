@@ -11,6 +11,8 @@ import UserNotifications
 import Firebase
 import FirebaseInstanceID
 import FirebaseMessaging
+import GoogleMaps
+import GooglePlaces
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        
+        GMSServices.provideAPIKey(Constants.GoogleMapApiKey)
+        GMSPlacesClient.provideAPIKey(Constants.GoogleMapApiKey)
         
         // [START register_for_notifications]
         if #available(iOS 10.0, *) {
@@ -52,12 +55,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                name: .firInstanceIDTokenRefresh,
                                                object: nil)
 
+        
+        
         return true
     }
     
     
-    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+    func openMain(_ addingKey:String){
+        // Register routes that're handled
+//        
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let root = self.window?.rootViewController as! UINavigationController
+//        
+//        let profileVC: LaunchViewController = storyboard.instantiateViewController(withIdentifier: "LaunchViewController") as! LaunchViewController
+       Vars.pendingUserKey = addingKey
+//        root.pushViewController(profileVC, animated: true)
         
+        
+    }
+    
+    func application(_ application: UIApplication,
+                     continue userActivity: NSUserActivity,
+                     restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+        
+        // 1
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+            let url = userActivity.webpageURL,
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+                return false
+        }
+        
+        // 2
+        var compo = components.path.components(separatedBy: "/")
+        if compo.count >= 3{
+            self.openMain(compo[2])
+            return true
+        }
+        
+        
+        // 3
+        let webpageUrl = URL(string: "https://ff-finder.com")!
+        application.openURL(webpageUrl)
+        
+        return false
+    }
+    
+    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
         if let title = notification.userInfo?["title"]{
             if let body = notification.userInfo?["body"]{
                 NotificationShower.showNotificationAlert(title as! String, body as! String)

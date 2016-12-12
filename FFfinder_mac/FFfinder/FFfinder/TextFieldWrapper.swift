@@ -14,6 +14,9 @@ import Foundation
     @IBOutlet weak var textField: BottomBorderTextField!
     @IBOutlet weak var labelError: UILabel!
     @IBInspectable var title: String?
+    @IBOutlet weak var imageViewHelp: UIImageView!
+    var onHelpTapped:(()->Void)?
+    
     
     override func awakeFromNib() {
         self.labelTitle.text = title?.localized
@@ -60,6 +63,20 @@ import Foundation
         xibSetup()
     }
 
+    public func setHelpTapped(_ helpTapped:@escaping ()->Void){
+        self.onHelpTapped = helpTapped
+        
+        self.imageViewHelp?.isHidden = false
+        self.imageViewHelp?.isUserInteractionEnabled = true
+        self.imageViewHelp?.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                    action:
+                                                            #selector(imageViewHelpTapped)))
+        
+    }
+
+    public func imageViewHelpTapped(){
+        self.onHelpTapped!()
+    }
     
     public func setText(_ text:String?){
         textField.text = text

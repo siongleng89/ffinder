@@ -13,6 +13,7 @@ class ShareKeyViewController: MyViewController {
     @IBOutlet weak var labelMessage: AutoHeightLabel!
     @IBOutlet weak var labelKey: UILabel!
     @IBOutlet weak var labelExpiredAt: UILabel!
+    @IBOutlet weak var imageViewHelp: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,9 @@ class ShareKeyViewController: MyViewController {
         // Do any additional setup after loading the view.
         checkKey()
     
+        self.imageViewHelp?.isUserInteractionEnabled = true
+        self.imageViewHelp?.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                    action: #selector(onHelpTapped)))
     }
     
     private func checkKey(){
@@ -100,6 +104,17 @@ class ShareKeyViewController: MyViewController {
         present(activityViewController, animated: true, completion: nil)
         
     }
+    
+    func onHelpTapped(){
+        self.performSegue(withIdentifier: "ShareKeyToPagingSegue", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShareKeyToPagingSegue"{
+            (segue.destination as! PagingViewController).type = PagingType.TutorialShareKey
+        }
+    }
+    
     
 }
 

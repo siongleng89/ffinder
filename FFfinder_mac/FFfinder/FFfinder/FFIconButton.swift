@@ -16,6 +16,7 @@ class FFIconButton : UIButton {
     var imagePath:String?
     var selectedImagePath:String?
     var isBtnSelected:Bool? = false
+
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -36,29 +37,37 @@ class FFIconButton : UIButton {
         clipsToBounds = true
         self.imageView?.contentMode = UIViewContentMode.scaleAspectFit
         self.isUserInteractionEnabled = true
-        colorUp()
+        
+        if self.isEnabled{
+            colorUp()
+        }
+        else{
+            colorDisabled()
+        }
+        
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !isBtnSelected!{
+        if !isBtnSelected! && self.isEnabled{
             colorDown()
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !isBtnSelected!{
+        if !isBtnSelected! && self.isEnabled{
             colorUp()
         }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !isBtnSelected!{
+        if !isBtnSelected! && self.isEnabled{
             colorUp()
         }
     }
     
     func colorUp(){
+        layer.borderColor = iconColorNormal?.cgColor
         layer.backgroundColor = bgColorNormal?.cgColor
         
         let image = UIImage(named: imagePath!)?.withRenderingMode(.alwaysTemplate)
@@ -67,6 +76,7 @@ class FFIconButton : UIButton {
     }
     
     func colorDown(){
+        layer.borderColor = iconColorNormal?.cgColor
         layer.backgroundColor = bgColorOnTapped?.cgColor
         
         if self.isBtnSelected! && self.selectedImagePath != nil{
@@ -81,14 +91,42 @@ class FFIconButton : UIButton {
         self.tintColor = iconColorOnTapped
     }
     
+    func colorDisabled(){
+        layer.borderColor = UIColor.colorLightGray().cgColor
+        layer.backgroundColor = UIColor.colorLightGray().cgColor
+        
+        let image = UIImage(named: imagePath!)?.withRenderingMode(.alwaysTemplate)
+        self.setImage(image, for: .disabled)
+        self.setImage(image, for: .normal)
+        self.tintColor = UIColor.colorContrast()
+    }
+    
     public func setIsBtnSelected(_ selected:Bool){
+        
+        if (!isEnabled){
+            return
+        }
+        
         self.isBtnSelected = selected
         
         if isBtnSelected!{
             colorDown()
         }
+        else{
+            colorUp()
+        }
     }
-   
+    
+    override var isEnabled: Bool {
+        didSet {
+            if self.isEnabled{
+                colorUp()
+            }
+            else{
+                colorDisabled()
+            }
+        }
+    }
  
     @IBInspectable var imageName : String? {
         set (newValue) {

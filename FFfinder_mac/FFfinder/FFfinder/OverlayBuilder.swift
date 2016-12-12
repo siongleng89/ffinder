@@ -17,9 +17,14 @@ class OverlayBuilder{
     private var onDismiss:(()->Void)?
     private var onChoices:[(()->Void)]?
     private var vc:UIViewController?
+    private var checkboxTitle:String?
+    private var textFieldText:String?
+    private var customViewController:UIViewController?
+    
     private static var alertController: UIAlertController?
     private static var popupController: PopupDialog?
-
+    private static var checkboxController: CheckboxPopupViewController?
+    private static var textboxController: TextboxPopupViewController?
     
     public static func build() -> OverlayBuilder{
         return OverlayBuilder()
@@ -39,15 +44,34 @@ class OverlayBuilder{
         return self
     }
     
+    public func setCheckboxTitle(_ checkboxTitle:String) -> OverlayBuilder{
+        self.checkboxTitle = checkboxTitle
+        return self
+    }
+    
+    public func setTextFieldText(_ textFieldText:String) -> OverlayBuilder{
+        self.textFieldText = textFieldText
+        return self
+    }
+    
     public func setMessage(_ message:String) -> OverlayBuilder{
         self.message = message
         return self
     }
     
+    
+    public func setCustomVc(_ vc:UIViewController) -> OverlayBuilder{
+        self.customViewController = vc
+        return self
+    }
+
+    
     public func setVc(_ vc:UIViewController) -> OverlayBuilder{
         self.vc = vc
         return self
     }
+    
+    
     
     public func setOnDismiss(_ onDismiss:@escaping (()->Void)) -> OverlayBuilder{
         self.onDismiss = onDismiss
@@ -118,12 +142,40 @@ class OverlayBuilder{
         }
         else{
             // Create the dialog
-            let popup = PopupDialog(title: self.title, message: self.message,
-                                    gestureDismissal: false, completion: {
-                if self.onDismiss != nil{
-                    self.onDismiss!()
-                }
-            })
+            
+            var popup:PopupDialog!
+            
+            if let checkboxTitle = self.checkboxTitle{
+                // Create a custom view controller
+                let checkboxVc = CheckboxPopupViewController(nibName: "CheckboxPopup", bundle: nil)
+                checkboxVc.setMessage(self.message!)
+                checkboxVc.setCustomTitle(self.title!)
+                checkboxVc.setCustomCheckboxTitle(checkboxTitle)
+                
+                OverlayBuilder.checkboxController = checkboxVc
+                
+                // Create the dialog
+                popup = PopupDialog(viewController: checkboxVc, gestureDismissal: false)
+            }
+            else if let textFieldText = self.textFieldText{
+                // Create a custom view controller
+                let textboxVc = TextboxPopupViewController(nibName: "TextboxPopup", bundle: nil)
+                textboxVc.popupTitle = self.title!
+                textboxVc.textFieldDefaultText = textFieldText
+                
+                OverlayBuilder.textboxController = textboxVc
+                
+                // Create the dialog
+                popup = PopupDialog(viewController: textboxVc, gestureDismissal: false)
+            }
+            else if let customViewController = self.customViewController{
+                popup = PopupDialog(viewController: customViewController, gestureDismissal: false)
+            }
+            else{
+                popup = PopupDialog(title: self.title, message: self.message,
+                                    gestureDismissal: false)
+            }
+            
             
             if self.overlayType == OverlayType.OkOnly{
                 let buttonOk = DefaultButton(title: "ok".localized) {
@@ -136,7 +188,7 @@ class OverlayBuilder{
                 let buttonOk = DefaultButton(title: "ok".localized) {
                     self.getChoiceToRun(0)?()
                 }
-                let buttonCancel = DefaultButton(title: "cancel".localized) {
+                let buttonCancel = CancelButton(title: "cancel".localized) {
                     self.getChoiceToRun(1)?()
                 }
                 popup.addButtons([buttonOk, buttonCancel])
@@ -166,12 +218,32 @@ class OverlayBuilder{
         
     }
     
+    
+    public static func isChecked() -> Bool{
+        if let checkboxVc = OverlayBuilder.checkboxController{
+            return checkboxVc.checkbox.isSelected
+        }
+        return false
+    }
+    
+    public static func getTextFieldText() -> String{
+        if let textboxVc = OverlayBuilder.textboxController{
+            return textboxVc.textField.text!
+        }
+        return ""
+    }
+    
+    
+    
+    
     public static func forceCloseAllOverlays(){
         OverlayBuilder.popupController?.dismiss(animated: false, completion: nil)
         OverlayBuilder.alertController?.dismiss(animated: false, completion: nil)
         
         OverlayBuilder.popupController = nil
         OverlayBuilder.alertController = nil
+        OverlayBuilder.checkboxController = nil
+        OverlayBuilder.textboxController = nil
     }
     
     

@@ -172,9 +172,14 @@ class FirebaseDB{
         getTable(TableName.links).child(myUserId).child(targetUserId).removeValue()
     }
     
-    
-    
-    
+    public static func editLinkName(_ myUserId:String, _ targetUserId:String,
+                                           _ newName:String,
+                                           _ callback:((Status) -> Void)?){
+        var map1 = [String:String]()
+        map1[targetUserId] = newName
+        
+        setValue(getTable(TableName.links).child(myUserId), map1, callback)
+    }
     
     
     public static func checkKeyExist(_ userID:String, _ userKey:String,
@@ -232,16 +237,18 @@ class FirebaseDB{
     
     public static func changeBlockUser(_ myUserId:String, _ targetUserId:String, _ block:Bool,
                                         _ callback: ((Status) -> Void)?){
-        var map1 = [String:String?]()
+        var map1 = [String:String]()
         
         if block{
             map1[targetUserId] = "1"
+            setValue(getTable(TableName.blockUsers).child(myUserId), map1, callback)
         }
         else{
-            map1[targetUserId] = nil
+           getTable(TableName.blockUsers).child(myUserId).child(targetUserId).removeValue()
+            
         }
     
-        setValue(getTable(TableName.blockUsers).child(myUserId), map1, callback)
+        
     }
   
     

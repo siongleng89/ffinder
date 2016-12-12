@@ -20,6 +20,8 @@ class SearchButton:UIView{
     @IBOutlet weak var buttonTopMargin: NSLayoutConstraint!
     @IBOutlet weak var labelStatus: UILabel!
     
+    private var animating:Bool = false
+    
     override func awakeFromNib() {
         
         
@@ -53,7 +55,9 @@ class SearchButton:UIView{
     }
     
     func onAppearing(){
-        imageViewFlower.startAnimating()
+        if animating{
+         imageViewFlower.startAnimating()
+        }
     }
     
     func loadViewFromNib() -> UIView {
@@ -103,6 +107,13 @@ class SearchButton:UIView{
                 setFlowerAnimation(FlowerType.Ending, repeating: false, callback:{
                     self.colorUp()
                     self.setFlower(FlowerType.AutoSearching)
+                })
+            }
+            else if extra == "error"{
+                setFlowerAnimation(FlowerType.Ending, repeating: false, callback:{
+                    self.colorUp()
+                    self.setFlower(FlowerType.Sleeping)
+                    self.setStatus("search".localized)
                 })
             }
             else{
@@ -163,6 +174,8 @@ class SearchButton:UIView{
         
         
         if animationImages.count > 1 && animate{
+            animating = true
+            
             imageViewFlower.animationImages = animationImages
             imageViewFlower.animationDuration = TimeInterval(totalDurationMs / 1000)
             if !repeating{
@@ -186,6 +199,8 @@ class SearchButton:UIView{
             }
         }
         else{
+            animating = false
+            
             imageViewFlower.image = animationImages.first
         }
      

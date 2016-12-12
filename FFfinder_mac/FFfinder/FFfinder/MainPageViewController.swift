@@ -10,12 +10,14 @@ import UIKit
 import PopupDialog
 import Firebase
 
-class MainPageViewController: MyViewController, UITableViewDelegate, UITableViewDataSource {
+class MainPageViewController: MyViewController, UITableViewDelegate, UITableViewDataSource,
+                                FriendTableViewProtocol{
     
     @IBOutlet weak var friendsTableView: UITableView!
     let friendTableCellIdentifier:String = "FriendTableViewCell"
-    var firstTimeRun:Bool?
-
+    let tapToAddCellIdentifier:String = "TapToAddTableViewCell"
+    var firstTimeRun:Bool? = false
+    var selectedFriendModel:FriendModel!
    
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,6 +44,10 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         
         let yourNibName = UINib(nibName: friendTableCellIdentifier, bundle: nil)
         friendsTableView.register(yourNibName, forCellReuseIdentifier: friendTableCellIdentifier)
+        let yourNibName2 = UINib(nibName: tapToAddCellIdentifier, bundle: nil)
+        friendsTableView.register(yourNibName2, forCellReuseIdentifier: tapToAddCellIdentifier)
+        
+        self.friendsTableView.tableFooterView = UIView()
         
         NotificationCenter.default.addObserver(self, selector: #selector(friendModelChanged),
                                                name: .friendModelChanged, object: nil)
@@ -52,24 +58,41 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(onNeedToRefreshWholeFriendList),                                               name: .needToReloadWholeFriendsList, object: nil)
         
-        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(viewShowing),                                               name: .UIApplicationDidBecomeActive, object: nil)
         
         refreshFriendList()
+        checkNeedToShowNoFriendReminder()
+        setAddFriendReminderAlarm()
      
     }
     
+    func viewShowing(){
+        checkHasPendingAddUser()
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.myModel.friendModels.count
+        return self.myModel.friendModels.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) ->       UITableViewCell{
         
-        let cell:FriendTableViewCell! = tableView.dequeueReusableCell(withIdentifier: friendTableCellIdentifier, for:indexPath)as! FriendTableViewCell
-        let friendModel:FriendModel = self.myModel.friendModels[indexPath.row]
-        cell.update(friendModel, self.myModel)
-        cell.contentView.isUserInteractionEnabled = false
+        if indexPath.row <= self.myModel.friendModels.count - 1{
+            let cell:FriendTableViewCell! = tableView.dequeueReusableCell(withIdentifier: friendTableCellIdentifier, for:indexPath)as! FriendTableViewCell
+            let friendModel:FriendModel = self.myModel.friendModels[indexPath.row]
+            cell.update(friendModel, self.myModel, self)
+            cell.contentView.isUserInteractionEnabled = false
+            return cell
         
-        return cell
+        }
+        else{
+            let cell:TapToAddTableViewCell! = tableView.dequeueReusableCell(withIdentifier: tapToAddCellIdentifier, for:indexPath)as! TapToAddTableViewCell
+            cell.contentView.isUserInteractionEnabled = false
+            cell.update(self)
+            return cell
+        }
+        
     }
     
     func friendModelChanged(notification:NSNotification){
@@ -158,7 +181,87 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         })
     }
     
-    @IBAction func onAddButtonTapped(_ sender: AnyObject) {
+    private func checkHasPendingAddUser(){
+        if let _ = Vars.pendingUserKey{
+            self.performSegue(withIdentifier: "MainToAddMemberSegue", sender: nil)
+        }
+    }
+    
+    private func checkNeedToShowNoFriendReminder(){
+        if !firstTimeRun!{
+            if self.myModel.getNonSelfFriendModelsCount() == 0{
+                OverlayBuilder.build().setMessage("no_friend_popup_msg".localized)
+                    .setOverlayType(OverlayType.OkOrCancel)
+                    .setOnChoices {
+                        self.onAddButtonTapped(nil)
+                    }.show()
+            }
+        }
+    }
+    
+    private func setAddFriendReminderAlarm(){
+        
+    }
+    
+    func onRequestPickImage(_ friendModel: FriendModel) {
+        self.selectedFriendModel = friendModel
+        self.performSegue(withIdentifier: "MainToPickImageSegue", sender: nil)
+    }
+    
+    func onRequestChangeName(_ requestingFriend: FriendModel) {
+        OverlayBuilder.build().setOverlayType(OverlayType.OkOrCancel)
+            .setTitle("edit_name_title".localized).setTextFieldText((requestingFriend.username!))
+            .setOnChoices {
+                let newName = OverlayBuilder.getTextFieldText()
+                
+                if let friendModel = self.myModel.getFriendModelById(requestingFriend.userId!){
+                    if !StringsHelper.isEmpty(newName)
+                        && newName != (friendModel.username!){
+                        friendModel.username = newName
+                        friendModel.save()
+                        
+                        requestingFriend.username = newName
+                        
+                        self.myModel.sortFriendModels()
+                        self.myModel.commitFriendUserIds()
+                        
+                        Threadings.postMainThread {
+                            self.friendsTableView.reloadData()
+                        }
+                        
+                        FirebaseDB.editLinkName((self.myModel?.userId)!,
+                                                (friendModel.userId)!, newName, nil)
+                    }
+
+                }
+                
+                
+            }.show()
+    }
+    
+    func onRequestShowMap(_ friendModel: FriendModel) {
+        self.selectedFriendModel = friendModel
+        self.performSegue(withIdentifier: "MainToMapSegue", sender: nil)
+    }
+    
+    func onRequestShareKey() {
+        onAddButtonTapped(nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "MainToPickImageSegue"{
+            let theDestination = (segue.destination as! ImagePickerViewController)
+            theDestination.friendModel = self.selectedFriendModel
+        }
+        else if segue.identifier == "MainToMapSegue"{
+            let theDestination = (segue.destination as! MapViewController)
+            theDestination.friendModel = self.selectedFriendModel
+        }
+    }
+    
+    
+    
+    @IBAction func onAddButtonTapped(_ sender: AnyObject?) {
         self.performSegue(withIdentifier: "MainToShareKeySegue", sender: nil)
     }
 
@@ -218,4 +321,7 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
 //        self.present(popup, animated: true, completion: nil)
         
     }
+    
+    
+    
 }

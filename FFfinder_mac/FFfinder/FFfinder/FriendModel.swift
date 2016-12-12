@@ -20,6 +20,7 @@ class FriendModel : EVObject{
     var searchResult:SearchResult?
     var recentlyFinished:Bool?
     var hideErrorMsg:Bool = false
+    var blocked:Bool = false
     
      //used to prevent double triggering of notificationCenter while loading
     var copying:Bool = false
@@ -79,6 +80,7 @@ class FriendModel : EVObject{
         self.searchStatus = loadedFriendModel.searchStatus
         self.searchResult = loadedFriendModel.searchResult
         self.hideErrorMsg = loadedFriendModel.hideErrorMsg
+        self.blocked = loadedFriendModel.blocked
     }
     
     public func notificateChanged(){

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11521.1" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11517.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WaitAutoNotificationPopupViewController" customModule="FFfinder" customModuleProvider="target">
+            <connections>
+                <outlet property="btnWaitAutoNotification" destination="OhB-Vo-5ej" id="evk-LS-7gN"/>
+                <outlet property="buttonSearchAgain" destination="kfe-Ll-dSH" id="j0F-L1-TQ0"/>
+                <outlet property="labelReason2" destination="GMB-5g-cRt" id="bu5-9a-9Vy"/>
+                <outlet property="view" destination="iN0-l3-epB" id="gKK-1Q-76R"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="261"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="failed_search_msg_text1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxc-eJ-5ca" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Yww-3V-sGl">
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error_timeout_unknown_reason_possible_reasons" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kEa-GE-hyJ" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="16"/>
+                            <color key="textColor" red="0.28627450980000002" green="0.4549019608" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="topInset">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="bottomInset">
+                                    <real key="value" value="0.0"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="rightInset">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error_timeout_unknown_reason_possible_reasons2" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GMB-5g-cRt" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <color key="textColor" red="0.28627450980000002" green="0.4549019608" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="topInset">
+                                    <real key="value" value="0.0"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="bottomInset">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="rightInset">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </stackView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="failed_search_msg_text2" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EjZ-Cl-6b5" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Fcg-JX-Oyo">
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="kfe-Ll-dSH" customClass="FFTextButton" customModule="FFfinder" customModuleProvider="target">
+                            <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="14"/>
+                            <state key="normal" title="btn_search_again_text"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="colorStyle" value="green"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onSeachAgainTapped:" destination="-1" eventType="touchUpInside" id="ncg-v7-nIC"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="OhB-Vo-5ej" customClass="FFTextButton" customModule="FFfinder" customModuleProvider="target">
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal" title="btn_wait_autonotification_text"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="colorStyle" value="green"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onWaitAutoNotificationTapped:" destination="-1" eventType="touchUpInside" id="Gdm-ib-Jlf"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="EjZ-Cl-6b5" firstAttribute="top" secondItem="Yww-3V-sGl" secondAttribute="bottom" constant="20" id="5cP-3F-xXZ"/>
+                <constraint firstItem="fxc-eJ-5ca" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="IcL-z6-rDt"/>
+                <constraint firstItem="Yww-3V-sGl" firstAttribute="top" secondItem="fxc-eJ-5ca" secondAttribute="bottom" constant="20" id="L61-HD-jDg"/>
+                <constraint firstItem="Fcg-JX-Oyo" firstAttribute="trailing" secondItem="EjZ-Cl-6b5" secondAttribute="trailing" id="MPj-EI-of3"/>
+                <constraint firstItem="Fcg-JX-Oyo" firstAttribute="leading" secondItem="EjZ-Cl-6b5" secondAttribute="leading" id="Q7p-mi-v3z"/>
+                <constraint firstItem="EjZ-Cl-6b5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="STO-te-1st"/>
+                <constraint firstItem="Fcg-JX-Oyo" firstAttribute="top" secondItem="EjZ-Cl-6b5" secondAttribute="bottom" constant="20" id="ccj-Rk-5mS"/>
+                <constraint firstAttribute="trailing" secondItem="Yww-3V-sGl" secondAttribute="trailing" id="jqA-i5-jt8"/>
+                <constraint firstAttribute="trailing" secondItem="EjZ-Cl-6b5" secondAttribute="trailing" constant="15" id="k2X-sV-e6O"/>
+                <constraint firstAttribute="trailing" secondItem="fxc-eJ-5ca" secondAttribute="trailing" constant="15" id="nl1-fQ-y7O"/>
+                <constraint firstAttribute="bottom" secondItem="Fcg-JX-Oyo" secondAttribute="bottom" constant="20" id="rA0-ct-Ln0"/>
+                <constraint firstItem="Yww-3V-sGl" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="sNy-YU-WHL"/>
+                <constraint firstItem="fxc-eJ-5ca" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="tPj-T6-omp"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="36.5" y="312.5"/>
+        </view>
+    </objects>
+</document>

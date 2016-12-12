@@ -8,5 +8,8 @@
 
 import Foundation
 protocol FriendTableViewProtocol {
-    func onUpdateRowRequired(_ friendModel:FriendModel)
+     func onRequestPickImage(_ friendModel:FriendModel)
+     func onRequestChangeName(_ friendModel:FriendModel)
+     func onRequestShowMap(_ friendModel:FriendModel)
+    func onRequestShareKey()
 }
