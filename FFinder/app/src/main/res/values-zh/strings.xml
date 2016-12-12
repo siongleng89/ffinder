@@ -181,11 +181,11 @@ Share key activity text start -->
 
 <!-- Fuzzy -->
 <string name="share_msg">"你是我重要的人！请下载免费的简易家人朋友搜寻器于
-https://play.google.com/store/apps/details?id=com.ffinder.android&amp;referrer=%1$s
+https://ff-finder.com/download?referrer=%1$s
 让我们可以互相知道对方的所在。
 
 下载后，请使用家人朋友搜寻器打开以下网址添加我，
-http://ff-finder.com/addnew/%2$s"</string>
+https://ff-finder.com/addnew/%2$s"</string>
 <string name="after_share_passcode_reminder">"谢谢您分享邀请号，请等待您的家人或朋友的添加。过后你们就能互相定位。"</string>
 
 <!-- Share key activity text end
