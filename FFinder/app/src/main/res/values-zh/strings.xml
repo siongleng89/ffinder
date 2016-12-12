@@ -247,6 +247,9 @@ Everything about tutorials -->
 
 <!-- activityVip -->
 <string name="vip_benefits">"无限搜索"</string>
+
+<!-- ActivityMap -->
+<string name="no_gps_nav_apps_found_error">"您的设置未安装任何地图软件。"</string>
 <string name="apps_intro1">"调查显示每个人在拥有至少五个非常亲密的知己后，他们的社交生活品质得到了大幅度的提升。"</string>
 <string name="apps_intro2">"这五个人是您愿意与其在任何时候分享您的所在地点以让他们能轻易的找到您，您也能随时找到他们确定他们的安全。"</string>
 <string name="apps_intro3">"最简易的家人朋友寻找器
