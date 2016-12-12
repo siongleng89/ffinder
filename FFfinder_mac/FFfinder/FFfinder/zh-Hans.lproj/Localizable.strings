@@ -163,7 +163,7 @@ Share key activity text start*/
 "share_subject" = "简易家人朋友搜寻器邀请号";
 
 /*Fuzzy*/
-"share_msg" = "你是我重要的人！请下载免费的简易家人朋友搜寻器于\nhttps://play.google.com/store/apps/details?id=com.ffinder.android&referrer=%1$s\n让我们可以互相知道对方的所在。\n\n下载后，请使用家人朋友搜寻器打开以下网址添加我，\nhttp://ff-finder.com/addnew/%2$s";
+"share_msg" = "你是我重要的人！请下载免费的简易家人朋友搜寻器于\nhttps://ff-finder.com/download?referrer=%1$s\n让我们可以互相知道对方的所在。\n\n下载后，请使用家人朋友搜寻器打开以下网址添加我，\nhttps://ff-finder.com/addnew/%2$s";
 "after_share_passcode_reminder" = "谢谢您分享邀请号，请等待您的家人或朋友的添加。过后你们就能互相定位。";
 
 /*Share key activity text end
