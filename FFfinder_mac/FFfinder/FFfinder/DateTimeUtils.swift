@@ -63,6 +63,29 @@ class DateTimeUtils{
 
         }
     }
+    
+    
+    public static func checkIsOlderThanYesterday(_ unixTime:UInt64) -> Bool{
+        if unixTime == 0{
+            return true
+        }
+        
+        let date = Date(timeIntervalSince1970: Double(unixTime))
+        let currentDate = Date()
+
+        if date.timeIntervalSince1970 > currentDate.timeIntervalSince1970{
+            return false
+        }
+        else{
+            let dayDiff = daysBetweenDates(date, currentDate)
+            if dayDiff >= 1{
+                return true
+            }
+            else{
+                return false
+            }
+        }
+    }
 
     
     private static func daysBetweenDates(_ startDate: Date, _ endDate: Date) -> Int

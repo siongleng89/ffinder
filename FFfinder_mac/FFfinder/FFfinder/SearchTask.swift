@@ -168,13 +168,21 @@ class SearchTask{
         //update task search status with friend model one, as friend model always hold latest status
         if let friendModel:FriendModel = myModel.getFriendModelById(self.friendModel.userId!){
             var shouldAutoNotify = false
+            var searchTarget = "Me"
+            if friendModel.userId != self.myModel.userId{
+                searchTarget = "Others"
+            }
             
             if friendModel.searchStatus == SearchStatus.WaitingUserLocation{
                 self.setResult(SearchResult.ErrorTimeoutUnknownReason)
+                Analytics.trackEvent(AnalyticEvent.Search_Timeout,
+                                "\(SearchStatus.WaitingUserLocation.rawValue)_\(searchTarget)")
                 shouldAutoNotify = true
             }
             else if friendModel.searchStatus == SearchStatus.WaitingUserRespond{
                 self.setResult(SearchResult.ErrorTimeoutUnknownReason)
+                Analytics.trackEvent(AnalyticEvent.Search_Timeout,
+                                     "\(SearchStatus.WaitingUserRespond.rawValue)_\(searchTarget)")
                 shouldAutoNotify = true
             }
             else{
@@ -224,6 +232,8 @@ class SearchTask{
         self.friendModel.recentlyFinished = true
         self.friendModel.save()
         self.friendModel.notificateChanged()
+        
+        Analytics.trackEvent(AnalyticEvent.Search_Result, searchResult.rawValue)
     }
     
     public func searchCompleted(){
@@ -231,8 +241,17 @@ class SearchTask{
         if let friendModel:FriendModel = myModel.getFriendModelById(self.friendModel.userId!){
             friendModel.recentlyFinished = true
             friendModel.notificateChanged()
+            
+            if !(friendModel.searchResult?.isError())!{
+                Analytics.trackEvent(AnalyticEvent.Search_Result, "SearchSuccess")
+            }
+            
         }
         self.finish = true
+        
+        
+        
+        
     }
     
     public func dispose(){

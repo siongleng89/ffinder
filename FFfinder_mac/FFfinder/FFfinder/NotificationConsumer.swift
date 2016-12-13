@@ -7,9 +7,11 @@
 //
 
 import Foundation
+import Firebase
 class NotitificationConsumer{
     
     private var locationUpdateTask:LocationUpdateTask?
+    private var locationReceiverTask:LocationReceiverTask?
     private static var handledMsgIds = [String]()
     
     public func consume(_ dict:[AnyHashable:Any]){
@@ -64,6 +66,13 @@ class NotitificationConsumer{
             else if action == FCMMessageType.IsAliveMsg{
                 let senderId = dict["senderId"] as! String
                 let myModel:MyModel = MyModel(dontLoadFriends:true)
+                var locationDisabled:Bool = false
+                if let isDisabled = dict["locationDisabled"] as? String{
+                    if isDisabled == "1"{
+                        locationDisabled = true
+                    }
+                }
+                
                 myModel.loadFriend(senderId)
                 if let friendModel = myModel.getFriendModelById(senderId){
                     
@@ -71,7 +80,15 @@ class NotitificationConsumer{
                         return
                     }
                     
-                    friendModel.searchStatus = SearchStatus.WaitingUserLocation
+                    if(locationDisabled){
+                        friendModel.searchStatus = SearchStatus.End
+                        friendModel.searchResult = SearchResult.ErrorLocationDisabled
+                    }
+                    else{
+                        friendModel.searchStatus = SearchStatus.WaitingUserLocation
+                    }
+                    
+                    
                     friendModel.save()
                     
                     self.broadcastReloadFriend(senderId)
@@ -81,31 +98,14 @@ class NotitificationConsumer{
                 let senderId = dict["senderId"] as! String
                 let latitude = dict["latitude"] as! String
                 let longitude = dict["longitude"] as! String
-                let isAutoNotification = dict["isAutoNotification"] as! String
-                let myModel:MyModel = MyModel(dontLoadFriends:true)
-                myModel.loadFriend(senderId)
-                if let friendModel = myModel.getFriendModelById(senderId){
-                    
-                    
-                    let locationModel:LocationModel = LocationModel()
-                    locationModel.latitude = latitude
-                    locationModel.longitude = longitude
-                    locationModel.timestampLastUpdated = "\(DateTimeUtils.getCurrentUnixSecs())"
-                    friendModel.searchResult = SearchResult.Normal
-                    friendModel.searchStatus = SearchStatus.End
-                    
-                    locationModel.geodecodeCoordinatesIfNeeded {
-                        friendModel.locationModel = locationModel
-                        friendModel.save()
-                        self.broadcastReloadFriend(senderId)
-                    
-                        //only show notification on user system tray if it is from auto notification
-                        if isAutoNotification == "1"{
-                            
-                        }
+                var auto:Bool = false
+                if let isAutoNotification = dict["isAutoNotification"] as? String{
+                    if isAutoNotification == "1"{
+                        auto = true
                     }
-                    
                 }
+                
+                locationReceiverTask = LocationReceiverTask(senderId, latitude, longitude, auto)
             }
         
         }

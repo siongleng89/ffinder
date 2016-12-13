@@ -61,6 +61,11 @@ class MapViewController:MyViewController, GMSMapViewDelegate{
         showMarker(friendLatitude, friendLongitude)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        Analytics.setScreen(name: "ActivityMap")
+    }
+    
     func showMarker(_ latitude:Double, _ longitude:Double){
     
         let position = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)

@@ -17,6 +17,7 @@ class Constants{
     public static let SearchTimeoutSecs:UInt64 = 40;
     public static let FcmKey:String = "AIzaSyB2DgF790wlLZ3fXzb9_ArVgxAit2Mouno";
     public static let GoogleMapApiKey:String = "AIzaSyBl24aXXYQOaUiF3Lu717At54uzGaDd1Ks"
+    public static let AnalyticsTrackingID : String = "UA-84106126-1"
     
 }
 

@@ -35,18 +35,25 @@ class LaunchViewController: MyViewController, CLLocationManagerDelegate {
             checkNeedToShowIntroduction();
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        Analytics.setScreen(name: "ActivityLaunch")
+    }
+    
+    
    
     func checkNeedToShowIntroduction(){
         if let seenIntroduction = Preferences.get(PreferenceType.SeenIntroduction){
             if seenIntroduction == "1"{
-                goToNextScreen();
+                goToNextScreen()
             }
             else{
-                showIntroduction();
+                showIntroduction()
             }
         }
         else{
-            showIntroduction();
+            showIntroduction()
         }
     }
     

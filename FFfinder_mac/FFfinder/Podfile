@@ -18,6 +18,7 @@ target 'FFfinder' do
   pod 'Kingfisher', '~> 3.0'
   pod 'GoogleMaps'
   pod 'GooglePlaces'
+  pod 'GoogleAnalytics'
 
   target 'FFfinderTests' do
     inherit! :search_paths

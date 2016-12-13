@@ -41,6 +41,8 @@ class ImagePickerViewController:UIViewController, UIImagePickerControllerDelegat
             let cropViewController = TOCropViewController(
                                 image: pickedImage)
             cropViewController.delegate = self
+            cropViewController.setAspectRatioPreset(TOCropViewControllerAspectRatioPreset.presetSquare, animated: false)
+            cropViewController.aspectRatioLockEnabled = true
             present(cropViewController, animated: false, completion: nil)
         }
         

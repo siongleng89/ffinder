@@ -35,6 +35,7 @@ PODS:
     - GoogleInterchangeUtilities (~> 1.2)
     - GoogleSymbolUtilities (~> 1.1)
     - GoogleToolboxForMac/Logger (~> 2.1)
+  - GoogleAnalytics (3.17.0)
   - GoogleInterchangeUtilities (1.2.2):
     - GoogleSymbolUtilities (~> 1.1)
   - GoogleMaps (2.1.1):
@@ -69,6 +70,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Messaging
+  - GoogleAnalytics
   - GoogleMaps
   - GooglePlaces
   - Kingfisher (~> 3.0)
@@ -95,6 +97,7 @@ SPEC CHECKSUMS:
   FirebaseDatabase: 6de92187481ff0e8e124064f21742e95ee883b02
   FirebaseInstanceID: ba1e640935235e5fac39dfa816fe7660e72e1a8a
   FirebaseMessaging: acf66347e43c5637c697060c3001d25c809a4131
+  GoogleAnalytics: f42cc53a87a51fe94334821868d9c8481ff47a7b
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
   GooglePlaces: 35636d86e5020cba3856eb988c09a5491de0a65a
@@ -105,6 +108,6 @@ SPEC CHECKSUMS:
   PopupDialog: 9890441b81105b9076757af2afe2b037be682f3e
   TOCropViewController: fe91aaab9e95d72ac38654d1174c8c8339585ee5
 
-PODFILE CHECKSUM: bffe963556c2fb0aa13f6f08921d8ac55c80b1fc
+PODFILE CHECKSUM: c91ad0acdb1100406b0b8ec3839dcfb51d8402cd
 
 COCOAPODS: 1.1.1

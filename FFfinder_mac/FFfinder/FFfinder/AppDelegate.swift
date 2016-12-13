@@ -25,6 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey(Constants.GoogleMapApiKey)
         GMSPlacesClient.provideAPIKey(Constants.GoogleMapApiKey)
         
+        setupGoogleAnalytics()
+        
+        
         // [START register_for_notifications]
         if #available(iOS 10.0, *) {
             let authOptions : UNAuthorizationOptions = [.alert, .badge, .sound]
@@ -60,6 +63,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    
+    func setupGoogleAnalytics() {
+        
+        // pod 'Google/Analytics'
+        //        let configureError:NSError?
+        //        GGLContext.sharedInstance().configureWithError(&configureError)
+        //        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        //
+        //        let gai = GAI.sharedInstance()
+        //        gai.trackUncaughtExceptions = true  // report uncaught exceptions
+        //        gai.logger.logLevel = GAILogLevel.Verbose  // remove before app release
+        
+        
+        // pod 'GoogleAnalytics'
+        let tracker = GAI.sharedInstance().tracker(withTrackingId: Constants.AnalyticsTrackingID)
+        GAI.sharedInstance().trackUncaughtExceptions = true;
+        
+        // default dispatchInterval is 120
+        
+        #if DEBUG
+            
+            GAI.sharedInstance().dispatchInterval = 1
+            GAI.sharedInstance().logger.logLevel = .verbose //.Verbose
+            
+            // disable sending data to Google.
+            // very useful option for debugging.
+            GAI.sharedInstance().dryRun = true
+            
+        #endif
+        
+        
+        // check defaultTacker property
+        let firstTracker = GAI.sharedInstance().defaultTracker
+        
+        if (tracker?.isEqual(firstTracker))! {
+            #if DEBUG
+                
+                print("same Tracker")
+                
+            #endif
+        }
+    }
     
     func openMain(_ addingKey:String){
         // Register routes that're handled
@@ -167,9 +212,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         FIRMessaging.messaging().disconnect()
         Logs.show("Disconnected from FCM.")
+         GAI.sharedInstance().dispatch()
     }
     // [END disconnect_from_fcm]
     
+    func applicationWillTerminate(_ application: UIApplication) {
+         GAI.sharedInstance().dispatch()
+    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         //Tricky line

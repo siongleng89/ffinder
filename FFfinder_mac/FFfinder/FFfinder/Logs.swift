@@ -10,7 +10,11 @@ import Foundation
 public class Logs{
     
     public static func show(_ msg:String){
+        #if DEBUG
+        
         print("\(NSDate().timeIntervalSince1970)-FFfinder log: \(msg)")
+        
+        #endif
     }
 
 }

@@ -46,12 +46,8 @@ class LocationUpdater : NSObject, CLLocationManagerDelegate{
             replyAliveMsg(myModel.userId!)
         }
 
-        
-        
 
         if locationSharingEnabled!{
-            
-            
             Threadings.postMainThread {
                 self.locationManager = CLLocationManager()
                 self.locationManager.delegate = self

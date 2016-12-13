@@ -26,6 +26,11 @@ class SettingsViewController:MyViewController, UITableViewDelegate, UITableViewD
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        Analytics.setScreen(name: "ActivitySettings")
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.settingsList!.count
     }

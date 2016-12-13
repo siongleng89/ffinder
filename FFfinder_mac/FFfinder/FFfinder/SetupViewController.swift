@@ -28,6 +28,11 @@ class SetupViewController: MyViewController {
         setListeners()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        Analytics.setScreen(name: "ActivitySetup")
+    }
+    
     private func start(){
                changeStatus(SetupStatus.CheckingToken)
                 

@@ -21,9 +21,11 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
    
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         SearchButtonPools.mainPageAppearing()
+        Analytics.setScreen(name: "ActivityMain")
     }
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +38,6 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
         
         // Do any additional setup after loading the view.
         self.navigationItem.title = "app_name".localized
-        
-        self.addActionToNav(true, NavItemActionType.Settings)
         
         self.navigationItem.leftBarButtonItem = nil;
         self.navigationItem.hidesBackButton = true;

@@ -25,6 +25,8 @@ class PagingViewController:UIPageViewController{
             let button1 = UIBarButtonItem(image: UIImage(named: "SaveIcon"), style: .plain, target: self, action: #selector(closeTapped))
             button1.tintColor = UIColor.colorContrast()
             self.navigationItem.rightBarButtonItem  = button1
+            
+             Analytics.setScreen(name: "ActivityIntro")
         }
         else if type == PagingType.TutorialShareKey{
             initTutorialShareKey()
@@ -52,17 +54,18 @@ class PagingViewController:UIPageViewController{
         
         var models:[PageModel] = Array()
         
-        models.append(PageModel("apps_intro1".localized, nil))
-        models.append(PageModel("apps_intro2".localized, nil))
-        models.append(PageModel("apps_intro3".localized, nil))
-        models.append(PageModel("apps_intro4".localized, nil))
-        models.append(PageModel("apps_intro5".localized, nil))
-        models.append(PageModel("apps_intro6".localized, nil))
+        models.append(PageModel("apps_intro1".localized, UIImage(named: "intro_1")))
+        models.append(PageModel("apps_intro2".localized, UIImage(named: "intro_2")))
+        models.append(PageModel("apps_intro3".localized, UIImage(named: "intro_3")))
+        models.append(PageModel("apps_intro4".localized, UIImage(named: "intro_4")))
+        models.append(PageModel("apps_intro5".localized, UIImage(named: "intro_5")))
+        models.append(PageModel("apps_intro6".localized, UIImage(named: "intro_6")))
         
         for pageModel in models{
             let singlePageViewController:SinglePageViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SinglePageViewController") as! SinglePageViewController
             
             singlePageViewController.labelText = pageModel.text
+            singlePageViewController.uiImage = pageModel.image
             orderedViewControllers?.append(singlePageViewController)
         }
     }
@@ -74,16 +77,17 @@ class PagingViewController:UIPageViewController{
         
         var models:[PageModel] = Array()
         
-        models.append(PageModel("share_passcode_s1".localized, nil))
-        models.append(PageModel("share_passcode_s2".localized, nil))
-        models.append(PageModel("share_passcode_s3".localized, nil))
-        models.append(PageModel("share_passcode_s4".localized, nil))
+        models.append(PageModel("share_passcode_s1".localized, UIImage(named:"share_passcode_s1")))
+        models.append(PageModel("share_passcode_s2".localized, UIImage(named:"share_passcode_s2")))
+        models.append(PageModel("share_passcode_s3".localized, UIImage(named:"share_passcode_s3")))
+        models.append(PageModel("share_passcode_s4".localized, UIImage(named:"intro_5")))
         
         
         for pageModel in models{
             let singlePageViewController:SinglePageViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SinglePageViewController") as! SinglePageViewController
             
             singlePageViewController.labelText = pageModel.text
+            singlePageViewController.uiImage = pageModel.image
             orderedViewControllers?.append(singlePageViewController)
         }
     }
@@ -94,16 +98,17 @@ class PagingViewController:UIPageViewController{
         
         var models:[PageModel] = Array()
         
-        models.append(PageModel("add_manually_a1".localized, nil))
-        models.append(PageModel("add_manually_a2".localized, nil))
-        models.append(PageModel("add_manually_a3".localized, nil))
-        models.append(PageModel("add_manually_a4".localized, nil))
+        models.append(PageModel("add_manually_a1".localized, UIImage(named:"add_manually_a1")))
+        models.append(PageModel("add_manually_a2".localized, UIImage(named:"add_manually_a2")))
+        models.append(PageModel("add_manually_a3".localized, UIImage(named:"add_manually_a3")))
+        models.append(PageModel("add_manually_a4".localized, UIImage(named:"intro_5")))
         
         
         for pageModel in models{
             let singlePageViewController:SinglePageViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SinglePageViewController") as! SinglePageViewController
             
             singlePageViewController.labelText = pageModel.text
+            singlePageViewController.uiImage = pageModel.image
             orderedViewControllers?.append(singlePageViewController)
         }
     }

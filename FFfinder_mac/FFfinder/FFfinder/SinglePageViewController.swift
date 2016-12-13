@@ -12,10 +12,12 @@ class SinglePageViewController:UIViewController{
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var image: UIImageView!
     var labelText:String?
+    var uiImage:UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         label.text = labelText
+        image.image = uiImage
     }
     
     

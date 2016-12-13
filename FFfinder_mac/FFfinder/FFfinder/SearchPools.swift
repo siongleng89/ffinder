@@ -24,6 +24,7 @@ class SearchPools{
         }
         
         if let token = FIRInstanceID.instanceID().token(){
+            Analytics.trackEvent(AnalyticEvent.Search_Deduct_Credit)
             pool[friendModel.userId!] = SearchTask(friendModel, myModel, token)
         }
         

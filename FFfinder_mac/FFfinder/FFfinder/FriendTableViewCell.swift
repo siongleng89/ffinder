@@ -164,8 +164,20 @@ class FriendTableViewCell: UITableViewCell {
                             self.searchButton?.setFlower(FlowerType.Sleeping)
                         }
                         else{
-                            //todo: if more than one day put flower sleep
-                            self.searchButton?.setFlower(FlowerType.Satisfied)
+                            
+                            if let timestamp:String = friendModel.locationModel?.timestampLastUpdated,
+                                !timestamp.isEmpty{
+                                
+                                if DateTimeUtils.checkIsOlderThanYesterday(UInt64(timestamp)!){
+                                    self.searchButton?.setFlower(FlowerType.Sleeping)
+                                }
+                                else{
+                                    self.searchButton?.setFlower(FlowerType.Satisfied)
+                                }
+                            }
+                            else{
+                                 self.searchButton?.setFlower(FlowerType.Sleeping)
+                            }
                         }
                     }
                 }

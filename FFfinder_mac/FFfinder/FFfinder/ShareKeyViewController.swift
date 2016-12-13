@@ -26,8 +26,11 @@ class ShareKeyViewController: MyViewController {
         self.imageViewHelp?.isUserInteractionEnabled = true
         self.imageViewHelp?.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                                     action: #selector(onHelpTapped)))
-        
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        Analytics.setScreen(name: "ActivityShareKey")
     }
     
     private func checkKey(){
@@ -131,6 +134,8 @@ class ShareKeyViewController: MyViewController {
         activityViewController.popoverPresentationController?.sourceView = self.view
         
         present(activityViewController, animated: true, completion: nil)
+        
+        Analytics.trackEvent(AnalyticEvent.Share_Key_Button_Clicked)
         
     }
     

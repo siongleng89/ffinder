@@ -209,7 +209,9 @@
 		6CE958581DDB50FF0033B0A7 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE958571DDB50FF0033B0A7 /* UIImageExtension.swift */; };
 		6CEAFAA51DF7E9A500312289 /* LocationUpdateTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEAFAA41DF7E9A500312289 /* LocationUpdateTask.swift */; };
 		6CEAFAA71DF842B900312289 /* FFIconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEAFAA61DF842B900312289 /* FFIconButton.swift */; };
-		6CF90EAB1DFEA72D009B2BC0 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF90EAA1DFEA72D009B2BC0 /* TestViewController.swift */; };
+		6CEFFEAE1E000356008756A8 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEFFEAD1E000356008756A8 /* Analytics.swift */; };
+		6CEFFEB01E001C96008756A8 /* AnalyticEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEFFEAF1E001C96008756A8 /* AnalyticEvent.swift */; };
+		6CEFFEB41E00380F008756A8 /* LocationReceiverTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEFFEB31E00380F008756A8 /* LocationReceiverTask.swift */; };
 		6CF9502D1DFBAAE800724D67 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF9502C1DFBAAE800724D67 /* TabButton.swift */; };
 		6CF9502F1DFBAAF000724D67 /* TabButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6CF9502E1DFBAAF000724D67 /* TabButton.xib */; };
 		6CF950311DFBB6A400724D67 /* MapIcon.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6CF950301DFBB6A400724D67 /* MapIcon.xib */; };
@@ -454,8 +456,10 @@
 		6CE958571DDB50FF0033B0A7 /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		6CEAFAA41DF7E9A500312289 /* LocationUpdateTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationUpdateTask.swift; sourceTree = "<group>"; };
 		6CEAFAA61DF842B900312289 /* FFIconButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFIconButton.swift; sourceTree = "<group>"; };
+		6CEFFEAD1E000356008756A8 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		6CEFFEAF1E001C96008756A8 /* AnalyticEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticEvent.swift; sourceTree = "<group>"; };
+		6CEFFEB31E00380F008756A8 /* LocationReceiverTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationReceiverTask.swift; sourceTree = "<group>"; };
 		6CF90EA91DFE8B3C009B2BC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "FFfinder/zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		6CF90EAA1DFEA72D009B2BC0 /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		6CF9502C1DFBAAE800724D67 /* TabButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		6CF9502E1DFBAAF000724D67 /* TabButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TabButton.xib; sourceTree = "<group>"; };
 		6CF950301DFBB6A400724D67 /* MapIcon.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapIcon.xib; sourceTree = "<group>"; };
@@ -630,6 +634,7 @@
 			children = (
 				6C24AEBF1DEF019F00F87625 /* SearchTask.swift */,
 				6CEAFAA41DF7E9A500312289 /* LocationUpdateTask.swift */,
+				6CEFFEB31E00380F008756A8 /* LocationReceiverTask.swift */,
 			);
 			name = tasks;
 			sourceTree = "<group>";
@@ -730,6 +735,7 @@
 				6C24AEC11DEF02A100F87625 /* SearchPools.swift */,
 				6C941C291DF6A7720050EC82 /* Logs.swift */,
 				6C941C2B1DF6BB2C0050EC82 /* SearchButtonPools.swift */,
+				6CEFFEAD1E000356008756A8 /* Analytics.swift */,
 			);
 			name = helpers;
 			sourceTree = "<group>";
@@ -768,6 +774,7 @@
 				6C082AC51DDB091A0098DE7E /* NavItemActionType.swift */,
 				6C8C95AA1DEDBF4100771556 /* OverlayType.swift */,
 				6C941C2D1DF6C12C0050EC82 /* FlowerType.swift */,
+				6CEFFEAF1E001C96008756A8 /* AnalyticEvent.swift */,
 			);
 			name = enums;
 			sourceTree = "<group>";
@@ -786,7 +793,6 @@
 				6C8FB30C1DFAC8B900BB75A5 /* MapViewController.swift */,
 				6CF9503A1DFBE5B500724D67 /* PagingViewController.swift */,
 				6CF9503C1DFBE5CA00724D67 /* SinglePageViewController.swift */,
-				6CF90EAA1DFEA72D009B2BC0 /* TestViewController.swift */,
 			);
 			name = viewControllers;
 			sourceTree = "<group>";
@@ -1320,6 +1326,7 @@
 				6C24672F1DB3B36300290569 /* NotificationExtension.swift in Sources */,
 				6CEAFAA51DF7E9A500312289 /* LocationUpdateTask.swift in Sources */,
 				6C87C60B1DF958060020629B /* NotificationShower.swift in Sources */,
+				6CEFFEB41E00380F008756A8 /* LocationReceiverTask.swift in Sources */,
 				6C3DE2F41DB3664300CF8BDF /* AddManuallyViewController.swift in Sources */,
 				6CF9502D1DFBAAE800724D67 /* TabButton.swift in Sources */,
 				6C25EA561DB1DE2A007441A6 /* Threadings.swift in Sources */,
@@ -1341,11 +1348,13 @@
 				6CC6B86E1DDCAD6C00D54AD6 /* DialogNoCreditsViewController.swift in Sources */,
 				6CCABA3F1DACCF27009831B8 /* SetupViewController.swift in Sources */,
 				6C72DDED1DAE235A0065EF02 /* KeyChainSwift.swift in Sources */,
+				6CEFFEAE1E000356008756A8 /* Analytics.swift in Sources */,
 				6C3DE2EB1DB33A6000CF8BDF /* LocationModel.swift in Sources */,
 				6C8C8FAD1DEC19CE002E25DD /* NormalTableViewCell.swift in Sources */,
 				6CE8E5751DD21C4600538F82 /* SWNinePatchImageFactory.m in Sources */,
 				6C8C95A91DEDBEE700771556 /* OverlayBuilder.swift in Sources */,
 				6C9095611DAB768A00FA114B /* FirebaseDB.swift in Sources */,
+				6CEFFEB01E001C96008756A8 /* AnalyticEvent.swift in Sources */,
 				6C15601A1DCF61D2001C65E3 /* ColorExtension.swift in Sources */,
 				6CE8E56B1DD2079E00538F82 /* AnimateBuilder.swift in Sources */,
 				6C2467371DB3C75200290569 /* LocationUpdater.swift in Sources */,
@@ -1378,7 +1387,6 @@
 				6CCABA3C1DACA471009831B8 /* LaunchViewController.swift in Sources */,
 				6C941C2C1DF6BB2C0050EC82 /* SearchButtonPools.swift in Sources */,
 				6C082AC61DDB091A0098DE7E /* NavItemActionType.swift in Sources */,
-				6CF90EAB1DFEA72D009B2BC0 /* TestViewController.swift in Sources */,
 				6C8F37E01DAE785B00D7291F /* FirebaseModelProtocol.swift in Sources */,
 				6CF950371DFBDF8500724D67 /* TapToAddTableViewCell.swift in Sources */,
 				6C72DDE61DADF7560065EF02 /* MyViewController.swift in Sources */,

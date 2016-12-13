@@ -37,7 +37,10 @@ class AddManuallyViewController: MyViewController {
         
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        Analytics.setScreen(name: "ActivityAddFriend")
+    }
     
     private func validateAndSubmit(){
         
@@ -148,16 +151,20 @@ class AddManuallyViewController: MyViewController {
         
         Threadings.postMainThread {
             var msg:String = ""
+            var errorMsg:String = ""
             
             switch errorType{
             case AddUserErrorType.UserAlreadyAdded:
                 msg = "user_already_added_error_msg".localized.format(extra!)
+                errorMsg =  errorType.rawValue
                 break
             case AddUserErrorType.KeyNotExistOrOutdated:
                 msg = "key_expired_or_not_exist_msg".localized
+                errorMsg = "\(errorType.rawValue)-\(extra)"
                 break
             case AddUserErrorType.UnknownError:
                 msg = "unknown_error_msg".localized
+                errorMsg = errorType.rawValue
                 break
             }
             
@@ -177,6 +184,8 @@ class AddManuallyViewController: MyViewController {
                 AnimateBuilder.fadeIn(self.labelError)
             }
 
+            Analytics.trackEvent(AnalyticEvent.Add_Friend_Failed, errorMsg)
+            
         }
         
     }
@@ -202,6 +211,8 @@ class AddManuallyViewController: MyViewController {
                                               FCMMessageType.FriendsAdded,
                                               NotificationSender.TTL_LONG, "", retryIfError: false,
                                               dict: ["username": myName])
+            
+            Analytics.trackEvent(AnalyticEvent.Add_Friend_Success)
         }
     }
 
@@ -227,10 +238,10 @@ class AddManuallyViewController: MyViewController {
         }
     }
     
-    enum AddUserErrorType{
-        case KeyNotExistOrOutdated
-        case UnknownError
-        case UserAlreadyAdded
+    enum AddUserErrorType:String{
+        case KeyNotExistOrOutdated = "KeyNotExistOrOutdated"
+        case UnknownError = "UnknownError"
+        case UserAlreadyAdded = "UserAlreadyAdded"
     }
     
 }
