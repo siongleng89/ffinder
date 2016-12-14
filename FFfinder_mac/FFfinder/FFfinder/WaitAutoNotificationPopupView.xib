@@ -15,7 +15,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="261"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="277"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="failed_search_msg_text1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxc-eJ-5ca" customClass="LocalizedLabel" customModule="FFfinder" customModuleProvider="target">
@@ -96,6 +96,9 @@
                             </connections>
                         </button>
                     </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="90" id="hbo-IY-PrB"/>
+                    </constraints>
                 </stackView>
             </subviews>
             <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -118,7 +121,7 @@
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="36.5" y="312.5"/>
+            <point key="canvasLocation" x="36.5" y="320.5"/>
         </view>
     </objects>
 </document>

@@ -62,9 +62,9 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
                                                selector: #selector(viewShowing),                                               name: .UIApplicationDidBecomeActive, object: nil)
         
         refreshFriendList()
-        checkNeedToShowNoFriendReminder()
         setAddFriendReminderAlarm()
         autoSearchIfFirstTime()
+        checkHasPendingAddUser()
      
     }
     
@@ -206,21 +206,24 @@ class MainPageViewController: MyViewController, UITableViewDelegate, UITableView
     
     private func checkHasPendingAddUser(){
         if let _ = Vars.pendingUserKey{
+            OverlayBuilder.forceCloseAllOverlays()
             self.performSegue(withIdentifier: "MainToAddMemberSegue", sender: nil)
         }
     }
     
-    private func checkNeedToShowNoFriendReminder(){
-        if !firstTimeRun!{
-            if self.myModel.getNonSelfFriendModelsCount() == 0{
-                OverlayBuilder.build().setMessage("no_friend_popup_msg".localized)
-                    .setOverlayType(OverlayType.OkOrCancel)
-                    .setOnChoices {
-                        self.onAddButtonTapped(nil)
-                    }.show()
-            }
-        }
-    }
+//    private func checkNeedToShowNoFriendReminder(){
+//        Threadings.delay(5000, {
+//            if !self.firstTimeRun! && StringsHelper.isEmpty(Vars.pendingUserKey){
+//                if self.myModel.getNonSelfFriendModelsCount() == 0{
+//                    OverlayBuilder.build().setMessage("no_friend_popup_msg".localized)
+//                        .setOverlayType(OverlayType.OkOrCancel)
+//                        .setOnChoices {
+//                            self.onAddButtonTapped(nil)
+//                        }.show()
+//                }
+//            }
+//        })
+//    }
     
     private func setAddFriendReminderAlarm(){
         
