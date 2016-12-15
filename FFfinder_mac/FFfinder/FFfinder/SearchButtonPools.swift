@@ -27,6 +27,12 @@ class SearchButtonPools{
         }
     }
     
+    public static func removeSearchButton(_ id:String){
+        if let value:SearchButton = pool[id]{
+            value.removeFromSuperview()
+            pool[id] = nil
+        }
+    }
     
     public static func mainPageAppearing(){
         for (_, button) in pool{

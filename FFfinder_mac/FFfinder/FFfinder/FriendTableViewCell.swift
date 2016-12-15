@@ -264,12 +264,15 @@ class FriendTableViewCell: UITableViewCell {
                 //remove blocking user since already deleted
                 FirebaseDB.changeBlockUser((self.myModel?.userId)!, (self.friendModel?.userId!)!,
                                            false, nil);
-                
+            
+                SearchButtonPools.removeSearchButton((self.friendModel?.userId!)!)
                 self.myModel?.deleteFriend((self.friendModel)!)
                 self.friendModel?.delete()
                 self.myModel?.commitFriendUserIds()
-                
+            
                 NotificationCenter.default.post(name: .needToReloadWholeFriendsList, object: nil)
+        
+            
         })
         .show()
         
