@@ -44,6 +44,9 @@ extension UIColor{
     }
     
     
+    static func colorNavBar() -> UIColor{
+        return UIColor(netHex: 0x648857)
+    }
 
     convenience init(netHex:Int) {
         self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)

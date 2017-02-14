@@ -35,6 +35,7 @@ public class ActivityLaunch extends MyActivityAbstract {
         //start heart beat service singleton
         Intent intent = new Intent(this, GcmAliveHeartbeatService.class);
         startService(intent);
+
     }
 
     @Override

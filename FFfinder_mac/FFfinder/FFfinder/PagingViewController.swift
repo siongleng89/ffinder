@@ -129,7 +129,7 @@ class PagingViewController:UIPageViewController{
     
     
     private func stylePageControl() {
-        self.view.backgroundColor = UIColor.colorPrimaryDark()
+        self.view.backgroundColor = UIColor.colorNavBar()
     }
     
     
