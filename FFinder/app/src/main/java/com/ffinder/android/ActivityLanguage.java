@@ -78,6 +78,8 @@ public class ActivityLanguage extends MyActivityAbstract {
         languageModels.add(new LanguageModel("English", "en"));
         languageModels.add(new LanguageModel("Português", "pt"));
         languageModels.add(new LanguageModel("中文", "zh"));
+        languageModels.add(new LanguageModel("Indonesia", "in"));
+        languageModels.add(new LanguageModel("Malay", "ms"));
 
         originalLanguage = LocaleHelper.getLanguage(this);
         for(LanguageModel languageModel : languageModels){
