@@ -1,3 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+<!-- Apps info start -->
+<string name="app_name">"FFfinder"</string>
+<string name="app_title_long">"Pencari Teman Dan Keluarga Yang Mudah"</string>
+
+<!-- Apps info end
+ _________________________________________________________________________________ 
+Common texts start -->
+<string name="retry">"Cuba Sekali Lagi"</string>
+<string name="unknown_error_msg">"Masalah yang Tidak Diketahui Berlaku"</string>
+<string name="close">"Tutup"</string>
+<string name="confirm">"Pasti"</string>
+<string name="submit">"Hantar"</string>
+<string name="quit">"Berhenti"</string>
+<string name="error">"Kesilapan"</string>
+<string name="yesterday">"Semalam"</string>
+<string name="ok">"OK"</string>
+<string name="cancel">"Batal"</string>
+<string name="yes">"Iya"</string>
+<string name="no">"Tidak"</string>
+<string name="never">"Tidak Pernah"</string>
+<string name="loading">"Memuatkan..."</string>
+<string name="add">"Tambah"</string>
+<string name="address_myself">"Saya"</string>
+<string name="next">"Seterusnya"</string>
+<string name="don_remind_me_again">"Jangan Ingatkan Saya Lagi"</string>
+<string name="dont_show_this_again">"Jangan pamerkan ini lagi"</string>
+<string name="search">"Mencari"</string>
+<string name="unknown">"Tidak Diketahui"</string>
+<string name="tutorial">"Tutorial"</string>
+
+<!-- Common texts end
+_________________________________________________________________________________
+Launch Activity text start -->
+<string name="welcome_msg_1">"Selamat Datang Ke"</string>
+<string name="required_location_provider_msg">"FFfinder memohon untuk mengaktifkan perkhidmatan lokasi"</string>
+<string name="btn_go_to_location_settings_text">"Konfig Lokasi"</string>
+<string name="some_permission_denied_toast_msg">"
+Sila pastikan semua kebenaran yang diperlukan diberi untuk memulakan FFfinder"</string>
+
+<!-- Launch Activity text end
+_________________________________________________________________________________
+Setup Activity text start -->
+<string name="initializing">"Memulakan..."</string>
+<string name="checking_google_service_availability">"Memeriksa ketersediaan perkhidmatan google"</string>
+<string name="retrieving_token">"Mendapatkan semula Token ..."</string>
+<string name="initializing_user">"Memulakan pengguna ..."</string>
+<string name="initialization_done">"Memulakan dilakukan."</string>
+<string name="no_google_service_error_msg">"Sila pastikan perkhidmatan Google Play dikonfigurasikan dengan betul sebelum menjalankan aplikasi ini."</string>
+<string name="no_connection_msg">"Tiada sambungan dijumpai, sila semak sambungan anda dan cuba lagi."</string>
+<string name="db_failed_msg">"Tidak dapat menyambung ke server, sila semak sambungan anda dan cuba lagi."</string>
+<string name="location_service_change_denied">"Sila konfigurasi perkhidmatan lokasi sebelum memulakan FFfinder."</string>
+
+<!-- Setup Activity text end
+_________________________________________________________________________________
+Main Activity text start -->
+<string name="never_locate_user_msg">"Klik Carian untuk mencari!"</string>
+<string name="unknown_address_msg">"Alamat tidak diketahui, sila lihat lokasi dengan peta"</string>
+<string name="block_dialog_title">"Menyekat %s?"</string>
+<string name="block_dialog_content">"%1$s tidak akan dapat untuk mencari anda selepas ini. Anda bagaimanapun masih boleh mengesan %2$s"</string>
+<string name="search_status_starting_msg">"Bermula..."</string>
+<string name="search_status_checking_data_msg">"Menyambung ke lokasi ..."</string>
+<string name="search_status_waiting_user_respond_msg">"Permintaan dihantar, menunggu jawapan pengguna ..."</string>
+<string name="search_status_waiting_user_location_msg">"Pengguna telah memberi respons, menunggu lokasi ..."</string>
+<string name="search_status_geodecoding_msg">"Mendapatkan alamat pengguna ..."</string>
+<string name="error_no_link_msg">"Tidak dapat mendapatkan alamat kerana pengguna tidak mempunyai anda dalam senarai."</string>
+<string name="error_timeout_msg">"Tidak dapat mendapatkan lokasi terkini pengguna."</string>
+<string name="error_timeout_no_connection_msg">"Tidak dapat menyambung, sila semak sambungan anda dan cuba lagi."</string>
+
+<!-- search_failed_dialog -->
+<string name="error_timeout_unknown_reason_possible_reasons">"1) Peranti Pengguna tidak mempunyai sambungan internet aktif
+2) Pengguna telah memaksa FFfinder tutup"</string>
+
+<!-- search_failed_dialog -->
+<string name="error_timeout_unknown_reason_possible_reasons2">"3) Konfigurasi tidak disediakan untuk sesetengah model telefon tertentu"</string>
+<string name="error_user_blocked_msg">"Pengguna telah menyekat anda."</string>
+
+<!-- search_failed_dialog -->
+<string name="failed_search_msg_text1">"Tidak dapat mengesan pengguna ini."</string>
+
+<!-- search_failed_dialog -->
+<string name="failed_search_msg_text2">"Kami akan terus mencari pengguna ini dan menghantar pemberitahuan percuma kemudian, atau anda boleh cuba cari lagi."</string>
+
+<!-- search_failed_dialog -->
+<string name="btn_search_again_text">"Cari lagi"</string>
+
+<!-- search_failed_dialog -->
+<string name="btn_wait_autonotification_text">"Tunggu pemberitahuan auto"</string>
+<string name="search_left">"Sisa carian"</string>
+<string name="searching">"Mencari"</string>
+<string name="auto_searching">"Auto"</string>
+<string name="tap_plus_to_add_friend_family">"+ Tekan untuk menambah rakan / keluarga"</string>
+
+<!-- Main Activity text end
+_________________________________________________________________________________
+Settings Activity text start -->
+<string name="settings_activity_title">"Tetapan"</string>
+<string name="settings_item_language_title">"Bahasa"</string>
+
+<!-- Settings Activity text end
+_________________________________________________________________________________
+Vip Activity text start -->
+<!-- activityVip -->
+<string name="vip_member">"VIP (%s/year) "</string>
+
+<!-- activityVip -->
+<string name="vip_title">"VIP "</string>
+
+<!-- activityVip -->
+<string name="manage_subscriptions_item_title">"Uruskan Langganan"</string>
+
+<!-- activityVip -->
+<string name="manage_subscriptions_introduction_android">"Untuk menguruskan langganan, sila buka Google Play Store, klik Menu&gt; Akaun&gt; Langganan"</string>
+
+<!-- Vip Activity text end
+_________________________________________________________________________________
+Known Issues Activity text start -->
+<string name="known_issues_title">"isu yang diketahui"</string>
+<string name="issue_fix_xiaomi">"Untuk Xiao Mi, apabila menggunakan FFfinder, untuk memastikan orang tersayang anda sentiasa boleh mencari anda,
+sila benarkan aplikasi kami untuk dapat berjalan di latar belakang dengan mengikuti langkah berikut:
+
+1) Pergi ke Keselamatan Apps
+2) pergi ke kebenaran kemudian klik pada Auto Start Pengurusan
+3) Tambah / Aktifkan aplikasi permulaan auto, membolehkan FFfinder"</string>
+<string name="issue_fix_huawei">"Untuk Huawei, apabila menggunakan FFfinder, untuk memastikan yang orang yang anda sayangi boleh mencari anda,
+sila membolehkan aplikasi kami untuk dapat berjalan di latar belakang dengan mengikuti langkah berikut:
+
+1) Pergi ke Tetapan
+2) Klik pada Apps Dilindungi
+3) Tambah FFfinder sebagai aplikasi dilindungi"</string>
+<string name="issue_fix_sony">"Untuk Sony, apabila menggunakan FFfinder, jika anda menggunakan Mod Stamina Pengurusan Kuasa (Anda boleh mengabaikan arahan ini jika anda tidak menggunakan Mod Stamina), sila ikuti langkah-langkah ini untuk memastikan bahawa anda sayangi boleh mencari anda:
+
+1) Pergi ke Pengurusan Kuasa
+2) Klik pada mod STAMINA
+3) Apps aktif dalam bersedia
+4) Tambah FFfinder"</string>
+
+<!-- Known Issues Activity text end
+_________________________________________________________________________________
+Map Activity text start -->
+<string name="map_activity_title">"Peta"</string>
+<string name="street_view_not_available_msg">"Paparan jalan tidak boleh didapati di kawasan ini"</string>
+<string name="pick_your_travel_mode">"Pilihkan mod perjalanan anda"</string>
+<string name="duration">"Tempoh"</string>
+<string name="distance">"Jarak"</string>
+<string name="directions">"Arah"</string>
+<string name="no_route_found_error_msg">"Tiada laluan ditemui"</string>
+
+<!-- Promo Code Activity text end
+_________________________________________________________________________________
+Add member Activity text start -->
+<string name="add_new_member_title">"Tambah Teman/Keluarga"</string>
+<string name="add_new_member_manually_title">"Tambah Teman/Keluarga secara manual"</string>
+<string name="user_key_title">"Kod Jemputan Teman/Keluarga"</string>
+<string name="member_name_title">"Bagaimana anda memanggil nama dia"</string>
+<string name="no_user_key_msg">"Sila masukkan kod jemputan dari pengguna yang anda mahu tambah."</string>
+<string name="adding_friend_msg">"Menambah ke dalam rekod..."</string>
+<string name="user_already_added_error_msg">"Pengguna telah wujud dalam senarai anda sebagai% s"</string>
+<string name="key_expired_or_not_exist_msg">"Kod Jemputan tidak wujud atau telah tamat."</string>
+
+<!-- Add member Activity text end
+_________________________________________________________________________________
+Edit member name popup dialog text start -->
+<string name="edit_name_title">"Edit Nama"</string>
+<string name="new_name_title">"Nama Baru"</string>
+
+<!-- Edit member name popup dialog text end
+_________________________________________________________________________________
+Share key activity text start -->
+<string name="share_key_activity_title">"Kod Jemputan"</string>
+<string name="share_key_title">"Tambah Kawan / Keluarga Dengan Perkongsian kod jemputan"</string>
+<string name="btn_share_via_other_apps_text">"Kongsi"</string>
+<string name="your_key_title">"Kongsi kod jemputan dengan rakan dan keluarga anda, dan anda boleh mula menjejak
+lokasi mereka setelah mereka menambah anda
+(Tiada tindakan diperlukan selepas berkongsi kod jemputan)"</string>
+<string name="expired_at_title">"(Tamat pada %s)"</string>
+<string name="minutes_left">"(%s minit lagi)"</string>
+<string name="copied_to_clipboard_toast_msg">"Disalin"</string>
+<string name="regenerating_key_msg">"Mengemaskini Kod Jemputan"</string>
+<string name="regen_key_confirm_msg">"Adakah anda pasti anda mahu menjana semula kod jemputan anda? Pengguna yang lain tidak akan dapat menambah anda lagi menggunakan kod jemputan anda yang sebelum ini"</string>
+<string name="share_title">"Kongsi Kod Jemputan"</string>
+<string name="share_subject">"Kod Jemputan FFfinder"</string>
+
+<!-- Fuzzy -->
+<string name="share_msg">"Hi, sila muat turun Pencari Kawan dan Keluarga yang mudah untuk mencari rakan dan keluarga anda dengan hanya satu klik secara PERCUMA di
+https://ff-finder.com/download?referrer=%1$s
+
+Kemudian menambah saya dengan klik pada pautan ini (Buka dengan FFfinder)
+https://ff-finder.com/addnew/%2$s"</string>
+<string name="after_share_passcode_reminder">"Terima kasih kerana berkongsi kod jemputan anda, sila tunggu supaya rakan anda atau keluarga menambah anda dan anda boleh mula menjejaki satu sama lain."</string>
+
+<!-- Share key activity text end
+_________________________________________________________________________________
+Delete member popup dialog text start -->
+<string name="delete_user_title">"Padam %s?"</string>
+<string name="confirm_delete_user_msg">"Adakah anda pasti anda mahu memadam pengguna ini? Pengguna tidak akan dapat untuk mencari anda setelah anda memadam dia."</string>
+
+<!-- Delete member popup dialog text end
+_________________________________________________________________________________
+Language chooser popup dialog text start -->
+<string name="language_take_effect_after_restart_toast">"Tetapan bahasa hanya akan berkuat kuasa selepas memulakan semula"</string>
+
+<!-- Language chooser popup dialog text end
+_________________________________________________________________________________
+Notifications start -->
+<string name="notification_user_located_title">"Kemaskini FFfinder"</string>
+<string name="notification_x_has_been_located_msg">"%s telah di kesan"</string>
+<string name="notification_x_users_located_msg">"%s kawan dikesan"</string>
+<string name="notification_x_added_you">"%s telah menambah anda! Kini anda boleh mengesan satu sama lain."</string>
+<string name="notification_remember_to_add_friend_msg">"Bermula! Kongsi anda kod jemputan untuk menambah rakan-rakan anda dan keluarga :)"</string>
+
+<!-- Notifications end 
+Everything about tutorials -->
+<string name="first_time_see_passcode">"Hi, ini kali pertama menambah rakan / keluarga anda, adakah anda mahu melihat panduan tutorial yang singkat?"</string>
+<string name="share_passcode_s1">"Setiap pengguna mempunyai kod jemputan sementara yang unik, anda mesti berkongsi kod jemputan peribadi anda dengan rakan / keluarga anda untuk berhubung."</string>
+<string name="share_passcode_s2">"Klik pada  butang Kongsi kod Jemputan dan memilih satu cara untuk berkongsi kod jemputan anda."</string>
+<string name="share_passcode_s3">"Setelah ini, Tiada tindakan diperlukan"</string>
+<string name="share_passcode_s4">"Setelah Teman/Keluarga menambah anda, anda boleh saling mengesan."</string>
+<string name="add_manually_a1">"Setiap pengguna mempunyai kod sementara yang unik, dapatkan kod jemputan dari mereka dengan meminta mereka untuk klik pada ikon PLUS."</string>
+<string name="add_manually_a2">"Setelah menerima mesej, catatkan kod jemputan mereka di sini."</string>
+<string name="add_manually_a3">"Masukkan kod pada kod Jemputan rakan anda"</string>
+<string name="add_manually_a4">"Voila! Anda boleh mula menjejaki satu sama lain"</string>
+<string name="huawei">"Huawei"</string>
+<string name="xiaomi">"Xiaomi"</string>
+<string name="sony">"Sony"</string>
+
+<!-- activityMap -->
+<string name="driving">"memandu"</string>
+
+<!-- activityMap -->
+<string name="transit">"transit"</string>
+
+<!-- activityMap -->
+<string name="walking">"bergerak"</string>
+
+<!-- activityMap -->
+<string name="street_view_btn_text">"Permandangan Jalan"</string>
+
+<!-- activityMap -->
+<string name="directions_btn_text">"Arah"</string>
+
+<!-- activityMap -->
+<string name="gps_nav_btn_text">"Buka Navigasi GPS"</string>
+<string name="error_location_disabled_msg">"Penguna telah membatalkan berkongsi lokasi"</string>
+
+<!-- search_failed_dialog -->
+<string name="click_to_see_possible_reasons">"Klik untuk melihat sebab yang mungkin"</string>
+
+<!-- activityVip -->
+<string name="manage_subscriptions_introduction_ios">"Untuk menguruskan langganan,
+1) Melancarkan aplikasi Tetapan pada iPhone atau iPad anda.
+2) Tekan iTunes &amp; App Store.
+3) Tekan pada Apple ID anda di bahagian atas.
+4) Pilih Paparan Apple ID dari menu popup.
+5) Tekan Mengurus bawah Langganan."</string>
+
+<!-- activityVip -->
+<string name="vip_benefits">"Untuk Pencarian Tanpa Batasan"</string>
+
+<!-- ActivityMap -->
+<string name="no_gps_nav_apps_found_error">"Tiada aplikasi navigasi gps dijumpai di dalam peranti anda."</string>
+<string name="apps_intro1"></string>
+<string name="apps_intro2"></string>
+<string name="apps_intro3"></string>
+<string name="apps_intro4"></string>
+<string name="apps_intro5"></string>
+<string name="apps_intro6"></string>
+<string name="no_friend_popup_msg"></string>
 </resources>
